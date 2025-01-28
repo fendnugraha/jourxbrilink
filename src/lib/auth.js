@@ -10,6 +10,7 @@ export const login = async (email, password) => {
 };
 
 export const logout = async () => {
+    await axios.get("/sanctum/csrf-cookie");
     const response = await axios.post("/logout");
     return response.data;
 };

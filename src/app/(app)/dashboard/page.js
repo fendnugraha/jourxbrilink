@@ -1,25 +1,49 @@
 "use client";
+import Header from "@/app/(app)/Header";
+import { useEffect, useState } from "react";
+import Notification from "@/components/notification";
+import axios from "@/libs/axios";
+import DailyDashboard from "./components/DailyDashboard";
 import { useAuth } from "@/libs/auth";
-const Dashboard = () => {
-    const { logout } = useAuth({
-        middleware: "auth",
-        redirectIfAuthenticated: "/login",
-    });
+import CashBankMutation from "./components/CashBankMutation";
 
-    const handleLogout = async () => {
-        await logout();
+const Dashboard = () => {
+    const { user } = useAuth({ middleware: "auth" });
+
+    const [notification, setNotification] = useState("");
+    const warehouse = user?.role?.warehouse_id;
+
+    const [loading, setLoading] = useState(false);
+    const [warehouses, setWarehouses] = useState([]);
+    const fetchWarehouses = async (url = "/api/get-all-warehouses") => {
+        setLoading(true);
+        try {
+            const response = await axios.get(url);
+            setWarehouses(response.data.data);
+        } catch (error) {
+            setErrors(error.response?.data?.errors || ["Something went wrong."]);
+        } finally {
+            setLoading(false);
+        }
     };
 
+    useEffect(() => {
+        fetchWarehouses();
+    }, []);
     return (
-        <div>
-            <h1 className="text-5xl font-bold mb-4">Dashboard</h1>
-            <button
-                onClick={handleLogout}
-                className="bg-slate-800 text-white rounded-md px-4 py-2 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
-            >
-                Logout
-            </button>
-        </div>
+        <>
+            {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
+            <div className="">
+                {/* <h1 className="text-2xl font-bold mb-4">Point of Sales - Add to Cart</h1> */}
+                <Header title={"Dashboard"} />
+                <div className="py-8">
+                    <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                        <DailyDashboard user={user} />
+                        <CashBankMutation warehouse={warehouse} warehouses={warehouses} />
+                    </div>
+                </div>
+            </div>
+        </>
     );
 };
 

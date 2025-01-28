@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
 
-const VoucherSalesTable = ({ data }) => {
+const VoucherSalesTable = ({}) => {
     const [transactions, setTransactions] = useState([]);
     const [notification, setNotification] = useState("");
     const [loading, setLoading] = useState(false);
@@ -27,9 +27,6 @@ const VoucherSalesTable = ({ data }) => {
     const totalCost = transactions?.reduce((total, transaction) => {
         return total + Number(transaction.total_cost);
     }, 0);
-    const totalFee = transactions.reduce((total, transaction) => {
-        return total + Number(transaction.total_price - transaction.total_cost);
-    }, 0);
     return (
         <div className="my-4 flex gap-4">
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-2xl w-3/4">
@@ -45,23 +42,15 @@ const VoucherSalesTable = ({ data }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {loading ? (
-                            <tr>
-                                <td colSpan="5" className="text-center">
-                                    Loading...
-                                </td>
+                        {transactions?.map((transaction) => (
+                            <tr key={transaction.id}>
+                                <td>{transaction.product.name}</td>
+                                <td>{formatNumber(-transaction.quantity)}</td>
+                                <td>{formatNumber(-transaction.total_price)}</td>
+                                <td>{formatNumber(-transaction.total_cost)}</td>
+                                <td>{formatNumber(-Number(transaction.total_price - transaction.total_cost))}</td>
                             </tr>
-                        ) : (
-                            transactions.map((transaction) => (
-                                <tr key={transaction.id}>
-                                    <td>{transaction.product.name}</td>
-                                    <td>{formatNumber(-transaction.quantity)}</td>
-                                    <td>{formatNumber(-transaction.total_price)}</td>
-                                    <td>{formatNumber(-transaction.total_cost)}</td>
-                                    <td>{formatNumber(-Number(transaction.total_price - transaction.total_cost))}</td>
-                                </tr>
-                            ))
-                        )}
+                        ))}
                     </tbody>
                 </table>
             </div>

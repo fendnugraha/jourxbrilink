@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import Input from "@/components/Input";
 import FormCreateAccount from "./formCreateAccount";
 import Modal from "@/components/Modal";
-import { PencilIcon, PlusCircleIcon, TrashIcon } from "lucide-react";
+import { LockIcon, PencilIcon, PlusCircleIcon, Trash2Icon, TrashIcon } from "lucide-react";
 import Notification from "@/components/notification";
 
 export default function Account() {
@@ -234,7 +234,9 @@ export default function Account() {
                                                     />
                                                 </td>
                                                 <td className="">
-                                                    <span className="font-bold text-blue-800">{account.acc_name}</span>
+                                                    <span className="font-bold text-blue-800">
+                                                        {account.acc_name} {account.is_locked === 1 && <LockIcon size={16} className="inline" />}
+                                                    </span>
                                                     <br />
                                                     <span className="text-slate-600">
                                                         {account.acc_code} # {account.account?.name} # {account?.warehouse?.name ?? "NotAssociated"}
@@ -256,9 +258,17 @@ export default function Account() {
                                                         >
                                                             <PencilIcon className="w-5 h-5 inline" />
                                                         </button>
-                                                        <button onClick={() => handleDeleteAccount(account.id)} className="">
+                                                        <button
+                                                            onClick={() => handleDeleteAccount(account.id)}
+                                                            className="disabled:text-red-400"
+                                                            disabled={account.is_locked === 1}
+                                                        >
                                                             {" "}
-                                                            <TrashIcon className="w-5 h-5 inline" />
+                                                            {account.is_locked === 1 ? (
+                                                                <LockIcon className="w-5 h-5 inline" />
+                                                            ) : (
+                                                                <Trash2Icon className="w-5 h-5 inline" />
+                                                            )}
                                                         </button>
                                                     </div>
                                                 </td>

@@ -1,6 +1,6 @@
 import NavLink from "@/components/NavLink";
 import { useAuth } from "@/libs/auth";
-import { BarChart, ChartAreaIcon, CoinsIcon, DockIcon, LogOutIcon, MapIcon, ShoppingBag, User2Icon } from "lucide-react";
+import { BarChart, ChartAreaIcon, CogIcon, CoinsIcon, DockIcon, LogOutIcon, MapIcon, ShoppingBag, StoreIcon, User2Icon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -59,7 +59,7 @@ const Navigation = ({ user }) => {
                             Jurnal
                         </span>
                     </NavLink>
-                    <NavLink href="/setting/product" isOpen={isOpen} active={usePathname() === "/setting/product"}>
+                    <NavLink href="/summary" isOpen={isOpen} active={usePathname() === "/summary"}>
                         <div>
                             <BarChart className="w-5 h-5" />
                         </div>
@@ -69,12 +69,12 @@ const Navigation = ({ user }) => {
                             }`}
                             style={{ display: isOpen ? "inline" : "none" }}
                         >
-                            Products
+                            Summary
                         </span>
                     </NavLink>
-                    <NavLink href="/setting/contact" isOpen={isOpen} active={usePathname() === "/setting/contact"}>
+                    <NavLink href="/store" isOpen={isOpen} active={usePathname() === "/store"}>
                         <div>
-                            <User2Icon className="w-5 h-5" />
+                            <StoreIcon className="w-5 h-5" />
                         </div>
                         <span
                             className={`transition-all duration-300 ease-in-out transform text-nowrap ${
@@ -82,10 +82,10 @@ const Navigation = ({ user }) => {
                             }`}
                             style={{ display: isOpen ? "inline" : "none" }}
                         >
-                            Customers
+                            Store
                         </span>
                     </NavLink>
-                    <NavLink href="/report" isOpen={isOpen} active={usePathname() === "/report"}>
+                    {/* <NavLink href="/report" isOpen={isOpen} active={usePathname() === "/report"}>
                         <div>
                             <DockIcon className="w-5 h-5" />
                         </div>
@@ -97,13 +97,13 @@ const Navigation = ({ user }) => {
                         >
                             Reports
                         </span>
-                    </NavLink>
+                    </NavLink> */}
                 </div>
                 <hr className="my-4" />
                 <ul className="mt-4 text-sm">
                     <NavLink href="/setting" isOpen={isOpen} active={usePathname().startsWith("/setting")}>
                         <div>
-                            <CoinsIcon className="w-5 h-5" />
+                            <CogIcon className="w-5 h-5" />
                         </div>
                         <span
                             className={`transition-all duration-300 ease-in-out transform text-nowrap ${
@@ -117,10 +117,10 @@ const Navigation = ({ user }) => {
                 </ul>
             </nav>
 
-            <div className="">
+            <div className="my-5">
                 <button
                     onClick={logout}
-                    className="px-4 py-4 w-full hover:bg-indigo-500 hover:text-white cursor-pointer flex items-center gap-4 justify-center"
+                    className="px-4 py-4 w-full hover:bg-slate-500 border-y hover:text-white cursor-pointer flex items-center gap-4 justify-center"
                 >
                     <div>
                         <LogOutIcon className="w-5 h-5" />

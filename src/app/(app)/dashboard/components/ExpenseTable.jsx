@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
+import formatDateTime from "@/libs/formatDateTime";
 
 const ExpenseTable = ({ data }) => {
     const [expenses, setExpenses] = useState([]);
@@ -49,7 +50,11 @@ const ExpenseTable = ({ data }) => {
                         ) : (
                             expenses.map((expense) => (
                                 <tr key={expense.id}>
-                                    <td>{expense.description}</td>
+                                    <td>
+                                        <span className="text-xs">{formatDateTime(expense.created_at)}</span>
+                                        <br />
+                                        {expense.description}
+                                    </td>
                                     <td>{expense.debt.acc_name}</td>
                                     <td>{formatNumber(-expense.fee_amount)}</td>
                                 </tr>

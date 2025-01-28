@@ -78,14 +78,14 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
 
     const mutationInSum = (acc_id) => {
         return journalsByWarehouse?.data?.reduce(
-            (sum, journal) => (journal.debt_code === acc_id && journal.trx_type === "Mutasi Kas" ? sum + journal.amount : sum),
+            (sum, journal) => (Number(journal.debt_code) === acc_id && journal.trx_type === "Mutasi Kas" ? sum + Number(journal.amount) : sum),
             0
         );
     };
 
     const mutationOutSum = (acc_id) => {
         return journalsByWarehouse.data?.reduce(
-            (sum, journal) => (journal.cred_code === acc_id && journal.trx_type === "Mutasi Kas" ? sum + journal.amount : sum),
+            (sum, journal) => (Number(journal.cred_code) === acc_id && journal.trx_type === "Mutasi Kas" ? sum + Number(journal.amount) : sum),
             0
         );
     };

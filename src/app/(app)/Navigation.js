@@ -1,6 +1,6 @@
 import NavLink from "@/components/NavLink";
 import { useAuth } from "@/libs/auth";
-import { ArrowBigDownDash, BarChart, ChartAreaIcon, CoinsIcon, DockIcon, MapIcon, ShoppingBag, User2Icon } from "lucide-react";
+import { BarChart, ChartAreaIcon, CoinsIcon, DockIcon, LogOutIcon, MapIcon, ShoppingBag, User2Icon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -118,9 +118,12 @@ const Navigation = ({ user }) => {
             </nav>
 
             <div className="">
-                <button onClick={logout} className="px-4 py-4 w-full hover:bg-indigo-500 hover:text-white cursor-pointer flex items-center gap-4 justify-start">
+                <button
+                    onClick={logout}
+                    className="px-4 py-4 w-full hover:bg-indigo-500 hover:text-white cursor-pointer flex items-center gap-4 justify-center"
+                >
                     <div>
-                        <ArrowBigDownDash className="w-5 h-5" />
+                        <LogOutIcon className="w-5 h-5" />
                     </div>
                     <span
                         className={`transition-all duration-300 ease-in-out transform text-nowrap ${isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}

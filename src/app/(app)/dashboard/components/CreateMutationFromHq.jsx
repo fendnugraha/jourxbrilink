@@ -45,7 +45,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                     <select
                         onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })}
                         value={formData.cred_code}
-                        className="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     >
                         <option value="">--Pilih sumber dana--</option>
                         {hqAccount.map((br) => (
@@ -63,7 +63,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                     <select
                         onChange={(e) => setSelectedWarehouseId(e.target.value)}
                         value={selectedWarehouseId}
-                        className="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     >
                         <option value="">--Pilih cabang tujuan mutasi--</option>
                         {warehouses?.map((wh) => (
@@ -81,7 +81,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                     <select
                         onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })}
                         value={formData.debt_code}
-                        className="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         disabled={!selectedWarehouseId}
                     >
                         <option value="">--Pilih tujuan mutasi--</option>
@@ -105,7 +105,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                 <Label>Keterangan</Label>
                 <div className="col-span-2">
                     <textarea
-                        className="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         type="text"
                         placeholder="(Optional)"
                         value={formData.description}

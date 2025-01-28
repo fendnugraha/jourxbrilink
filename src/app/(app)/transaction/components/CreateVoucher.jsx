@@ -8,7 +8,7 @@ import { MinusCircleIcon, PlusCircleIcon } from "lucide-react";
 const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, user }) => {
     const [formData, setFormData] = useState({
         product_id: "",
-        qty: 1,
+        qty: 0,
         price: 0,
         description: "",
     });
@@ -78,9 +78,9 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                 <Label>Product</Label>
                 <div className="col-span-2">
                     <select
-                        onChange={(e) => setFormData({ ...formData, product_id: e.target.value })}
+                        onChange={(e) => setFormData({ ...formData, product_id: e.target.value, qty: 1 })}
                         value={formData.product_id}
-                        className="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     >
                         <option value="">--Pilih barang--</option>
                         {products?.map((product) => (
@@ -98,12 +98,16 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                     <button
                         className="hover:text-red-600 disabled:text-slate-400 disabled:cursor-not-allowed"
                         onClick={decrementQty}
-                        disabled={formData.qty === 1}
+                        disabled={formData.qty <= 1}
                     >
                         <MinusCircleIcon className="w-6 h-6" />
                     </button>
                     <span className="text-md mx-2">{formData.qty}</span>
-                    <button className="hover:text-red-600" onClick={incrementQty}>
+                    <button
+                        className="hover:text-red-600 disabled:text-slate-400 disabled:cursor-not-allowed"
+                        onClick={incrementQty}
+                        disabled={formData.product_id === ""}
+                    >
                         <PlusCircleIcon className="w-6 h-6" />
                     </button>
                 </div>
@@ -127,7 +131,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                 <Label>Keterangan</Label>
                 <div className="col-span-2">
                     <textarea
-                        className="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         type="text"
                         placeholder="(Optional)"
                         value={formData.description}

@@ -7,7 +7,7 @@ import Modal from "@/components/Modal";
 import CreateMutationFromHq from "./CreateMutationFromHq";
 import Notification from "@/components/notification";
 import Pagination from "@/components/PaginateList";
-import { ArrowBigRightDash, PlusCircleIcon } from "lucide-react";
+import { MoveRightIcon, PlusCircleIcon } from "lucide-react";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -159,7 +159,7 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
                     <thead>
                         <tr>
                             <th>
-                                Dari <ArrowBigRightDash className="size-5 inline" /> Ke
+                                Dari <MoveRightIcon className="size-5 inline" /> Ke
                             </th>
                             <th>Jumlah</th>
                         </tr>
@@ -169,7 +169,7 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
                             <tr key={index}>
                                 <td className="">
                                     <span className="block font-bold text-slate-500">{formatDateTime(journal.created_at)}</span>
-                                    {journal.cred.acc_name} <ArrowBigRightDash className="size-5 inline" /> {journal.debt.acc_name}
+                                    {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt.acc_name}
                                 </td>
                                 <td className="text-end">{formatNumber(journal.amount)}</td>
                             </tr>

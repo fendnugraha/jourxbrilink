@@ -1,5 +1,5 @@
 import Header from "@/app/(app)/Header";
-import { ArrowRight, ListCheck, UserIcon } from "lucide-react";
+import { ArrowRight, BoxesIcon, ListCheck, SquareGanttChartIcon, UserIcon, UsersIcon, WarehouseIcon } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = {
@@ -24,7 +24,7 @@ export default function Setting() {
                                 </div>
                                 <div className="sm:relative bg-white p-3 sm:p-6 dark:bg-gray-800 overflow-hidden shadow-md rounded-xl h-32 sm:h-60 flex sm:justify-center justify-evenly items-center flex-col gap-1">
                                     <h1 className="text-5xl sm:text-8xl font-bold text-center">
-                                        <ListCheck className="w-24 h-24" />
+                                        <SquareGanttChartIcon className="w-24 h-24" />
                                     </h1>
                                     <Link
                                         href="/setting/account"
@@ -36,7 +36,7 @@ export default function Setting() {
                                 </div>
                                 <div className="sm:relative bg-white p-3 sm:p-6 dark:bg-gray-800 overflow-hidden shadow-md rounded-xl h-32 sm:h-60 flex sm:justify-center justify-evenly items-center flex-col gap-1">
                                     <h1 className="text-5xl sm:text-8xl font-bold text-center">
-                                        <ListCheck className="w-24 h-24" />
+                                        <WarehouseIcon className="w-24 h-24" />
                                     </h1>
                                     <Link
                                         href="/setting/warehouse"
@@ -48,7 +48,7 @@ export default function Setting() {
                                 </div>
                                 <div className="sm:relative bg-white p-3 sm:p-6 dark:bg-gray-800 overflow-hidden shadow-md rounded-xl h-32 sm:h-60 flex sm:justify-center justify-evenly items-center flex-col gap-1">
                                     <h1 className="text-5xl sm:text-8xl font-bold text-center">
-                                        <ListCheck className="w-24 h-24" />
+                                        <UsersIcon className="w-24 h-24" />
                                     </h1>
                                     <Link href="/setting/contact" className="sm:absolute hover:underline hover:font-bold bottom-4 right-5 text-sm rounded-full">
                                         Contact <span className="hidden sm:inline">Management</span>
@@ -57,7 +57,7 @@ export default function Setting() {
                                 </div>
                                 <div className="sm:relative bg-white p-3 sm:p-6 dark:bg-gray-800 overflow-hidden shadow-md rounded-xl h-32 sm:h-60 flex sm:justify-center justify-evenly items-center flex-col gap-1">
                                     <h1 className="text-5xl sm:text-8xl font-bold text-center">
-                                        <ListCheck className="w-24 h-24" />
+                                        <BoxesIcon className="w-24 h-24" />
                                     </h1>
                                     <Link href="/setting/product" className="sm:absolute hover:underline hover:font-bold bottom-4 right-5 text-sm rounded-full">
                                         Product <span className="hidden sm:inline">Management</span>

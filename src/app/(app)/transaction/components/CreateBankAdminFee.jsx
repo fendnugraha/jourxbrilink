@@ -48,7 +48,7 @@ const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notifica
                         <select
                             onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })}
                             value={formData.cred_code}
-                            className="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         >
                             <option value="">--Pilih Rekening--</option>
                             {filteredCashBankByWarehouse.map((cashBank) => (
@@ -76,7 +76,7 @@ const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notifica
                     <Label>Keterangan</Label>
                     <div className="col-span-2">
                         <textarea
-                            className="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             type="text"
                             placeholder="(Optional)"
                             value={formData.description}

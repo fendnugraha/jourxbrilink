@@ -19,7 +19,7 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
 
     const fetchExpense = async () => {
         try {
-            const response = await axios.get(`/api/get-expenses`);
+            const response = await axios.get(`/api/get-expense-accounts`);
             setExpense(response.data.data); // Commented out as it's not used
         } catch (error) {
             notification(error.response?.data?.message || "Something went wrong.");
@@ -59,7 +59,7 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                     <select
                         onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })}
                         value={formData.debt_code}
-                        className="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     >
                         <option value="">--Pilih Rekening--</option>
                         {expense.map((expense) => (
@@ -87,7 +87,7 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                 <Label>Keterangan</Label>
                 <div className="col-span-2">
                     <textarea
-                        className="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         type="text"
                         placeholder="(Optional)"
                         value={formData.description}

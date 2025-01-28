@@ -6,6 +6,8 @@ import axios from "@/libs/axios";
 import DailyDashboard from "./components/DailyDashboard";
 import { useAuth } from "@/libs/auth";
 import CashBankMutation from "./components/CashBankMutation";
+import VoucherSalesTable from "./components/VoucherSalesTable";
+import ExpenseTable from "./components/ExpenseTable";
 
 const Dashboard = () => {
     const { user } = useAuth({ middleware: "auth" });
@@ -40,6 +42,8 @@ const Dashboard = () => {
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <DailyDashboard user={user} />
                         <CashBankMutation warehouse={warehouse} warehouses={warehouses} />
+                        <VoucherSalesTable warehouse={warehouse} warehouses={warehouses} />
+                        <ExpenseTable warehouse={warehouse} warehouses={warehouses} />
                     </div>
                 </div>
             </div>

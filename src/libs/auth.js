@@ -46,13 +46,13 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
             await axios.post("/logout").then(() => mutate());
         }
 
-        window.location.pathname = "/";
+        window.location.href = "/";
     };
 
     useEffect(() => {
         if (middleware === "guest" && redirectIfAuthenticated && user) router.push(redirectIfAuthenticated);
 
-        if (middleware === "auth" && !user?.email_verified_at) router.push("/");
+        // if (middleware === "auth" && !user?.email_verified_at) router.push("/");
 
         // if (window.location.pathname === "/" && user?.email_verified_at) router.push(redirectIfAuthenticated);
         if (middleware === "auth" && error) logout();

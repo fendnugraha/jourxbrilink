@@ -1,6 +1,6 @@
 import NavLink from "@/components/NavLink";
 import { useAuth } from "@/libs/auth";
-import { BarChart, ChartAreaIcon, CogIcon, CoinsIcon, DockIcon, LogOutIcon, MapIcon, ShoppingBag, StoreIcon, User2Icon } from "lucide-react";
+import { BarChart, ChartAreaIcon, CogIcon, CoinsIcon, DockIcon, LandmarkIcon, LogOutIcon, MapIcon, ShoppingBag, StoreIcon, User2Icon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -56,20 +56,7 @@ const Navigation = ({ user }) => {
                             }`}
                             style={{ display: isOpen ? "inline" : "none" }}
                         >
-                            Jurnal
-                        </span>
-                    </NavLink>
-                    <NavLink href="/summary" isOpen={isOpen} active={usePathname() === "/summary"}>
-                        <div>
-                            <BarChart className="w-5 h-5" />
-                        </div>
-                        <span
-                            className={`transition-all duration-300 ease-in-out transform text-nowrap ${
-                                isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
-                            }`}
-                            style={{ display: isOpen ? "inline" : "none" }}
-                        >
-                            Summary
+                            Transaction
                         </span>
                     </NavLink>
                     <NavLink href="/store" isOpen={isOpen} active={usePathname() === "/store"}>
@@ -85,6 +72,33 @@ const Navigation = ({ user }) => {
                             Store
                         </span>
                     </NavLink>
+                    <NavLink href="/finance" isOpen={isOpen} active={usePathname() === "/finance"}>
+                        <div>
+                            <LandmarkIcon className="w-5 h-5" />
+                        </div>
+                        <span
+                            className={`transition-all duration-300 ease-in-out transform text-nowrap ${
+                                isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                            }`}
+                            style={{ display: isOpen ? "inline" : "none" }}
+                        >
+                            Finance
+                        </span>
+                    </NavLink>
+                    <NavLink href="/summary" isOpen={isOpen} active={usePathname() === "/summary"}>
+                        <div>
+                            <BarChart className="w-5 h-5" />
+                        </div>
+                        <span
+                            className={`transition-all duration-300 ease-in-out transform text-nowrap ${
+                                isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                            }`}
+                            style={{ display: isOpen ? "inline" : "none" }}
+                        >
+                            Summary
+                        </span>
+                    </NavLink>
+
                     {/* <NavLink href="/report" isOpen={isOpen} active={usePathname() === "/report"}>
                         <div>
                             <DockIcon className="w-5 h-5" />

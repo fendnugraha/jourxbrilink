@@ -18,12 +18,13 @@ const Contact = () => {
             setContacts(response.data.data);
         } catch (error) {
             setNotification(error.response?.data?.message || "Something went wrong.");
+        } finally {
+            setLoading(false);
         }
     };
 
     useEffect(() => {
         fetchContacts();
-        setLoading(false);
     }, []);
 
     const [isModalCreateContactOpen, setIsModalCreateContactOpen] = useState(false);

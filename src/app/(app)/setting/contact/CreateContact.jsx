@@ -52,7 +52,7 @@ const CreateContact = ({ isModalOpen, notification, fetchContacts }) => {
                     <select
                         onChange={(e) => setType(e.target.value)}
                         value={type}
-                        className="rounded-md w-full shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="rounded-md w-full border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     >
                         <option value="">Select type</option>
                         <option value="Customer">Customer</option>

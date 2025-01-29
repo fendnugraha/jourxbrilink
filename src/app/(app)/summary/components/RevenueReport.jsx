@@ -7,13 +7,17 @@ import formatNumber from "@/libs/formatNumber";
 const RevenueReport = () => {
     const [revenue, setRevenue] = useState([]);
     const [notification, setNotification] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const fetchRevenueReport = async () => {
+        setLoading(true);
         try {
             const response = await axios.get("/api/get-revenue-report");
             setRevenue(response.data.data);
         } catch (error) {
             setNotification(error.response?.data?.message || "Something went wrong.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -47,30 +51,42 @@ const RevenueReport = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {revenue.revenue?.map((item, index) => (
-                        <tr key={index}>
-                            <td className="">{item.warehouse}</td>
-                            <td className="">{formatNumber(item.transfer)}</td>
-                            <td className="">{formatNumber(item.tarikTunai)}</td>
-                            <td className="">{formatNumber(item.voucher)}</td>
-                            <td className="">{formatNumber(item.deposit)}</td>
-                            <td className="">{formatNumber(item.trx)}</td>
-                            <td className="">{formatNumber(item.expense)}</td>
-                            <td className="">{formatNumber(item.fee)}</td>
+                    {loading ? (
+                        <tr>
+                            <td colSpan={9}>Loading...</td>
                         </tr>
-                    ))}
+                    ) : (
+                        revenue.revenue?.map((item, index) => (
+                            <tr key={index}>
+                                <td className="">{item.warehouse}</td>
+                                <td className="">{formatNumber(item.transfer)}</td>
+                                <td className="">{formatNumber(item.tarikTunai)}</td>
+                                <td className="">{formatNumber(item.voucher)}</td>
+                                <td className="">{formatNumber(item.deposit)}</td>
+                                <td className="">{formatNumber(item.trx)}</td>
+                                <td className="">{formatNumber(item.expense)}</td>
+                                <td className="">{formatNumber(item.fee)}</td>
+                            </tr>
+                        ))
+                    )}
                 </tbody>
                 <tfoot>
-                    <tr>
-                        <th className="font-bold">Total</th>
-                        <th className="font-bold">{formatNumber(sumByTrxType("transfer"))}</th>
-                        <th className="font-bold">{formatNumber(sumByTrxType("tarikTunai"))}</th>
-                        <th className="font-bold">{formatNumber(sumByTrxType("voucher"))}</th>
-                        <th className="font-bold">{formatNumber(sumByTrxType("deposit"))}</th>
-                        <th className="font-bold">{formatNumber(sumByTrxType("trx"))}</th>
-                        <th className="font-bold">{formatNumber(sumByTrxType("expense"))}</th>
-                        <th className="font-bold">{formatNumber(sumByTrxType("fee"))}</th>
-                    </tr>
+                    {loading ? (
+                        <tr>
+                            <td colSpan={9}>Loading...</td>
+                        </tr>
+                    ) : (
+                        <tr>
+                            <th className="font-bold">Total</th>
+                            <th className="font-bold">{formatNumber(sumByTrxType("transfer"))}</th>
+                            <th className="font-bold">{formatNumber(sumByTrxType("tarikTunai"))}</th>
+                            <th className="font-bold">{formatNumber(sumByTrxType("voucher"))}</th>
+                            <th className="font-bold">{formatNumber(sumByTrxType("deposit"))}</th>
+                            <th className="font-bold">{formatNumber(sumByTrxType("trx"))}</th>
+                            <th className="font-bold">{formatNumber(sumByTrxType("expense"))}</th>
+                            <th className="font-bold">{formatNumber(sumByTrxType("fee"))}</th>
+                        </tr>
+                    )}
                 </tfoot>
             </table>
         </div>

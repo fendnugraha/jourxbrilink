@@ -7,13 +7,17 @@ import formatNumber from "@/libs/formatNumber";
 const WarehouseBalance = () => {
     const [warehouseBalance, setWarehouseBalance] = useState([]);
     const [notification, setNotification] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const fetchWarehouseBalance = async () => {
+        setLoading(true);
         try {
             const response = await axios.get("/api/get-warehouse-balance");
             setWarehouseBalance(response.data.data);
         } catch (error) {
             setNotification(error.response?.data?.message || "Something went wrong.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -36,22 +40,34 @@ const WarehouseBalance = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {warehouseBalance.warehouse?.map((w, i) => (
-                        <tr className="" key={i}>
-                            <td className="">{w.name}</td>
-                            <td className="text-end">{formatNumber(w.cash)}</td>
-                            <td className="text-end">{formatNumber(w.bank)}</td>
-                            <td className="text-end font-bold">{formatNumber(w.cash + w.bank)}</td>
+                    {loading ? (
+                        <tr>
+                            <td colSpan={4}>Loading...</td>
                         </tr>
-                    ))}
+                    ) : (
+                        warehouseBalance.warehouse?.map((w, i) => (
+                            <tr className="" key={i}>
+                                <td className="">{w.name}</td>
+                                <td className="text-end">{formatNumber(w.cash)}</td>
+                                <td className="text-end">{formatNumber(w.bank)}</td>
+                                <td className="text-end font-bold">{formatNumber(w.cash + w.bank)}</td>
+                            </tr>
+                        ))
+                    )}
                 </tbody>
                 <tfoot>
-                    <tr>
-                        <th>Total</th>
-                        <th>{formatNumber(warehouseBalance.totalCash)}</th>
-                        <th>{formatNumber(warehouseBalance.totalBank)}</th>
-                        <th>{formatNumber(warehouseBalance.totalCash + warehouseBalance.totalBank)}</th>
-                    </tr>
+                    {loading ? (
+                        <tr>
+                            <td colSpan={4}>Loading...</td>
+                        </tr>
+                    ) : (
+                        <tr>
+                            <th>Total</th>
+                            <th>{formatNumber(warehouseBalance.totalCash)}</th>
+                            <th>{formatNumber(warehouseBalance.totalBank)}</th>
+                            <th>{formatNumber(warehouseBalance.totalCash + warehouseBalance.totalBank)}</th>
+                        </tr>
+                    )}
                 </tfoot>
             </table>
         </div>

@@ -102,6 +102,7 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
+
     return (
         <div className="my-4">
             {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
@@ -153,39 +154,41 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
                     </tfoot>
                 </table>
             </div>
-            <div className="mb-4 bg-white overflow-hidden shadow-sm sm:rounded-2xl">
-                <h1 className="px-6 pt-6 font-bold text-xl text-green-600">History Mutasi Kas</h1>
-                <table className="table w-full text-xs">
-                    <thead>
-                        <tr>
-                            <th>
-                                Dari <MoveRightIcon className="size-5 inline" /> Ke
-                            </th>
-                            <th>Jumlah</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentItems.map((journal, index) => (
-                            <tr key={index}>
-                                <td className="">
-                                    <span className="block font-bold text-slate-500">{formatDateTime(journal.created_at)}</span>
-                                    {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt.acc_name}
-                                </td>
-                                <td className="text-end">{formatNumber(journal.amount)}</td>
+            {currentItems.length > 0 && (
+                <div className="mb-4 bg-white overflow-hidden shadow-sm sm:rounded-2xl">
+                    <h1 className="px-6 pt-6 font-bold text-xl text-green-600">History Mutasi Kas</h1>
+                    <table className="table w-full text-xs">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Dari <MoveRightIcon className="size-5 inline" /> Ke
+                                </th>
+                                <th>Jumlah</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-                {totalPages > 1 && (
-                    <Pagination
-                        className="w-full px-6 pb-6"
-                        totalItems={totalItems}
-                        itemsPerPage={itemsPerPage}
-                        currentPage={currentPage}
-                        onPageChange={handlePageChange}
-                    />
-                )}
-            </div>
+                        </thead>
+                        <tbody>
+                            {currentItems.map((journal, index) => (
+                                <tr key={index}>
+                                    <td className="">
+                                        <span className="block font-bold text-slate-500">{formatDateTime(journal.created_at)}</span>
+                                        {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt.acc_name}
+                                    </td>
+                                    <td className="text-end">{formatNumber(journal.amount)}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    {totalPages > 1 && (
+                        <Pagination
+                            className="w-full px-6 pb-6"
+                            totalItems={totalItems}
+                            itemsPerPage={itemsPerPage}
+                            currentPage={currentPage}
+                            onPageChange={handlePageChange}
+                        />
+                    )}
+                </div>
+            )}
         </div>
     );
 };

@@ -32,7 +32,7 @@ const ExpenseTable = ({ data }) => {
         <div className="my-4 flex gap-4">
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-2xl w-3/4">
                 <h1 className="px-6 pt-6 font-bold text-xl text-red-600">Pengeluaran (Biaya Operasional)</h1>
-                <table className="table w-full mb-4">
+                <table className="table w-full mb-4 text-xs">
                     <thead>
                         <tr>
                             <th>Description</th>
@@ -43,7 +43,7 @@ const ExpenseTable = ({ data }) => {
                     <tbody key={data}>
                         {loading ? (
                             <tr>
-                                <td colSpan="5" className="text-center">
+                                <td colSpan="3" className="text-center">
                                     Loading...
                                 </td>
                             </tr>

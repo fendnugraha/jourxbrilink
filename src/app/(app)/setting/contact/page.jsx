@@ -51,7 +51,7 @@ const Contact = () => {
                                     />
                                 </Modal>
                             </div>
-                            <table className="table w-full sm:w-3/4">
+                            <table className="table w-full sm:w-3/4 text-xs">
                                 <thead>
                                     <tr>
                                         <th className="border-b-2 p-2">Name</th>

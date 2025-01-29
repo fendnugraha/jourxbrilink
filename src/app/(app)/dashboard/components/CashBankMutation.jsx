@@ -124,7 +124,7 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
                         />
                     </Modal>
                 </div>
-                <table className="table w-full">
+                <table className="table w-full text-xs">
                     <thead>
                         <tr>
                             <th>Nama akun</th>
@@ -155,7 +155,7 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
             </div>
             <div className="mb-4 bg-white overflow-hidden shadow-sm sm:rounded-2xl">
                 <h1 className="px-6 pt-6 font-bold text-xl text-green-600">History Mutasi Kas</h1>
-                <table className="table w-full">
+                <table className="table w-full text-xs">
                     <thead>
                         <tr>
                             <th>

@@ -49,6 +49,7 @@ const User = () => {
             setNotification(error.response?.data?.message || "Something went wrong.");
         }
     };
+
     return (
         <>
             <Header title="User Management" />
@@ -69,7 +70,7 @@ const User = () => {
                                     />
                                 </Modal>
                             </div>
-                            <table className="table w-full">
+                            <table className="table w-full text-xs">
                                 <thead>
                                     <tr>
                                         <th className="border-b-2 p-2">Name</th>
@@ -78,7 +79,7 @@ const User = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {users?.data?.map((user) => (
+                                    {users?.map((user) => (
                                         <tr key={user.id}>
                                             <td className="border-b p-2">
                                                 <span className="font-bold">{user.name}</span>

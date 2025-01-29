@@ -171,7 +171,7 @@ const WarehouseDetail = ({ params }) => {
                             <div className="shadow-sm sm:rounded-lg p-6 bg-white mb-2">
                                 <h1 className="text-xl font-bold mb-4">Cash & Bank List</h1>
                                 <div>
-                                    <table className="table w-3/4">
+                                    <table className="table w-3/4 text-xs">
                                         <tbody>
                                             {currentItems.map((item) => (
                                                 <tr key={item.id}>

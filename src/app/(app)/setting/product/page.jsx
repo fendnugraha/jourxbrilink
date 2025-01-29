@@ -159,7 +159,7 @@ export default function Product() {
                                     />
                                 </Modal>
                             </div>
-                            <table className="table w-full">
+                            <table className="table w-full text-xs">
                                 <thead>
                                     <tr>
                                         <th className="text-center">#</th>

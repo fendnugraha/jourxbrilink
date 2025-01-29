@@ -31,7 +31,7 @@ const VoucherSalesTable = ({}) => {
         <div className="my-4 flex gap-4">
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-2xl w-3/4">
                 <h1 className="px-6 pt-6 font-bold text-xl text-blue-600">Total Penjualan Voucher & SP</h1>
-                <table className="table w-full mb-4">
+                <table className="table w-full mb-4 text-xs">
                     <thead>
                         <tr>
                             <th>Product</th>
@@ -42,15 +42,23 @@ const VoucherSalesTable = ({}) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {transactions?.map((transaction) => (
-                            <tr key={transaction.id}>
-                                <td>{transaction.product.name}</td>
-                                <td>{formatNumber(-transaction.quantity)}</td>
-                                <td>{formatNumber(-transaction.total_price)}</td>
-                                <td>{formatNumber(-transaction.total_cost)}</td>
-                                <td>{formatNumber(-Number(transaction.total_price - transaction.total_cost))}</td>
+                        {loading ? (
+                            <tr>
+                                <td colSpan="5" className="text-center">
+                                    Loading...
+                                </td>
                             </tr>
-                        ))}
+                        ) : (
+                            transactions?.map((transaction) => (
+                                <tr key={transaction.product_id}>
+                                    <td>{transaction.product.name}</td>
+                                    <td>{formatNumber(-transaction.quantity)}</td>
+                                    <td>{formatNumber(-transaction.total_price)}</td>
+                                    <td>{formatNumber(-transaction.total_cost)}</td>
+                                    <td>{formatNumber(-Number(transaction.total_price - transaction.total_cost))}</td>
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>

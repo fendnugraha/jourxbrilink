@@ -17,7 +17,7 @@ import CreateExpense from "./components/CreateExpense";
 import CashBankBalance from "./components/CashBankBalance";
 import formatNumber from "@/libs/formatNumber";
 import Loading from "../loading";
-import { PlusCircleIcon } from "lucide-react";
+import { ChevronDownIcon, PlusCircleIcon } from "lucide-react";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -188,7 +188,11 @@ const TransactionPage = () => {
                             </Modal>
 
                             <Dropdown
-                                trigger={<button className="bg-green-500 hover:bg-green-600 text-white py-2 px-6 rounded-lg">Voucher & Deposit</button>}
+                                trigger={
+                                    <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-6 rounded-lg">
+                                        Voucher & Deposit <ChevronDownIcon size={18} className="inline" />
+                                    </button>
+                                }
                                 align="left"
                             >
                                 <ul className="min-w-max">
@@ -205,7 +209,11 @@ const TransactionPage = () => {
                                 </ul>
                             </Dropdown>
                             <Dropdown
-                                trigger={<button className="bg-red-500 hover:bg-red-600 text-white py-2 px-6 rounded-lg">Pengeluaran (Biaya)</button>}
+                                trigger={
+                                    <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-6 rounded-lg">
+                                        Pengeluaran (Biaya) <ChevronDownIcon size={18} className="inline" />
+                                    </button>
+                                }
                                 align="left"
                             >
                                 <ul className="min-w-max">

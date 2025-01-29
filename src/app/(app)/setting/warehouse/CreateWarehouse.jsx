@@ -40,7 +40,7 @@ const CreateWarehouse = ({ isModalOpen, notification, fetchWarehouses }) => {
             notification(response.data.message);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
-            notification("Failed to create warehouse.", "error");
+            notification(error.response?.data?.message, "error");
             isModalOpen(false);
             fetchWarehouses();
         }
@@ -78,7 +78,9 @@ const CreateWarehouse = ({ isModalOpen, notification, fetchWarehouses }) => {
                     <Label htmlFor="address">Address:</Label>
                     <textarea
                         type="text"
-                        className={"w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"}
+                        className={
+                            "w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        }
                         value={formData.address}
                         onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                         required
@@ -90,7 +92,7 @@ const CreateWarehouse = ({ isModalOpen, notification, fetchWarehouses }) => {
                     <select
                         name="cash_bank"
                         id="cash_bank"
-                        className="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         onChange={(e) =>
                             setFormData({
                                 ...formData,

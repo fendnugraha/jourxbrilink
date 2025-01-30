@@ -8,28 +8,10 @@ import { useEffect, useState } from "react";
 
 const Finance = () => {
     const { user } = useAuth({ middleware: "auth" });
-    const [loading, setLoading] = useState(false);
-    const [finance, setFinance] = useState([]);
 
     const [notification, setNotification] = useState("");
     const warehouse = user?.role?.warehouse_id;
 
-    const fetchFinance = async (url = "/api/finance") => {
-        setLoading(true);
-        try {
-            const response = await axios.get(url);
-            setFinance(response.data.data);
-        } catch (error) {
-            setNotification(error.response?.data?.message || "Something went wrong.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchFinance();
-    }, []);
-    console.log(finance);
     return (
         <>
             {notification && <Notification notification={notification} onClose={() => setNotification("")} />}

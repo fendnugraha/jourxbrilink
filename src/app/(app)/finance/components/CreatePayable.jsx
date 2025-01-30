@@ -5,17 +5,20 @@ import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
 
-const CreatePayable = ({ isModalOpen, notification }) => {
+const CreatePayable = ({ isModalOpen, fetchFinance, notification }) => {
     const [formData, setFormData] = useState({
+        date_issued: "",
         contact_id: "",
         amount: "",
         description: "",
         debt_code: "",
         cred_code: "",
+        type: "Payable",
     });
     const [contacts, setContacts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [accounts, setAccounts] = useState([]);
+    const [errors, setErrors] = useState([]);
 
     const fetchContacts = async (url = "/api/get-all-contacts") => {
         setLoading(true);
@@ -53,9 +56,25 @@ const CreatePayable = ({ isModalOpen, notification }) => {
 
     const filterPayableAccounts = accounts.filter((account) => account.account_id === 19 || account.account_id === 20);
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const response = await axios.post("/api/finance", formData);
+            notification(response.data.message);
+            isModalOpen(false);
+            fetchFinance();
+        } catch (error) {
+            setErrors(error.response?.data?.errors || ["Something went wrong."]);
+            notification(error.response?.data?.message || "Something went wrong.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mb-2 items-center">
                     <Label htmlFor="date_issued">Tanggal</Label>
                     <div className="col-span-2">
@@ -102,7 +121,7 @@ const CreatePayable = ({ isModalOpen, notification }) => {
                         <select
                             value={formData.contact_id}
                             onChange={(e) => setFormData({ ...formData, contact_id: e.target.value })}
-                            className="w-full border rounded-lg p-2"
+                            className={`w-full border rounded-lg p-2 ${errors.contact_id ? "border-red-500" : ""}`}
                         >
                             <option value="">--Pilih Contact--</option>
                             {contacts.map((contact) => (
@@ -138,8 +157,12 @@ const CreatePayable = ({ isModalOpen, notification }) => {
                         />
                     </div>
                 </div>
-                <button type="submit" className="border rounded-lg p-2 bg-blue-500 text-white">
-                    Simpan
+                <button
+                    type="submit"
+                    className="bg-indigo-500 hover:bg-indigo-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
+                    disabled={loading}
+                >
+                    {loading ? "Loading..." : "Simpan"}
                 </button>
             </form>
         </div>

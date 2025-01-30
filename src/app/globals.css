@@ -25,12 +25,4 @@
     .table th {
         @apply py-4 text-gray-700 border-b-2 border-gray-200;
     }
-
-    .table td {
-        @apply text-gray-500;
-    }
-
-    .table tr:nth-child(even) {
-        @apply bg-gray-50;
-    }
 }

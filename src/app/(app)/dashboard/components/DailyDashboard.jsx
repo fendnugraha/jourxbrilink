@@ -51,18 +51,19 @@ const DailyDashboard = ({ user, notification }) => {
                     </div>
                 </div>
                 <div className="bg-gray-800 w-full h-full p-3 rounded-lg sm:rounded-3xl flex flex-col gap-2 items-center justify-center col-span-2 row-span-2">
-                    <div className="flex gap-10 justify-between items-center">
+                    <div className="flex gap-5 justify-between flex-col items-center">
                         <div className="flex gap-2 flex-col justify-center items-center">
                             <h4 className="text-md sm:text-lg font-bold text-white">Voucher & SP</h4>
                             <h1 className="text-2xl sm:text-3xl font-black text-yellow-300">
                                 {loading ? <LoaderIcon className="animate-pulse" /> : formatNumber(data?.totalVoucher)}
                             </h1>
                         </div>
-                        {/* <div className="flex gap-2 flex-col justify-center items-center">
-                    <h4 className="text-md sm:text-lg font-bold text-white">Accessories</h4>
-                    <h1 className="text-2xl sm:text-3xl font-black text-yellow-300">100000
-                    </h1>
-                </div> */}
+                        <div className="flex gap-2 flex-col justify-center items-center">
+                            <h4 className="text-md sm:text-lg font-bold text-white">Accessories</h4>
+                            <h1 className="text-2xl sm:text-3xl font-black text-yellow-300">
+                                {loading ? <LoaderIcon className="animate-pulse" /> : formatNumber(data?.totalAccessories)}
+                            </h1>
+                        </div>
                     </div>
                 </div>
                 <div className="bg-violet-700 rounded-lg sm:rounded-3xl w-full h-full p-3 flex flex-col gap-1 items-center justify-center">
@@ -71,7 +72,7 @@ const DailyDashboard = ({ user, notification }) => {
                         {loading ? (
                             <LoaderIcon className="animate-pulse" />
                         ) : (
-                            formatNumber(data?.totalCashDeposit + data?.profit + data?.totalCash + data?.totalVoucher)
+                            formatNumber(data?.totalCashDeposit + data?.profit + data?.totalCash + data?.totalVoucher + data?.totalAccessories)
                         )}
                     </h1>
                 </div>
@@ -110,7 +111,7 @@ const DailyDashboard = ({ user, notification }) => {
                 <div className="bg-red-600 rounded-lg sm:rounded-3xl w-full h-full p-3 flex flex-col gap-1 items-center justify-center">
                     <h4 className="text-md sm:text-xl text-white">Biaya</h4>
                     <h1 className="text-2xl font-extrabold text-white">
-                        {loading ? <LoaderIcon className="animate-pulse" /> : formatNumber(data?.totalExpense)}
+                        {loading ? <LoaderIcon className="animate-pulse" /> : formatNumber(data?.totalExpense < 0 ? data?.totalExpense * -1 : 0)}
                     </h1>
                 </div>
                 <div className="bg-gray-700 rounded-lg sm:rounded-3xl w-full h-full p-3 flex flex-col gap-1 items-center justify-center">

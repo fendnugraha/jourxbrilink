@@ -7,16 +7,17 @@ import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
 import formatDateTime from "@/libs/formatDateTime";
 import Link from "next/link";
+import Paginator from "@/components/Paginator";
 
 const StorePage = () => {
     const [transactions, setTransactions] = useState([]);
     const [notification, setNotification] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const fetchTransaction = async () => {
+    const fetchTransaction = async (url = "/api/transactions") => {
         setLoading(true);
         try {
-            const response = await axios.get(`/api/transactions`);
+            const response = await axios.get(url);
             setTransactions(response.data.data);
         } catch (error) {
             setNotification(error.response?.data?.message || "Something went wrong.");
@@ -29,6 +30,9 @@ const StorePage = () => {
     useEffect(() => {
         fetchTransaction();
     }, []);
+    const handleChangePage = (url) => {
+        fetchTransaction(url);
+    };
 
     return (
         <>
@@ -64,7 +68,7 @@ const StorePage = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {transactions.map((transaction) => (
+                                        {transactions.data?.map((transaction) => (
                                             <tr key={transaction.id}>
                                                 <td className="text-center">
                                                     {transaction.transaction_type === "Purchase" ? (
@@ -90,6 +94,9 @@ const StorePage = () => {
                                         ))}
                                     </tbody>
                                 </table>
+                                <div className="px-4">
+                                    {transactions.last_page > 1 && <Paginator links={transactions} handleChangePage={handleChangePage} />}
+                                </div>
                             </div>
                         </div>
                     </div>

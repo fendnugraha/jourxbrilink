@@ -77,7 +77,7 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                     <Input
                         type="number"
                         placeholder="Rp."
-                        value={formData.fee_amount}
+                        value={formData.fee_amount * -1}
                         onChange={(e) => setFormData({ ...formData, fee_amount: -e.target.value })}
                     />
                     {errors.fee_amount && <span className="text-red-500 text-xs">{errors.fee_amount}</span>}

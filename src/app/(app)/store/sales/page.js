@@ -4,7 +4,7 @@ import Header from "../../Header";
 import { useEffect, useState } from "react";
 import formatNumber from "@/libs/formatNumber";
 import Input from "@/components/Input";
-import { MinusCircleIcon, PlusCircleIcon, TrashIcon } from "lucide-react";
+import { LoaderCircleIcon, MinusCircleIcon, PlusCircleIcon, TrashIcon } from "lucide-react";
 import axios from "@/libs/axios";
 import ProductCard from "../components/ProductCard";
 import Modal from "@/components/Modal";
@@ -146,13 +146,13 @@ const Sales = () => {
         setTotalPrice(calculateTotalPrice());
     }, [cart]);
 
-    const handleCheckOut = () => {
+    const handleCheckOut = async () => {
         setLoading(true);
         try {
-            const response = axios.post("/api/transactions", { cart, transaction_type: "sales" });
+            const response = await axios.post("/api/transactions", { cart, transaction_type: "Sales" });
             setNotification(response.data.message);
             handleClearCart();
-            console.log(response);
+            setIsModalCheckOutOpen(false);
         } catch (error) {
             setNotification(error.response?.data?.message || "Something went wrong.");
         } finally {
@@ -260,9 +260,10 @@ const Sales = () => {
                                     </div>
                                     <button
                                         onClick={handleCheckOut}
-                                        className="w-full mt-4 bg-indigo-600 hover:bg-indigo-500 text-white py-4 px-6  rounded-full"
+                                        className="w-full mt-4 bg-indigo-600 hover:bg-indigo-500 text-white py-4 px-6 disabled:bg-slate-300 disabled:cursor-wait rounded-full"
+                                        disabled={loading}
                                     >
-                                        Check out
+                                        {loading ? <LoaderCircleIcon className="animate-spin" /> : "Check out"}
                                     </button>
                                 </Modal>
                             </div>

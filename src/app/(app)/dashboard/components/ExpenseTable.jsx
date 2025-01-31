@@ -51,21 +51,21 @@ const ExpenseTable = ({ data }) => {
                             expenses.map((expense) => (
                                 <tr key={expense.id}>
                                     <td>
-                                        <span className="text-xs">{formatDateTime(expense.created_at)}</span>
+                                        <span className="text-xs text-slate-500">{formatDateTime(expense.created_at)}</span>
                                         <br />
                                         {expense.description}
                                     </td>
                                     <td>{expense.debt.acc_name}</td>
-                                    <td>{formatNumber(-expense.fee_amount)}</td>
+                                    <td className="text-right">{formatNumber(-expense.fee_amount)}</td>
                                 </tr>
                             ))
                         )}
                     </tbody>
                 </table>
             </div>
-            <div className="bg-sky-700 text-white overflow-hidden shadow-sm sm:rounded-2xl flex-1 flex flex-col justify-center items-center">
+            <div className="bg-red-500 text-white overflow-hidden shadow-sm sm:rounded-2xl flex-1 flex flex-col justify-center items-center">
                 <h1>Expense Total</h1>
-                <h1 className="text-4xl font-bold">{formatNumber(-totalExpense)}</h1>
+                <h1 className="text-4xl font-bold">{formatNumber(totalExpense < 0 ? totalExpense * -1 : 0)}</h1>
             </div>
         </div>
     );

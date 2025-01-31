@@ -6,6 +6,7 @@ import axios from "@/libs/axios";
 import { useState } from "react";
 import Pagination from "@/components/PaginateList";
 import { ArrowRightIcon, FilterIcon, PencilIcon, TrashIcon } from "lucide-react";
+import Modal from "@/components/Modal";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -21,10 +22,15 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
     const [endDate, setEndDate] = useState(getCurrentDate());
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(5);
+    const [isModalFilterJournalOpen, setIsModalFilterJournalOpen] = useState(false);
+
+    const closeModal = () => {
+        setIsModalFilterJournalOpen(false);
+    };
 
     const warehouse = user.role?.warehouse_id;
     const warehouseCash = user.role.warehouse.chart_of_account_id;
-    const itemsPerPage = 5; // Number of items per page
 
     const handleDeleteJournal = async (id) => {
         try {
@@ -57,10 +63,23 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
             <div className="px-4 mb-4 flex justify-start items-center gap-2 w-full">
                 <select
                     onChange={(e) => {
+                        setItemsPerPage(Number(e.target.value));
+                        setCurrentPage(1);
+                    }}
+                    className="rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                >
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={25}>25</option>
+                    <option value={50}>50</option>
+                    <option value={100}>100</option>
+                </select>
+                <select
+                    onChange={(e) => {
                         setSelectedAccount(e.target.value);
                         setCurrentPage(1);
                     }}
-                    className="rounded-md w-1/2 border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    className="rounded-md flex-1 border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 >
                     <option value="">Semua Akun</option>
                     {branchAccount.map((account, index) => (
@@ -69,9 +88,15 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
                         </option>
                     ))}
                 </select>
-                <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold p-3 rounded-lg">
-                    <FilterIcon className="size-5" />
+                <button
+                    onClick={() => setIsModalFilterJournalOpen(true)}
+                    className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
+                >
+                    <FilterIcon className="size-4" />
                 </button>
+                <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal">
+                    <div className="flex flex-col gap-2"></div>
+                </Modal>
             </div>
 
             <table className="table w-full text-xs">
@@ -107,7 +132,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
                                         {journal.cred.acc_name} <ArrowRightIcon className="size-4 inline" /> {journal.debt.acc_name}
                                     </span>
                                 </td>
-                                <td className="font-bold">
+                                <td className="font-bold text-end">
                                     <span
                                         className={`${Number(journal.debt_code) === Number(selectedAccount) ? "text-green-500" : ""}
                                     ${Number(journal.cred_code) === Number(selectedAccount) ? "text-red-500" : ""}

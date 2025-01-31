@@ -52,10 +52,10 @@ const VoucherSalesTable = ({}) => {
                             transactions?.map((transaction) => (
                                 <tr key={transaction.product_id}>
                                     <td>{transaction.product.name}</td>
-                                    <td>{formatNumber(-transaction.quantity)}</td>
-                                    <td>{formatNumber(-transaction.total_price)}</td>
-                                    <td>{formatNumber(-transaction.total_cost)}</td>
-                                    <td>{formatNumber(-Number(transaction.total_price - transaction.total_cost))}</td>
+                                    <td className="text-center">{formatNumber(-transaction.quantity)}</td>
+                                    <td className="text-end">{formatNumber(-transaction.total_price)}</td>
+                                    <td className="text-end">{formatNumber(-transaction.total_cost)}</td>
+                                    <td className="text-end">{formatNumber(-Number(transaction.total_price - transaction.total_cost))}</td>
                                 </tr>
                             ))
                         )}
@@ -64,7 +64,7 @@ const VoucherSalesTable = ({}) => {
             </div>
             <div className="bg-sky-700 text-white overflow-hidden shadow-sm sm:rounded-2xl flex-1 flex flex-col justify-center items-center">
                 <h1>Cost Total</h1>
-                <h1 className="text-4xl font-bold">{formatNumber(-totalCost)}</h1>
+                <h1 className="text-4xl font-bold">{formatNumber(totalCost < 0 ? totalCost * -1 : 0)}</h1>
             </div>
         </div>
     );

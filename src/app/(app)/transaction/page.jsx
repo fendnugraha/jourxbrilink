@@ -117,7 +117,7 @@ const TransactionPage = () => {
                         <div className="mb-2 flex justify-start gap-2">
                             <button
                                 onClick={() => setIsModalCreateTransferOpen(true)}
-                                className="bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-6 rounded-lg"
+                                className="bg-indigo-500 text-sm hover:bg-indigo-600 text-white py-2 px-6 rounded-lg"
                             >
                                 Tansfer Uang <PlusCircleIcon className="size-4 inline" />
                             </button>
@@ -132,7 +132,7 @@ const TransactionPage = () => {
                             </Modal>
                             <button
                                 onClick={() => setIsModalCreateCashWithdrawalOpen(true)}
-                                className="bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-6 rounded-lg"
+                                className="bg-indigo-500 text-sm hover:bg-indigo-600 text-white py-2 px-6 rounded-lg"
                             >
                                 Tarik Tunai <PlusCircleIcon className="size-4 inline" />
                             </button>
@@ -189,7 +189,7 @@ const TransactionPage = () => {
 
                             <Dropdown
                                 trigger={
-                                    <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-6 rounded-lg">
+                                    <button className="bg-green-500 text-sm hover:bg-green-600 text-white py-2 px-6 rounded-lg">
                                         Voucher & Deposit <ChevronDownIcon size={18} className="inline" />
                                     </button>
                                 }
@@ -197,12 +197,12 @@ const TransactionPage = () => {
                             >
                                 <ul className="min-w-max">
                                     <li className="border-b hover:bg-slate-100 ">
-                                        <button className="w-full text-left py-2 px-4 " onClick={() => setIsModalCreateVoucherOpen(true)}>
+                                        <button className="w-full text-sm text-left py-2 px-4 " onClick={() => setIsModalCreateVoucherOpen(true)}>
                                             Voucher & SP
                                         </button>
                                     </li>
                                     <li className="border-b hover:bg-slate-100 ">
-                                        <button className="w-full text-left py-2 px-4" onClick={() => setIsModalCreateDepositOpen(true)}>
+                                        <button className="w-full text-sm text-left py-2 px-4" onClick={() => setIsModalCreateDepositOpen(true)}>
                                             Penjualan Pulsa dll.
                                         </button>
                                     </li>
@@ -210,7 +210,7 @@ const TransactionPage = () => {
                             </Dropdown>
                             <Dropdown
                                 trigger={
-                                    <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-6 rounded-lg">
+                                    <button className="bg-red-500 text-sm hover:bg-red-600 text-white py-2 px-6 rounded-lg">
                                         Pengeluaran (Biaya) <ChevronDownIcon size={18} className="inline" />
                                     </button>
                                 }
@@ -218,17 +218,17 @@ const TransactionPage = () => {
                             >
                                 <ul className="min-w-max">
                                     <li className="border-b hover:bg-slate-100 ">
-                                        <button className="w-full text-left py-2 px-4 " onClick={() => setIsModalCreateMutationToHqOpen(true)}>
+                                        <button className="w-full text-sm text-left py-2 px-4 " onClick={() => setIsModalCreateMutationToHqOpen(true)}>
                                             Pengembalian Saldo Kas & Bank
                                         </button>
                                     </li>
                                     <li className="border-b hover:bg-slate-100 ">
-                                        <button className="w-full text-left py-2 px-4" onClick={() => setIsModalCreateExpenseOpen(true)}>
+                                        <button className="w-full text-sm text-left py-2 px-4" onClick={() => setIsModalCreateExpenseOpen(true)}>
                                             Biaya Operasional
                                         </button>
                                     </li>
                                     <li className="border-b hover:bg-slate-100 ">
-                                        <button className="w-full text-left py-2 px-4" onClick={() => setIsModalCreateBankAdminFeeOpen(true)}>
+                                        <button className="w-full text-sm text-left py-2 px-4" onClick={() => setIsModalCreateBankAdminFeeOpen(true)}>
                                             Biaya Admin Bank
                                         </button>
                                     </li>
@@ -237,7 +237,6 @@ const TransactionPage = () => {
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                             <div className="col-span-3 bg-white py-6 rounded-2xl">
-                                <h1 className="text-red-500">Profit: {formatNumber(dailyDashboard?.profit)} </h1>
                                 <JournalTable
                                     cashBank={cashBank}
                                     journalsByWarehouse={journalsByWarehouse}

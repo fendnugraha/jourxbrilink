@@ -23,6 +23,8 @@ const User = () => {
             setUsers(response.data.data);
         } catch (error) {
             setNotification(error.response?.data?.message || "Something went wrong.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -55,31 +57,37 @@ const User = () => {
             <Header title="User Management" />
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div className="bg-white overflow-hidden rounded-2xl">
                         {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
-                        <div className="p-6 bg-white border-b border-gray-200">
-                            <div className="mb-2">
-                                <button onClick={() => setIsModalCreateUserOpen(true)} className="bg-indigo-500 text-white py-2 px-6 rounded-lg">
-                                    Tambah User <PlusCircleIcon className="size-4 inline" />
-                                </button>
-                                <Modal isOpen={isModalCreateUserOpen} onClose={closeModal} modalTitle="Create User">
-                                    <CreateUser
-                                        isModalOpen={setIsModalCreateUserOpen}
-                                        notification={(message) => setNotification(message)}
-                                        fetchUsers={fetchUsers}
-                                    />
-                                </Modal>
-                            </div>
-                            <table className="table w-full text-xs">
-                                <thead>
+                        <div className="p-4">
+                            <button onClick={() => setIsModalCreateUserOpen(true)} className="bg-indigo-500 text-white text-sm py-2 px-6 rounded-lg">
+                                Tambah User <PlusCircleIcon className="size-4 inline" />
+                            </button>
+                            <Modal isOpen={isModalCreateUserOpen} onClose={closeModal} modalTitle="Create User">
+                                <CreateUser
+                                    isModalOpen={setIsModalCreateUserOpen}
+                                    notification={(message) => setNotification(message)}
+                                    fetchUsers={fetchUsers}
+                                />
+                            </Modal>
+                        </div>
+                        <table className="table w-full text-xs">
+                            <thead>
+                                <tr>
+                                    <th className="border-b-2 p-2">Name</th>
+                                    <th className="border-b-2 p-2">Created at</th>
+                                    <th className="border-b-2 p-2">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {loading ? (
                                     <tr>
-                                        <th className="border-b-2 p-2">Name</th>
-                                        <th className="border-b-2 p-2">Created at</th>
-                                        <th className="border-b-2 p-2">Action</th>
+                                        <td className="border-b p-2" colSpan={3}>
+                                            Loading ...
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    {users?.map((user) => (
+                                ) : (
+                                    users?.map((user) => (
                                         <tr key={user.id}>
                                             <td className="border-b p-2">
                                                 <span className="font-bold">{user.name}</span>
@@ -100,11 +108,11 @@ const User = () => {
                                                 </span>
                                             </td>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                            {users?.links && <Paginator links={users} handleChangePage={handleChangePage} />}
-                        </div>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                        {users?.links && <Paginator links={users} handleChangePage={handleChangePage} />}
                     </div>
                 </div>
             </div>

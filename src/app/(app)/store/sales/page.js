@@ -7,6 +7,7 @@ import Input from "@/components/Input";
 import { MinusCircleIcon, PlusCircleIcon, TrashIcon } from "lucide-react";
 import axios from "@/libs/axios";
 import ProductCard from "../components/ProductCard";
+import Modal from "@/components/Modal";
 
 const useDebounce = (value, delay) => {
     const [debouncedValue, setDebouncedValue] = useState(value);
@@ -32,6 +33,10 @@ const Sales = () => {
     const debouncedSearch = useDebounce(search, 500); // Apply debounce with 500ms delay
     const [cart, setCart] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [isModalCheckOutOpen, setIsModalCheckOutOpen] = useState(false);
+    const closeModal = () => {
+        setIsModalCheckOutOpen(false);
+    };
 
     // Handle search input change
     const handleSearch = (e) => {
@@ -140,6 +145,20 @@ const Sales = () => {
         localStorage.setItem("cart", JSON.stringify(cart));
         setTotalPrice(calculateTotalPrice());
     }, [cart]);
+
+    const handleCheckOut = () => {
+        setLoading(true);
+        try {
+            const response = axios.post("/api/transactions", { cart, transaction_type: "sales" });
+            setNotification(response.data.message);
+            handleClearCart();
+            console.log(response);
+        } catch (error) {
+            setNotification(error.response?.data?.message || "Something went wrong.");
+        } finally {
+            setLoading(false);
+        }
+    };
     return (
         <>
             {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
@@ -217,14 +236,35 @@ const Sales = () => {
                                         ))
                                     )}
                                 </div>
-                                <button className="w-full mt-4 bg-indigo-600 text-white py-4 px-6  rounded-full flex justify-between items-center">
-                                    <span>Checkout</span>
-                                    <div>
-                                        <span className="font-bold text-yellow-200">
-                                            {formatNumber(totalPrice)} <br />
-                                        </span>
+                                {cart.length > 0 && (
+                                    <button
+                                        onClick={() => setIsModalCheckOutOpen(true)}
+                                        className="w-full mt-4 bg-indigo-600 hover:bg-indigo-500 text-white py-4 px-6  rounded-full flex justify-between items-center"
+                                    >
+                                        <span>Checkout</span>
+                                        <div>
+                                            <span className="font-bold text-yellow-200">
+                                                {formatNumber(totalPrice)} <br />
+                                            </span>
+                                        </div>
+                                    </button>
+                                )}
+
+                                <Modal isOpen={isModalCheckOutOpen} onClose={closeModal} modalTitle="Check out pesanan">
+                                    <div className="flex justify-center items-center border-b border-gray-300 border-dashed py-2">
+                                        <h1 className="text-4xl">{cart.length} Items</h1>
                                     </div>
-                                </button>
+                                    <div className="flex justify-between items-center my-4">
+                                        <h1 className="text-2xl">Total</h1>
+                                        <h1 className="text-2xl">Rp. {formatNumber(totalPrice)}</h1>
+                                    </div>
+                                    <button
+                                        onClick={handleCheckOut}
+                                        className="w-full mt-4 bg-indigo-600 hover:bg-indigo-500 text-white py-4 px-6  rounded-full"
+                                    >
+                                        Check out
+                                    </button>
+                                </Modal>
                             </div>
                         </div>
                     </div>

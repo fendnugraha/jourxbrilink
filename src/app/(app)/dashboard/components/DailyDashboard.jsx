@@ -58,12 +58,14 @@ const DailyDashboard = ({ user, notification }) => {
                                 {loading ? <LoaderIcon className="animate-pulse" /> : formatNumber(data?.totalVoucher)}
                             </h1>
                         </div>
-                        <div className="flex gap-2 flex-col justify-center items-center">
-                            <h4 className="text-md sm:text-lg font-bold text-white">Accessories</h4>
-                            <h1 className="text-2xl sm:text-3xl font-black text-yellow-300">
-                                {loading ? <LoaderIcon className="animate-pulse" /> : formatNumber(data?.totalAccessories)}
-                            </h1>
-                        </div>
+                        {data?.totalAccessories > 0 && (
+                            <div className="flex gap-2 flex-col justify-center items-center">
+                                <h4 className="text-md sm:text-lg font-bold text-white">Accessories</h4>
+                                <h1 className="text-2xl sm:text-3xl font-black text-yellow-300">
+                                    {loading ? <LoaderIcon className="animate-pulse" /> : formatNumber(data?.totalAccessories)}
+                                </h1>
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="bg-violet-700 rounded-lg sm:rounded-3xl w-full h-full p-3 flex flex-col gap-1 items-center justify-center">

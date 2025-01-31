@@ -1,6 +1,19 @@
 import NavLink from "@/components/NavLink";
 import { useAuth } from "@/libs/auth";
-import { BarChart, ChartAreaIcon, CogIcon, CoinsIcon, DockIcon, LandmarkIcon, LogOutIcon, MapIcon, ShoppingBag, StoreIcon, User2Icon } from "lucide-react";
+import {
+    BarChart,
+    ChartAreaIcon,
+    CogIcon,
+    CoinsIcon,
+    DockIcon,
+    LandmarkIcon,
+    LogOutIcon,
+    MapIcon,
+    MenuIcon,
+    ShoppingBag,
+    StoreIcon,
+    User2Icon,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -12,9 +25,13 @@ const Navigation = ({ user }) => {
     };
     return (
         <nav className={`bg-white text-gray-600 hidden sm:block min-h-screen transition-all ${isOpen ? "w-64" : "w-16"} flex flex-col`}>
-            <div className="h-[72px] px-4 text-gray-500 bg-blue-800 flex items-center justify-start gap-4 cursor-pointer border-b">
+            <div
+                className={`h-[72px] px-4 text-gray-500 bg-blue-800 flex items-center ${
+                    isOpen ? "justify-start" : "justify-center"
+                } gap-4 cursor-pointer border-b`}
+            >
                 <div className="h-full flex items-center" onClick={toggleNavbar}>
-                    <BarChart className="w-5 h-5" />
+                    <MenuIcon className="w-5 h-5 text-white" />
                 </div>
                 <div
                     className={`transition-all duration-300 ease-in-out transform text-nowrap ${isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}

@@ -10,7 +10,7 @@ const VoucherSalesTable = ({}) => {
     const fetchTransaction = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`/api/transactions`);
+            const response = await axios.get(`/api/get-trx-vcr`);
             setTransactions(response.data.data);
         } catch (error) {
             setNotification(error.response?.data?.message || "Something went wrong.");
@@ -31,7 +31,7 @@ const VoucherSalesTable = ({}) => {
         <div className="my-4 flex gap-4">
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-2xl w-3/4">
                 <h1 className="px-6 pt-6 font-bold text-xl text-blue-600">Total Penjualan Voucher & SP</h1>
-                <table className="table w-full mb-4 text-xs">
+                <table className="table w-full text-xs">
                     <thead>
                         <tr>
                             <th>Product</th>

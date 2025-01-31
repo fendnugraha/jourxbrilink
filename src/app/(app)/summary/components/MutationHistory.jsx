@@ -32,7 +32,6 @@ const MutationHistory = () => {
         fetchMutation();
     }, [formData]);
 
-    console.log(mutation);
     return (
         <div className="bg-white rounded-lg mb-3 relative">
             <div className="p-4">

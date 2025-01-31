@@ -7,7 +7,7 @@ import Label from "@/components/Label";
 import Notification from "@/components/notification";
 import Pagination from "@/components/PaginateList";
 import Link from "next/link";
-import { KeyIcon, LockIcon } from "lucide-react";
+import { KeyIcon, KeyRound, LockIcon } from "lucide-react";
 
 const WarehouseDetail = ({ params }) => {
     const [notification, setNotification] = useState(null);
@@ -137,7 +137,7 @@ const WarehouseDetail = ({ params }) => {
                                         <div className="mb-4">
                                             <Label>Warehouse Address:</Label>
                                             <textarea
-                                                className="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                                className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                                 value={formData.address || warehouse.address || ""}
                                                 onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                                             />
@@ -145,7 +145,7 @@ const WarehouseDetail = ({ params }) => {
                                         <div className="mb-4">
                                             <Label>Cash Account:</Label>
                                             <select
-                                                className="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                                className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                                 value={formData.chart_of_account_id || warehouse.chart_of_account_id || ""}
                                                 onChange={(e) => setFormData({ ...formData, chart_of_account_id: e.target.value })}
                                             >
@@ -183,7 +183,7 @@ const WarehouseDetail = ({ params }) => {
                                                         <span className="text-xs flex justify-center items-center">
                                                             {warehouse.chart_of_account_id == item.id ? (
                                                                 <button>
-                                                                    <KeyIcon className="size-8 text-red-600" />
+                                                                    <KeyRound className="size-6 text-red-600" />
                                                                 </button>
                                                             ) : (
                                                                 <button

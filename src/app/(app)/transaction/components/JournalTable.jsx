@@ -5,8 +5,10 @@ import formatDateTime from "@/libs/formatDateTime";
 import axios from "@/libs/axios";
 import { useState } from "react";
 import Pagination from "@/components/PaginateList";
-import { ArrowRightIcon, FilterIcon, PencilIcon, TrashIcon } from "lucide-react";
+import { ArrowRightIcon, FilterIcon, MessageCircleWarningIcon, PencilIcon, TrashIcon } from "lucide-react";
 import Modal from "@/components/Modal";
+import Label from "@/components/Label";
+import Input from "@/components/Input";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -24,9 +26,11 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
     const [isModalFilterJournalOpen, setIsModalFilterJournalOpen] = useState(false);
+    const [isModalDeleteJournalOpen, setIsModalDeleteJournalOpen] = useState(false);
 
     const closeModal = () => {
         setIsModalFilterJournalOpen(false);
+        setIsModalDeleteJournalOpen(false);
     };
 
     const warehouse = user.role?.warehouse_id;
@@ -95,7 +99,52 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
                     <FilterIcon className="size-4" />
                 </button>
                 <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal">
-                    <div className="flex flex-col gap-2"></div>
+                    <div className="mb-4">
+                        <Label className="font-bold">Cabang</Label>
+                        <select
+                            onChange={(e) => {
+                                setSelectedAccount(e.target.value);
+                                setCurrentPage(1);
+                            }}
+                            className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        >
+                            <option value="">Semua Akun</option>
+                            {branchAccount.map((account, index) => (
+                                <option key={index} value={account.id}>
+                                    {account.acc_name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 mb-4">
+                        <div>
+                            <Label className="font-bold">Tanggal</Label>
+                            <Input
+                                type="date"
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
+                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            />
+                        </div>
+                        <div>
+                            <Label className="font-bold">s/d</Label>
+                            <Input
+                                type="date"
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            />
+                        </div>
+                    </div>
+                    <button
+                        onClick={() => {
+                            fetchJournalsByWarehouse(startDate, endDate);
+                            setIsModalFilterJournalOpen(false);
+                        }}
+                        className="btn-primary"
+                    >
+                        Submit
+                    </button>
                 </Modal>
             </div>
 
@@ -144,12 +193,32 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
                                 </td>
                                 <td className="hidden sm:table-cell">
                                     <div className="flex justify-center gap-3">
-                                        <button className="">
+                                        <button className="" hidden={!["Transfer Uang", "Tarik Tunai"].includes(journal.trx_type)}>
                                             <PencilIcon className="size-4 text-indigo-700 hover:scale-125 transtition-all duration-200" />
                                         </button>
-                                        <button onClick={() => handleDeleteJournal(journal.id)} className="">
+                                        <button onClick={() => setIsModalDeleteJournalOpen(true)} className="">
                                             <TrashIcon className="size-4 text-red-600 hover:scale-125 transtition-all duration-200" />
                                         </button>
+                                        <Modal isOpen={isModalDeleteJournalOpen} onClose={closeModal} modalTitle="Confirm Delete">
+                                            <div className="flex flex-col items-center justify-center gap-3 mb-4">
+                                                <MessageCircleWarningIcon size={64} className="text-red-600" />
+                                                <p>Apakah anda yakin ingin menghapus transaksi ini?</p>
+                                            </div>
+                                            <div className="flex justify-center gap-3">
+                                                <button
+                                                    onClick={() => {
+                                                        handleDeleteJournal(journal.id);
+                                                        setIsModalDeleteJournalOpen(false);
+                                                    }}
+                                                    className="btn-primary"
+                                                >
+                                                    Ya
+                                                </button>
+                                                <button onClick={() => setIsModalDeleteJournalOpen(false)} className="btn-secondary">
+                                                    Tidak
+                                                </button>
+                                            </div>
+                                        </Modal>
                                     </div>
                                 </td>
                             </tr>

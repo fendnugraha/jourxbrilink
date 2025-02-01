@@ -17,7 +17,7 @@ import CreateExpense from "./components/CreateExpense";
 import CashBankBalance from "./components/CashBankBalance";
 import formatNumber from "@/libs/formatNumber";
 import Loading from "../loading";
-import { ChevronDownIcon, PlusCircleIcon } from "lucide-react";
+import { ArrowDownCircleIcon, ArrowUpCircleIcon, ChevronDownIcon, ChevronRightIcon, PlusCircleIcon } from "lucide-react";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -117,9 +117,9 @@ const TransactionPage = () => {
                         <div className="mb-2 flex justify-start gap-2">
                             <button
                                 onClick={() => setIsModalCreateTransferOpen(true)}
-                                className="bg-indigo-500 text-sm hover:bg-indigo-600 text-white py-2 px-6 rounded-lg"
+                                className="bg-indigo-600 text-sm min-w-44 hover:bg-indigo-700 text-white py-2 px-6 rounded-lg"
                             >
-                                Tansfer Uang <PlusCircleIcon className="size-4 inline" />
+                                Tansfer Uang <ArrowUpCircleIcon className="size-4 inline" />
                             </button>
                             <Modal isOpen={isModalCreateTransferOpen} onClose={closeModal} modalTitle="Transfer Uang">
                                 <CreateTransfer
@@ -132,9 +132,9 @@ const TransactionPage = () => {
                             </Modal>
                             <button
                                 onClick={() => setIsModalCreateCashWithdrawalOpen(true)}
-                                className="bg-indigo-500 text-sm hover:bg-indigo-600 text-white py-2 px-6 rounded-lg"
+                                className="bg-indigo-600 text-sm min-w-44 hover:bg-indigo-700 text-white py-2 px-6 rounded-lg"
                             >
-                                Tarik Tunai <PlusCircleIcon className="size-4 inline" />
+                                Tarik Tunai <ArrowDownCircleIcon className="size-4 inline" />
                             </button>
                             <Modal isOpen={isModalCreateCashWithdrawalOpen} onClose={closeModal} modalTitle="Tarik Tunai">
                                 <CreateCashWithdrawal
@@ -189,8 +189,9 @@ const TransactionPage = () => {
 
                             <Dropdown
                                 trigger={
-                                    <button className="bg-green-500 text-sm hover:bg-green-600 text-white py-2 px-6 rounded-lg">
-                                        Voucher & Deposit <ChevronDownIcon size={18} className="inline" />
+                                    <button className="bg-green-600 text-sm hover:bg-green-700 text-white py-2 px-6 rounded-lg group">
+                                        Voucher & Deposit
+                                        <ChevronRightIcon size={18} className="inline group-hover:rotate-90 transition-transform duration-200" />
                                     </button>
                                 }
                                 align="left"
@@ -210,8 +211,9 @@ const TransactionPage = () => {
                             </Dropdown>
                             <Dropdown
                                 trigger={
-                                    <button className="bg-red-500 text-sm hover:bg-red-600 text-white py-2 px-6 rounded-lg">
-                                        Pengeluaran (Biaya) <ChevronDownIcon size={18} className="inline" />
+                                    <button className="bg-red-600 text-sm hover:bg-red-700 text-white py-2 px-6 rounded-lg group">
+                                        Pengeluaran (Biaya){" "}
+                                        <ChevronRightIcon size={18} className="inline group-hover:rotate-90 transition-transform duration-200" />
                                     </button>
                                 }
                                 align="left"

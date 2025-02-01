@@ -98,7 +98,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
                 >
                     <FilterIcon className="size-4" />
                 </button>
-                <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal">
+                <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                     <div className="mb-4">
                         <Label className="font-bold">Cabang</Label>
                         <select
@@ -147,7 +147,6 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
                     </button>
                 </Modal>
             </div>
-
             <table className="table w-full text-xs">
                 <thead>
                     <tr>
@@ -174,7 +173,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
                             <tr key={index}>
                                 <td>
                                     <span className="text-xs text-slate-500 block">
-                                        {journal.invoice} | {formatDateTime(journal.created_at)}
+                                        #{journal.id} {journal.invoice} | {formatDateTime(journal.created_at)}
                                     </span>
                                     Note: {journal.description}
                                     <span className="block font-bold text-xs">
@@ -199,10 +198,10 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
                                         <button onClick={() => setIsModalDeleteJournalOpen(true)} className="">
                                             <TrashIcon className="size-4 text-red-600 hover:scale-125 transtition-all duration-200" />
                                         </button>
-                                        <Modal isOpen={isModalDeleteJournalOpen} onClose={closeModal} modalTitle="Confirm Delete">
+                                        <Modal isOpen={isModalDeleteJournalOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
                                             <div className="flex flex-col items-center justify-center gap-3 mb-4">
-                                                <MessageCircleWarningIcon size={64} className="text-red-600" />
-                                                <p>Apakah anda yakin ingin menghapus transaksi ini?</p>
+                                                <MessageCircleWarningIcon size={72} className="text-red-600" />
+                                                <p className="text-sm">Apakah anda yakin ingin menghapus transaksi ini?</p>
                                             </div>
                                             <div className="flex justify-center gap-3">
                                                 <button
@@ -210,11 +209,14 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
                                                         handleDeleteJournal(journal.id);
                                                         setIsModalDeleteJournalOpen(false);
                                                     }}
-                                                    className="btn-primary"
+                                                    className="btn-primary w-full"
                                                 >
                                                     Ya
                                                 </button>
-                                                <button onClick={() => setIsModalDeleteJournalOpen(false)} className="btn-secondary">
+                                                <button
+                                                    onClick={() => setIsModalDeleteJournalOpen(false)}
+                                                    className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                                >
                                                     Tidak
                                                 </button>
                                             </div>

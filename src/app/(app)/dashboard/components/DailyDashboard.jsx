@@ -2,7 +2,7 @@
 import formatNumber from "@/libs/formatNumber";
 import axios from "@/libs/axios";
 import { useState, useEffect } from "react";
-import { LoaderIcon } from "lucide-react";
+import { LoaderIcon, RefreshCcwIcon } from "lucide-react";
 
 const DailyDashboard = ({ user, notification }) => {
     const [data, setData] = useState([]);
@@ -27,6 +27,9 @@ const DailyDashboard = ({ user, notification }) => {
     }, []);
     return (
         <div className="relative">
+            <button className="absolute bottom-3 left-3 text-white hover:scale-110 transition-transform duration-75" onClick={getDailyDashboard}>
+                <RefreshCcwIcon className="w-5 h-5" />
+            </button>
             <div className="min-h-[28rem] grid grid-cols-1 sm:grid-cols-5 sm:grid-rows-4 gap-1 sm:gap-3">
                 <div className="bg-gray-800 w-full h-full p-3 rounded-lg sm:rounded-3xl flex flex-col gap-6 items-center justify-center col-span-2 row-span-2">
                     <div className="flex gap-2 flex-col justify-center items-center">

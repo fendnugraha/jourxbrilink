@@ -9,6 +9,7 @@ import {
     LandmarkIcon,
     LogOutIcon,
     MapIcon,
+    MapPinnedIcon,
     MenuIcon,
     ShoppingBag,
     StoreIcon,
@@ -26,30 +27,26 @@ const Navigation = ({ user }) => {
     return (
         <nav className={`bg-white text-gray-600 hidden sm:block min-h-screen transition-all ${isOpen ? "w-64" : "w-16"} flex flex-col`}>
             <div
+                onClick={toggleNavbar}
                 className={`h-[72px] px-4 text-gray-500 bg-blue-800 flex items-center ${
                     isOpen ? "justify-start" : "justify-center"
                 } gap-4 cursor-pointer border-b`}
             >
-                <div className="h-full flex items-center" onClick={toggleNavbar}>
+                <div className="h-full flex items-center">
                     <MenuIcon className="w-5 h-5 text-white" />
                 </div>
                 <div
                     className={`transition-all duration-300 ease-in-out transform text-nowrap ${isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
                     style={{ display: isOpen ? "inline" : "none" }}
                 >
-                    <h1 className="font-bold text-yellow-300">JOUR APPS</h1>
+                    <div className="flex flex-col">
+                        <h1 className="font-bold text-yellow-300">JOUR APPS</h1>
+                        <span className="text-xs text-white">{user.role.warehouse.name}</span>
+                    </div>
                 </div>
             </div>
             <nav className="flex-1">
-                <div className=" text-sm">
-                    <div
-                        className={`justify-center items-center p-4 border-b font-bold overflow-hidden transition-all duration-300 ease-in-out ${
-                            isOpen ? "scale-100" : "scale-0"
-                        }`}
-                        style={{ display: isOpen ? "flex" : "none" }}
-                    >
-                        <MapIcon className="w-5 h-5 inline" /> {user?.role?.warehouse?.name}
-                    </div>
+                <div className=" text-sm mt-4">
                     <NavLink href="/dashboard" isOpen={isOpen} active={usePathname() === "/dashboard"}>
                         <div className="">
                             <ChartAreaIcon className="w-5 h-5" />

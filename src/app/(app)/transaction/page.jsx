@@ -117,9 +117,9 @@ const TransactionPage = () => {
                         <div className="mb-2 flex justify-start gap-2">
                             <button
                                 onClick={() => setIsModalCreateTransferOpen(true)}
-                                className="bg-indigo-600 text-sm min-w-44 hover:bg-indigo-700 text-white py-2 px-6 rounded-lg"
+                                className="bg-indigo-600 group text-sm min-w-44 hover:bg-indigo-700 text-white py-2 px-6 rounded-lg"
                             >
-                                Tansfer Uang <ArrowUpCircleIcon className="size-4 inline" />
+                                Tansfer Uang <ArrowUpCircleIcon className="size-4 group-hover:scale-110 inline" />
                             </button>
                             <Modal isOpen={isModalCreateTransferOpen} onClose={closeModal} modalTitle="Transfer Uang">
                                 <CreateTransfer
@@ -132,9 +132,9 @@ const TransactionPage = () => {
                             </Modal>
                             <button
                                 onClick={() => setIsModalCreateCashWithdrawalOpen(true)}
-                                className="bg-indigo-600 text-sm min-w-44 hover:bg-indigo-700 text-white py-2 px-6 rounded-lg"
+                                className="bg-indigo-600 group text-sm min-w-44 hover:bg-indigo-700 text-white py-2 px-6 rounded-lg"
                             >
-                                Tarik Tunai <ArrowDownCircleIcon className="size-4 inline" />
+                                Tarik Tunai <ArrowDownCircleIcon className="size-4 group-hover:scale-110 inline" />
                             </button>
                             <Modal isOpen={isModalCreateCashWithdrawalOpen} onClose={closeModal} modalTitle="Tarik Tunai">
                                 <CreateCashWithdrawal

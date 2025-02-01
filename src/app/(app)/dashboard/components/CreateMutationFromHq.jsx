@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "@/libs/axios";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
+import formatNumber from "@/libs/formatNumber";
 
 const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, warehouses }) => {
     const [formData, setFormData] = useState({
@@ -39,6 +40,23 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
 
     return (
         <form>
+            <div className="mb-6 grid grid-cols-3 gap-4 items-center">
+                <Label>Pilih Cabang</Label>
+                <div className="col-span-2">
+                    <select
+                        onChange={(e) => setSelectedWarehouseId(e.target.value)}
+                        value={selectedWarehouseId}
+                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    >
+                        {warehouses?.map((wh) => (
+                            <option key={wh.id} value={wh.id}>
+                                {wh.name}
+                            </option>
+                        ))}
+                    </select>
+                    {errors.debt_code && <span className="text-red-500 text-xs">{errors.debt_code}</span>}
+                </div>
+            </div>
             <div className="mb-2 grid grid-cols-3 gap-4 items-center">
                 <Label>Dari (Pusat)</Label>
                 <div className="col-span-2">
@@ -55,24 +73,6 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                         ))}
                     </select>
                     {errors.cred_code && <span className="text-red-500 text-xs">{errors.cred_code}</span>}
-                </div>
-            </div>
-            <div className="mb-2 grid grid-cols-3 gap-4 items-center">
-                <Label>Pilih Cabang</Label>
-                <div className="col-span-2">
-                    <select
-                        onChange={(e) => setSelectedWarehouseId(e.target.value)}
-                        value={selectedWarehouseId}
-                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                    >
-                        <option value="">--Pilih cabang tujuan mutasi--</option>
-                        {warehouses?.map((wh) => (
-                            <option key={wh.id} value={wh.id}>
-                                {wh.name}
-                            </option>
-                        ))}
-                    </select>
-                    {errors.debt_code && <span className="text-red-500 text-xs">{errors.debt_code}</span>}
                 </div>
             </div>
             <div className="mb-2 grid grid-cols-3 gap-4 items-center">
@@ -96,10 +96,18 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
             </div>
             <div className="mb-2 grid grid-cols-3 gap-4 items-center">
                 <Label>Jumlah transfer</Label>
-                <div className="col-span-2">
-                    <Input type="number" placeholder="Rp." value={formData.amount} onChange={(e) => setFormData({ ...formData, amount: e.target.value })} />
+                <div className="col-span-1">
+                    <Input
+                        className="w-full"
+                        type="number"
+                        placeholder="Rp."
+                        value={formData.amount}
+                        onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                    />
                     {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
                 </div>
+
+                <h1 className="text-lg font-bold">{formatNumber(formData.amount)}</h1>
             </div>
             <div className="mb-2 grid grid-cols-3 gap-4 items-center">
                 <Label>Keterangan</Label>

@@ -76,19 +76,23 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
         getAccountBalance();
     }, [journalsByWarehouse]);
 
-    const mutationInSum = (acc_id) => {
+    const mutationInSumById = (acc_id) => {
         return journalsByWarehouse?.data?.reduce(
             (sum, journal) => (Number(journal.debt_code) === acc_id && journal.trx_type === "Mutasi Kas" ? sum + Number(journal.amount) : sum),
             0
         );
     };
 
-    const mutationOutSum = (acc_id) => {
+    const mutationOutSumById = (acc_id) => {
         return journalsByWarehouse.data?.reduce(
             (sum, journal) => (Number(journal.cred_code) === acc_id && journal.trx_type === "Mutasi Kas" ? sum + Number(journal.amount) : sum),
             0
         );
     };
+
+    const mutationInSum = accountBalance.reduce((sum, acc) => sum + mutationInSumById(acc.id), 0);
+
+    const mutationOutSum = accountBalance.reduce((sum, acc) => sum + mutationOutSumById(acc.id), 0);
 
     const filteredJournals = journalsByWarehouse.data?.filter((journal) => journal.trx_type === "Mutasi Kas");
 
@@ -139,17 +143,25 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
                             <tr key={index}>
                                 <td>{account.acc_name}</td>
                                 <td className="text-end">{formatNumber(account.balance)}</td>
-                                <td className="text-end">{formatNumber(mutationInSum(account.id))}</td>
-                                <td className="text-end">{formatNumber(mutationOutSum(account.id))}</td>
+                                <td className="text-end">{formatNumber(mutationInSumById(account.id))}</td>
+                                <td className="text-end">{formatNumber(mutationOutSumById(account.id))}</td>
                             </tr>
                         ))}
+                        <tr>
+                            <td className="font-bold" colSpan={3}>
+                                Selisih saldo dari cabang
+                            </td>
+                            <td className="text-end font-bold">
+                                {mutationOutSum - mutationInSum === 0 ? "Completed" : formatNumber(mutationOutSum - mutationInSum)}
+                            </td>
+                        </tr>
                     </tbody>
                     <tfoot>
                         <tr>
                             <th>Total</th>
                             <th className="text-end">{formatNumber(accountBalance.reduce((sum, acc) => sum + acc.balance, 0))}</th>
-                            <th className="text-end">{formatNumber(accountBalance.reduce((sum, acc) => sum + mutationInSum(acc.id), 0))}</th>
-                            <th className="text-end">{formatNumber(accountBalance.reduce((sum, acc) => sum + mutationOutSum(acc.id), 0))}</th>
+                            <th className="text-end">{formatNumber(mutationInSum)}</th>
+                            <th className="text-end">{formatNumber(mutationOutSum)}</th>
                         </tr>
                     </tfoot>
                 </table>

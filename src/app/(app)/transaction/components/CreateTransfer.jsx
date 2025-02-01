@@ -25,14 +25,16 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
             const response = await axios.post("/api/create-transfer", formData);
             notification(response.data.message);
             setFormData({
-                cred_code: "",
+                debt_code: user.role.warehouse.chart_of_account_id,
+                cred_code: formData.cred_code,
                 amount: "",
+                trx_type: "Transfer Uang",
                 fee_amount: "",
                 description: "",
                 custName: "",
             });
             fetchJournalsByWarehouse();
-            isModalOpen(false);
+            // isModalOpen(false);
         } catch (error) {
             setErrors(error.response.data.errors || ["Something went wrong."]);
         } finally {

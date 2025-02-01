@@ -13,7 +13,7 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
         trx_type: "Tarik Tunai",
         fee_amount: "",
         description: "",
-        custName: "XXX",
+        custName: "General",
     });
     const [errors, setErrors] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -25,14 +25,16 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
             const response = await axios.post("/api/create-transfer", formData);
             notification(response.data.message);
             setFormData({
-                cred_code: "",
+                debt_code: formData.debt_code,
+                cred_code: user.role.warehouse.chart_of_account_id,
                 amount: "",
+                trx_type: "Tarik Tunai",
                 fee_amount: "",
                 description: "",
-                custName: "",
+                custName: "General",
             });
             fetchJournalsByWarehouse();
-            isModalOpen(false);
+            // isModalOpen(false);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
         } finally {

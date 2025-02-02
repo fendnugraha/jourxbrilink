@@ -39,7 +39,7 @@ const CreatePayable = ({ isModalOpen, fetchFinance, notification }) => {
     const fetchAccounts = async ({ account_ids }) => {
         setLoading(true);
         try {
-            const response = await axios.get(`/api/get-account-by-account-id/`, { params: { account_ids } });
+            const response = await axios.get(`/api/get-account-by-account-id`, { params: { account_ids } });
             setAccounts(response.data.data);
         } catch (error) {
             notification(error.response?.data?.message || "Something went wrong.");

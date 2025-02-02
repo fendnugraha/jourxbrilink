@@ -43,10 +43,10 @@ const RevenueReport = () => {
                         <th className="">Cabang</th>
                         <th className="">Transfer</th>
                         <th className="">Tarik Tunai</th>
-                        <th className="">Voucher & SP</th>
-                        <th className="">Deposit (Pulsa dll)</th>
-                        <th className="">Transaksi</th>
-                        <th className="">Pengeluaran (Biaya)</th>
+                        <th className="">Voucher</th>
+                        <th className="">Deposit</th>
+                        <th className="">Trx</th>
+                        <th className="">Biaya</th>
                         <th className="">Laba Bersih</th>
                     </tr>
                 </thead>
@@ -59,13 +59,13 @@ const RevenueReport = () => {
                         revenue.revenue?.map((item, index) => (
                             <tr key={index}>
                                 <td className="">{item.warehouse}</td>
-                                <td className="">{formatNumber(item.transfer)}</td>
-                                <td className="">{formatNumber(item.tarikTunai)}</td>
-                                <td className="">{formatNumber(item.voucher)}</td>
-                                <td className="">{formatNumber(item.deposit)}</td>
-                                <td className="">{formatNumber(item.trx)}</td>
-                                <td className="">{formatNumber(item.expense)}</td>
-                                <td className="">{formatNumber(item.fee)}</td>
+                                <td className="text-end">{formatNumber(item.transfer)}</td>
+                                <td className="text-end">{formatNumber(item.tarikTunai)}</td>
+                                <td className="text-end">{formatNumber(item.voucher)}</td>
+                                <td className="text-end">{formatNumber(item.deposit)}</td>
+                                <td className="text-end">{formatNumber(item.trx)}</td>
+                                <td className="text-end font-bold text-red-500">{formatNumber(item.expense)}</td>
+                                <td className="text-end font-bold text-green-500">{formatNumber(item.fee)}</td>
                             </tr>
                         ))
                     )}
@@ -83,8 +83,8 @@ const RevenueReport = () => {
                             <th className="font-bold">{formatNumber(sumByTrxType("voucher"))}</th>
                             <th className="font-bold">{formatNumber(sumByTrxType("deposit"))}</th>
                             <th className="font-bold">{formatNumber(sumByTrxType("trx"))}</th>
-                            <th className="font-bold">{formatNumber(sumByTrxType("expense"))}</th>
-                            <th className="font-bold">{formatNumber(sumByTrxType("fee"))}</th>
+                            <th className="font-bold text-red-500">{formatNumber(sumByTrxType("expense"))}</th>
+                            <th className="font-bold text-green-500">{formatNumber(sumByTrxType("fee"))}</th>
                         </tr>
                     )}
                 </tfoot>

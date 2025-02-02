@@ -40,7 +40,7 @@ const Dashboard = () => {
                 <Header title={"Dashboard"} />
                 <div className="py-8">
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                        <DailyDashboard user={user} />
+                        <DailyDashboard warehouse={warehouse} warehouses={warehouses} />
                         <CashBankMutation warehouse={warehouse} warehouses={warehouses} />
                         <VoucherSalesTable warehouse={warehouse} warehouses={warehouses} />
                         <ExpenseTable warehouse={warehouse} warehouses={warehouses} />

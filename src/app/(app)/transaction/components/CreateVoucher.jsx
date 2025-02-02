@@ -30,6 +30,8 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
         fetchProducts();
     }, []);
 
+    const filteredProducts = products.filter((product) => product.category === "Voucher & SP");
+
     const incrementQty = (e) => {
         e.preventDefault();
         setFormData({ ...formData, qty: formData.qty + 1 });
@@ -43,7 +45,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
     };
 
     const selectedProduct = () => {
-        const product = products.find((product) => product.id === Number(formData.product_id));
+        const product = filteredProducts.find((product) => product.id === Number(formData.product_id));
         return product;
     };
 
@@ -83,7 +85,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                         className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     >
                         <option value="">--Pilih barang--</option>
-                        {products?.map((product) => (
+                        {filteredProducts?.map((product) => (
                             <option key={product.id} value={product.id}>
                                 {product.name} {" -> "} Rp. {formatNumber(product.price)}
                             </option>

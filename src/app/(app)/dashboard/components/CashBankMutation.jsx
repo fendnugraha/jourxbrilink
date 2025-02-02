@@ -25,6 +25,7 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
     const [journalsByWarehouse, setJournalsByWarehouse] = useState([]);
     const [isModalCreateMutationFromHqOpen, setIsModalCreateMutationFromHqOpen] = useState(false);
     const [notification, setNotification] = useState("");
+    const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
     const closeModal = () => {
         setIsModalCreateMutationFromHqOpen(false);
     };
@@ -46,7 +47,7 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
     const getAccountBalance = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`/api/get-cash-bank-balance/${warehouse}`);
+            const response = await axios.get(`/api/get-cash-bank-balance/${selectedWarehouse}`);
             setAccountBalance(response.data.data);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
@@ -58,7 +59,7 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
     const fetchJournalsByWarehouse = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`/api/get-journal-by-warehouse/${warehouse}/${startDate}/${endDate}`);
+            const response = await axios.get(`/api/get-journal-by-warehouse/${selectedWarehouse}/${startDate}/${endDate}`);
             setJournalsByWarehouse(response.data);
         } catch (error) {
             console.error(error);
@@ -67,15 +68,6 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
             setLoading(false);
         }
     };
-
-    useEffect(() => {
-        fetchJournalsByWarehouse();
-    }, []);
-
-    useEffect(() => {
-        getAccountBalance();
-    }, [journalsByWarehouse]);
-
     const mutationInSumById = (acc_id) => {
         return journalsByWarehouse?.data?.reduce(
             (sum, journal) => (Number(journal.debt_code) === acc_id && journal.trx_type === "Mutasi Kas" ? sum + Number(journal.amount) : sum),
@@ -89,6 +81,15 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
             0
         );
     };
+
+    useEffect(() => {
+        fetchJournalsByWarehouse();
+        getAccountBalance();
+    }, [selectedWarehouse]);
+
+    // useEffect(() => {
+    //     getAccountBalance();
+    // }, [journalsByWarehouse]);
 
     const mutationInSum = accountBalance.reduce((sum, acc) => sum + mutationInSumById(acc.id), 0);
 
@@ -111,14 +112,27 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
         <div className="my-4">
             {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
             <div className="mb-4 bg-white overflow-hidden shadow-sm sm:rounded-2xl">
-                <div className="px-6 pt-6 flex justify-between">
+                <div className="px-6 pt-6 grid grid-cols-2 gap-4">
                     <h1 className="font-bold text-xl">Mutasi Saldo</h1>
-                    <button
-                        onClick={() => setIsModalCreateMutationFromHqOpen(true)}
-                        className="bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-6 rounded-lg"
-                    >
-                        Mutasi Saldo <PlusCircleIcon className="size-4 inline" />
-                    </button>
+                    <div className="flex gap-2 w-full">
+                        <select
+                            value={selectedWarehouse}
+                            onChange={(e) => setSelectedWarehouse(e.target.value)}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        >
+                            {warehouses.map((warehouse) => (
+                                <option key={warehouse.id} value={warehouse.id}>
+                                    {warehouse.name}
+                                </option>
+                            ))}
+                        </select>
+                        <button
+                            onClick={() => setIsModalCreateMutationFromHqOpen(true)}
+                            className="bg-indigo-500 text-xs min-w-36 hover:bg-indigo-600 text-white py-2 px-6 rounded-lg"
+                        >
+                            Mutasi Saldo <PlusCircleIcon className="size-4 inline" />
+                        </button>
+                    </div>
                     <Modal isOpen={isModalCreateMutationFromHqOpen} onClose={closeModal} modalTitle="Penambahan Saldo Kas & Bank">
                         <CreateMutationFromHq
                             cashBank={cashBank}
@@ -139,20 +153,30 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {accountBalance.map((account, index) => (
-                            <tr key={index}>
-                                <td>{account.acc_name}</td>
-                                <td className="text-end">{formatNumber(account.balance)}</td>
-                                <td className="text-end">{formatNumber(mutationInSumById(account.id))}</td>
-                                <td className="text-end">{formatNumber(mutationOutSumById(account.id))}</td>
+                        {loading ? (
+                            <tr className="text-center">
+                                <td colSpan={4}>Loading ...</td>
                             </tr>
-                        ))}
+                        ) : (
+                            accountBalance.map((account, index) => (
+                                <tr key={index}>
+                                    <td>{account.acc_name}</td>
+                                    <td className="text-end">{formatNumber(account.balance)}</td>
+                                    <td className="text-end">{formatNumber(mutationInSumById(account.id) ?? 0)}</td>
+                                    <td className="text-end">{formatNumber(mutationOutSumById(account.id) ?? 0)}</td>
+                                </tr>
+                            ))
+                        )}
                         <tr>
                             <td className="font-bold" colSpan={3}>
-                                Selisih saldo dari cabang
+                                Penambahan saldo dari HQ
                             </td>
                             <td className="text-end font-bold">
-                                {mutationOutSum - mutationInSum === 0 ? "Completed" : formatNumber(mutationOutSum - mutationInSum)}
+                                {mutationOutSum - mutationInSum === 0 ? (
+                                    <span className="text-green-600">Completed</span>
+                                ) : (
+                                    formatNumber(mutationOutSum - mutationInSum)
+                                )}
                             </td>
                         </tr>
                     </tbody>
@@ -179,15 +203,21 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {currentItems.map((journal, index) => (
-                                <tr key={index}>
-                                    <td className="">
-                                        <span className="block font-bold text-slate-500">{formatDateTime(journal.created_at)}</span>
-                                        {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt.acc_name}
-                                    </td>
-                                    <td className="text-end">{formatNumber(journal.amount)}</td>
+                            {loading ? (
+                                <tr className="text-center">
+                                    <td colSpan={2}>Loading ...</td>
                                 </tr>
-                            ))}
+                            ) : (
+                                currentItems.map((journal, index) => (
+                                    <tr key={index}>
+                                        <td className="">
+                                            <span className="block font-bold text-slate-500">{formatDateTime(journal.created_at)}</span>
+                                            {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt.acc_name}
+                                        </td>
+                                        <td className="text-end">{formatNumber(journal.amount)}</td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
                     {totalPages > 1 && (

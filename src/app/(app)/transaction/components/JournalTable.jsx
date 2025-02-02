@@ -27,6 +27,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
     const [itemsPerPage, setItemsPerPage] = useState(5);
     const [isModalFilterJournalOpen, setIsModalFilterJournalOpen] = useState(false);
     const [isModalDeleteJournalOpen, setIsModalDeleteJournalOpen] = useState(false);
+    const [selecttedJournalId, setSelecttedJournalId] = useState(null);
 
     const closeModal = () => {
         setIsModalFilterJournalOpen(false);
@@ -195,32 +196,16 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
                                         <button className="" hidden={!["Transfer Uang", "Tarik Tunai"].includes(journal.trx_type)}>
                                             <PencilIcon className="size-4 text-indigo-700 hover:scale-125 transtition-all duration-200" />
                                         </button>
-                                        <button onClick={() => setIsModalDeleteJournalOpen(true)} className="">
-                                            <TrashIcon className="size-4 text-red-600 hover:scale-125 transtition-all duration-200" />
+                                        <button
+                                            onClick={() => {
+                                                setSelecttedJournalId(journal.id);
+                                                setIsModalDeleteJournalOpen(true);
+                                            }}
+                                            disabled={["Voucher & SP", "Accessories"].includes(journal.trx_type)}
+                                            className=" disabled:text-slate-300 disabled:cursor-not-allowed text-red-600"
+                                        >
+                                            <TrashIcon className="size-4 hover:scale-125 transtition-all duration-200" />
                                         </button>
-                                        <Modal isOpen={isModalDeleteJournalOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
-                                            <div className="flex flex-col items-center justify-center gap-3 mb-4">
-                                                <MessageCircleWarningIcon size={72} className="text-red-600" />
-                                                <p className="text-sm">Apakah anda yakin ingin menghapus transaksi ini?</p>
-                                            </div>
-                                            <div className="flex justify-center gap-3">
-                                                <button
-                                                    onClick={() => {
-                                                        handleDeleteJournal(journal.id);
-                                                        setIsModalDeleteJournalOpen(false);
-                                                    }}
-                                                    className="btn-primary w-full"
-                                                >
-                                                    Ya
-                                                </button>
-                                                <button
-                                                    onClick={() => setIsModalDeleteJournalOpen(false)}
-                                                    className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                                >
-                                                    Tidak
-                                                </button>
-                                            </div>
-                                        </Modal>
                                     </div>
                                 </td>
                             </tr>
@@ -228,7 +213,29 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
                     )}
                 </tbody>
             </table>
-
+            <Modal isOpen={isModalDeleteJournalOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
+                <div className="flex flex-col items-center justify-center gap-3 mb-4">
+                    <MessageCircleWarningIcon size={72} className="text-red-600" />
+                    <p className="text-sm">Apakah anda yakin ingin menghapus transaksi ini (ID: {selecttedJournalId})?</p>
+                </div>
+                <div className="flex justify-center gap-3">
+                    <button
+                        onClick={() => {
+                            handleDeleteJournal(selecttedJournalId);
+                            setIsModalDeleteJournalOpen(false);
+                        }}
+                        className="btn-primary w-full"
+                    >
+                        Ya
+                    </button>
+                    <button
+                        onClick={() => setIsModalDeleteJournalOpen(false)}
+                        className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    >
+                        Tidak
+                    </button>
+                </div>
+            </Modal>
             {totalPages > 1 && (
                 <Pagination
                     className="w-full px-4"

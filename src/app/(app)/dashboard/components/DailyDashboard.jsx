@@ -4,15 +4,25 @@ import axios from "@/libs/axios";
 import { useState, useEffect } from "react";
 import { LoaderIcon, RefreshCcwIcon } from "lucide-react";
 
-const DailyDashboard = ({ user, notification }) => {
+const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // Month is 0-indexed
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+};
+
+const DailyDashboard = ({ notification, warehouse, warehouses }) => {
     const [data, setData] = useState([]);
-    const warehouse = user.role?.warehouse_id;
     const [loading, setLoading] = useState(false);
+    const [startDate, setStartDate] = useState(getCurrentDate());
+    const [endDate, setEndDate] = useState(getCurrentDate());
+    const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
 
     const getDailyDashboard = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`/api/daily-dashboard/${warehouse}`);
+            const response = await axios.get(`/api/daily-dashboard/${selectedWarehouse}/${startDate}/${endDate}`);
             setData(response.data.data);
             localStorage.setItem("dailyDashboard", JSON.stringify(response.data.data));
         } catch (error) {
@@ -24,9 +34,22 @@ const DailyDashboard = ({ user, notification }) => {
 
     useEffect(() => {
         getDailyDashboard();
-    }, []);
+    }, [selectedWarehouse]);
     return (
         <div className="relative">
+            <div className="w-1/3 mb-2">
+                <select
+                    value={selectedWarehouse}
+                    onChange={(e) => setSelectedWarehouse(e.target.value)}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                >
+                    {warehouses.map((warehouse) => (
+                        <option key={warehouse.id} value={warehouse.id}>
+                            {warehouse.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
             <button className="absolute bottom-3 left-3 text-white hover:scale-110 transition-transform duration-75" onClick={getDailyDashboard}>
                 <RefreshCcwIcon className="w-5 h-5" />
             </button>

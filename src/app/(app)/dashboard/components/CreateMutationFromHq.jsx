@@ -13,6 +13,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
         fee_amount: 0,
         trx_type: "Mutasi Kas",
         description: "",
+        admin_fee: "" || 0,
     });
     const [selectedWarehouseId, setSelectedWarehouseId] = useState(1);
 
@@ -108,6 +109,21 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                 </div>
 
                 <h1 className="text-lg font-bold">{formatNumber(formData.amount)}</h1>
+            </div>
+            <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+                <Label>Biaya admin bank</Label>
+                <div className="col-span-1">
+                    <Input
+                        className="w-1/2"
+                        type="number"
+                        placeholder="Rp."
+                        value={formData.admin_fee}
+                        onChange={(e) => setFormData({ ...formData, admin_fee: e.target.value })}
+                    />
+                    {errors.admin_fee && <span className="text-red-500 text-xs">{errors.admin_fee}</span>}
+                </div>
+
+                <h1 className="text-lg font-bold">{formatNumber(formData.admin_fee)}</h1>
             </div>
             <div className="mb-2 grid grid-cols-3 gap-4 items-center">
                 <Label>Keterangan</Label>

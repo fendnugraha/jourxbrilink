@@ -2,7 +2,10 @@
 import formatNumber from "@/libs/formatNumber";
 import axios from "@/libs/axios";
 import { useState, useEffect } from "react";
-import { LoaderIcon, RefreshCcwIcon } from "lucide-react";
+import { FilterIcon, LoaderIcon, RefreshCcwIcon } from "lucide-react";
+import Modal from "@/components/Modal";
+import Label from "@/components/Label";
+import Input from "@/components/Input";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -18,6 +21,11 @@ const DailyDashboard = ({ notification, warehouse, warehouses }) => {
     const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
+    const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
+
+    const closeModal = () => {
+        setIsModalFilterDataOpen(false);
+    };
 
     const getDailyDashboard = async () => {
         setLoading(true);
@@ -37,7 +45,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses }) => {
     }, [selectedWarehouse]);
     return (
         <div className="relative">
-            <div className="w-1/3 mb-2">
+            <div className="w-1/2 mb-2 flex gap-2">
                 <select
                     value={selectedWarehouse}
                     onChange={(e) => setSelectedWarehouse(e.target.value)}
@@ -49,6 +57,41 @@ const DailyDashboard = ({ notification, warehouse, warehouses }) => {
                         </option>
                     ))}
                 </select>
+                <button
+                    onClick={() => setIsModalFilterDataOpen(true)}
+                    className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
+                >
+                    <FilterIcon className="size-4" />
+                </button>
+                <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
+                    <div className="mb-4">
+                        <Label className="font-bold">Tanggal</Label>
+                        <Input
+                            type="date"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <Label className="font-bold">s/d</Label>
+                        <Input
+                            type="date"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                            className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        />
+                    </div>
+                    <button
+                        onClick={() => {
+                            fetchTransaction();
+                            setIsModalFilterDataOpen(false);
+                        }}
+                        className="btn-primary"
+                    >
+                        Submit
+                    </button>
+                </Modal>
             </div>
             <button className="absolute bottom-3 left-3 text-white hover:scale-110 transition-transform duration-75" onClick={getDailyDashboard}>
                 <RefreshCcwIcon className="w-5 h-5" />

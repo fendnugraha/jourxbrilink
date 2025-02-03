@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
 import formatDateTime from "@/libs/formatDateTime";
+import { FilterIcon } from "lucide-react";
+import Modal from "@/components/Modal";
+import Label from "@/components/Label";
+import Input from "@/components/Input";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -19,6 +23,11 @@ const ExpenseTable = ({ warehouse, warehouses }) => {
     const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
+    const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
+
+    const closeModal = () => {
+        setIsModalFilterDataOpen(false);
+    };
     const fetchExpenses = async () => {
         setLoading(true);
         try {
@@ -43,7 +52,7 @@ const ExpenseTable = ({ warehouse, warehouses }) => {
         <div className="my-4 flex gap-4">
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-2xl w-3/4">
                 <h1 className="px-6 pt-6 font-bold text-xl text-red-600">Pengeluaran (Biaya Operasional)</h1>
-                <div className="px-6 pt-4">
+                <div className="px-6 pt-4 flex gap-2">
                     <select
                         value={selectedWarehouse}
                         onChange={(e) => setSelectedWarehouse(e.target.value)}
@@ -55,6 +64,46 @@ const ExpenseTable = ({ warehouse, warehouses }) => {
                             </option>
                         ))}
                     </select>
+                    <button
+                        onClick={() => setIsModalFilterDataOpen(true)}
+                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
+                    >
+                        <FilterIcon className="size-4" />
+                    </button>
+                    <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
+                        <div className="mb-4">
+                            <Label className="font-bold">Tanggal</Label>
+                            <Input
+                                type="date"
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
+                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <Label className="font-bold">s/d</Label>
+                            <Input
+                                type="date"
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            />
+                        </div>
+                        <button
+                            onClick={() => {
+                                fetchExpenses();
+                                setIsModalFilterDataOpen(false);
+                            }}
+                            className="btn-primary"
+                        >
+                            Submit
+                        </button>
+                    </Modal>
+                </div>
+                <div className="px-6 mt-2">
+                    <h4 className="text-xs text-slate-500">
+                        Periode: {startDate} - {endDate}
+                    </h4>
                 </div>
                 <table className="table w-full text-xs">
                     <thead>
@@ -69,6 +118,12 @@ const ExpenseTable = ({ warehouse, warehouses }) => {
                             <tr>
                                 <td colSpan="3" className="text-center">
                                     Loading...
+                                </td>
+                            </tr>
+                        ) : expenses.length === 0 ? (
+                            <tr>
+                                <td colSpan="3" className="text-center">
+                                    Tidak ada pengeluaran
                                 </td>
                             </tr>
                         ) : (

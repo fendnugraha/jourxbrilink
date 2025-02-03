@@ -2,17 +2,41 @@
 import Notification from "@/components/notification";
 import Header from "../Header";
 import { useEffect, useState } from "react";
-import { ArrowBigDown, ArrowBigUp, PlusCircleIcon, XCircleIcon } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp, FilterIcon, PlusCircleIcon, XCircleIcon } from "lucide-react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
 import formatDateTime from "@/libs/formatDateTime";
 import Link from "next/link";
 import Paginator from "@/components/Paginator";
+import Modal from "@/components/Modal";
+import Label from "@/components/Label";
+import Input from "@/components/Input";
+import { useAuth } from "@/libs/auth";
+
+const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // Month is 0-indexed
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+};
 
 const StorePage = () => {
+    const { user } = useAuth({ middleware: "auth" });
+
+    const warehouse = user?.role?.warehouse_id;
     const [transactions, setTransactions] = useState([]);
     const [notification, setNotification] = useState("");
+    const [startDate, setStartDate] = useState(getCurrentDate());
+    const [endDate, setEndDate] = useState(getCurrentDate());
     const [loading, setLoading] = useState(false);
+    const [isModalFilterJournalOpen, setIsModalFilterJournalOpen] = useState(false);
+    const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
+    const [warehouses, setWarehouses] = useState([]);
+
+    const closeModal = () => {
+        setIsModalFilterJournalOpen(false);
+    };
 
     const fetchTransaction = async (url = "/api/transactions") => {
         setLoading(true);
@@ -34,6 +58,22 @@ const StorePage = () => {
         fetchTransaction(url);
     };
 
+    const fetchWarehouses = async (url = "/api/get-all-warehouses") => {
+        setLoading(true);
+        try {
+            const response = await axios.get(url);
+            setWarehouses(response.data.data);
+        } catch (error) {
+            setErrors(error.response?.data?.errors || ["Something went wrong."]);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchWarehouses();
+    }, []);
+
     return (
         <>
             {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
@@ -46,13 +86,71 @@ const StorePage = () => {
                             <div className="bg-white shadow-sm sm:rounded-2xl ">
                                 <div className="p-4 flex justify-between">
                                     <h1 className="text-2xl font-bold mb-4">Transaksi Barang</h1>
-                                    <div>
+                                    <div className="flex items-center gap-2">
                                         <Link href="/store/sales" className="btn-primary text-xs mr-2">
-                                            <PlusCircleIcon className="w-4 h-4 mr-2 inline" /> Penjualan
+                                            <PlusCircleIcon className="w-4 h-4 inline" /> Penjualan
                                         </Link>
                                         <button className="btn-primary text-xs disabled:bg-slate-400 disabled:cursor-not-allowed" disabled={true}>
-                                            <PlusCircleIcon className="w-4 h-4 mr-2 inline" /> Pembelian
+                                            <PlusCircleIcon className="w-4 h-4 inline" /> Pembelian
                                         </button>
+                                        <button
+                                            onClick={() => setIsModalFilterJournalOpen(true)}
+                                            className="bg-white font-bold p-2 rounded-lg border border-gray-300 hover:border-gray-400"
+                                        >
+                                            <FilterIcon className="size-4" />
+                                        </button>
+                                        <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
+                                            <div className="mb-4">
+                                                <Label>Cabang</Label>
+                                                <select
+                                                    onChange={(e) => {
+                                                        setSelectedWarehouse(e.target.value);
+                                                        setCurrentPage(1);
+                                                    }}
+                                                    value={selectedWarehouse}
+                                                    className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                                >
+                                                    <option value="">Semua Akun</option>
+                                                    {warehouses.map((w) => (
+                                                        <option key={w.id} value={w.id}>
+                                                            {w.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-2 mb-4">
+                                                <div>
+                                                    <Label>Tanggal</Label>
+                                                    <Input
+                                                        type="date"
+                                                        value={startDate}
+                                                        onChange={(e) => setStartDate(e.target.value)}
+                                                        className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <Label>s/d</Label>
+                                                    <Input
+                                                        type="date"
+                                                        value={endDate}
+                                                        onChange={(e) => setEndDate(e.target.value)}
+                                                        className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                                        disabled={!startDate}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => {
+                                                    fetchJournalsByWarehouse(selectedWarehouse, startDate, endDate);
+                                                    warehouseId(selectedWarehouse);
+
+                                                    setIsModalFilterJournalOpen(false);
+                                                }}
+                                                className="btn-primary"
+                                            >
+                                                Submit
+                                            </button>
+                                        </Modal>
                                     </div>
                                 </div>
                                 <table className="table w-full text-xs">
@@ -78,7 +176,10 @@ const StorePage = () => {
                                                     )}{" "}
                                                     <span className="">{transaction.transaction_type}</span>
                                                 </td>
-                                                <td>{transaction.product.name}</td>
+                                                <td>
+                                                    {transaction.product.name}{" "}
+                                                    <span className="text-xs block text-slate-500">{transaction.product.category}</span>
+                                                </td>
                                                 <td className="text-center">
                                                     {formatNumber(transaction.quantity < 0 ? transaction.quantity * -1 : transaction.quantity)}
                                                 </td>

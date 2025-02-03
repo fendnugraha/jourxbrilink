@@ -103,7 +103,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                 </button>
                 <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                     <div className="mb-4">
-                        <Label className="font-bold">Cabang</Label>
+                        <Label>Cabang</Label>
                         <select
                             onChange={(e) => {
                                 setSelectedWarehouse(e.target.value);
@@ -122,7 +122,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                     </div>
                     <div className="grid grid-cols-2 gap-2 mb-4">
                         <div>
-                            <Label className="font-bold">Tanggal</Label>
+                            <Label>Tanggal</Label>
                             <Input
                                 type="date"
                                 value={startDate}
@@ -131,7 +131,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                             />
                         </div>
                         <div>
-                            <Label className="font-bold">s/d</Label>
+                            <Label>s/d</Label>
                             <Input
                                 type="date"
                                 value={endDate}
@@ -155,8 +155,8 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                 </Modal>
             </div>
             <div className="px-4">
-                <h4 className="text-xs text-slate-500 font-bold">
-                    Data Transaksi {warehouses.find((w) => w.id === Number(selectedWarehouse))?.name} Periode {startDate} s/d {endDate}
+                <h4 className="text-xs text-slate-500">
+                    {warehouses.find((w) => w.id === Number(selectedWarehouse))?.name} Periode {startDate} s/d {endDate}
                 </h4>
             </div>
             <table className="table w-full text-xs">

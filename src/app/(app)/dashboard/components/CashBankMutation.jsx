@@ -7,8 +7,10 @@ import Modal from "@/components/Modal";
 import CreateMutationFromHq from "./CreateMutationFromHq";
 import Notification from "@/components/notification";
 import Pagination from "@/components/PaginateList";
-import { MoveRightIcon, PlusCircleIcon } from "lucide-react";
+import { FilterIcon, MoveRightIcon, PlusCircleIcon } from "lucide-react";
 import CreateJournal from "./CreateJournal";
+import Label from "@/components/Label";
+import Input from "@/components/Input";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -21,16 +23,17 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
     const [cashBank, setCashBank] = useState([]);
-    const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
     const [journalsByWarehouse, setJournalsByWarehouse] = useState([]);
     const [isModalCreateMutationFromHqOpen, setIsModalCreateMutationFromHqOpen] = useState(false);
     const [isModalCreateJournalOpen, setIsModalCreateJournalOpen] = useState(false);
+    const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
     const [notification, setNotification] = useState("");
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
     const closeModal = () => {
         setIsModalCreateMutationFromHqOpen(false);
         setIsModalCreateJournalOpen(false);
+        setIsModalFilterDataOpen(false);
     };
 
     const fetchCashBank = async () => {
@@ -62,7 +65,7 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
     const fetchJournalsByWarehouse = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`/api/get-journal-by-warehouse/${selectedWarehouse}/${startDate}/${endDate}`);
+            const response = await axios.get(`/api/get-journal-by-warehouse/${selectedWarehouse}/${endDate}/${endDate}`);
             setJournalsByWarehouse(response.data);
         } catch (error) {
             console.error(error);
@@ -114,20 +117,9 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
         <div className="my-4">
             {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
             <div className="mb-4 bg-white overflow-hidden shadow-sm sm:rounded-2xl">
-                <div className="px-6 pt-6 grid grid-cols-2 gap-4">
+                <div className="px-6 pt-6 grid grid-cols-3 gap-4">
                     <h1 className="font-bold text-xl">Mutasi Saldo</h1>
-                    <div className="flex gap-2 w-full">
-                        <select
-                            value={selectedWarehouse}
-                            onChange={(e) => setSelectedWarehouse(e.target.value)}
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                        >
-                            {warehouses.map((warehouse) => (
-                                <option key={warehouse.id} value={warehouse.id}>
-                                    {warehouse.name}
-                                </option>
-                            ))}
-                        </select>
+                    <div className="flex gap-2 w-full col-span-2">
                         <button
                             onClick={() => setIsModalCreateJournalOpen(true)}
                             className="bg-indigo-500 text-xs min-w-36 hover:bg-indigo-600 text-white py-2 px-6 rounded-lg"
@@ -140,6 +132,43 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
                         >
                             Mutasi Saldo <PlusCircleIcon className="size-4 inline" />
                         </button>
+                        <select
+                            value={selectedWarehouse}
+                            onChange={(e) => setSelectedWarehouse(e.target.value)}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        >
+                            {warehouses.map((warehouse) => (
+                                <option key={warehouse.id} value={warehouse.id}>
+                                    {warehouse.name}
+                                </option>
+                            ))}
+                        </select>
+                        <button
+                            onClick={() => setIsModalFilterDataOpen(true)}
+                            className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
+                        >
+                            <FilterIcon className="size-4" />
+                        </button>
+                        <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
+                            <div className="mb-4">
+                                <Label className="font-bold">Tanggal</Label>
+                                <Input
+                                    type="date"
+                                    value={endDate}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                    className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                />
+                            </div>
+                            <button
+                                onClick={() => {
+                                    fetchJournalsByWarehouse();
+                                    setIsModalFilterDataOpen(false);
+                                }}
+                                className="btn-primary"
+                            >
+                                Submit
+                            </button>
+                        </Modal>
                     </div>
                     <Modal isOpen={isModalCreateMutationFromHqOpen} onClose={closeModal} modalTitle="Penambahan Saldo Kas & Bank">
                         <CreateMutationFromHq
@@ -160,6 +189,9 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
                         />
                     </Modal>
                 </div>
+                <div className="px-6">
+                    <h4 className="text-xs text-slate-500">Periode: {endDate}</h4>
+                </div>
                 <table className="table w-full text-xs">
                     <thead>
                         <tr>
@@ -178,7 +210,7 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
                             accountBalance.map((account, index) => (
                                 <tr key={index}>
                                     <td>{account.acc_name}</td>
-                                    <td className="text-end">{formatNumber(account.balance)}</td>
+                                    <td className="text-end font-bold text-blue-950">{formatNumber(account.balance)}</td>
                                     <td className="text-end">{formatNumber(mutationInSumById(account.id) ?? 0)}</td>
                                     <td className="text-end">{formatNumber(mutationOutSumById(account.id) ?? 0)}</td>
                                 </tr>

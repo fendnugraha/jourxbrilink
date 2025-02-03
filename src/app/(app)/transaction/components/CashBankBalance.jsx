@@ -7,7 +7,7 @@ const CashBankBalance = ({ accountBalance }) => {
 
     return (
         <div>
-            <div className="flex justify-center items-center mb-3 flex-col bg-white hover:bg-slate-200 py-4 border rounded-2xl text-slate-800">
+            <div className="flex justify-center items-center mb-3 flex-col bg-amber-400 hover:bg-slate-200 py-4 border rounded-2xl text-slate-800">
                 <h1 className="text-xs">Total Saldo Kas & Bank</h1>
                 <h1 className="text-2xl font-black">{formatNumber(summarizeBalance)}</h1>
             </div>

@@ -2,7 +2,7 @@
 import Notification from "@/components/notification";
 import Header from "../Header";
 import { useEffect, useState } from "react";
-import { ArrowBigDown, ArrowBigUp, FilterIcon, PlusCircleIcon, XCircleIcon } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp, FilterIcon, MessageCircleWarningIcon, PlusCircleIcon, XCircleIcon } from "lucide-react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
 import formatDateTime from "@/libs/formatDateTime";
@@ -33,15 +33,18 @@ const StorePage = () => {
     const [isModalFilterJournalOpen, setIsModalFilterJournalOpen] = useState(false);
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
     const [warehouses, setWarehouses] = useState([]);
+    const [isModalDeleteTrxOpen, setIsModalDeleteTrxOpen] = useState(false);
+    const [selectedTrxId, setSelectedTrxId] = useState(null);
 
     const closeModal = () => {
         setIsModalFilterJournalOpen(false);
+        setIsModalDeleteTrxOpen(false);
     };
 
-    const fetchTransaction = async (url = "/api/transactions") => {
+    const fetchTransaction = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(url);
+            const response = await axios.get(`/api/get-trx-by-warehouse/${selectedWarehouse}/${startDate}/${endDate}`);
             setTransactions(response.data.data);
         } catch (error) {
             setNotification(error.response?.data?.message || "Something went wrong.");
@@ -74,6 +77,17 @@ const StorePage = () => {
         fetchWarehouses();
     }, []);
 
+    const handleDeleteTrx = async () => {
+        try {
+            const response = await axios.delete(`/api/transactions/${selectedTrxId}`);
+            setNotification(response.data.message);
+            fetchTransaction();
+        } catch (error) {
+            setNotification(error.response?.data?.message || "Something went wrong.");
+            console.log(error);
+        }
+    };
+
     return (
         <>
             {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
@@ -105,7 +119,6 @@ const StorePage = () => {
                                                 <select
                                                     onChange={(e) => {
                                                         setSelectedWarehouse(e.target.value);
-                                                        setCurrentPage(1);
                                                     }}
                                                     value={selectedWarehouse}
                                                     className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -141,9 +154,7 @@ const StorePage = () => {
                                             </div>
                                             <button
                                                 onClick={() => {
-                                                    fetchJournalsByWarehouse(selectedWarehouse, startDate, endDate);
-                                                    warehouseId(selectedWarehouse);
-
+                                                    fetchTransaction(`/api/transactions/${selectedWarehouse}/${startDate}/${endDate}`);
                                                     setIsModalFilterJournalOpen(false);
                                                 }}
                                                 className="btn-primary"
@@ -153,6 +164,11 @@ const StorePage = () => {
                                         </Modal>
                                     </div>
                                 </div>
+                                <div className="px-4">
+                                    <h4 className="text-xs text-slate-500">
+                                        Cabang: {warehouses.find((w) => w.id === Number(selectedWarehouse))?.name} Periode: {startDate} - {endDate}
+                                    </h4>
+                                </div>
                                 <table className="table w-full text-xs">
                                     <thead>
                                         <tr>
@@ -161,44 +177,86 @@ const StorePage = () => {
                                             <th>Qty</th>
                                             <th>Jual</th>
                                             <th>Modal</th>
-                                            <th>Waktu</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {transactions.data?.map((transaction) => (
-                                            <tr key={transaction.id}>
-                                                <td className="text-center">
-                                                    {transaction.transaction_type === "Purchase" ? (
-                                                        <ArrowBigDown size={24} className="text-green-500 inline" />
-                                                    ) : (
-                                                        <ArrowBigUp size={24} className="text-red-500 inline" />
-                                                    )}{" "}
-                                                    <span className="">{transaction.transaction_type}</span>
-                                                </td>
-                                                <td>
-                                                    {transaction.product.name}{" "}
-                                                    <span className="text-xs block text-slate-500">{transaction.product.category}</span>
-                                                </td>
-                                                <td className="text-center">
-                                                    {formatNumber(transaction.quantity < 0 ? transaction.quantity * -1 : transaction.quantity)}
-                                                </td>
-                                                <td className="text-end">{formatNumber(transaction.price)}</td>
-                                                <td className="text-end">{formatNumber(transaction.cost)}</td>
-                                                <td className="text-center">{formatDateTime(transaction.created_at)}</td>
-                                                <td className="text-center">
-                                                    <button>
-                                                        <XCircleIcon className="w-4 h-4 text-red-500 inline" />
-                                                    </button>
+                                        {loading ? (
+                                            <tr>
+                                                <td colSpan={7} className="text-center">
+                                                    Loading...
                                                 </td>
                                             </tr>
-                                        ))}
+                                        ) : transactions.data?.length === 0 ? (
+                                            <tr>
+                                                <td colSpan={7} className="text-center">
+                                                    Tidak ada transaksi
+                                                </td>
+                                            </tr>
+                                        ) : (
+                                            transactions.data?.map((transaction) => (
+                                                <tr key={transaction.id}>
+                                                    <td className="text-center">
+                                                        {transaction.transaction_type === "Purchase" ? (
+                                                            <ArrowBigDown size={24} className="text-green-500 inline" />
+                                                        ) : (
+                                                            <ArrowBigUp size={24} className="text-red-500 inline" />
+                                                        )}{" "}
+                                                        <span className="">{transaction.transaction_type}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span className="text-xs block text-slate-500">
+                                                            {formatDateTime(transaction.created_at)} | {transaction.product.category}
+                                                        </span>
+                                                        {transaction.product.name}
+                                                    </td>
+                                                    <td className="text-center">
+                                                        {formatNumber(transaction.quantity < 0 ? transaction.quantity * -1 : transaction.quantity)}
+                                                    </td>
+                                                    <td className="text-end">{formatNumber(transaction.price)}</td>
+                                                    <td className="text-end">{formatNumber(transaction.cost)}</td>
+                                                    <td className="text-center">
+                                                        <button
+                                                            onClick={() => {
+                                                                setSelectedTrxId(transaction.id);
+                                                                setIsModalDeleteTrxOpen(true);
+                                                            }}
+                                                        >
+                                                            <XCircleIcon className="w-4 h-4 text-red-500 inline hover:scale-125 transition-transform duration-300" />
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        )}
                                     </tbody>
                                 </table>
                                 <div className="px-4">
                                     {transactions.last_page > 1 && <Paginator links={transactions} handleChangePage={handleChangePage} />}
                                 </div>
                             </div>
+                            <Modal isOpen={isModalDeleteTrxOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
+                                <div className="flex flex-col items-center justify-center gap-3 mb-4">
+                                    <MessageCircleWarningIcon size={72} className="text-red-600" />
+                                    <p className="text-sm">Apakah anda yakin ingin menghapus transaksi ini (ID: {selectedTrxId})?</p>
+                                </div>
+                                <div className="flex justify-center gap-3">
+                                    <button
+                                        onClick={() => {
+                                            handleDeleteTrx(selectedTrxId);
+                                            setIsModalDeleteTrxOpen(false);
+                                        }}
+                                        className="btn-primary w-full"
+                                    >
+                                        Ya
+                                    </button>
+                                    <button
+                                        onClick={() => setIsModalDeleteTrxOpen(false)}
+                                        className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                    >
+                                        Tidak
+                                    </button>
+                                </div>
+                            </Modal>
                         </div>
                     </div>
                 </div>

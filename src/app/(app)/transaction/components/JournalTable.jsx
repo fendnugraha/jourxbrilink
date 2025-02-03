@@ -9,6 +9,7 @@ import { ArrowRightIcon, FilterIcon, MessageCircleWarningIcon, PencilIcon, Trash
 import Modal from "@/components/Modal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
+import EditJournal from "./EditJournal";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -18,7 +19,7 @@ const getCurrentDate = () => {
     return `${year}-${month}-${day}`;
 };
 
-const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJournalsByWarehouse, user }) => {
+const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, warehouseId, notification, fetchJournalsByWarehouse, user }) => {
     const [selectedAccount, setSelectedAccount] = useState(null);
     const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
@@ -27,14 +28,16 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
     const [itemsPerPage, setItemsPerPage] = useState(5);
     const [isModalFilterJournalOpen, setIsModalFilterJournalOpen] = useState(false);
     const [isModalDeleteJournalOpen, setIsModalDeleteJournalOpen] = useState(false);
-    const [selecttedJournalId, setSelecttedJournalId] = useState(null);
+    const [isModalEditJournalOpen, setIsModalEditJournalOpen] = useState(false);
+    const [selectedJournalId, setSelectedJournalId] = useState(null);
+    const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
 
     const closeModal = () => {
         setIsModalFilterJournalOpen(false);
         setIsModalDeleteJournalOpen(false);
+        setIsModalEditJournalOpen(false);
     };
 
-    const warehouse = user.role?.warehouse_id;
     const warehouseCash = user.role.warehouse.chart_of_account_id;
 
     const handleDeleteJournal = async (id) => {
@@ -47,7 +50,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
         }
     };
 
-    const branchAccount = cashBank.filter((cashBank) => cashBank.warehouse_id === warehouse);
+    const branchAccount = cashBank.filter((cashBank) => cashBank.warehouse_id === Number(selectedWarehouse));
     const filteredJournals = selectedAccount
         ? journalsByWarehouse?.data?.filter(
               (journal) => Number(journal.cred_code) === Number(selectedAccount) || Number(journal.debt_code) === Number(selectedAccount)
@@ -62,7 +65,6 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
-
     return (
         <div>
             <div className="px-4 mb-4 flex justify-start items-center gap-2 w-full">
@@ -104,15 +106,16 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
                         <Label className="font-bold">Cabang</Label>
                         <select
                             onChange={(e) => {
-                                setSelectedAccount(e.target.value);
+                                setSelectedWarehouse(e.target.value);
                                 setCurrentPage(1);
                             }}
+                            value={selectedWarehouse}
                             className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         >
                             <option value="">Semua Akun</option>
-                            {branchAccount.map((account, index) => (
-                                <option key={index} value={account.id}>
-                                    {account.acc_name}
+                            {warehouses.map((w) => (
+                                <option key={w.id} value={w.id}>
+                                    {w.name}
                                 </option>
                             ))}
                         </select>
@@ -134,12 +137,15 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
                                 value={endDate}
                                 onChange={(e) => setEndDate(e.target.value)}
                                 className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                disabled={!startDate}
                             />
                         </div>
                     </div>
                     <button
                         onClick={() => {
-                            fetchJournalsByWarehouse(startDate, endDate);
+                            fetchJournalsByWarehouse(selectedWarehouse, startDate, endDate);
+                            warehouseId(selectedWarehouse);
+
                             setIsModalFilterJournalOpen(false);
                         }}
                         className="btn-primary"
@@ -147,6 +153,11 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
                         Submit
                     </button>
                 </Modal>
+            </div>
+            <div className="px-4">
+                <h4 className="text-xs text-slate-500 font-bold">
+                    Data Transaksi {warehouses.find((w) => w.id === Number(selectedWarehouse))?.name} Periode {startDate} s/d {endDate}
+                </h4>
             </div>
             <table className="table w-full text-xs">
                 <thead>
@@ -193,12 +204,19 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
                                 </td>
                                 <td className="hidden sm:table-cell">
                                     <div className="flex justify-center gap-3">
-                                        <button className="" hidden={!["Transfer Uang", "Tarik Tunai"].includes(journal.trx_type)}>
+                                        <button
+                                            className=""
+                                            hidden={!["Transfer Uang", "Tarik Tunai"].includes(journal.trx_type)}
+                                            onClick={() => {
+                                                setSelectedJournalId(journal.id);
+                                                setIsModalEditJournalOpen(true);
+                                            }}
+                                        >
                                             <PencilIcon className="size-4 text-indigo-700 hover:scale-125 transtition-all duration-200" />
                                         </button>
                                         <button
                                             onClick={() => {
-                                                setSelecttedJournalId(journal.id);
+                                                setSelectedJournalId(journal.id);
                                                 setIsModalDeleteJournalOpen(true);
                                             }}
                                             disabled={["Voucher & SP", "Accessories"].includes(journal.trx_type)}
@@ -216,12 +234,12 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
             <Modal isOpen={isModalDeleteJournalOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
                 <div className="flex flex-col items-center justify-center gap-3 mb-4">
                     <MessageCircleWarningIcon size={72} className="text-red-600" />
-                    <p className="text-sm">Apakah anda yakin ingin menghapus transaksi ini (ID: {selecttedJournalId})?</p>
+                    <p className="text-sm">Apakah anda yakin ingin menghapus transaksi ini (ID: {selectedJournalId})?</p>
                 </div>
                 <div className="flex justify-center gap-3">
                     <button
                         onClick={() => {
-                            handleDeleteJournal(selecttedJournalId);
+                            handleDeleteJournal(selectedJournalId);
                             setIsModalDeleteJournalOpen(false);
                         }}
                         className="btn-primary w-full"
@@ -235,6 +253,15 @@ const JournalTable = ({ cashBank, journalsByWarehouse, notification, fetchJourna
                         Tidak
                     </button>
                 </div>
+            </Modal>
+            <Modal isOpen={isModalEditJournalOpen} onClose={closeModal} modalTitle="Edit Journal" maxWidth="max-w-2xl">
+                <EditJournal
+                    isModalOpen={setIsModalEditJournalOpen}
+                    journal={selectedJournalId}
+                    branchAccount={branchAccount}
+                    notification={notification}
+                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                />
             </Modal>
             {totalPages > 1 && (
                 <Pagination

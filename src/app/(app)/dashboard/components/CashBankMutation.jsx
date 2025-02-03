@@ -8,6 +8,7 @@ import CreateMutationFromHq from "./CreateMutationFromHq";
 import Notification from "@/components/notification";
 import Pagination from "@/components/PaginateList";
 import { MoveRightIcon, PlusCircleIcon } from "lucide-react";
+import CreateJournal from "./CreateJournal";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -24,10 +25,12 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
     const [endDate, setEndDate] = useState(getCurrentDate());
     const [journalsByWarehouse, setJournalsByWarehouse] = useState([]);
     const [isModalCreateMutationFromHqOpen, setIsModalCreateMutationFromHqOpen] = useState(false);
+    const [isModalCreateJournalOpen, setIsModalCreateJournalOpen] = useState(false);
     const [notification, setNotification] = useState("");
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
     const closeModal = () => {
         setIsModalCreateMutationFromHqOpen(false);
+        setIsModalCreateJournalOpen(false);
     };
 
     const fetchCashBank = async () => {
@@ -84,12 +87,11 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
 
     useEffect(() => {
         fetchJournalsByWarehouse();
-        getAccountBalance();
     }, [selectedWarehouse]);
 
-    // useEffect(() => {
-    //     getAccountBalance();
-    // }, [journalsByWarehouse]);
+    useEffect(() => {
+        getAccountBalance();
+    }, [journalsByWarehouse]);
 
     const mutationInSum = accountBalance.reduce((sum, acc) => sum + mutationInSumById(acc.id), 0);
 
@@ -127,6 +129,12 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
                             ))}
                         </select>
                         <button
+                            onClick={() => setIsModalCreateJournalOpen(true)}
+                            className="bg-indigo-500 text-xs min-w-36 hover:bg-indigo-600 text-white py-2 px-6 rounded-lg"
+                        >
+                            Jurnal Umum <PlusCircleIcon className="size-4 inline" />
+                        </button>
+                        <button
                             onClick={() => setIsModalCreateMutationFromHqOpen(true)}
                             className="bg-indigo-500 text-xs min-w-36 hover:bg-indigo-600 text-white py-2 px-6 rounded-lg"
                         >
@@ -139,6 +147,15 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
                             isModalOpen={setIsModalCreateMutationFromHqOpen}
                             notification={(message) => setNotification(message)}
                             fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                            warehouses={warehouses}
+                        />
+                    </Modal>
+                    <Modal isOpen={isModalCreateJournalOpen} onClose={closeModal} modalTitle="Jurnal umum">
+                        <CreateJournal
+                            cashBank={cashBank}
+                            isModalOpen={setIsModalCreateJournalOpen}
+                            notification={(message) => setNotification(message)}
+                            getAccountBalance={getAccountBalance}
                             warehouses={warehouses}
                         />
                     </Modal>

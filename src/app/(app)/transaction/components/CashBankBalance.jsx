@@ -2,7 +2,7 @@
 import formatNumber from "@/libs/formatNumber";
 import { Settings } from "lucide-react";
 
-const CashBankBalance = ({ warehouse, accountBalance }) => {
+const CashBankBalance = ({ accountBalance }) => {
     const summarizeBalance = accountBalance?.reduce((total, account) => total + account.balance, 0);
 
     return (

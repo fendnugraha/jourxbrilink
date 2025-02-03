@@ -57,13 +57,27 @@ const TransactionPage = () => {
         setIsModalCreateExpenseOpen(false);
     };
     const warehouse = user.role?.warehouse_id;
-    const [startDate, setStartDate] = useState(getCurrentDate());
-    const [endDate, setEndDate] = useState(getCurrentDate());
-
-    const fetchJournalsByWarehouse = async () => {
+    const [selectedWarehouseId, setSelectedWarehouseId] = useState(warehouse);
+    const [warehouses, setWarehouses] = useState([]);
+    const fetchWarehouses = async (url = "/api/get-all-warehouses") => {
         setLoading(true);
         try {
-            const response = await axios.get(`/api/get-journal-by-warehouse/${warehouse}/${startDate}/${endDate}`);
+            const response = await axios.get(url);
+            setWarehouses(response.data.data);
+        } catch (error) {
+            setErrors(error.response?.data?.errors || ["Something went wrong."]);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchWarehouses();
+    }, []);
+    const fetchJournalsByWarehouse = async (selectedWarehouse = warehouse, startDate = getCurrentDate(), endDate = getCurrentDate()) => {
+        setLoading(true);
+        try {
+            const response = await axios.get(`/api/get-journal-by-warehouse/${selectedWarehouse}/${startDate}/${endDate}`);
             setJournalsByWarehouse(response.data);
         } catch (error) {
             console.error(error);
@@ -75,12 +89,12 @@ const TransactionPage = () => {
 
     useEffect(() => {
         fetchJournalsByWarehouse();
-    }, []);
+    }, []); // Include startDate and endDate in the dependency array
 
     const getAccountBalance = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`/api/get-cash-bank-balance/${warehouse}`);
+            const response = await axios.get(`/api/get-cash-bank-balance/${selectedWarehouseId}`);
             setAccountBalance(response.data.data);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
@@ -106,7 +120,7 @@ const TransactionPage = () => {
         fetchCashBank();
     }, []);
 
-    const filteredCashBankByWarehouse = cashBank.filter((cashBank) => cashBank.warehouse_id === user.role.warehouse_id);
+    const filteredCashBankByWarehouse = cashBank.filter((cashBank) => cashBank.warehouse_id === selectedWarehouseId);
     return (
         <>
             <Header title="Transaction" />
@@ -241,9 +255,12 @@ const TransactionPage = () => {
                             <div className="col-span-3 bg-white py-6 rounded-2xl">
                                 <JournalTable
                                     cashBank={cashBank}
-                                    journalsByWarehouse={journalsByWarehouse}
-                                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                     notification={(message) => setNotification(message)}
+                                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                                    journalsByWarehouse={journalsByWarehouse}
+                                    warehouses={warehouses}
+                                    warehouse={warehouse}
+                                    warehouseId={(warehouseId) => setSelectedWarehouseId(warehouseId)}
                                     user={user}
                                 />
                             </div>

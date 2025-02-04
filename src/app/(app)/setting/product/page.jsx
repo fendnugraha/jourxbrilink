@@ -137,10 +137,10 @@ export default function Product() {
                                     </button>
                                 )} */}
                                 <div className="flex justify-end gap-2">
-                                    <button className="btn-primary" onClick={() => setIsModalCreateProductOpen(true)}>
+                                    <button className="btn-primary text-sm" onClick={() => setIsModalCreateProductOpen(true)}>
                                         Tambah Produk <PlusCircleIcon className="w-5 h-5 inline" />
                                     </button>
-                                    <button className="btn-primary" onClick={() => setIsModalCreateCategoryProductOpen(true)}>
+                                    <button className="btn-primary text-sm" onClick={() => setIsModalCreateCategoryProductOpen(true)}>
                                         Tambah Kategori <PlusCircleIcon className="w-5 h-5 inline" />
                                     </button>
                                 </div>

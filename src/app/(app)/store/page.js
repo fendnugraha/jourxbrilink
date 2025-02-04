@@ -101,12 +101,15 @@ const StorePage = () => {
                                 <div className="p-4 flex justify-between">
                                     <h1 className="text-2xl font-bold mb-4">Transaksi Barang</h1>
                                     <div className="flex items-center gap-2">
-                                        <Link href="/store/sales" className="btn-primary text-xs mr-2">
+                                        <Link href="/store/sales" className="btn-primary text-xs">
                                             <PlusCircleIcon className="w-4 h-4 inline" /> Penjualan
                                         </Link>
-                                        <button className="btn-primary text-xs disabled:bg-slate-400 disabled:cursor-not-allowed" disabled={true}>
+                                        <Link href="/store/purchase" className="btn-primary text-xs">
                                             <PlusCircleIcon className="w-4 h-4 inline" /> Pembelian
-                                        </button>
+                                        </Link>
+                                        {/* <button className="btn-primary text-xs disabled:bg-slate-400 disabled:cursor-not-allowed" disabled={true}>
+                                            <PlusCircleIcon className="w-4 h-4 inline" /> Pembelian
+                                        </button> */}
                                         <button
                                             onClick={() => setIsModalFilterJournalOpen(true)}
                                             className="bg-white font-bold p-2 rounded-lg border border-gray-300 hover:border-gray-400"

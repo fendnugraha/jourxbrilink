@@ -1,5 +1,5 @@
 "use client";
-import { ArrowBigDown, ArrowBigUp, PlusCircleIcon, XCircleIcon } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp, MessageCircleWarningIcon, PlusCircleIcon, XCircleIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import Modal from "@/components/Modal";
@@ -8,12 +8,17 @@ import Notification from "@/components/notification";
 import CreatePayable from "./CreatePayable";
 import formatNumber from "@/libs/formatNumber";
 import formatDateTime from "@/libs/formatDateTime";
+import PaymentForm from "./PaymentForm";
 const Payable = () => {
     const [isModalCreateContactOpen, setIsModalCreateContactOpen] = useState(false);
     const [isModalCreatePayableOpen, setIsModalCreatePayableOpen] = useState(false);
+    const [isModalDeleteFinanceOpen, setIsModalDeleteFinanceOpen] = useState(false);
+    const [isModalPaymentOpen, setIsModalPaymentOpen] = useState(false);
     const [finance, setFinance] = useState([]);
     const [notification, setNotification] = useState("");
     const [financeType, setFinanceType] = useState("Payable");
+    const [selectedFinanceId, setSelectedFinanceId] = useState(null);
+    const [selectedContactId, setSelectedContactId] = useState(null);
 
     const [loading, setLoading] = useState(true);
     const fetchFinance = async (url = "/api/finance") => {
@@ -34,11 +39,23 @@ const Payable = () => {
     const closeModal = () => {
         setIsModalCreateContactOpen(false);
         setIsModalCreatePayableOpen(false);
+        setIsModalDeleteFinanceOpen(false);
+        setIsModalPaymentOpen(false);
     };
 
     const filterFinanceByContactIdAndType = finance.financeGroupByContactId?.filter((fnc) => fnc.finance_type === financeType) || [];
 
     const filterFinanceByType = finance.finance?.filter((fnc) => fnc.finance_type === financeType) || [];
+
+    const handleDeleteFinance = async (id) => {
+        try {
+            const response = await axios.delete(`/api/finance/${id}`);
+            setNotification(response.data.message);
+            fetchFinance();
+        } catch (error) {
+            setNotification(error.response?.data?.message || "Something went wrong.");
+        }
+    };
 
     return (
         <>
@@ -103,7 +120,14 @@ const Payable = () => {
                                     <td className="text-end">{formatNumber(item.terbayar)}</td>
                                     <td className="text-end">{formatNumber(item.sisa)}</td>
                                     <td className="text-center">
-                                        <button type="button" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-xl">
+                                        <button
+                                            onClick={() => {
+                                                setIsModalPaymentOpen(true);
+                                                setSelectedContactId(item.contact_id);
+                                            }}
+                                            type="button"
+                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-xl"
+                                        >
                                             Bayar
                                         </button>
                                     </td>
@@ -151,11 +175,21 @@ const Payable = () => {
                                     </td>
                                     <td className="text-end">{formatNumber(item.bill_amount > 0 ? item.bill_amount : item.payment_amount)}</td>
                                     <td className="">{item.account.acc_name}</td>
-                                    <td className="">{item.description}</td>
+                                    <td className="">
+                                        <span className="font-bold text-xs text-slate-400 block">{item.invoice}</span>
+                                        {item.description}
+                                    </td>
                                     <td className="">{item.contact.name}</td>
                                     <td className="text-end">{formatDateTime(item.created_at)}</td>
                                     <td className="text-center">
-                                        <button type="button" className="">
+                                        <button
+                                            onClick={() => {
+                                                setSelectedFinanceId(item.id);
+                                                setIsModalDeleteFinanceOpen(true);
+                                            }}
+                                            type="button"
+                                            className=""
+                                        >
                                             <XCircleIcon className="w-4 h-4 mr-2 inline text-red-600" />
                                         </button>
                                     </td>
@@ -164,6 +198,32 @@ const Payable = () => {
                         </tbody>
                     </table>
                 </div>
+                <Modal isOpen={isModalDeleteFinanceOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
+                    <div className="flex flex-col items-center justify-center gap-3 mb-4">
+                        <MessageCircleWarningIcon size={72} className="text-red-600" />
+                        <p className="text-sm">Apakah anda yakin ingin menghapus transaksi ini (ID: {selectedFinanceId})?</p>
+                    </div>
+                    <div className="flex justify-center gap-3">
+                        <button
+                            onClick={() => {
+                                handleDeleteFinance(selectedFinanceId);
+                                setIsModalDeleteFinanceOpen(false);
+                            }}
+                            className="btn-primary w-full"
+                        >
+                            Ya
+                        </button>
+                        <button
+                            onClick={() => setIsModalDeleteFinanceOpen(false)}
+                            className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                            Tidak
+                        </button>
+                    </div>
+                </Modal>
+                <Modal isOpen={isModalPaymentOpen} onClose={closeModal} modalTitle="Form Pembayaran" maxWidth="max-w-xl">
+                    <PaymentForm contactId={selectedContactId} onClose={closeModal} />
+                </Modal>
             </div>
         </>
     );

@@ -29,6 +29,7 @@ const PaymentForm = ({ contactId }) => {
         } finally {
             setLoading(false);
         }
+        console.log("contactId", contactId);
     };
 
     useEffect(() => {
@@ -53,6 +54,7 @@ const PaymentForm = ({ contactId }) => {
 
     const contactName = financeData[0]?.contact.name;
     const filterDataByInvoice = financeData.filter((finance) => finance.invoice === selectedInvoice);
+    console.log(contactId);
     return (
         <div>
             <h1 className="text-lg mb-4">Contact: {contactName}</h1>

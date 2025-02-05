@@ -20,9 +20,10 @@ const Payable = () => {
     const [financeType, setFinanceType] = useState("Payable");
     const [selectedFinanceId, setSelectedFinanceId] = useState(null);
     const [selectedContactId, setSelectedContactId] = useState("All");
+    const [selectedContactIdPayment, setSelectedContactIdPayment] = useState(null);
 
     const [loading, setLoading] = useState(true);
-    const fetchFinance = async (url = `/api/finance/${selectedContactId}/${financeType}`) => {
+    const fetchFinance = async (url = `/api/finance-by-type/${selectedContactId}/${financeType}`) => {
         setLoading(true);
         try {
             const response = await axios.get(url);
@@ -129,12 +130,13 @@ const Payable = () => {
                                             <button
                                                 onClick={() => {
                                                     setIsModalPaymentOpen(true);
-                                                    setSelectedContactId(item.contact_id);
+                                                    setSelectedContactIdPayment(item.contact_id);
                                                 }}
                                                 type="button"
-                                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-xl"
+                                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-xl disabled:bg-slate-400 disabled:cursor-not-allowed"
+                                                disabled={Number(item.sisa) === 0}
                                             >
-                                                Bayar
+                                                {Number(item.sisa) === 0 ? "Lunas" : "Bayar"}
                                             </button>
                                         </td>
                                     </tr>
@@ -236,7 +238,7 @@ const Payable = () => {
                     </div>
                 </Modal>
                 <Modal isOpen={isModalPaymentOpen} onClose={closeModal} modalTitle="Form Pembayaran" maxWidth="max-w-xl">
-                    <PaymentForm contactId={selectedContactId} onClose={closeModal} />
+                    <PaymentForm contactId={selectedContactIdPayment} onClose={closeModal} />
                 </Modal>
             </div>
         </>

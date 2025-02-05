@@ -5,33 +5,58 @@ import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
 import formatDateTime from "@/libs/formatDateTime";
 import { ArrowRightIcon } from "lucide-react";
+import { FilterIcon } from "lucide-react";
+import Modal from "@/components/Modal";
+import Label from "@/components/Label";
+import Input from "@/components/Input";
+import Paginator from "@/components/Paginator";
 
-const MutationHistory = () => {
-    const [formData, setFormData] = useState({
-        start_date: "",
-        end_date: "",
-        account: 52,
-    });
+const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // Month is 0-indexed
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+};
+
+const MutationHistory = ({ account }) => {
+    const [search, setSearch] = useState("");
     const [mutation, setMutation] = useState([]);
     const [notification, setNotification] = useState("");
     const [loading, setLoading] = useState(false);
-    useEffect(() => {
-        const fetchMutation = async () => {
-            setLoading(true);
-            try {
-                const response = await axios.get("/api/mutation-history", {
-                    params: formData,
-                });
-                setMutation(response.data.data);
-            } catch (error) {
-                setNotification(error.response?.data?.message || "Something went wrong.");
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchMutation();
-    }, [formData]);
+    const [startDate, setStartDate] = useState(getCurrentDate());
+    const [endDate, setEndDate] = useState(getCurrentDate());
+    const [selectedAccount, setSelectedAccount] = useState(null);
+    const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
 
+    const closeModal = () => {
+        setIsModalFilterDataOpen(false);
+    };
+
+    const fetchMutation = async (url = `/api/mutation-history/${selectedAccount}/${startDate}/${endDate}`) => {
+        setLoading(true);
+        try {
+            const response = await axios.get(url, {
+                params: {
+                    search: search,
+                },
+            });
+            setMutation(response.data.data);
+        } catch (error) {
+            setNotification(error.response?.data?.message || "Something went wrong.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchMutation();
+    }, [selectedAccount]);
+
+    const handleChangePage = (url) => {
+        fetchMutation(url);
+    };
+    console.log(mutation.journals?.last_page);
     return (
         <div className="bg-white rounded-lg mb-3 relative">
             <div className="p-4">
@@ -39,21 +64,63 @@ const MutationHistory = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-2">
                     <div className="bg-sky-700 p-2 sm:px-4 sm:py-2 rounded-xl text-white">
                         <h5 className="sm:text-xs">Saldo Awal</h5>
-                        <span className="sm:text-xl font-bold">{formatNumber(mutation?.initBalance)}</span>
+                        <span className="sm:text-xl font-bold">{formatNumber(mutation?.initBalance || 0)}</span>
                     </div>
                     <div className="bg-sky-700 p-2 sm:px-4 sm:py-2 rounded-xl text-white">
                         <h5 className="sm:text-xs">Debet</h5>
-                        <span className="sm:text-xl font-bold">{formatNumber(mutation?.debt_total)}</span>
+                        <span className="sm:text-xl font-bold">{formatNumber(mutation?.debt_total || 0)}</span>
                     </div>
                     <div className="bg-sky-700 p-2 sm:px-4 sm:py-2 rounded-xl text-white">
                         <h5 className="sm:text-xs">Credit</h5>
-                        <span className="sm:text-xl font-bold">{formatNumber(mutation?.cred_total)}</span>
+                        <span className="sm:text-xl font-bold">{formatNumber(mutation?.cred_total || 0)}</span>
                     </div>
                     <div className="bg-sky-700 p-2 sm:px-4 sm:py-2 rounded-xl text-white">
                         <h5 className="sm:text-xs">Saldo Akhir</h5>
-                        <span className="sm:text-xl font-bold">{formatNumber(mutation?.endBalance)}</span>
+                        <span className="sm:text-xl font-bold">{formatNumber(mutation?.endBalance || 0)}</span>
                     </div>
                 </div>
+            </div>
+            <div className="mb-2 px-4 flex gap-2">
+                <select
+                    onChange={(e) => setSelectedAccount(e.target.value)}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                >
+                    <option value="0">Pilih Akun</option>
+                    {account?.map((item) => (
+                        <option key={item.id} value={item.id}>
+                            {item.acc_name}
+                        </option>
+                    ))}
+                </select>
+                <button
+                    onClick={() => setIsModalFilterDataOpen(true)}
+                    className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
+                >
+                    <FilterIcon className="size-4" />
+                </button>
+                <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
+                    <div className="mb-4">
+                        <Label className="font-bold">Tanggal</Label>
+                        <Input
+                            type="date"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <Label className="font-bold">s/d</Label>
+                        <Input
+                            type="date"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                            className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        />
+                    </div>
+                    <button onClick={fetchMutation} className="btn-primary">
+                        Submit
+                    </button>
+                </Modal>
             </div>
 
             <table className="table w-full text-xs">
@@ -68,33 +135,49 @@ const MutationHistory = () => {
                         <tr>
                             <td colSpan={2}>Loading...</td>
                         </tr>
-                    ) : (
-                        mutation.journals?.data?.map((item, index) => (
-                            <tr key={index}>
-                                <td>
-                                    <span className="text-xs text-slate-500 block">
-                                        {item.invoice} | {formatDateTime(item.created_at)}
-                                    </span>
-                                    Note: {item.description}
-                                    <span className="block font-bold text-xs">
-                                        {item.cred.acc_name} <ArrowRightIcon className="size-4 inline" /> {item.debt.acc_name}
-                                    </span>
-                                </td>
-                                <td className="font-bold">
-                                    <span
-                                        className={`${Number(item.debt_code) === Number(formData.account) ? "text-green-500" : ""}
-                                    ${Number(item.cred_code) === Number(formData.account) ? "text-red-500" : ""}
-                                        text-sm md:text-base sm:text-lg`}
-                                    >
-                                        {formatNumber(item.amount)}
-                                    </span>
-                                    {item.fee_amount !== 0 && <span className="text-xs text-blue-600 block">{formatNumber(item.fee_amount)}</span>}
-                                </td>
+                    ) : selectedAccount > 0 ? (
+                        mutation.journals?.data?.length > 0 ? (
+                            mutation.journals?.data?.map((item, index) => (
+                                <tr key={index}>
+                                    <td>
+                                        <span className="text-xs text-slate-500 block">
+                                            {item.invoice} | {formatDateTime(item.created_at)}
+                                        </span>
+                                        Note: {item.description}
+                                        <span className="block font-bold text-xs">
+                                            {item.cred.acc_name} <ArrowRightIcon className="size-4 inline" /> {item.debt.acc_name}
+                                        </span>
+                                    </td>
+                                    <td className="font-bold">
+                                        <span
+                                            className={`${Number(item.debt_code) === Number(selectedAccount) ? "text-green-500" : ""}
+                                            ${Number(item.cred_code) === Number(selectedAccount) ? "text-red-500" : ""}
+                                                text-sm md:text-base sm:text-lg`}
+                                        >
+                                            {formatNumber(item.amount)}
+                                        </span>
+                                        {item.fee_amount !== 0 && <span className="text-xs text-blue-600 block">{formatNumber(item.fee_amount)}</span>}
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={2}>Tidak ada data.</td>
                             </tr>
-                        ))
+                        )
+                    ) : (
+                        <tr>
+                            <td colSpan={2}>Silahkan pilih akun.</td>
+                        </tr>
                     )}
                 </tbody>
             </table>
+
+            {mutation.journals?.last_page > 1 && (
+                <div className="px-4">
+                    <Paginator links={mutation.journals} handleChangePage={handleChangePage} />
+                </div>
+            )}
         </div>
     );
 };

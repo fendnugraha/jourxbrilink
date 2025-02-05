@@ -135,7 +135,7 @@ const TransactionPage = () => {
                             >
                                 Tansfer Uang <ArrowUpCircleIcon className="size-4 group-hover:scale-110 inline" />
                             </button>
-                            <Modal isOpen={isModalCreateTransferOpen} onClose={closeModal} modalTitle="Transfer Uang">
+                            <Modal isOpen={isModalCreateTransferOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Transfer Uang">
                                 <CreateTransfer
                                     filteredCashBankByWarehouse={filteredCashBankByWarehouse}
                                     isModalOpen={setIsModalCreateTransferOpen}
@@ -150,7 +150,7 @@ const TransactionPage = () => {
                             >
                                 Tarik Tunai <ArrowDownCircleIcon className="size-4 group-hover:scale-110 inline" />
                             </button>
-                            <Modal isOpen={isModalCreateCashWithdrawalOpen} onClose={closeModal} modalTitle="Tarik Tunai">
+                            <Modal isOpen={isModalCreateCashWithdrawalOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Tarik Tunai">
                                 <CreateCashWithdrawal
                                     filteredCashBankByWarehouse={filteredCashBankByWarehouse}
                                     isModalOpen={setIsModalCreateCashWithdrawalOpen}
@@ -159,7 +159,7 @@ const TransactionPage = () => {
                                     user={user}
                                 />
                             </Modal>
-                            <Modal isOpen={isModalCreateVoucherOpen} onClose={closeModal} modalTitle="Penjualan Voucher & Kartu">
+                            <Modal isOpen={isModalCreateVoucherOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Penjualan Voucher & Kartu">
                                 <CreateVoucher
                                     isModalOpen={setIsModalCreateVoucherOpen}
                                     notification={(message) => setNotification(message)}
@@ -167,7 +167,7 @@ const TransactionPage = () => {
                                     user={user}
                                 />
                             </Modal>
-                            <Modal isOpen={isModalCreateDepositOpen} onClose={closeModal} modalTitle="Penjualan Deposit">
+                            <Modal isOpen={isModalCreateDepositOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Penjualan Deposit">
                                 <CreateDeposit
                                     isModalOpen={setIsModalCreateDepositOpen}
                                     notification={(message) => setNotification(message)}
@@ -175,7 +175,7 @@ const TransactionPage = () => {
                                 />
                             </Modal>
                             {/* Expenses */}
-                            <Modal isOpen={isModalCreateMutationToHqOpen} onClose={closeModal} modalTitle="Pengembalian Saldo Kas & Bank">
+                            <Modal isOpen={isModalCreateMutationToHqOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Pengembalian Saldo Kas & Bank">
                                 <CreateMutationToHq
                                     cashBank={cashBank}
                                     isModalOpen={setIsModalCreateMutationToHqOpen}
@@ -184,7 +184,7 @@ const TransactionPage = () => {
                                     user={user}
                                 />
                             </Modal>
-                            <Modal isOpen={isModalCreateBankAdminFeeOpen} onClose={closeModal} modalTitle="Biaya Administrasi Bank">
+                            <Modal isOpen={isModalCreateBankAdminFeeOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Biaya Administrasi Bank">
                                 <CreateBankAdminFee
                                     filteredCashBankByWarehouse={filteredCashBankByWarehouse}
                                     isModalOpen={setIsModalCreateBankAdminFeeOpen}
@@ -192,7 +192,7 @@ const TransactionPage = () => {
                                     fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 />
                             </Modal>
-                            <Modal isOpen={isModalCreateExpenseOpen} onClose={closeModal} modalTitle="Biaya Operasional">
+                            <Modal isOpen={isModalCreateExpenseOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Biaya Operasional">
                                 <CreateExpense
                                     isModalOpen={setIsModalCreateExpenseOpen}
                                     notification={(message) => setNotification(message)}

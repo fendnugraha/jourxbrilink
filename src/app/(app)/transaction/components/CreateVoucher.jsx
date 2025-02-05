@@ -98,15 +98,15 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                 <Label>Qty</Label>
                 <div className="col-span-2 flex items-center gap-2">
                     <button
-                        className="hover:text-red-600 disabled:text-slate-400 disabled:cursor-not-allowed"
+                        className="hover:text-red-600 active:scale-95 disabled:text-slate-400 disabled:cursor-not-allowed"
                         onClick={decrementQty}
                         disabled={formData.qty <= 1}
                     >
                         <MinusCircleIcon className="w-6 h-6" />
                     </button>
-                    <span className="text-md mx-2">{formData.qty}</span>
+                    <span className="text-md text-center min-w-5">{formData.qty}</span>
                     <button
-                        className="hover:text-red-600 disabled:text-slate-400 disabled:cursor-not-allowed"
+                        className="hover:text-red-600 active:scale-95 disabled:text-slate-400 disabled:cursor-not-allowed"
                         onClick={incrementQty}
                         disabled={formData.product_id === ""}
                     >

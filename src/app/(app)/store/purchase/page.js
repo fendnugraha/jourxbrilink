@@ -189,7 +189,7 @@ const Purchase = () => {
                                     >
                                         Tambah Produk <PlusCircleIcon className="w-4 h-4 inline" />
                                     </button>
-                                    <Modal isOpen={isModalCreateProductOpen} onClose={closeModal} modalTitle="Create account">
+                                    <Modal isOpen={isModalCreateProductOpen} onClose={closeModal} modalTitle="Create new product" maxWidth={"max-w-md"}>
                                         <CreateProduct
                                             isModalOpen={setIsModalCreateProductOpen}
                                             notification={(message) => setNotification(message)}

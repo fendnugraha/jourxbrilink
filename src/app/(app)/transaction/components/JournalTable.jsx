@@ -20,7 +20,7 @@ const getCurrentDate = () => {
 };
 
 const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, warehouseId, notification, fetchJournalsByWarehouse, user }) => {
-    const [selectedAccount, setSelectedAccount] = useState(null);
+    const [selectedAccount, setSelectedAccount] = useState("");
     const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
     const [loading, setLoading] = useState(false);
@@ -86,6 +86,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                         setSelectedAccount(e.target.value);
                         setCurrentPage(1);
                     }}
+                    value={selectedAccount}
                     className="rounded-md flex-1 border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 >
                     <option value="">Semua Akun</option>
@@ -147,6 +148,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                             warehouseId(selectedWarehouse);
 
                             setIsModalFilterJournalOpen(false);
+                            setSelectedAccount("");
                         }}
                         className="btn-primary"
                     >
@@ -182,7 +184,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                         </tr>
                     ) : (
                         currentItems.map((journal, index) => (
-                            <tr key={index}>
+                            <tr key={index} className="hover:bg-slate-100">
                                 <td>
                                     <span className="text-xs text-slate-500 block">
                                         #{journal.id} {journal.invoice} | {formatDateTime(journal.created_at)}
@@ -205,14 +207,14 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                                 <td className="hidden sm:table-cell">
                                     <div className="flex justify-center gap-3">
                                         <button
-                                            className=""
+                                            className=" hover:scale-125 transtition-all duration-200"
                                             hidden={!["Transfer Uang", "Tarik Tunai"].includes(journal.trx_type)}
                                             onClick={() => {
                                                 setSelectedJournalId(journal.id);
                                                 setIsModalEditJournalOpen(true);
                                             }}
                                         >
-                                            <PencilIcon className="size-4 text-indigo-700 hover:scale-125 transtition-all duration-200" />
+                                            <PencilIcon className="size-4 text-indigo-700" />
                                         </button>
                                         <button
                                             onClick={() => {
@@ -220,9 +222,9 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                                                 setIsModalDeleteJournalOpen(true);
                                             }}
                                             disabled={["Voucher & SP", "Accessories"].includes(journal.trx_type)}
-                                            className=" disabled:text-slate-300 disabled:cursor-not-allowed text-red-600"
+                                            className=" disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transtition-all duration-200"
                                         >
-                                            <TrashIcon className="size-4 hover:scale-125 transtition-all duration-200" />
+                                            <TrashIcon className="size-4" />
                                         </button>
                                     </div>
                                 </td>

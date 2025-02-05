@@ -80,7 +80,7 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                     <Label>Fee (Admin)</Label>
                     <div className="col-span-1">
                         <Input
-                            className={"w-1/2"}
+                            className={"w-3/4"}
                             type="number"
                             placeholder="Rp."
                             value={formData.fee_amount}

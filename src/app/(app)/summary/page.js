@@ -1,13 +1,29 @@
 "use client";
 import Notification from "@/components/notification";
 import Header from "../Header";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import WarehouseBalance from "./components/WarehouseBalance";
 import RevenueReport from "./components/RevenueReport";
 import MutationHistory from "./components/MutationHistory";
+import axios from "@/libs/axios";
 
 const SummaryPage = () => {
+    const [account, setAccount] = useState(null);
     const [notification, setNotification] = useState("");
+    const [errors, setErrors] = useState([]);
+
+    const fetchAccount = async (url = "/api/get-all-accounts") => {
+        try {
+            const response = await axios.get(url);
+            setAccount(response.data.data);
+        } catch (error) {
+            setErrors(error.response?.data?.errors || ["Something went wrong."]);
+        }
+    };
+
+    useEffect(() => {
+        fetchAccount();
+    }, []);
     return (
         <>
             {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
@@ -18,7 +34,7 @@ const SummaryPage = () => {
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <WarehouseBalance />
                         <RevenueReport />
-                        <MutationHistory />
+                        <MutationHistory account={account} />
                     </div>
                 </div>
             </div>

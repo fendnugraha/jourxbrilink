@@ -80,7 +80,7 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                     <Label>Fee (Admin)</Label>
                     <div className="">
                         <Input
-                            className={"w-1/2"}
+                            className={"w-3/4"}
                             type="number"
                             placeholder="Rp."
                             value={formData.fee_amount}

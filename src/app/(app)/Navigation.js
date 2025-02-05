@@ -25,7 +25,7 @@ const Navigation = ({ user }) => {
         setIsOpen(!isOpen);
     };
     return (
-        <nav className={`bg-white text-gray-600 hidden sm:block min-h-screen transition-all ${isOpen ? "w-64" : "w-16"} flex flex-col`}>
+        <nav className={`bg-white text-gray-600 hidden sm:block min-h-screen transition-all ${isOpen ? "w-64" : "w-16"}`}>
             <div
                 onClick={toggleNavbar}
                 className={`h-[72px] px-4 text-gray-500 bg-blue-800 flex items-center ${
@@ -144,7 +144,6 @@ const Navigation = ({ user }) => {
                     </NavLink>
                 </ul>
             </nav>
-
             <div className="my-5">
                 <button
                     onClick={logout}

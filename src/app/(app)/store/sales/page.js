@@ -177,7 +177,7 @@ const Sales = () => {
                                     placeholder="Search product ..."
                                     className="mt-1 block w-full rounded-xl border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 />
-                                <div className="mt-3 grid grid-cols-2 gap-3 overflow-y-auto">
+                                <div className="mt-3 grid grid-cols-2 gap-3 max-h-full">
                                     {productList?.data?.length === 0 ? (
                                         <div>No data</div>
                                     ) : (
@@ -206,11 +206,11 @@ const Sales = () => {
                                                 </div>
                                                 <div className="flex justify-between items-center my-2">
                                                     <div className="flex items-center gap-1">
-                                                        <button onClick={() => handleDecrementQuantity(item)} className="focus:text-red-500">
+                                                        <button onClick={() => handleDecrementQuantity(item)} className="active:text-red-500 active:scale-95">
                                                             <MinusCircleIcon className="w-5 h-5" />
                                                         </button>
                                                         <span className="mx-2">{item.quantity}</span>
-                                                        <button onClick={() => handleIncrementQuantity(item)} className="focus:text-red-500">
+                                                        <button onClick={() => handleIncrementQuantity(item)} className="active:text-red-500 active:scale-95">
                                                             <PlusCircleIcon className="w-5 h-5" />
                                                         </button>
                                                     </div>
@@ -252,7 +252,9 @@ const Sales = () => {
 
                                 <Modal isOpen={isModalCheckOutOpen} onClose={closeModal} modalTitle="Check out pesanan">
                                     <div className="flex justify-center items-center border-b border-gray-300 border-dashed py-2">
-                                        <h1 className="text-4xl">{cart.length} Items</h1>
+                                        <h1 className="text-4xl">
+                                            {cart.length} Item{cart.length > 1 && "s"}
+                                        </h1>
                                     </div>
                                     <div className="flex justify-between items-center my-4">
                                         <h1 className="text-2xl">Total</h1>

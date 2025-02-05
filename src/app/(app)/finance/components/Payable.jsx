@@ -9,6 +9,7 @@ import CreatePayable from "./CreatePayable";
 import formatNumber from "@/libs/formatNumber";
 import formatDateTime from "@/libs/formatDateTime";
 import PaymentForm from "./PaymentForm";
+import Paginator from "@/components/Paginator";
 const Payable = () => {
     const [isModalCreateContactOpen, setIsModalCreateContactOpen] = useState(false);
     const [isModalCreatePayableOpen, setIsModalCreatePayableOpen] = useState(false);
@@ -18,10 +19,10 @@ const Payable = () => {
     const [notification, setNotification] = useState("");
     const [financeType, setFinanceType] = useState("Payable");
     const [selectedFinanceId, setSelectedFinanceId] = useState(null);
-    const [selectedContactId, setSelectedContactId] = useState(null);
+    const [selectedContactId, setSelectedContactId] = useState("All");
 
     const [loading, setLoading] = useState(true);
-    const fetchFinance = async (url = "/api/finance") => {
+    const fetchFinance = async (url = `/api/finance/${selectedContactId}/${financeType}`) => {
         setLoading(true);
         try {
             const response = await axios.get(url);
@@ -35,7 +36,7 @@ const Payable = () => {
 
     useEffect(() => {
         fetchFinance();
-    }, []);
+    }, [selectedContactId]);
     const closeModal = () => {
         setIsModalCreateContactOpen(false);
         setIsModalCreatePayableOpen(false);
@@ -44,8 +45,6 @@ const Payable = () => {
     };
 
     const filterFinanceByContactIdAndType = finance.financeGroupByContactId?.filter((fnc) => fnc.finance_type === financeType) || [];
-
-    const filterFinanceByType = finance.finance?.filter((fnc) => fnc.finance_type === financeType) || [];
 
     const handleDeleteFinance = async (id) => {
         try {
@@ -56,7 +55,9 @@ const Payable = () => {
             setNotification(error.response?.data?.message || "Something went wrong.");
         }
     };
-
+    const handleChangePage = (url) => {
+        fetchFinance(url);
+    };
     return (
         <>
             <div className="bg-slate-400 rounded-2xl mb-4 p-1">
@@ -115,7 +116,11 @@ const Payable = () => {
                         <tbody>
                             {filterFinanceByContactIdAndType.map((item, index) => (
                                 <tr key={index} className="hover:bg-slate-700 hover:text-white">
-                                    <td>{item.contact.name}</td>
+                                    <td>
+                                        <button onClick={() => setSelectedContactId(item.contact_id)} className="hover:underline">
+                                            {item.contact.name}
+                                        </button>
+                                    </td>
                                     <td className="text-end">{formatNumber(item.tagihan)}</td>
                                     <td className="text-end">{formatNumber(item.terbayar)}</td>
                                     <td className="text-end">{formatNumber(item.sisa)}</td>
@@ -164,7 +169,7 @@ const Payable = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filterFinanceByType.map((item, index) => (
+                            {finance.finance?.data.map((item, index) => (
                                 <tr key={index} className="hover:bg-slate-700 hover:text-white">
                                     <td>
                                         {item.bill_amount > 0 ? (
@@ -173,11 +178,13 @@ const Payable = () => {
                                             <ArrowBigUp className="inline text-red-600" />
                                         )}
                                     </td>
-                                    <td className="text-end">{formatNumber(item.bill_amount > 0 ? item.bill_amount : item.payment_amount)}</td>
+                                    <td className={`text-end font-bold ${item.bill_amount > 0 ? "text-green-600" : "text-red-600"}`}>
+                                        {formatNumber(item.bill_amount > 0 ? item.bill_amount : item.payment_amount)}
+                                    </td>
                                     <td className="">{item.account.acc_name}</td>
                                     <td className="">
                                         <span className="font-bold text-xs text-slate-400 block">{item.invoice}</span>
-                                        {item.description}
+                                        Note: {item.description}
                                     </td>
                                     <td className="">{item.contact.name}</td>
                                     <td className="text-end">{formatDateTime(item.created_at)}</td>
@@ -197,6 +204,7 @@ const Payable = () => {
                             ))}
                         </tbody>
                     </table>
+                    <div className="px-4">{finance.finance?.last_page > 1 && <Paginator links={finance.finance} handleChangePage={handleChangePage} />}</div>
                 </div>
                 <Modal isOpen={isModalDeleteFinanceOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
                     <div className="flex flex-col items-center justify-center gap-3 mb-4">

@@ -46,7 +46,10 @@ const WarehouseBalance = () => {
     return (
         <div className="bg-white rounded-lg mb-3 relative">
             <div className="p-4 flex justify-between">
-                <h4 className=" text-blue-950 text-lg font-bold">Saldo Kas & bank</h4>
+                <h4 className=" text-blue-950 text-lg font-bold">
+                    Saldo Kas & bank
+                    <span className="text-xs text-slate-500 block font-normal">Periode: {endDate}</span>
+                </h4>
 
                 <button
                     onClick={() => setIsModalFilterDataOpen(true)}
@@ -69,49 +72,48 @@ const WarehouseBalance = () => {
                     </button>
                 </Modal>
             </div>
-            <div className="px-4 mt-2">
-                <h4 className="text-xs text-slate-500">Periode: {endDate}</h4>
-            </div>
-            <table className="table w-full text-xs">
-                <thead className="">
-                    <tr className="">
-                        <th className="text-center">Cabang (Konter)</th>
-                        <th className="text-center">Kas Tunai</th>
-                        <th className="text-center">Saldo Bank</th>
-                        <th className="text-center">Jumlah</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {loading ? (
-                        <tr>
-                            <td colSpan={4}>Loading...</td>
+            <div className="overflow-x-auto">
+                <table className="table w-full text-xs">
+                    <thead className="">
+                        <tr className="">
+                            <th className="text-center">Cabang (Konter)</th>
+                            <th className="text-center">Kas Tunai</th>
+                            <th className="text-center">Saldo Bank</th>
+                            <th className="text-center">Jumlah</th>
                         </tr>
-                    ) : (
-                        warehouseBalance.warehouse?.map((w, i) => (
-                            <tr className="" key={i}>
-                                <td className="">{w.name}</td>
-                                <td className="text-end">{formatNumber(w.cash)}</td>
-                                <td className="text-end">{formatNumber(w.bank)}</td>
-                                <td className="text-end font-bold">{formatNumber(w.cash + w.bank)}</td>
+                    </thead>
+                    <tbody>
+                        {loading ? (
+                            <tr>
+                                <td colSpan={4}>Loading...</td>
                             </tr>
-                        ))
-                    )}
-                </tbody>
-                <tfoot>
-                    {loading ? (
-                        <tr>
-                            <td colSpan={4}>Loading...</td>
-                        </tr>
-                    ) : (
-                        <tr>
-                            <th>Total</th>
-                            <th>{formatNumber(warehouseBalance.totalCash)}</th>
-                            <th>{formatNumber(warehouseBalance.totalBank)}</th>
-                            <th>{formatNumber(warehouseBalance.totalCash + warehouseBalance.totalBank)}</th>
-                        </tr>
-                    )}
-                </tfoot>
-            </table>
+                        ) : (
+                            warehouseBalance.warehouse?.map((w, i) => (
+                                <tr className="" key={i}>
+                                    <td className="">{w.name}</td>
+                                    <td className="text-end">{formatNumber(w.cash)}</td>
+                                    <td className="text-end">{formatNumber(w.bank)}</td>
+                                    <td className="text-end font-bold">{formatNumber(w.cash + w.bank)}</td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                    <tfoot>
+                        {loading ? (
+                            <tr>
+                                <td colSpan={4}>Loading...</td>
+                            </tr>
+                        ) : (
+                            <tr>
+                                <th>Total</th>
+                                <th>{formatNumber(warehouseBalance.totalCash)}</th>
+                                <th>{formatNumber(warehouseBalance.totalBank)}</th>
+                                <th>{formatNumber(warehouseBalance.totalCash + warehouseBalance.totalBank)}</th>
+                            </tr>
+                        )}
+                    </tfoot>
+                </table>
+            </div>
         </div>
     );
 };

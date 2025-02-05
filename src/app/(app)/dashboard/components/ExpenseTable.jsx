@@ -49,14 +49,19 @@ const ExpenseTable = ({ warehouse, warehouses }) => {
         return total + Number(expense.fee_amount);
     }, 0);
     return (
-        <div className="my-4 flex gap-4">
-            <div className="bg-white overflow-hidden shadow-sm sm:rounded-2xl w-3/4">
-                <h1 className="px-6 pt-6 font-bold text-xl text-red-600">Pengeluaran (Biaya Operasional)</h1>
-                <div className="px-6 pt-4 flex gap-2">
+        <div className="my-4 flex gap-4 sm:flex-row flex-col">
+            <div className="bg-white overflow-hidden shadow-sm sm:rounded-2xl wfull sm:w-3/4">
+                <h1 className="px-2 sm:px-6 pt-4 font-bold text-xl text-red-600">
+                    Pengeluaran (Biaya Operasional)
+                    <span className="text-xs block font-normal">
+                        Periode: {startDate} - {endDate}
+                    </span>
+                </h1>
+                <div className="px-2 sm:px-6 pt-4 flex gap-2">
                     <select
                         value={selectedWarehouse}
                         onChange={(e) => setSelectedWarehouse(e.target.value)}
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     >
                         {warehouses.map((warehouse) => (
                             <option key={warehouse.id} value={warehouse.id}>
@@ -100,11 +105,6 @@ const ExpenseTable = ({ warehouse, warehouses }) => {
                         </button>
                     </Modal>
                 </div>
-                <div className="px-6 mt-2">
-                    <h4 className="text-xs text-slate-500">
-                        Periode: {startDate} - {endDate}
-                    </h4>
-                </div>
                 <table className="table w-full text-xs">
                     <thead>
                         <tr>
@@ -142,7 +142,7 @@ const ExpenseTable = ({ warehouse, warehouses }) => {
                     </tbody>
                 </table>
             </div>
-            <div className="bg-red-500 text-white overflow-hidden shadow-sm sm:rounded-2xl flex-1 flex flex-col justify-center items-center">
+            <div className="bg-red-500 text-white py-2 overflow-hidden shadow-sm sm:rounded-2xl flex-1 flex flex-col justify-center items-center">
                 <h1>Expense Total</h1>
                 <h1 className="text-4xl font-bold">{formatNumber(totalExpense < 0 ? totalExpense * -1 : 0)}</h1>
             </div>

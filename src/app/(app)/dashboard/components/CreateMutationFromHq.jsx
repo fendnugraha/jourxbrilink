@@ -108,13 +108,13 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                     {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
                 </div>
 
-                <h1 className="text-lg font-bold">{formatNumber(formData.amount)}</h1>
+                {formData.amount > 0 && <h1 className="text-lg font-bold">{formatNumber(formData.amount)}</h1>}
             </div>
             <div className="mb-2 grid grid-cols-3 gap-4 items-center">
                 <Label>Biaya admin bank</Label>
                 <div className="col-span-1">
                     <Input
-                        className="w-1/2"
+                        className="sm:w-1/2 w-3/4"
                         type="number"
                         placeholder="Rp."
                         value={formData.admin_fee}
@@ -123,7 +123,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                     {errors.admin_fee && <span className="text-red-500 text-xs">{errors.admin_fee}</span>}
                 </div>
 
-                <h1 className="text-lg font-bold">{formatNumber(formData.admin_fee)}</h1>
+                {formData.admin_fee > 0 && <h1 className="text-lg font-bold">{formatNumber(formData.admin_fee)}</h1>}
             </div>
             <div className="mb-2 grid grid-cols-3 gap-4 items-center">
                 <Label>Keterangan</Label>

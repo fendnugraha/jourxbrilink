@@ -45,11 +45,11 @@ const DailyDashboard = ({ notification, warehouse, warehouses }) => {
     }, [selectedWarehouse]);
     return (
         <div className="relative">
-            <div className="w-1/2 mb-2 flex gap-2">
+            <div className="w-full sm:w-1/2 mb-2 flex gap-2">
                 <select
                     value={selectedWarehouse}
                     onChange={(e) => setSelectedWarehouse(e.target.value)}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 >
                     {warehouses.map((warehouse) => (
                         <option key={warehouse.id} value={warehouse.id}>

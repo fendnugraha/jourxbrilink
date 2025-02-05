@@ -60,8 +60,13 @@ const MutationHistory = ({ account }) => {
     return (
         <div className="bg-white rounded-lg mb-3 relative">
             <div className="p-4">
-                <h4 className="mb-4 text-blue-950 text-lg font-bold">Riwayat Mutasi</h4>
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-2">
+                <h4 className="mb-4 text-blue-950 text-lg font-bold">
+                    Riwayat Mutasi
+                    <span className="text-xs block font-normal text-slate-500">
+                        Periode: {startDate} - {endDate}
+                    </span>
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-3 mb-2">
                     <div className="bg-sky-700 p-2 sm:px-4 sm:py-2 rounded-xl text-white">
                         <h5 className="sm:text-xs">Saldo Awal</h5>
                         <span className="sm:text-xl font-bold">{formatNumber(mutation?.initBalance || 0)}</span>
@@ -83,7 +88,7 @@ const MutationHistory = ({ account }) => {
             <div className="mb-2 px-4 flex gap-2">
                 <select
                     onChange={(e) => setSelectedAccount(e.target.value)}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 >
                     <option value="0">Pilih Akun</option>
                     {account?.map((item) => (

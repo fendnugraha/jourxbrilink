@@ -116,59 +116,63 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
     return (
         <div className="my-4">
             {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
-            <div className="mb-4 bg-white overflow-hidden shadow-sm sm:rounded-2xl">
-                <div className="px-6 pt-6 grid grid-cols-3 gap-4">
+            <div className="mb-4 bg-white shadow-sm sm:rounded-2xl">
+                <div className="px-2 sm:px-6 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <h1 className="font-bold text-xl">Mutasi Saldo</h1>
-                    <div className="flex gap-2 w-full col-span-2">
-                        <button
-                            onClick={() => setIsModalCreateJournalOpen(true)}
-                            className="bg-indigo-500 text-xs min-w-36 hover:bg-indigo-600 text-white py-2 px-6 rounded-lg"
-                        >
-                            Jurnal Umum <PlusCircleIcon className="size-4 inline" />
-                        </button>
-                        <button
-                            onClick={() => setIsModalCreateMutationFromHqOpen(true)}
-                            className="bg-indigo-500 text-xs min-w-36 hover:bg-indigo-600 text-white py-2 px-6 rounded-lg"
-                        >
-                            Mutasi Saldo <PlusCircleIcon className="size-4 inline" />
-                        </button>
-                        <select
-                            value={selectedWarehouse}
-                            onChange={(e) => setSelectedWarehouse(e.target.value)}
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                        >
-                            {warehouses.map((warehouse) => (
-                                <option key={warehouse.id} value={warehouse.id}>
-                                    {warehouse.name}
-                                </option>
-                            ))}
-                        </select>
-                        <button
-                            onClick={() => setIsModalFilterDataOpen(true)}
-                            className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
-                        >
-                            <FilterIcon className="size-4" />
-                        </button>
-                        <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
-                            <div className="mb-4">
-                                <Label className="font-bold">Tanggal</Label>
-                                <Input
-                                    type="date"
-                                    value={endDate}
-                                    onChange={(e) => setEndDate(e.target.value)}
-                                    className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                />
-                            </div>
+                    <div className="sm:flex gap-2 w-full sm:col-span-2">
+                        <div className="gap-2 sm:flex grid grid-cols-2 mb-2 sm:mb-0">
                             <button
-                                onClick={() => {
-                                    fetchJournalsByWarehouse();
-                                    setIsModalFilterDataOpen(false);
-                                }}
-                                className="btn-primary"
+                                onClick={() => setIsModalCreateJournalOpen(true)}
+                                className="bg-indigo-500 text-sm sm:text-xs min-w-36 hover:bg-indigo-600 text-white py-2 px-2 sm:px-6 rounded-lg"
                             >
-                                Submit
+                                Jurnal Umum <PlusCircleIcon className="size-4 inline" />
                             </button>
-                        </Modal>
+                            <button
+                                onClick={() => setIsModalCreateMutationFromHqOpen(true)}
+                                className="bg-indigo-500 text-sm sm:text-xs min-w-36 hover:bg-indigo-600 text-white py-2 px-2 sm:px-6 rounded-lg"
+                            >
+                                Mutasi Saldo <PlusCircleIcon className="size-4 inline" />
+                            </button>
+                        </div>
+                        <div className="w-full flex gap-2 mb-2 sm:mb-0">
+                            <select
+                                value={selectedWarehouse}
+                                onChange={(e) => setSelectedWarehouse(e.target.value)}
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                            >
+                                {warehouses.map((warehouse) => (
+                                    <option key={warehouse.id} value={warehouse.id}>
+                                        {warehouse.name}
+                                    </option>
+                                ))}
+                            </select>
+                            <button
+                                onClick={() => setIsModalFilterDataOpen(true)}
+                                className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
+                            >
+                                <FilterIcon className="size-4" />
+                            </button>
+                            <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
+                                <div className="mb-4">
+                                    <Label className="font-bold">Tanggal</Label>
+                                    <Input
+                                        type="date"
+                                        value={endDate}
+                                        onChange={(e) => setEndDate(e.target.value)}
+                                        className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    />
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        fetchJournalsByWarehouse();
+                                        setIsModalFilterDataOpen(false);
+                                    }}
+                                    className="btn-primary"
+                                >
+                                    Submit
+                                </button>
+                            </Modal>
+                        </div>
                     </div>
                     <Modal isOpen={isModalCreateMutationFromHqOpen} onClose={closeModal} modalTitle="Penambahan Saldo Kas & Bank">
                         <CreateMutationFromHq
@@ -189,95 +193,102 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
                         />
                     </Modal>
                 </div>
-                <div className="px-6">
+                <div className="px-2 sm:px-6">
                     <h4 className="text-xs text-slate-500">Periode: {endDate}</h4>
                 </div>
-                <table className="table w-full text-xs">
-                    <thead>
-                        <tr>
-                            <th>Nama akun</th>
-                            <th>Saldo Akhir</th>
-                            <th>Masuk</th>
-                            <th>Keluar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {loading ? (
-                            <tr className="text-center">
-                                <td colSpan={4}>Loading ...</td>
-                            </tr>
-                        ) : (
-                            accountBalance.map((account, index) => (
-                                <tr key={index}>
-                                    <td>{account.acc_name}</td>
-                                    <td className="text-end font-bold text-blue-950">{formatNumber(account.balance)}</td>
-                                    <td className="text-end">{formatNumber(mutationInSumById(account.id) ?? 0)}</td>
-                                    <td className="text-end">{formatNumber(mutationOutSumById(account.id) ?? 0)}</td>
-                                </tr>
-                            ))
-                        )}
-                        <tr>
-                            <td className="font-bold" colSpan={3}>
-                                Penambahan saldo dari HQ
-                            </td>
-                            <td className="text-end font-bold">
-                                {mutationOutSum - mutationInSum === 0 ? (
-                                    <span className="text-green-600">Completed</span>
-                                ) : (
-                                    formatNumber(mutationOutSum - mutationInSum)
-                                )}
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>Total</th>
-                            <th className="text-end">{formatNumber(accountBalance.reduce((sum, acc) => sum + acc.balance, 0))}</th>
-                            <th className="text-end">{formatNumber(mutationInSum)}</th>
-                            <th className="text-end">{formatNumber(mutationOutSum)}</th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-            {currentItems.length > 0 && (
-                <div className="mb-4 bg-white overflow-hidden shadow-sm sm:rounded-2xl">
-                    <h1 className="px-6 pt-6 font-bold text-xl text-green-600">History Mutasi Kas</h1>
+                <div className="overflow-x-auto">
                     <table className="table w-full text-xs">
                         <thead>
                             <tr>
-                                <th>
-                                    Dari <MoveRightIcon className="size-5 inline" /> Ke
-                                </th>
-                                <th>Jumlah</th>
+                                <th>Nama akun</th>
+                                <th>Masuk</th>
+                                <th>Keluar</th>
                             </tr>
                         </thead>
                         <tbody>
                             {loading ? (
                                 <tr className="text-center">
-                                    <td colSpan={2}>Loading ...</td>
+                                    <td colSpan={4}>Loading ...</td>
                                 </tr>
                             ) : (
-                                currentItems.map((journal, index) => (
+                                accountBalance.map((account, index) => (
                                     <tr key={index}>
-                                        <td className="">
-                                            <span className="block font-bold text-slate-500">{formatDateTime(journal.created_at)}</span>
-                                            {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt.acc_name}
+                                        <td>
+                                            {account.acc_name}
+                                            <span className="text-xs font-bold block">{formatNumber(account.balance)}</span>
                                         </td>
-                                        <td className="text-end">{formatNumber(journal.amount)}</td>
+                                        <td className="text-end">{formatNumber(mutationInSumById(account.id) ?? 0)}</td>
+                                        <td className="text-end">{formatNumber(mutationOutSumById(account.id) ?? 0)}</td>
                                     </tr>
                                 ))
                             )}
+                            <tr>
+                                <td className="font-bold " colSpan={2}>
+                                    Penambahan saldo dari HQ
+                                </td>
+                                <td className="text-end font-bold">
+                                    {mutationOutSum - mutationInSum === 0 ? (
+                                        <span className="text-green-600">Completed</span>
+                                    ) : (
+                                        formatNumber(mutationOutSum - mutationInSum)
+                                    )}
+                                </td>
+                            </tr>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>
+                                    Total <span className="font-bold">{formatNumber(accountBalance.reduce((sum, acc) => sum + acc.balance, 0))}</span>
+                                </th>
+                                <th className="text-end">{formatNumber(mutationInSum)}</th>
+                                <th className="text-end">{formatNumber(mutationOutSum)}</th>
+                            </tr>
+                        </tfoot>
                     </table>
-                    {totalPages > 1 && (
-                        <Pagination
-                            className="w-full px-6 pb-6"
-                            totalItems={totalItems}
-                            itemsPerPage={itemsPerPage}
-                            currentPage={currentPage}
-                            onPageChange={handlePageChange}
-                        />
-                    )}
+                </div>
+            </div>
+            {currentItems.length > 0 && (
+                <div className="mb-4 bg-white shadow-sm sm:rounded-2xl">
+                    <h1 className="px-2 sm:px-6 pt-6 font-bold text-xl text-green-600">History Mutasi Kas</h1>
+                    <div className="overflow-x-auto">
+                        <table className="table w-full text-xs">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Dari <MoveRightIcon className="size-5 inline" /> Ke
+                                    </th>
+                                    <th className="hidden sm:table-cell">Jumlah</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {loading ? (
+                                    <tr className="text-center">
+                                        <td colSpan={2}>Loading ...</td>
+                                    </tr>
+                                ) : (
+                                    currentItems.map((journal, index) => (
+                                        <tr key={index}>
+                                            <td className="">
+                                                <span className="block font-bold text-slate-500">{formatDateTime(journal.created_at)}</span>
+                                                {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt.acc_name}
+                                                <span className="block sm:hidden font-bold text-blue-500">{formatNumber(journal.amount)}</span>
+                                            </td>
+                                            <td className="text-end hidden sm:table-cell">{formatNumber(journal.amount)}</td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                        {totalPages > 1 && (
+                            <Pagination
+                                className="w-full px-2 sm:px-6 pb-6"
+                                totalItems={totalItems}
+                                itemsPerPage={itemsPerPage}
+                                currentPage={currentPage}
+                                onPageChange={handlePageChange}
+                            />
+                        )}
+                    </div>
                 </div>
             )}
         </div>

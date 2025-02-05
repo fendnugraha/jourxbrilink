@@ -98,8 +98,13 @@ const StorePage = () => {
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div className="overflow-hidden">
                             <div className="bg-white shadow-sm sm:rounded-2xl ">
-                                <div className="p-4 flex justify-between">
-                                    <h1 className="text-2xl font-bold mb-4">Transaksi Barang</h1>
+                                <div className="p-4 flex justify-between sm:flex-row flex-col">
+                                    <h1 className="text-2xl font-bold mb-4">
+                                        Transaksi Barang
+                                        <span className="text-xs block text-slate-500 font-normal">
+                                            Cabang: {warehouses.find((w) => w.id === Number(selectedWarehouse))?.name} Periode: {startDate} - {endDate}
+                                        </span>
+                                    </h1>
                                     <div className="flex items-center gap-2">
                                         <Link href="/store/sales" className="btn-primary text-xs">
                                             <PlusCircleIcon className="w-4 h-4 inline" /> Penjualan
@@ -167,72 +172,69 @@ const StorePage = () => {
                                         </Modal>
                                     </div>
                                 </div>
-                                <div className="px-4">
-                                    <h4 className="text-xs text-slate-500">
-                                        Cabang: {warehouses.find((w) => w.id === Number(selectedWarehouse))?.name} Periode: {startDate} - {endDate}
-                                    </h4>
-                                </div>
-                                <table className="table w-full text-xs">
-                                    <thead>
-                                        <tr>
-                                            <th>Type</th>
-                                            <th>Product</th>
-                                            <th>Qty</th>
-                                            <th>Jual</th>
-                                            <th>Modal</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {loading ? (
+                                <div className="overflow-x-auto">
+                                    <table className="table w-full text-xs">
+                                        <thead>
                                             <tr>
-                                                <td colSpan={7} className="text-center">
-                                                    Loading...
-                                                </td>
+                                                <th>Type</th>
+                                                <th>Product</th>
+                                                <th>Qty</th>
+                                                <th>Jual</th>
+                                                <th>Modal</th>
+                                                <th>Action</th>
                                             </tr>
-                                        ) : transactions.data?.length === 0 ? (
-                                            <tr>
-                                                <td colSpan={7} className="text-center">
-                                                    Tidak ada transaksi
-                                                </td>
-                                            </tr>
-                                        ) : (
-                                            transactions.data?.map((transaction) => (
-                                                <tr key={transaction.id}>
-                                                    <td className="text-center">
-                                                        {transaction.transaction_type === "Purchase" ? (
-                                                            <ArrowBigDown size={24} className="text-green-500 inline" />
-                                                        ) : (
-                                                            <ArrowBigUp size={24} className="text-red-500 inline" />
-                                                        )}{" "}
-                                                        <span className="">{transaction.transaction_type}</span>
-                                                    </td>
-                                                    <td>
-                                                        <span className="text-xs block text-slate-500">
-                                                            {formatDateTime(transaction.created_at)} | {transaction.product.category}
-                                                        </span>
-                                                        {transaction.product.name}
-                                                    </td>
-                                                    <td className="text-center">
-                                                        {formatNumber(transaction.quantity < 0 ? transaction.quantity * -1 : transaction.quantity)}
-                                                    </td>
-                                                    <td className="text-end">{formatNumber(transaction.price)}</td>
-                                                    <td className="text-end">{formatNumber(transaction.cost)}</td>
-                                                    <td className="text-center">
-                                                        <button
-                                                            onClick={() => {
-                                                                setSelectedTrxId(transaction.id);
-                                                                setIsModalDeleteTrxOpen(true);
-                                                            }}
-                                                        >
-                                                            <XCircleIcon className="w-4 h-4 text-red-500 inline hover:scale-125 transition-transform duration-300" />
-                                                        </button>
+                                        </thead>
+                                        <tbody>
+                                            {loading ? (
+                                                <tr>
+                                                    <td colSpan={7} className="text-center">
+                                                        Loading...
                                                     </td>
                                                 </tr>
-                                            ))
-                                        )}
-                                    </tbody>
-                                </table>
+                                            ) : transactions.data?.length === 0 ? (
+                                                <tr>
+                                                    <td colSpan={7} className="text-center">
+                                                        Tidak ada transaksi
+                                                    </td>
+                                                </tr>
+                                            ) : (
+                                                transactions.data?.map((transaction) => (
+                                                    <tr key={transaction.id}>
+                                                        <td className="text-center">
+                                                            {transaction.transaction_type === "Purchase" ? (
+                                                                <ArrowBigDown size={24} className="text-green-500 inline" />
+                                                            ) : (
+                                                                <ArrowBigUp size={24} className="text-red-500 inline" />
+                                                            )}{" "}
+                                                            <span className="">{transaction.transaction_type}</span>
+                                                        </td>
+                                                        <td>
+                                                            <span className="text-xs block text-slate-500">
+                                                                {formatDateTime(transaction.created_at)} | {transaction.product.category}
+                                                            </span>
+                                                            {transaction.product.name}
+                                                        </td>
+                                                        <td className="text-center">
+                                                            {formatNumber(transaction.quantity < 0 ? transaction.quantity * -1 : transaction.quantity)}
+                                                        </td>
+                                                        <td className="text-end">{formatNumber(transaction.price)}</td>
+                                                        <td className="text-end">{formatNumber(transaction.cost)}</td>
+                                                        <td className="text-center">
+                                                            <button
+                                                                onClick={() => {
+                                                                    setSelectedTrxId(transaction.id);
+                                                                    setIsModalDeleteTrxOpen(true);
+                                                                }}
+                                                            >
+                                                                <XCircleIcon className="w-4 h-4 text-red-500 inline hover:scale-125 transition-transform duration-300" />
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
                                 <div className="px-4">
                                     {transactions.last_page > 1 && <Paginator links={transactions} handleChangePage={handleChangePage} />}
                                 </div>

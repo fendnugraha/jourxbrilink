@@ -2,7 +2,7 @@
 import Modal from "@/components/Modal";
 import CreateTransfer from "./components/CreateTransfer";
 import Header from "../Header";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "@/libs/axios";
 import Notification from "@/components/notification";
 import { useAuth } from "@/libs/auth";
@@ -15,9 +15,18 @@ import CreateMutationToHq from "./components/CreateMutationToHq";
 import CreateBankAdminFee from "./components/CreateBankAdminFee";
 import CreateExpense from "./components/CreateExpense";
 import CashBankBalance from "./components/CashBankBalance";
-import formatNumber from "@/libs/formatNumber";
 import Loading from "../loading";
-import { ArrowDownCircleIcon, ArrowUpCircleIcon, ChevronDownIcon, ChevronRightIcon, PlusCircleIcon } from "lucide-react";
+import {
+    ArrowDownCircleIcon,
+    ArrowUpCircleIcon,
+    ChevronDownIcon,
+    ChevronRightIcon,
+    CoinsIcon,
+    HandCoinsIcon,
+    PlusCircleIcon,
+    ShoppingBagIcon,
+    TicketIcon,
+} from "lucide-react";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -46,6 +55,26 @@ const TransactionPage = () => {
     const [notification, setNotification] = useState("");
     const getDailyDashboard = () => JSON.parse(localStorage.getItem("dailyDashboard")) || [];
     const [dailyDashboard, setDailyDashboard] = useState(getDailyDashboard);
+
+    const [isVoucherMenuOpen, setIsVoucherMenuOpen] = useState(false);
+    const [isExpenseMenuOpen, setIsExpenseMenuOpen] = useState(false);
+
+    const menuRef = useRef(null);
+
+    // Event listener untuk klik di luar menu
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setIsVoucherMenuOpen(false); // Tutup menu jika klik di luar
+                setIsExpenseMenuOpen(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     const closeModal = () => {
         setIsModalCreateTransferOpen(false);
@@ -121,86 +150,86 @@ const TransactionPage = () => {
     }, []);
 
     const filteredCashBankByWarehouse = cashBank.filter((cashBank) => cashBank.warehouse_id === selectedWarehouseId);
+
     return (
         <>
             <Header title="Transaction" />
-            <div className="py-8">
+            <div className="py-8 relative">
+                <div ref={menuRef} className="fixed sm:hidden bottom-0 w-full z-[999]">
+                    <div className={`text-white shadow-xl ${!isVoucherMenuOpen ? "hidden" : "flex flex-col justify-between items-center"}`}>
+                        <button onClick={() => setIsModalCreateVoucherOpen(true)} className="bg-white w-full text-slate-600 p-4 border-t hover:bg-slate-200">
+                            Voucher
+                        </button>
+                        <button onClick={() => setIsModalCreateDepositOpen(true)} className="bg-white w-full text-slate-600 p-4 border-t hover:bg-slate-200">
+                            Deposit
+                        </button>
+                    </div>
+                    <div className={`text-white ${!isExpenseMenuOpen ? "hidden" : "flex flex-col justify-between items-center"}`}>
+                        <button
+                            onClick={() => setIsModalCreateMutationToHqOpen(true)}
+                            className="bg-white w-full text-slate-600 p-4 border-t hover:bg-slate-200"
+                        >
+                            Pengembailan Saldo
+                        </button>
+                        <button onClick={() => setIsModalCreateExpenseOpen(true)} className="bg-white w-full text-slate-600 p-4 border-t hover:bg-slate-200">
+                            Biaya Operasional
+                        </button>
+                        <button
+                            onClick={() => setIsModalCreateBankAdminFeeOpen(true)}
+                            className="bg-white w-full text-slate-600 p-4 border-t hover:bg-slate-200"
+                        >
+                            Biaya Admin Bank
+                        </button>
+                    </div>
+                    <div className="text-white flex justify-between items-center">
+                        <button
+                            onClick={() => setIsModalCreateTransferOpen(true)}
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2"
+                        >
+                            <ArrowUpCircleIcon className="w-7 h-7" /> Transfer
+                        </button>
+                        <button
+                            onClick={() => setIsModalCreateCashWithdrawalOpen(true)}
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2"
+                        >
+                            <ArrowDownCircleIcon className="w-7 h-7" /> Tarik Tunai
+                        </button>
+                        <button
+                            onClick={() => {
+                                setIsVoucherMenuOpen(!isVoucherMenuOpen);
+                                setIsExpenseMenuOpen(false);
+                            }}
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2 focus:bg-white focus:text-indigo-600"
+                        >
+                            <ShoppingBagIcon className="w-7 h-7" /> Voucher
+                        </button>
+                        <button
+                            onClick={() => {
+                                setIsExpenseMenuOpen(!isExpenseMenuOpen);
+                                setIsVoucherMenuOpen(false);
+                            }}
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2"
+                        >
+                            <HandCoinsIcon className="w-7 h-7" /> Biaya
+                        </button>
+                    </div>
+                </div>
                 <div className="max-w-7xl mx-auto sm:px-6">
                     {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
                     <div className="overflow-hidden sm:rounded-lg">
-                        <div className="mb-2 flex justify-start gap-2">
+                        <div className="mb-2 hidden sm:flex justify-start gap-2">
                             <button
                                 onClick={() => setIsModalCreateTransferOpen(true)}
                                 className="bg-indigo-600 group text-sm min-w-44 hover:bg-indigo-700 text-white py-2 px-6 rounded-lg"
                             >
                                 Tansfer Uang <ArrowUpCircleIcon className="size-4 group-hover:scale-110 inline" />
                             </button>
-                            <Modal isOpen={isModalCreateTransferOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Transfer Uang">
-                                <CreateTransfer
-                                    filteredCashBankByWarehouse={filteredCashBankByWarehouse}
-                                    isModalOpen={setIsModalCreateTransferOpen}
-                                    notification={(message) => setNotification(message)}
-                                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                                    user={user}
-                                />
-                            </Modal>
                             <button
                                 onClick={() => setIsModalCreateCashWithdrawalOpen(true)}
                                 className="bg-indigo-600 group text-sm min-w-44 hover:bg-indigo-700 text-white py-2 px-6 rounded-lg"
                             >
                                 Tarik Tunai <ArrowDownCircleIcon className="size-4 group-hover:scale-110 inline" />
                             </button>
-                            <Modal isOpen={isModalCreateCashWithdrawalOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Tarik Tunai">
-                                <CreateCashWithdrawal
-                                    filteredCashBankByWarehouse={filteredCashBankByWarehouse}
-                                    isModalOpen={setIsModalCreateCashWithdrawalOpen}
-                                    notification={(message) => setNotification(message)}
-                                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                                    user={user}
-                                />
-                            </Modal>
-                            <Modal isOpen={isModalCreateVoucherOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Penjualan Voucher & Kartu">
-                                <CreateVoucher
-                                    isModalOpen={setIsModalCreateVoucherOpen}
-                                    notification={(message) => setNotification(message)}
-                                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                                    user={user}
-                                />
-                            </Modal>
-                            <Modal isOpen={isModalCreateDepositOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Penjualan Deposit">
-                                <CreateDeposit
-                                    isModalOpen={setIsModalCreateDepositOpen}
-                                    notification={(message) => setNotification(message)}
-                                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                                />
-                            </Modal>
-                            {/* Expenses */}
-                            <Modal isOpen={isModalCreateMutationToHqOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Pengembalian Saldo Kas & Bank">
-                                <CreateMutationToHq
-                                    cashBank={cashBank}
-                                    isModalOpen={setIsModalCreateMutationToHqOpen}
-                                    notification={(message) => setNotification(message)}
-                                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                                    user={user}
-                                />
-                            </Modal>
-                            <Modal isOpen={isModalCreateBankAdminFeeOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Biaya Administrasi Bank">
-                                <CreateBankAdminFee
-                                    filteredCashBankByWarehouse={filteredCashBankByWarehouse}
-                                    isModalOpen={setIsModalCreateBankAdminFeeOpen}
-                                    notification={(message) => setNotification(message)}
-                                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                                />
-                            </Modal>
-                            <Modal isOpen={isModalCreateExpenseOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Biaya Operasional">
-                                <CreateExpense
-                                    isModalOpen={setIsModalCreateExpenseOpen}
-                                    notification={(message) => setNotification(message)}
-                                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                                    user={user}
-                                />
-                            </Modal>
-
                             <Dropdown
                                 trigger={
                                     <button className="bg-green-600 text-sm hover:bg-green-700 text-white py-2 px-6 rounded-lg group">
@@ -251,8 +280,68 @@ const TransactionPage = () => {
                                 </ul>
                             </Dropdown>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                            <div className="col-span-3 bg-white py-6 rounded-2xl">
+                        <Modal isOpen={isModalCreateTransferOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Transfer Uang">
+                            <CreateTransfer
+                                filteredCashBankByWarehouse={filteredCashBankByWarehouse}
+                                isModalOpen={setIsModalCreateTransferOpen}
+                                notification={(message) => setNotification(message)}
+                                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                                user={user}
+                            />
+                        </Modal>
+
+                        <Modal isOpen={isModalCreateCashWithdrawalOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Tarik Tunai">
+                            <CreateCashWithdrawal
+                                filteredCashBankByWarehouse={filteredCashBankByWarehouse}
+                                isModalOpen={setIsModalCreateCashWithdrawalOpen}
+                                notification={(message) => setNotification(message)}
+                                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                                user={user}
+                            />
+                        </Modal>
+                        <Modal isOpen={isModalCreateVoucherOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Penjualan Voucher & Kartu">
+                            <CreateVoucher
+                                isModalOpen={setIsModalCreateVoucherOpen}
+                                notification={(message) => setNotification(message)}
+                                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                                user={user}
+                            />
+                        </Modal>
+                        <Modal isOpen={isModalCreateDepositOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Penjualan Deposit">
+                            <CreateDeposit
+                                isModalOpen={setIsModalCreateDepositOpen}
+                                notification={(message) => setNotification(message)}
+                                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                            />
+                        </Modal>
+                        {/* Expenses */}
+                        <Modal isOpen={isModalCreateMutationToHqOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Pengembalian Saldo Kas & Bank">
+                            <CreateMutationToHq
+                                cashBank={cashBank}
+                                isModalOpen={setIsModalCreateMutationToHqOpen}
+                                notification={(message) => setNotification(message)}
+                                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                                user={user}
+                            />
+                        </Modal>
+                        <Modal isOpen={isModalCreateBankAdminFeeOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Biaya Administrasi Bank">
+                            <CreateBankAdminFee
+                                filteredCashBankByWarehouse={filteredCashBankByWarehouse}
+                                isModalOpen={setIsModalCreateBankAdminFeeOpen}
+                                notification={(message) => setNotification(message)}
+                                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                            />
+                        </Modal>
+                        <Modal isOpen={isModalCreateExpenseOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Biaya Operasional">
+                            <CreateExpense
+                                isModalOpen={setIsModalCreateExpenseOpen}
+                                notification={(message) => setNotification(message)}
+                                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                                user={user}
+                            />
+                        </Modal>
+                        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-20 sm:mb-0">
+                            <div className="col-span-1 sm:col-span-3 bg-white py-6 rounded-2xl order-2 sm:order-1">
                                 <JournalTable
                                     cashBank={cashBank}
                                     notification={(message) => setNotification(message)}
@@ -264,7 +353,7 @@ const TransactionPage = () => {
                                     user={user}
                                 />
                             </div>
-                            <div>
+                            <div className="order-1 sm:order-2">
                                 <CashBankBalance warehouse={warehouse} accountBalance={accountBalance} />
                             </div>
                         </div>

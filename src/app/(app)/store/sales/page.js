@@ -167,8 +167,8 @@ const Sales = () => {
                 <Header title={"Store - Sales"} />
                 <div className="py-8">
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                        <div className="grid grid-cols-5 gap-4 sm:h-[70vh]">
-                            <div className="col-span-3">
+                        <div className="grid sm:grid-cols-5 gap-4 sm:h-[70vh]">
+                            <div className="col-span-1 sm:col-span-3">
                                 <Input
                                     id="search"
                                     type="search"
@@ -185,7 +185,7 @@ const Sales = () => {
                                     )}
                                 </div>
                             </div>
-                            <div className="col-span-2 bg-white rounded-2xl p-4 shadow-md">
+                            <div className="col-span-1 sm:col-span-2 bg-white rounded-2xl p-4 shadow-md">
                                 <div className="flex justify-between items-center mb-4">
                                     <h1 className="font-bold">Items ({cart.length})</h1>
                                     <button onClick={handleClearCart} className="text-red-600 hover:underline">

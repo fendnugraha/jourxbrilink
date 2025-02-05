@@ -36,7 +36,7 @@ const Payable = () => {
 
     useEffect(() => {
         fetchFinance();
-    }, [selectedContactId]);
+    }, [selectedContactId, financeType]);
     const closeModal = () => {
         setIsModalCreateContactOpen(false);
         setIsModalCreatePayableOpen(false);
@@ -79,7 +79,7 @@ const Payable = () => {
             <div className="overflow-hidden">
                 {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
                 <div className="bg-white shadow-sm sm:rounded-2xl mb-4">
-                    <div className="p-4 flex justify-between">
+                    <div className="p-4 flex justify-between flex-col sm:flex-row">
                         <h1 className="text-2xl font-bold mb-4">{financeType === "Payable" ? "Hutang" : "Piutang"}</h1>
                         <div>
                             <button onClick={() => setIsModalCreatePayableOpen(true)} className="btn-primary text-xs mr-2">
@@ -103,108 +103,114 @@ const Payable = () => {
                             </Modal>
                         </div>
                     </div>
-                    <table className="table w-full text-xs">
-                        <thead>
-                            <tr>
-                                <th>Contact</th>
-                                <th>Tagihan</th>
-                                <th>Dibayar</th>
-                                <th>Sisa</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filterFinanceByContactIdAndType.map((item, index) => (
-                                <tr key={index} className="hover:bg-slate-700 hover:text-white">
-                                    <td>
-                                        <button onClick={() => setSelectedContactId(item.contact_id)} className="hover:underline">
-                                            {item.contact.name}
-                                        </button>
-                                    </td>
-                                    <td className="text-end">{formatNumber(item.tagihan)}</td>
-                                    <td className="text-end">{formatNumber(item.terbayar)}</td>
-                                    <td className="text-end">{formatNumber(item.sisa)}</td>
-                                    <td className="text-center">
-                                        <button
-                                            onClick={() => {
-                                                setIsModalPaymentOpen(true);
-                                                setSelectedContactId(item.contact_id);
-                                            }}
-                                            type="button"
-                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-xl"
-                                        >
-                                            Bayar
-                                        </button>
-                                    </td>
+                    <div className="overflow-x-auto">
+                        <table className="table w-full text-xs">
+                            <thead>
+                                <tr>
+                                    <th>Contact</th>
+                                    <th>Tagihan</th>
+                                    <th>Dibayar</th>
+                                    <th>Sisa</th>
+                                    <th>Action</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                        <tfoot>
-                            <tr className="text-lg">
-                                <td colSpan={3} className="font-bold">
-                                    Total {financeType === "Payable" ? "Hutang" : "Piutang"}
-                                </td>
-                                <td className="font-bold text-end">
-                                    {formatNumber(filterFinanceByContactIdAndType.reduce((total, item) => total + Number(item.sisa), 0))}
-                                </td>
-                                <td className="font-bold text-end"></td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {filterFinanceByContactIdAndType.map((item, index) => (
+                                    <tr key={index} className="hover:bg-slate-700 hover:text-white">
+                                        <td>
+                                            <button onClick={() => setSelectedContactId(item.contact_id)} className="hover:underline">
+                                                {item.contact.name}
+                                            </button>
+                                        </td>
+                                        <td className="text-end">{formatNumber(item.tagihan)}</td>
+                                        <td className="text-end">{formatNumber(item.terbayar)}</td>
+                                        <td className="text-end">{formatNumber(item.sisa)}</td>
+                                        <td className="text-center">
+                                            <button
+                                                onClick={() => {
+                                                    setIsModalPaymentOpen(true);
+                                                    setSelectedContactId(item.contact_id);
+                                                }}
+                                                type="button"
+                                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-xl"
+                                            >
+                                                Bayar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                            <tfoot>
+                                <tr className="text-lg">
+                                    <td colSpan={3} className="font-bold">
+                                        Total {financeType === "Payable" ? "Hutang" : "Piutang"}
+                                    </td>
+                                    <td className="font-bold text-end">
+                                        {formatNumber(filterFinanceByContactIdAndType.reduce((total, item) => total + Number(item.sisa), 0))}
+                                    </td>
+                                    <td className="font-bold text-end"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
                 <div className="bg-white shadow-sm sm:rounded-2xl">
                     <div className="p-4 flex justify-between">
                         <h1 className="text-2xl font-bold mb-4">Riwayat Transaksi</h1>
                     </div>
-                    <table className="table w-full text-xs">
-                        <thead>
-                            <tr>
-                                <th>Type</th>
-                                <th>Amount</th>
-                                <th>Payment Method</th>
-                                <th>Description</th>
-                                <th>Contact</th>
-                                <th>Date Created</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {finance.finance?.data.map((item, index) => (
-                                <tr key={index} className="hover:bg-slate-700 hover:text-white">
-                                    <td>
-                                        {item.bill_amount > 0 ? (
-                                            <ArrowBigDown className="inline text-green-600" />
-                                        ) : (
-                                            <ArrowBigUp className="inline text-red-600" />
-                                        )}
-                                    </td>
-                                    <td className={`text-end font-bold ${item.bill_amount > 0 ? "text-green-600" : "text-red-600"}`}>
-                                        {formatNumber(item.bill_amount > 0 ? item.bill_amount : item.payment_amount)}
-                                    </td>
-                                    <td className="">{item.account.acc_name}</td>
-                                    <td className="">
-                                        <span className="font-bold text-xs text-slate-400 block">{item.invoice}</span>
-                                        Note: {item.description}
-                                    </td>
-                                    <td className="">{item.contact.name}</td>
-                                    <td className="text-end">{formatDateTime(item.created_at)}</td>
-                                    <td className="text-center">
-                                        <button
-                                            onClick={() => {
-                                                setSelectedFinanceId(item.id);
-                                                setIsModalDeleteFinanceOpen(true);
-                                            }}
-                                            type="button"
-                                            className=""
-                                        >
-                                            <XCircleIcon className="w-4 h-4 mr-2 inline text-red-600" />
-                                        </button>
-                                    </td>
+                    <div className="overflow-x-auto">
+                        <table className="table w-full text-xs">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Payment Method</th>
+                                    <th>Description</th>
+                                    <th>Contact</th>
+                                    <th>Date Created</th>
+                                    <th>Action</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    <div className="px-4">{finance.finance?.last_page > 1 && <Paginator links={finance.finance} handleChangePage={handleChangePage} />}</div>
+                            </thead>
+                            <tbody>
+                                {finance.finance?.data.map((item, index) => (
+                                    <tr key={index} className="hover:bg-slate-700 hover:text-white">
+                                        <td>
+                                            {item.bill_amount > 0 ? (
+                                                <ArrowBigDown className="inline text-green-600" />
+                                            ) : (
+                                                <ArrowBigUp className="inline text-red-600" />
+                                            )}
+                                        </td>
+                                        <td className={`text-end font-bold ${item.bill_amount > 0 ? "text-green-600" : "text-red-600"}`}>
+                                            {formatNumber(item.bill_amount > 0 ? item.bill_amount : item.payment_amount)}
+                                        </td>
+                                        <td className="">{item.account.acc_name}</td>
+                                        <td className="">
+                                            <span className="font-bold text-xs text-slate-400 block">{item.invoice}</span>
+                                            Note: {item.description}
+                                        </td>
+                                        <td className="">{item.contact.name}</td>
+                                        <td className="text-end">{formatDateTime(item.created_at)}</td>
+                                        <td className="text-center">
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedFinanceId(item.id);
+                                                    setIsModalDeleteFinanceOpen(true);
+                                                }}
+                                                type="button"
+                                                className=""
+                                            >
+                                                <XCircleIcon className="w-4 h-4 mr-2 inline text-red-600" />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="px-4 py-4 sm:py-0">
+                        {finance.finance?.last_page > 1 && <Paginator links={finance.finance} handleChangePage={handleChangePage} />}
+                    </div>
                 </div>
                 <Modal isOpen={isModalDeleteFinanceOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
                     <div className="flex flex-col items-center justify-center gap-3 mb-4">

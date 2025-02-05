@@ -161,78 +161,80 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                     {warehouses.find((w) => w.id === Number(selectedWarehouse))?.name} Periode {startDate} s/d {endDate}
                 </h4>
             </div>
-            <table className="table w-full text-xs">
-                <thead>
-                    <tr>
-                        <th>Keterangan</th>
-                        <th>Jumlah</th>
-                        <th className="hidden sm:table-cell">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {loading ? (
+            <div className="overflow-x-auto">
+                <table className="table w-full text-xs">
+                    <thead>
                         <tr>
-                            <td colSpan="3" className="text-center">
-                                <span className="text-sm text-slate-500">Loading...</span>
-                            </td>
+                            <th>Keterangan</th>
+                            <th>Jumlah</th>
+                            <th className="hidden sm:table-cell">Action</th>
                         </tr>
-                    ) : currentItems.length === 0 ? (
-                        <tr>
-                            <td colSpan="3" className="text-center">
-                                <span className="text-sm text-slate-500">Tidak ada transaksi</span>
-                            </td>
-                        </tr>
-                    ) : (
-                        currentItems.map((journal, index) => (
-                            <tr key={index} className="hover:bg-slate-100">
-                                <td>
-                                    <span className="text-xs text-slate-500 block">
-                                        #{journal.id} {journal.invoice} | {formatDateTime(journal.created_at)}
-                                    </span>
-                                    Note: {journal.description}
-                                    <span className="block font-bold text-xs">
-                                        {journal.cred.acc_name} <ArrowRightIcon className="size-4 inline" /> {journal.debt.acc_name}
-                                    </span>
-                                </td>
-                                <td className="font-bold text-end">
-                                    <span
-                                        className={`${Number(journal.debt_code) === Number(selectedAccount) ? "text-green-500" : ""}
-                                    ${Number(journal.cred_code) === Number(selectedAccount) ? "text-red-500" : ""}
-                                        text-sm md:text-base sm:text-lg`}
-                                    >
-                                        {formatNumber(journal.amount)}
-                                    </span>
-                                    {journal.fee_amount !== 0 && <span className="text-xs text-blue-600 block">{formatNumber(journal.fee_amount)}</span>}
-                                </td>
-                                <td className="hidden sm:table-cell">
-                                    <div className="flex justify-center gap-3">
-                                        <button
-                                            className=" hover:scale-125 transtition-all duration-200"
-                                            hidden={!["Transfer Uang", "Tarik Tunai"].includes(journal.trx_type)}
-                                            onClick={() => {
-                                                setSelectedJournalId(journal.id);
-                                                setIsModalEditJournalOpen(true);
-                                            }}
-                                        >
-                                            <PencilIcon className="size-4 text-indigo-700" />
-                                        </button>
-                                        <button
-                                            onClick={() => {
-                                                setSelectedJournalId(journal.id);
-                                                setIsModalDeleteJournalOpen(true);
-                                            }}
-                                            disabled={["Voucher & SP", "Accessories"].includes(journal.trx_type)}
-                                            className=" disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transtition-all duration-200"
-                                        >
-                                            <TrashIcon className="size-4" />
-                                        </button>
-                                    </div>
+                    </thead>
+                    <tbody>
+                        {loading ? (
+                            <tr>
+                                <td colSpan="3" className="text-center">
+                                    <span className="text-sm text-slate-500">Loading...</span>
                                 </td>
                             </tr>
-                        ))
-                    )}
-                </tbody>
-            </table>
+                        ) : currentItems.length === 0 ? (
+                            <tr>
+                                <td colSpan="3" className="text-center">
+                                    <span className="text-sm text-slate-500">Tidak ada transaksi</span>
+                                </td>
+                            </tr>
+                        ) : (
+                            currentItems.map((journal, index) => (
+                                <tr key={index} className="hover:bg-slate-100">
+                                    <td>
+                                        <span className="text-xs text-slate-500 block">
+                                            #{journal.id} {journal.invoice} | {formatDateTime(journal.created_at)}
+                                        </span>
+                                        Note: {journal.description}
+                                        <span className="block font-bold text-xs">
+                                            {journal.cred.acc_name} <ArrowRightIcon className="size-4 inline" /> {journal.debt.acc_name}
+                                        </span>
+                                    </td>
+                                    <td className="font-bold text-end">
+                                        <span
+                                            className={`${Number(journal.debt_code) === Number(selectedAccount) ? "text-green-500" : ""}
+                                    ${Number(journal.cred_code) === Number(selectedAccount) ? "text-red-500" : ""}
+                                        text-sm md:text-base sm:text-lg`}
+                                        >
+                                            {formatNumber(journal.amount)}
+                                        </span>
+                                        {journal.fee_amount !== 0 && <span className="text-xs text-blue-600 block">{formatNumber(journal.fee_amount)}</span>}
+                                    </td>
+                                    <td className="hidden sm:table-cell">
+                                        <div className="flex justify-center gap-3">
+                                            <button
+                                                className=" hover:scale-125 transtition-all duration-200"
+                                                hidden={!["Transfer Uang", "Tarik Tunai"].includes(journal.trx_type)}
+                                                onClick={() => {
+                                                    setSelectedJournalId(journal.id);
+                                                    setIsModalEditJournalOpen(true);
+                                                }}
+                                            >
+                                                <PencilIcon className="size-4 text-indigo-700" />
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedJournalId(journal.id);
+                                                    setIsModalDeleteJournalOpen(true);
+                                                }}
+                                                disabled={["Voucher & SP", "Accessories"].includes(journal.trx_type)}
+                                                className=" disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transtition-all duration-200"
+                                            >
+                                                <TrashIcon className="size-4" />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
             <Modal isOpen={isModalDeleteJournalOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
                 <div className="flex flex-col items-center justify-center gap-3 mb-4">
                     <MessageCircleWarningIcon size={72} className="text-red-600" />

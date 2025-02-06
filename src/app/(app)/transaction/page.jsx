@@ -58,7 +58,7 @@ const useCashBankBalance = (selectedWarehouseId) => {
 };
 const TransactionPage = () => {
     const { user } = useAuth({ middleware: "auth" });
-
+    const userRole = user.role?.role;
     if (!user) {
         return <Loading />;
     }
@@ -361,7 +361,7 @@ const TransactionPage = () => {
                                     warehouses={warehouses}
                                     warehouse={warehouse}
                                     warehouseId={(warehouseId) => setSelectedWarehouseId(warehouseId)}
-                                    user={user}
+                                    userRole={userRole}
                                 />
                             </div>
                             <div className="order-1 sm:order-2">

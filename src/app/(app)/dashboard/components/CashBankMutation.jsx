@@ -19,7 +19,7 @@ const getCurrentDate = () => {
     const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
 };
-const CashBankMutation = ({ warehouse, warehouses }) => {
+const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
     const [cashBank, setCashBank] = useState([]);
@@ -51,14 +51,11 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
 
     const [accountBalance, setAccountBalance] = useState([]);
     const getAccountBalance = async () => {
-        setLoading(true);
         try {
             const response = await axios.get(`/api/get-cash-bank-balance/${selectedWarehouse}`);
             setAccountBalance(response.data.data);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -120,32 +117,36 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
                 <div className="px-2 sm:px-6 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <h1 className="font-bold text-xl">Mutasi Saldo</h1>
                     <div className="sm:flex gap-2 w-full sm:col-span-2">
-                        <div className="gap-2 sm:flex grid grid-cols-2 mb-2 sm:mb-0">
-                            <button
-                                onClick={() => setIsModalCreateJournalOpen(true)}
-                                className="bg-indigo-500 text-sm sm:text-xs min-w-36 hover:bg-indigo-600 text-white py-2 px-2 sm:px-6 rounded-lg"
-                            >
-                                Jurnal Umum <PlusCircleIcon className="size-4 inline" />
-                            </button>
-                            <button
-                                onClick={() => setIsModalCreateMutationFromHqOpen(true)}
-                                className="bg-indigo-500 text-sm sm:text-xs min-w-36 hover:bg-indigo-600 text-white py-2 px-2 sm:px-6 rounded-lg"
-                            >
-                                Mutasi Saldo <PlusCircleIcon className="size-4 inline" />
-                            </button>
-                        </div>
-                        <div className="w-full flex gap-2 mb-2 sm:mb-0">
-                            <select
-                                value={selectedWarehouse}
-                                onChange={(e) => setSelectedWarehouse(e.target.value)}
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            >
-                                {warehouses.map((warehouse) => (
-                                    <option key={warehouse.id} value={warehouse.id}>
-                                        {warehouse.name}
-                                    </option>
-                                ))}
-                            </select>
+                        {userRole === "Administrator" && (
+                            <div className="gap-2 sm:flex grid grid-cols-2 mb-2 sm:mb-0">
+                                <button
+                                    onClick={() => setIsModalCreateJournalOpen(true)}
+                                    className="bg-indigo-500 text-sm sm:text-xs min-w-36 hover:bg-indigo-600 text-white py-2 px-2 sm:px-6 rounded-lg"
+                                >
+                                    Jurnal Umum <PlusCircleIcon className="size-4 inline" />
+                                </button>
+                                <button
+                                    onClick={() => setIsModalCreateMutationFromHqOpen(true)}
+                                    className="bg-indigo-500 text-sm sm:text-xs min-w-36 hover:bg-indigo-600 text-white py-2 px-2 sm:px-6 rounded-lg"
+                                >
+                                    Mutasi Saldo <PlusCircleIcon className="size-4 inline" />
+                                </button>
+                            </div>
+                        )}
+                        <div className="w-full flex justify-end gap-2 mb-2 sm:mb-0">
+                            {userRole === "Administrator" && (
+                                <select
+                                    value={selectedWarehouse}
+                                    onChange={(e) => setSelectedWarehouse(e.target.value)}
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                >
+                                    {warehouses.map((warehouse) => (
+                                        <option key={warehouse.id} value={warehouse.id}>
+                                            {warehouse.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
                             <button
                                 onClick={() => setIsModalFilterDataOpen(true)}
                                 className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
@@ -201,6 +202,7 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
                         <thead>
                             <tr>
                                 <th>Nama akun</th>
+                                <th className="hidden sm:table-cell">Saldo Akhir</th>
                                 <th>Masuk</th>
                                 <th>Keluar</th>
                             </tr>
@@ -215,17 +217,18 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
                                     <tr key={index}>
                                         <td>
                                             {account.acc_name}
-                                            <span className="text-xs font-bold block">{formatNumber(account.balance)}</span>
+                                            <span className="text-xs font-bold block sm:hidden">{formatNumber(account.balance)}</span>
                                         </td>
+                                        <td className="text-end font-bold hidden sm:table-cell">{formatNumber(account.balance ?? 0)}</td>
                                         <td className="text-end">{formatNumber(mutationInSumById(account.id) ?? 0)}</td>
                                         <td className="text-end">{formatNumber(mutationOutSumById(account.id) ?? 0)}</td>
                                     </tr>
                                 ))
                             )}
                             <tr>
-                                <td className="font-bold " colSpan={2}>
-                                    Penambahan saldo dari HQ
-                                </td>
+                                <td className="font-bold ">Penambahan saldo dari HQ</td>
+                                <td className="text-end font-bold hidden sm:table-cell"></td>
+                                <td className="text-end font-bold"></td>
                                 <td className="text-end font-bold">
                                     {mutationOutSum - mutationInSum === 0 ? (
                                         <span className="text-green-600">Completed</span>
@@ -240,6 +243,7 @@ const CashBankMutation = ({ warehouse, warehouses }) => {
                                 <th>
                                     Total <span className="font-bold">{formatNumber(accountBalance.reduce((sum, acc) => sum + acc.balance, 0))}</span>
                                 </th>
+                                <th className="text-end font-bold">{formatNumber(accountBalance.reduce((sum, acc) => sum + acc.balance, 0))}</th>
                                 <th className="text-end">{formatNumber(mutationInSum)}</th>
                                 <th className="text-end">{formatNumber(mutationOutSum)}</th>
                             </tr>

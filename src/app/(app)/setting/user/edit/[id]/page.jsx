@@ -83,7 +83,7 @@ const UserEditPage = ({ params }) => {
                             {loading ? (
                                 <p>Loading...</p>
                             ) : (
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <form>
                                         <div>
                                             <h1 className="text-lg font-bold">Update User Info</h1>

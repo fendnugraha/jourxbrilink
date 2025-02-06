@@ -1,18 +1,18 @@
 export default function Paginator({ links, handleChangePage }) {
     return (
         <div className="flex items-center justify-between">
-            <div className="flex-1 flex justify-between sm:hidden">
+            <div className="flex-1 p-4 flex justify-between sm:hidden">
                 <button
                     onClick={() => handleChangePage(links?.prev_page_url)}
                     disabled={!links?.prev_page_url}
-                    className="relative inline-flex items-center px-2 py-1 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                    className="relative inline-flex min-w-24 items-center justify-center px-2 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
                 >
                     Previous
                 </button>
                 <button
                     onClick={() => handleChangePage(links?.next_page_url)}
                     disabled={!links?.next_page_url}
-                    className="ml-3 relative inline-flex items-center px-2 py-1 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                    className="ml-3 relative inline-flex min-w-24 items-center justify-center px-2 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
                 >
                     Next
                 </button>

@@ -110,56 +110,58 @@ const Warehouse = () => {
                                 </div>
                             </Modal>
                         </div>
-                        <table className="table w-full text-xs">
-                            <thead>
-                                <tr>
-                                    <th>Warehouse Name</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {warehouses?.data?.length === 0 ? (
+                        <div className="overflow-y-auto">
+                            <table className="table w-full text-xs">
+                                <thead>
                                     <tr>
-                                        <td colSpan="7">No warehouse found</td>
+                                        <th>Warehouse Name</th>
+                                        <th>Actions</th>
                                     </tr>
-                                ) : (
-                                    warehouses?.data?.map((warehouse) => (
-                                        <tr key={warehouse.id}>
-                                            <td>
-                                                <span className="font-bold text-green-600">{warehouse.name}</span>
-                                                <span className="block text-xs">
-                                                    {warehouse.code} | {warehouse.chart_of_account.acc_name} | {formatDateTime(warehouse.created_at)}
-                                                </span>
-                                                <span className="block text-xs">
-                                                    <MapPinIcon className="w-4 h-4 inline" /> {warehouse.address}
-                                                </span>
-                                            </td>
-
-                                            <td className="w-32">
-                                                <div className="flex gap-2">
-                                                    <Link
-                                                        className="bg-blue-600 hover:bg-blue-400 p-2 rounded-lg text-white"
-                                                        href={`/setting/warehouse/detail/${warehouse.id}`}
-                                                    >
-                                                        <EyeIcon className="size-5" />
-                                                    </Link>
-                                                    <button
-                                                        // onClick={() => handleDeleteWarehouse(warehouse.id)}
-                                                        onClick={() => {
-                                                            setSelectedWarehouseId(warehouse.id);
-                                                            setIsModalConfirmAlertOpen(true);
-                                                        }}
-                                                        className="bg-red-600 hover:bg-red-400 p-2 rounded-lg text-white"
-                                                    >
-                                                        <TrashIcon className="size-5" />
-                                                    </button>
-                                                </div>
-                                            </td>
+                                </thead>
+                                <tbody>
+                                    {warehouses?.data?.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="7">No warehouse found</td>
                                         </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
+                                    ) : (
+                                        warehouses?.data?.map((warehouse) => (
+                                            <tr key={warehouse.id}>
+                                                <td>
+                                                    <span className="font-bold text-green-600">{warehouse.name}</span>
+                                                    <span className="block text-xs">
+                                                        {warehouse.code} | {warehouse.chart_of_account.acc_name} | {formatDateTime(warehouse.created_at)}
+                                                    </span>
+                                                    <span className="block text-xs">
+                                                        <MapPinIcon className="w-4 h-4 inline" /> {warehouse.address}
+                                                    </span>
+                                                </td>
+
+                                                <td className="w-32">
+                                                    <div className="flex gap-2">
+                                                        <Link
+                                                            className="bg-blue-600 hover:bg-blue-400 p-2 rounded-lg text-white"
+                                                            href={`/setting/warehouse/detail/${warehouse.id}`}
+                                                        >
+                                                            <EyeIcon className="size-5" />
+                                                        </Link>
+                                                        <button
+                                                            // onClick={() => handleDeleteWarehouse(warehouse.id)}
+                                                            onClick={() => {
+                                                                setSelectedWarehouseId(warehouse.id);
+                                                                setIsModalConfirmAlertOpen(true);
+                                                            }}
+                                                            className="bg-red-600 hover:bg-red-400 p-2 rounded-lg text-white"
+                                                        >
+                                                            <TrashIcon className="size-5" />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
                         {warehouses?.links && <Paginator links={warehouses} handleChangePage={handleChangePage} />}
                     </div>
                 </div>

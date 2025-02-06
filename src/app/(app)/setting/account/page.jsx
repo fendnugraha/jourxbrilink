@@ -9,6 +9,7 @@ import FormCreateAccount from "./formCreateAccount";
 import Modal from "@/components/Modal";
 import { LockIcon, PencilIcon, PlusCircleIcon, Trash2Icon, TrashIcon } from "lucide-react";
 import Notification from "@/components/notification";
+import formatNumber from "@/libs/formatNumber";
 
 export default function Account() {
     const [account, setAccount] = useState(null);
@@ -203,80 +204,83 @@ export default function Account() {
                                     </Modal>
                                 )}
                             </div>
-                            <table className="table w-full text-xs">
-                                <thead>
-                                    <tr>
-                                        <th className="">
-                                            <Input type="checkbox" disabled />
-                                        </th>
-                                        <th className="">Name</th>
-                                        <th className="">Balance</th>
-                                        <th className="">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {account?.data?.length === 0 ? (
+                            <div className="overflow-y-auto">
+                                <table className="table w-full text-xs">
+                                    <thead>
                                         <tr>
-                                            <td colSpan="5" className="text-center py-4">
-                                                No data
-                                            </td>
+                                            <th className="">
+                                                <Input type="checkbox" disabled />
+                                            </th>
+                                            <th className="">Name</th>
+                                            <th className="hidden sm:table-cell">Balance</th>
+                                            <th className="">Action</th>
                                         </tr>
-                                    ) : (
-                                        account?.data?.map((account) => (
-                                            <tr key={account.id}>
-                                                <td className="w-4">
-                                                    <Input
-                                                        checked={selectedAccount.includes(account.id)}
-                                                        onChange={() => {
-                                                            handleSelectAccount(account.id);
-                                                        }}
-                                                        type="checkbox"
-                                                    />
-                                                </td>
-                                                <td className="">
-                                                    <span className="font-bold text-blue-800">
-                                                        {account.acc_name} {account.is_locked === 1 && <LockIcon size={16} className="inline" />}
-                                                    </span>
-                                                    <br />
-                                                    <span className="text-slate-600">
-                                                        {account.acc_code} # {account.account?.name} # {account?.warehouse?.name ?? "NotAssociated"}
-                                                    </span>
-                                                </td>
-                                                <td className="text-right text-lg">
-                                                    {new Intl.NumberFormat("id-ID", {
-                                                        style: "currency",
-                                                        currency: "IDR",
-                                                    }).format(account.st_balance)}
-                                                </td>
-                                                <td className="text-center">
-                                                    <div className="flex justify-center gap-2">
-                                                        <button
-                                                            onClick={() => {
-                                                                handleShowAccount(account.id);
-                                                            }}
-                                                            className=""
-                                                        >
-                                                            <PencilIcon className="w-5 h-5 inline" />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleDeleteAccount(account.id)}
-                                                            className="disabled:text-red-400"
-                                                            disabled={account.is_locked === 1}
-                                                        >
-                                                            {" "}
-                                                            {account.is_locked === 1 ? (
-                                                                <LockIcon className="w-5 h-5 inline" />
-                                                            ) : (
-                                                                <Trash2Icon className="w-5 h-5 inline" />
-                                                            )}
-                                                        </button>
-                                                    </div>
+                                    </thead>
+                                    <tbody>
+                                        {account?.data?.length === 0 ? (
+                                            <tr>
+                                                <td colSpan="5" className="text-center py-4">
+                                                    No data
                                                 </td>
                                             </tr>
-                                        ))
-                                    )}
-                                </tbody>
-                            </table>
+                                        ) : (
+                                            account?.data?.map((account) => (
+                                                <tr key={account.id}>
+                                                    <td className="w-4">
+                                                        <Input
+                                                            checked={selectedAccount.includes(account.id)}
+                                                            onChange={() => {
+                                                                handleSelectAccount(account.id);
+                                                            }}
+                                                            type="checkbox"
+                                                        />
+                                                    </td>
+                                                    <td className="">
+                                                        <span className="font-bold text-blue-800">
+                                                            {account.acc_name} {account.is_locked === 1 && <LockIcon size={16} className="inline" />}
+                                                        </span>
+                                                        <br />
+                                                        <span className="text-slate-600">
+                                                            {account.acc_code} # {account.account?.name} # {account?.warehouse?.name ?? "NotAssociated"}
+                                                        </span>
+                                                        <span className="font-bold block text-sm sm:hidden">{formatNumber(account.st_balance)}</span>
+                                                    </td>
+                                                    <td className="text-right text-lg hidden sm:table-cell">
+                                                        {new Intl.NumberFormat("id-ID", {
+                                                            style: "currency",
+                                                            currency: "IDR",
+                                                        }).format(account.st_balance)}
+                                                    </td>
+                                                    <td className="text-center">
+                                                        <div className="flex justify-center gap-2">
+                                                            <button
+                                                                onClick={() => {
+                                                                    handleShowAccount(account.id);
+                                                                }}
+                                                                className=""
+                                                            >
+                                                                <PencilIcon className="w-5 h-5 inline" />
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleDeleteAccount(account.id)}
+                                                                className="disabled:text-red-400"
+                                                                disabled={account.is_locked === 1}
+                                                            >
+                                                                {" "}
+                                                                {account.is_locked === 1 ? (
+                                                                    <LockIcon className="w-5 h-5 inline" />
+                                                                ) : (
+                                                                    <Trash2Icon className="w-5 h-5 inline" />
+                                                                )}
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
                             {account === null ? "" : <Paginator links={account} handleChangePage={handleChangePage} />}
                         </div>
                     </div>

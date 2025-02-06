@@ -25,6 +25,7 @@ const StorePage = () => {
     const { user } = useAuth({ middleware: "auth" });
 
     const warehouse = user?.role?.warehouse_id;
+    const userRole = user.role?.role;
     const [transactions, setTransactions] = useState([]);
     const [notification, setNotification] = useState("");
     const [startDate, setStartDate] = useState(getCurrentDate());
@@ -109,9 +110,12 @@ const StorePage = () => {
                                         <Link href="/store/sales" className="btn-primary text-xs">
                                             <PlusCircleIcon className="w-4 h-4 inline" /> Penjualan
                                         </Link>
-                                        <Link href="/store/purchase" className="btn-primary text-xs">
-                                            <PlusCircleIcon className="w-4 h-4 inline" /> Pembelian
-                                        </Link>
+                                        {userRole === "Administrator" && (
+                                            <Link href="/store/purchase" className="btn-primary text-xs">
+                                                <PlusCircleIcon className="w-4 h-4 inline" /> Pembelian
+                                            </Link>
+                                        )}
+
                                         {/* <button className="btn-primary text-xs disabled:bg-slate-400 disabled:cursor-not-allowed" disabled={true}>
                                             <PlusCircleIcon className="w-4 h-4 inline" /> Pembelian
                                         </button> */}
@@ -122,23 +126,25 @@ const StorePage = () => {
                                             <FilterIcon className="size-4" />
                                         </button>
                                         <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
-                                            <div className="mb-4">
-                                                <Label>Cabang</Label>
-                                                <select
-                                                    onChange={(e) => {
-                                                        setSelectedWarehouse(e.target.value);
-                                                    }}
-                                                    value={selectedWarehouse}
-                                                    className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                                >
-                                                    <option value="">Semua Akun</option>
-                                                    {warehouses.map((w) => (
-                                                        <option key={w.id} value={w.id}>
-                                                            {w.name}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            </div>
+                                            {userRole === "Administrator" && (
+                                                <div className="mb-4">
+                                                    <Label>Cabang</Label>
+                                                    <select
+                                                        onChange={(e) => {
+                                                            setSelectedWarehouse(e.target.value);
+                                                        }}
+                                                        value={selectedWarehouse}
+                                                        className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                                    >
+                                                        <option value="">Semua Akun</option>
+                                                        {warehouses.map((w) => (
+                                                            <option key={w.id} value={w.id}>
+                                                                {w.name}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            )}
                                             <div className="grid grid-cols-2 gap-2 mb-4">
                                                 <div>
                                                     <Label>Tanggal</Label>

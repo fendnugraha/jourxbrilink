@@ -52,41 +52,43 @@ const Contact = () => {
                                     />
                                 </Modal>
                             </div>
-                            <table className="table w-full sm:w-3/4 text-xs">
-                                <thead>
-                                    <tr>
-                                        <th className="border-b-2 p-2">Name</th>
-                                        <th className="border-b-2 p-2">Desctiption</th>
-                                        <th className="border-b-2 p-2">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {contacts?.data?.map((contact) => (
-                                        <tr key={contact.id}>
-                                            <td className="border-b p-2">
-                                                <span className="font-bold">{contact.name}</span>
-                                                <span className="text-xs block mt-1">
-                                                    <PhoneIcon className="size-4 inline" /> {contact.phone_number} <MapPinIcon className="size-4 inline" />{" "}
-                                                    {contact.address}
-                                                </span>
-                                            </td>
-                                            <td className="border-b p-2">
-                                                {contact.type}: {contact.description}
-                                            </td>
-                                            <td className="border-b p-2">
-                                                <span className="flex gap-2 justify-center items-center">
-                                                    <button className="bg-green-500 text-white py-2 px-6 rounded-lg">
-                                                        <PencilIcon className="size-4" />
-                                                    </button>
-                                                    <button className="bg-red-500 text-white py-2 px-6 rounded-lg">
-                                                        <TrashIcon className="size-4" />
-                                                    </button>
-                                                </span>
-                                            </td>
+                            <div className="overflow-x-auto">
+                                <table className="table w-full sm:w-3/4 text-xs">
+                                    <thead>
+                                        <tr>
+                                            <th className="border-b-2 p-2">Name</th>
+                                            <th className="border-b-2 p-2">Desctiption</th>
+                                            <th className="border-b-2 p-2">Action</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {contacts?.data?.map((contact) => (
+                                            <tr key={contact.id}>
+                                                <td className="border-b p-2">
+                                                    <span className="font-bold">{contact.name}</span>
+                                                    <span className="text-xs block mt-1">
+                                                        <PhoneIcon className="size-4 inline" /> {contact.phone_number} <MapPinIcon className="size-4 inline" />{" "}
+                                                        {contact.address}
+                                                    </span>
+                                                </td>
+                                                <td className="border-b p-2">
+                                                    {contact.type}: {contact.description}
+                                                </td>
+                                                <td className="border-b p-2">
+                                                    <span className="flex gap-2 justify-center items-center">
+                                                        <button className="bg-green-500 text-white py-2 px-6 rounded-lg">
+                                                            <PencilIcon className="size-4" />
+                                                        </button>
+                                                        <button className="bg-red-500 text-white py-2 px-6 rounded-lg">
+                                                            <TrashIcon className="size-4" />
+                                                        </button>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

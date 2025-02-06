@@ -16,7 +16,7 @@ const User = () => {
     const [notification, setNotification] = useState("");
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
-    const fetchUsers = async (url = "/api/get-all-users") => {
+    const fetchUsers = async (url = "/api/users") => {
         setLoading(true);
         try {
             const response = await axios.get(url);
@@ -51,7 +51,6 @@ const User = () => {
             setNotification(error.response?.data?.message || "Something went wrong.");
         }
     };
-
     return (
         <>
             <Header title="User Management" />
@@ -71,48 +70,56 @@ const User = () => {
                                 />
                             </Modal>
                         </div>
-                        <table className="table w-full text-xs">
-                            <thead>
-                                <tr>
-                                    <th className="border-b-2 p-2">Name</th>
-                                    <th className="border-b-2 p-2">Created at</th>
-                                    <th className="border-b-2 p-2">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {loading ? (
+                        <div className="overflow-y-auto">
+                            <table className="table w-full text-xs">
+                                <thead>
                                     <tr>
-                                        <td className="border-b p-2" colSpan={3}>
-                                            Loading ...
-                                        </td>
+                                        <th className="">Name</th>
+                                        <th className="">Role</th>
+                                        <th className="">Warehouse</th>
+                                        <th className="">Created at</th>
+                                        <th className="">Action</th>
                                     </tr>
-                                ) : (
-                                    users?.map((user) => (
-                                        <tr key={user.id}>
-                                            <td className="border-b p-2">
-                                                <span className="font-bold">{user.name}</span>
-                                                <span className="text-xs block">
-                                                    <MailIcon className="h-4 w-4 inline" /> {user.email} <SmileIcon className="h-4 w-4 inline" />{" "}
-                                                    {user.role?.role} <StoreIcon className="h-4 w-4 inline" /> {user.role?.warehouse?.name}
-                                                </span>
-                                            </td>
-                                            <td className="border-b p-2">{formatDateTime(user.created_at)}</td>
-                                            <td className="border-b p-2">
-                                                <span className="flex gap-2 justify-center items-center">
-                                                    <Link href={`/setting/user/edit/${user.id}`} className="bg-green-500 text-white py-2 px-6 rounded-lg">
-                                                        <PencilIcon className="size-4" />
-                                                    </Link>
-                                                    <button onClick={() => handleDeleteUser(user.id)} className="bg-red-500 text-white py-2 px-6 rounded-lg">
-                                                        <Trash2Icon className="size-4" />
-                                                    </button>
-                                                </span>
+                                </thead>
+                                <tbody>
+                                    {loading ? (
+                                        <tr>
+                                            <td className="border-b p-2" colSpan={3}>
+                                                Loading ...
                                             </td>
                                         </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                        {users?.links && <Paginator links={users} handleChangePage={handleChangePage} />}
+                                    ) : (
+                                        users?.data?.map((user) => (
+                                            <tr key={user.id}>
+                                                <td className="border-b p-2">
+                                                    <span className="font-bold">{user.name}</span>
+                                                    <span className="text-xs block">
+                                                        <MailIcon className="h-4 w-4 inline" /> {user.email}
+                                                    </span>
+                                                </td>
+                                                <td className="border-b p-2">{user.role?.role}</td>
+                                                <td className="border-b p-2">{user.role?.warehouse?.name}</td>
+                                                <td className="border-b p-2">{formatDateTime(user.created_at)}</td>
+                                                <td className="border-b p-2">
+                                                    <span className="flex gap-2 justify-center items-center">
+                                                        <Link href={`/setting/user/edit/${user.id}`} className="bg-green-500 text-white py-2 px-6 rounded-lg">
+                                                            <PencilIcon className="size-4" />
+                                                        </Link>
+                                                        <button
+                                                            onClick={() => handleDeleteUser(user.id)}
+                                                            className="bg-red-500 text-white py-2 px-6 rounded-lg"
+                                                        >
+                                                            <Trash2Icon className="size-4" />
+                                                        </button>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="px-4">{users?.links && <Paginator links={users} handleChangePage={handleChangePage} />}</div>
                     </div>
                 </div>
             </div>

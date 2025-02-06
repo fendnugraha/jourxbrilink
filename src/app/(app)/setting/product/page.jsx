@@ -159,53 +159,55 @@ export default function Product() {
                                     />
                                 </Modal>
                             </div>
-                            <table className="table w-full text-xs">
-                                <thead>
-                                    <tr>
-                                        <th className="text-center">#</th>
-                                        <th>Product</th>
-                                        <th>Category</th>
-                                        <th>Price</th>
-                                        <th>Stock</th>
-                                        <th className="text-center">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {product?.data?.length === 0 ? (
+                            <div className="overflow-x-auto">
+                                <table className="table w-full text-xs">
+                                    <thead>
                                         <tr>
-                                            <td colSpan="6">No products found</td>
+                                            <th className="text-center">#</th>
+                                            <th>Product</th>
+                                            <th>Category</th>
+                                            <th>Price</th>
+                                            <th>Stock</th>
+                                            <th className="text-center">Actions</th>
                                         </tr>
-                                    ) : (
-                                        product?.data?.map((product) => (
-                                            <tr key={product.id}>
-                                                <td className="text-center">
-                                                    <Input
-                                                        checked={selectedProduct.includes(product.id)}
-                                                        onChange={() => {
-                                                            handleSelectProduct(product.id);
-                                                        }}
-                                                        type="checkbox"
-                                                    />
-                                                </td>
-                                                <td>{product.name}</td>
-                                                <td>{product.category}</td>
-                                                <td>{formatNumber(product.price)}</td>
-                                                <td>{product.end_stock}</td>
-                                                <td className="">
-                                                    <span className="flex justify-center">
-                                                        <button className="bg-indigo-500 py-2 px-4 rounded-lg text-white mr-2">
-                                                            <EyeIcon className="size-4" />
-                                                        </button>
-                                                        <button className="bg-red-600 py-2 px-4 rounded-lg text-white">
-                                                            <TrashIcon className="size-4" />
-                                                        </button>
-                                                    </span>
-                                                </td>
+                                    </thead>
+                                    <tbody>
+                                        {product?.data?.length === 0 ? (
+                                            <tr>
+                                                <td colSpan="6">No products found</td>
                                             </tr>
-                                        ))
-                                    )}
-                                </tbody>
-                            </table>
+                                        ) : (
+                                            product?.data?.map((product) => (
+                                                <tr key={product.id}>
+                                                    <td className="text-center">
+                                                        <Input
+                                                            checked={selectedProduct.includes(product.id)}
+                                                            onChange={() => {
+                                                                handleSelectProduct(product.id);
+                                                            }}
+                                                            type="checkbox"
+                                                        />
+                                                    </td>
+                                                    <td>{product.name}</td>
+                                                    <td>{product.category}</td>
+                                                    <td>{formatNumber(product.price)}</td>
+                                                    <td>{product.end_stock}</td>
+                                                    <td className="">
+                                                        <span className="flex justify-center">
+                                                            <button className="bg-indigo-500 py-2 px-4 rounded-lg text-white mr-2">
+                                                                <EyeIcon className="size-4" />
+                                                            </button>
+                                                            <button className="bg-red-600 py-2 px-4 rounded-lg text-white">
+                                                                <TrashIcon className="size-4" />
+                                                            </button>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
                             {product?.last_page > 1 && <Paginator links={product} handleChangePage={handleChangePage} />}
                         </div>
                     </div>

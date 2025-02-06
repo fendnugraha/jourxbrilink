@@ -192,9 +192,9 @@ const Sales = () => {
                                     placeholder="Search product ..."
                                     className="mt-1 block w-full rounded-xl border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 />
-                                <div className="mt-3 grid grid-cols-2 gap-3 max-h-full">
+                                <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-3 max-h-[60vh] sm:max-h-full mb-10 sm:mb-0 overflow-y-auto">
                                     {productList?.data?.length === 0 ? (
-                                        <div>No data</div>
+                                        <div className="text-center">Barang tidak ditemukan</div>
                                     ) : (
                                         productList?.data?.map((product) => <ProductCard product={product} key={product.id} onAddToCart={handleAddToCart} />)
                                     )}
@@ -240,7 +240,7 @@ const Sales = () => {
                                                             type="number"
                                                             value={item.price}
                                                             onChange={(e) => handleUpdatePrice(item, e.target.value)}
-                                                            className="w-full text-xs text-end py-1 border border-slate-300 rounded-lg"
+                                                            className="w-full text-xs text-end px-3 py-1 border border-slate-300 rounded-lg"
                                                         />
                                                     </div>
                                                 </div>
@@ -280,7 +280,7 @@ const Sales = () => {
                                         className="w-full mt-4 bg-indigo-600 hover:bg-indigo-500 text-white py-4 px-6 disabled:bg-slate-300 disabled:cursor-wait rounded-full"
                                         disabled={loading}
                                     >
-                                        {loading ? <LoaderCircleIcon className="animate-spin" /> : "Check out"}
+                                        {loading ? <LoaderCircleIcon className="animate-spin" /> : "Simpan"}
                                     </button>
                                 </Modal>
                             </div>
@@ -346,7 +346,7 @@ const Sales = () => {
                                                                 type="number"
                                                                 value={item.price}
                                                                 onChange={(e) => handleUpdatePrice(item, e.target.value)}
-                                                                className="w-full text-xs text-end py-1 border border-slate-300 rounded-lg"
+                                                                className="w-full text-xs text-end px-3 py-1 border border-slate-300 rounded-lg"
                                                             />
                                                         </div>
                                                     </div>

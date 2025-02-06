@@ -15,7 +15,7 @@ const getCurrentDate = () => {
     return `${year}-${month}-${day}`;
 };
 
-const DailyDashboard = ({ notification, warehouse, warehouses }) => {
+const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(getCurrentDate());
@@ -46,17 +46,20 @@ const DailyDashboard = ({ notification, warehouse, warehouses }) => {
     return (
         <div className="relative">
             <div className="w-full sm:w-1/2 mb-2 flex gap-2">
-                <select
-                    value={selectedWarehouse}
-                    onChange={(e) => setSelectedWarehouse(e.target.value)}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                >
-                    {warehouses.map((warehouse) => (
-                        <option key={warehouse.id} value={warehouse.id}>
-                            {warehouse.name}
-                        </option>
-                    ))}
-                </select>
+                {userRole === "Administrator" && (
+                    <select
+                        value={selectedWarehouse}
+                        onChange={(e) => setSelectedWarehouse(e.target.value)}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    >
+                        {warehouses.map((warehouse) => (
+                            <option key={warehouse.id} value={warehouse.id}>
+                                {warehouse.name}
+                            </option>
+                        ))}
+                    </select>
+                )}
+
                 <button
                     onClick={() => setIsModalFilterDataOpen(true)}
                     className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
@@ -84,7 +87,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses }) => {
                     </div>
                     <button
                         onClick={() => {
-                            fetchTransaction();
+                            getDailyDashboard();
                             setIsModalFilterDataOpen(false);
                         }}
                         className="btn-primary"

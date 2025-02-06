@@ -19,7 +19,7 @@ const getCurrentDate = () => {
     return `${year}-${month}-${day}`;
 };
 
-const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, warehouseId, notification, fetchJournalsByWarehouse, user }) => {
+const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, warehouseId, notification, fetchJournalsByWarehouse, userRole }) => {
     const [selectedAccount, setSelectedAccount] = useState("");
     const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
@@ -37,8 +37,6 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
         setIsModalDeleteJournalOpen(false);
         setIsModalEditJournalOpen(false);
     };
-
-    const warehouseCash = user.role.warehouse.chart_of_account_id;
 
     const handleDeleteJournal = async (id) => {
         try {
@@ -103,24 +101,27 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                     <FilterIcon className="size-4" />
                 </button>
                 <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
-                    <div className="mb-4">
-                        <Label>Cabang</Label>
-                        <select
-                            onChange={(e) => {
-                                setSelectedWarehouse(e.target.value);
-                                setCurrentPage(1);
-                            }}
-                            value={selectedWarehouse}
-                            className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                        >
-                            <option value="">Semua Akun</option>
-                            {warehouses.map((w) => (
-                                <option key={w.id} value={w.id}>
-                                    {w.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                    {userRole === "Administrator" && (
+                        <div className="mb-4">
+                            <Label>Cabang</Label>
+                            <select
+                                onChange={(e) => {
+                                    setSelectedWarehouse(e.target.value);
+                                    setCurrentPage(1);
+                                }}
+                                value={selectedWarehouse}
+                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            >
+                                <option value="">Semua Akun</option>
+                                {warehouses.map((w) => (
+                                    <option key={w.id} value={w.id}>
+                                        {w.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
+
                     <div className="grid grid-cols-2 gap-2 mb-4">
                         <div>
                             <Label>Tanggal</Label>

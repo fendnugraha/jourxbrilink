@@ -16,7 +16,7 @@ const getCurrentDate = () => {
     return `${year}-${month}-${day}`;
 };
 
-const ExpenseTable = ({ warehouse, warehouses }) => {
+const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
     const [expenses, setExpenses] = useState([]);
     const [notification, setNotification] = useState("");
     const [loading, setLoading] = useState(false);
@@ -57,18 +57,20 @@ const ExpenseTable = ({ warehouse, warehouses }) => {
                         Periode: {startDate} - {endDate}
                     </span>
                 </h1>
-                <div className="px-2 sm:px-6 pt-4 flex gap-2">
-                    <select
-                        value={selectedWarehouse}
-                        onChange={(e) => setSelectedWarehouse(e.target.value)}
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    >
-                        {warehouses.map((warehouse) => (
-                            <option key={warehouse.id} value={warehouse.id}>
-                                {warehouse.name}
-                            </option>
-                        ))}
-                    </select>
+                <div className="px-2 sm:px-6 pt-4 flex justify-end gap-2">
+                    {userRole === "Administrator" && (
+                        <select
+                            value={selectedWarehouse}
+                            onChange={(e) => setSelectedWarehouse(e.target.value)}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        >
+                            {warehouses.map((warehouse) => (
+                                <option key={warehouse.id} value={warehouse.id}>
+                                    {warehouse.name}
+                                </option>
+                            ))}
+                        </select>
+                    )}
                     <button
                         onClick={() => setIsModalFilterDataOpen(true)}
                         className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"

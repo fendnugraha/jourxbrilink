@@ -123,7 +123,7 @@ const WarehouseDetail = ({ params }) => {
                         <div className="overflow-hidden">
                             <div className="shadow-sm sm:rounded-lg p-6 bg-white mb-2">
                                 <h1 className="text-xl font-bold mb-4">Update Warehouse</h1>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <div className="mb-4">
                                             <Label>Warehouse Name:</Label>
@@ -171,7 +171,7 @@ const WarehouseDetail = ({ params }) => {
                             <div className="shadow-sm sm:rounded-lg p-6 bg-white mb-2">
                                 <h1 className="text-xl font-bold mb-4">Cash & Bank List</h1>
                                 <div>
-                                    <table className="table w-3/4 text-xs">
+                                    <table className="table w-full sm:w-3/4 text-xs">
                                         <tbody>
                                             {currentItems.map((item) => (
                                                 <tr key={item.id}>
@@ -212,7 +212,7 @@ const WarehouseDetail = ({ params }) => {
                                     </table>
                                     {totalPages > 1 && (
                                         <Pagination
-                                            className={"w-3/4"}
+                                            className={"w-full sm:w-3/4"}
                                             totalItems={totalItems}
                                             itemsPerPage={itemsPerPage}
                                             currentPage={currentPage}

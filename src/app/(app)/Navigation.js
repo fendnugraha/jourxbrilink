@@ -16,7 +16,7 @@ import {
     User2Icon,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { use, useState } from "react";
 
 const Navigation = ({ user }) => {
     const { logout } = useAuth();
@@ -24,6 +24,9 @@ const Navigation = ({ user }) => {
     const toggleNavbar = () => {
         setIsOpen(!isOpen);
     };
+    const pathname = usePathname();
+
+    const userRole = user.role?.role;
     return (
         <nav className={`bg-white text-gray-600 hidden sm:flex sm:flex-col sm:justify-between min-h-screen transition-all ${isOpen ? "w-64" : "w-16"}`}>
             <div>
@@ -48,7 +51,7 @@ const Navigation = ({ user }) => {
                 </div>
                 <nav className="flex-1">
                     <div className=" text-sm mt-4">
-                        <NavLink href="/dashboard" isOpen={isOpen} active={usePathname() === "/dashboard"}>
+                        <NavLink href="/dashboard" isOpen={isOpen} active={pathname === "/dashboard"}>
                             <div className="">
                                 <ChartAreaIcon className="w-5 h-5" />
                             </div>
@@ -61,7 +64,7 @@ const Navigation = ({ user }) => {
                                 Dashboard
                             </span>
                         </NavLink>
-                        <NavLink href="/transaction" isOpen={isOpen} active={usePathname() === "/transaction"}>
+                        <NavLink href="/transaction" isOpen={isOpen} active={pathname === "/transaction"}>
                             <div>
                                 <ShoppingBag className="w-5 h-5" />
                             </div>
@@ -74,7 +77,7 @@ const Navigation = ({ user }) => {
                                 Transaction
                             </span>
                         </NavLink>
-                        <NavLink href="/store" isOpen={isOpen} active={usePathname() === "/store"}>
+                        <NavLink href="/store" isOpen={isOpen} active={pathname === "/store"}>
                             <div>
                                 <StoreIcon className="w-5 h-5" />
                             </div>
@@ -87,34 +90,35 @@ const Navigation = ({ user }) => {
                                 Store
                             </span>
                         </NavLink>
-                        <NavLink href="/finance" isOpen={isOpen} active={usePathname() === "/finance"}>
-                            <div>
-                                <LandmarkIcon className="w-5 h-5" />
-                            </div>
-                            <span
-                                className={`transition-all duration-300 ease-in-out transform text-nowrap ${
-                                    isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
-                                }`}
-                                style={{ display: isOpen ? "inline" : "none" }}
-                            >
-                                Finance
-                            </span>
-                        </NavLink>
-                        <NavLink href="/summary" isOpen={isOpen} active={usePathname() === "/summary"}>
-                            <div>
-                                <BarChart className="w-5 h-5" />
-                            </div>
-                            <span
-                                className={`transition-all duration-300 ease-in-out transform text-nowrap ${
-                                    isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
-                                }`}
-                                style={{ display: isOpen ? "inline" : "none" }}
-                            >
-                                Summary
-                            </span>
-                        </NavLink>
-
-                        {/* <NavLink href="/report" isOpen={isOpen} active={usePathname() === "/report"}>
+                        {userRole === "Administrator" && (
+                            <>
+                                <NavLink href="/finance" isOpen={isOpen} active={pathname === "/finance"}>
+                                    <div>
+                                        <LandmarkIcon className="w-5 h-5" />
+                                    </div>
+                                    <span
+                                        className={`transition-all duration-300 ease-in-out transform text-nowrap ${
+                                            isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                                        }`}
+                                        style={{ display: isOpen ? "inline" : "none" }}
+                                    >
+                                        Finance
+                                    </span>
+                                </NavLink>
+                                <NavLink href="/summary" isOpen={isOpen} active={pathname === "/summary"}>
+                                    <div>
+                                        <BarChart className="w-5 h-5" />
+                                    </div>
+                                    <span
+                                        className={`transition-all duration-300 ease-in-out transform text-nowrap ${
+                                            isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                                        }`}
+                                        style={{ display: isOpen ? "inline" : "none" }}
+                                    >
+                                        Summary
+                                    </span>
+                                </NavLink>
+                                {/* <NavLink href="/report" isOpen={isOpen} active={pathname === "/report"}>
                         <div>
                             <DockIcon className="w-5 h-5" />
                         </div>
@@ -127,23 +131,29 @@ const Navigation = ({ user }) => {
                             Reports
                         </span>
                     </NavLink> */}
+                            </>
+                        )}
                     </div>
-                    <hr className="my-4" />
-                    <ul className="mt-4 text-sm">
-                        <NavLink href="/setting" isOpen={isOpen} active={usePathname().startsWith("/setting")}>
-                            <div>
-                                <CogIcon className="w-5 h-5" />
-                            </div>
-                            <span
-                                className={`transition-all duration-300 ease-in-out transform text-nowrap ${
-                                    isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
-                                }`}
-                                style={{ display: isOpen ? "inline" : "none" }}
-                            >
-                                Settings
-                            </span>
-                        </NavLink>
-                    </ul>
+                    {userRole === "Administrator" && (
+                        <>
+                            <hr className="my-4" />
+                            <ul className="mt-4 text-sm">
+                                <NavLink href="/setting" isOpen={isOpen} active={pathname.startsWith("/setting")}>
+                                    <div>
+                                        <CogIcon className="w-5 h-5" />
+                                    </div>
+                                    <span
+                                        className={`transition-all duration-300 ease-in-out transform text-nowrap ${
+                                            isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                                        }`}
+                                        style={{ display: isOpen ? "inline" : "none" }}
+                                    >
+                                        Settings
+                                    </span>
+                                </NavLink>
+                            </ul>
+                        </>
+                    )}
                 </nav>
             </div>
             <button

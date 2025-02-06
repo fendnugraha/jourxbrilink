@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/libs/auth";
+import Image from "next/image";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -50,7 +51,7 @@ const LoginPage = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
-                    {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                    {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
                 </div>
                 <div className="mb-4">
                     <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
@@ -63,7 +64,7 @@ const LoginPage = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+                    {errors.password && <p className="text-red-500 text-xs">{errors.password}</p>}
                 </div>
                 <button
                     type="submit"
@@ -73,6 +74,9 @@ const LoginPage = () => {
                     {loading ? "Loging in ..." : "Login"}
                 </button>
             </form>
+            <p className="text-center mt-6 text-xs">
+                &copy; 2022 Jour Apps by <Image src="/eightnite.png" alt="Logo" width={75} height={75} className="inline-block" /> All rights reserved
+            </p>
         </div>
     );
 };

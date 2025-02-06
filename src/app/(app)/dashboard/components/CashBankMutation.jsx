@@ -97,7 +97,15 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
 
     const mutationOutSum = accountBalance.reduce((sum, acc) => sum + mutationOutSumById(acc.id), 0);
 
-    const filteredJournals = journalsByWarehouse.data?.filter((journal) => journal.trx_type === "Mutasi Kas");
+    const [checkedAccounts, setCheckedAccounts] = useState(null);
+    const filteredJournals = journalsByWarehouse.data?.filter((journal) => {
+        if (checkedAccounts === null) {
+            return journal.trx_type === "Mutasi Kas";
+        }
+        return journal.trx_type === "Mutasi Kas" && (checkedAccounts.includes(journal.cred_code) || checkedAccounts.includes(journal.debt_code));
+    });
+    const [selectedWarehouseId, setSelectedWarehouseId] = useState(1);
+    const branchAccount = cashBank.filter((cashBank) => cashBank.warehouse_id === Number(selectedWarehouseId));
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5; // Number of items per page
@@ -109,7 +117,6 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
-
     return (
         <div className="my-4">
             {notification && <Notification notification={notification} onClose={() => setNotification("")} />}

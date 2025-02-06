@@ -10,6 +10,7 @@ import Modal from "@/components/Modal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
 import EditJournal from "./EditJournal";
+import TimeAgo from "@/libs/formatDateDistance";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -19,7 +20,7 @@ const getCurrentDate = () => {
     return `${year}-${month}-${day}`;
 };
 
-const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, warehouseId, notification, fetchJournalsByWarehouse, userRole }) => {
+const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, warehouseId, notification, fetchJournalsByWarehouse, user }) => {
     const [selectedAccount, setSelectedAccount] = useState("");
     const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
@@ -31,7 +32,8 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
     const [isModalEditJournalOpen, setIsModalEditJournalOpen] = useState(false);
     const [selectedJournalId, setSelectedJournalId] = useState(null);
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
-
+    const userRole = user?.role?.role;
+    const warehouseCash = user?.role?.warehouse?.chart_of_account_id;
     const closeModal = () => {
         setIsModalFilterJournalOpen(false);
         setIsModalDeleteJournalOpen(false);
@@ -192,8 +194,11 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                                             #{journal.id} {journal.invoice} | {formatDateTime(journal.created_at)}
                                         </span>
                                         Note: {journal.description}
-                                        <span className="block font-bold text-xs">
-                                            {journal.cred.acc_name} <ArrowRightIcon className="size-4 inline" /> {journal.debt.acc_name}
+                                        <span className="font-bold text-xs block">
+                                            {journal.debt_code === warehouseCash ? journal.cred.acc_name : journal.debt.acc_name}{" "}
+                                        </span>
+                                        <span className="text-xs block text-slate-500">
+                                            Last update at <TimeAgo timestamp={journal.updated_at} />
                                         </span>
                                     </td>
                                     <td className="font-bold text-end">

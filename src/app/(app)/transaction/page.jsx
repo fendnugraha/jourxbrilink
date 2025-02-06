@@ -361,7 +361,7 @@ const TransactionPage = () => {
                                     warehouses={warehouses}
                                     warehouse={warehouse}
                                     warehouseId={(warehouseId) => setSelectedWarehouseId(warehouseId)}
-                                    userRole={userRole}
+                                    user={user}
                                 />
                             </div>
                             <div className="order-1 sm:order-2">

@@ -10,6 +10,7 @@ import Paginator from "@/components/Paginator";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { BuildingIcon, MailIcon, PencilIcon, PlusCircleIcon, SmileIcon, StoreIcon, Trash2Icon } from "lucide-react";
+import TimeAgo from "@/libs/formatDateDistance";
 
 const User = () => {
     const router = useRouter();
@@ -77,7 +78,6 @@ const User = () => {
                                         <th className="">Name</th>
                                         <th className="">Role</th>
                                         <th className="">Warehouse</th>
-                                        <th className="">Created at</th>
                                         <th className="">Action</th>
                                     </tr>
                                 </thead>
@@ -96,10 +96,12 @@ const User = () => {
                                                     <span className="text-xs block">
                                                         <MailIcon className="h-4 w-4 inline" /> {user.email}
                                                     </span>
+                                                    <span className="text-xs block text-slate-500">
+                                                        Last update at <TimeAgo timestamp={user.updated_at} />
+                                                    </span>
                                                 </td>
                                                 <td className="border-b p-2">{user.role?.role}</td>
                                                 <td className="border-b p-2">{user.role?.warehouse?.name}</td>
-                                                <td className="border-b p-2">{formatDateTime(user.created_at)}</td>
                                                 <td className="border-b p-2">
                                                     <span className="flex gap-2 justify-center items-center">
                                                         <Link href={`/setting/user/edit/${user.id}`} className="bg-green-500 text-white py-2 px-6 rounded-lg">

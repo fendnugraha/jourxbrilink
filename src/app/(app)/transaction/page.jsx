@@ -4,6 +4,7 @@ import CreateTransfer from "./components/CreateTransfer";
 import Header from "../Header";
 import { useState, useEffect, useRef } from "react";
 import axios from "@/libs/axios";
+import useSWR, { mutate } from "swr";
 import Notification from "@/components/notification";
 import { useAuth } from "@/libs/auth";
 import CreateCashWithdrawal from "./components/CreateCashWithdrawal";
@@ -35,16 +36,36 @@ const getCurrentDate = () => {
     const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
 };
+
+const fetcher = (url) => axios.get(url).then((res) => res.data);
+
+const useCashBankBalance = (selectedWarehouseId) => {
+    const {
+        data: accountBalance,
+        error,
+        isValidating,
+    } = useSWR(selectedWarehouseId ? `/api/get-cash-bank-balance/${selectedWarehouseId}` : null, fetcher, {
+        revalidateOnFocus: true, // Refetch data when the window is focused
+        dedupingInterval: 60000, // Avoid duplicate requests for the same data within 1 minute
+        fallbackData: [], // Optional: you can specify default data here while it's loading
+    });
+
+    // Handle loading, errors, and data
+    if (error) return { error: error.response?.data?.errors || ["Something went wrong."] };
+    if (!accountBalance && !isValidating) return { loading: true };
+
+    return { accountBalance, loading: isValidating, error: error?.response?.data?.errors };
+};
 const TransactionPage = () => {
     const { user } = useAuth({ middleware: "auth" });
 
     if (!user) {
         return <Loading />;
     }
+
     const [journalsByWarehouse, setJournalsByWarehouse] = useState([]);
     const [loading, setLoading] = useState(false);
     const [cashBank, setCashBank] = useState([]);
-    const [accountBalance, setAccountBalance] = useState([]);
     const [isModalCreateTransferOpen, setIsModalCreateTransferOpen] = useState(false);
     const [isModalCreateCashWithdrawalOpen, setIsModalCreateCashWithdrawalOpen] = useState(false);
     const [isModalCreateDepositOpen, setIsModalCreateDepositOpen] = useState(false);
@@ -87,6 +108,8 @@ const TransactionPage = () => {
     };
     const warehouse = user.role?.warehouse_id;
     const [selectedWarehouseId, setSelectedWarehouseId] = useState(warehouse);
+    const { accountBalance, loading: balanceLoading, error } = useCashBankBalance(selectedWarehouseId);
+
     const [warehouses, setWarehouses] = useState([]);
     const fetchWarehouses = async (url = "/api/get-all-warehouses") => {
         setLoading(true);
@@ -120,20 +143,8 @@ const TransactionPage = () => {
         fetchJournalsByWarehouse();
     }, []); // Include startDate and endDate in the dependency array
 
-    const getAccountBalance = async () => {
-        setLoading(true);
-        try {
-            const response = await axios.get(`/api/get-cash-bank-balance/${selectedWarehouseId}`);
-            setAccountBalance(response.data.data);
-        } catch (error) {
-            setErrors(error.response?.data?.errors || ["Something went wrong."]);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     useEffect(() => {
-        getAccountBalance();
+        mutate(`/api/get-cash-bank-balance/${selectedWarehouseId}`);
     }, [journalsByWarehouse]);
 
     const fetchCashBank = async () => {

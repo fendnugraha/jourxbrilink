@@ -3,7 +3,7 @@ import formatNumber from "@/libs/formatNumber";
 import { Settings } from "lucide-react";
 
 const CashBankBalance = ({ accountBalance }) => {
-    const summarizeBalance = accountBalance?.reduce((total, account) => total + account.balance, 0);
+    const summarizeBalance = accountBalance?.data?.reduce((total, account) => total + account.balance, 0);
 
     return (
         <div>
@@ -11,8 +11,8 @@ const CashBankBalance = ({ accountBalance }) => {
                 <h1 className="text-xs">Total Saldo Kas & Bank</h1>
                 <h1 className="text-2xl font-black">{formatNumber(summarizeBalance)}</h1>
             </div>
-            {accountBalance?.length > 0 ? (
-                accountBalance?.map((account) => (
+            {accountBalance?.data?.length > 0 ? (
+                accountBalance?.data?.map((account) => (
                     <div className="rounded-lg group" key={account.id}>
                         <div className="mb-1">
                             <div className="flex flex-col justify-between py-2 px-4 rounded-2xl shadow-sm text-white hover:shadow-lg bg-slate-800 hover:bg-slate-700t">

@@ -1,10 +1,10 @@
 "use client";
 import Notification from "@/components/notification";
 import Header from "../../Header";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import formatNumber from "@/libs/formatNumber";
 import Input from "@/components/Input";
-import { LoaderCircleIcon, MinusCircleIcon, PlusCircleIcon, TrashIcon } from "lucide-react";
+import { ChevronUpIcon, LoaderCircleIcon, MinusCircleIcon, PlusCircleIcon, TrashIcon } from "lucide-react";
 import axios from "@/libs/axios";
 import ProductCard from "../components/ProductCard";
 import Modal from "@/components/Modal";
@@ -34,6 +34,7 @@ const Sales = () => {
     const [cart, setCart] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [isModalCheckOutOpen, setIsModalCheckOutOpen] = useState(false);
+    const [showCartMobile, setShowCartMobile] = useState(false);
     const closeModal = () => {
         setIsModalCheckOutOpen(false);
     };
@@ -42,6 +43,20 @@ const Sales = () => {
     const handleSearch = (e) => {
         setSearch(e.target.value);
     };
+
+    const cartMobileRef = useRef(null);
+
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (cartMobileRef.current && !cartMobileRef.current.contains(event.target)) {
+                setShowCartMobile(false);
+            }
+        };
+        document.addEventListener("click", handleOutsideClick);
+        return () => {
+            document.removeEventListener("click", handleOutsideClick);
+        };
+    }, []);
 
     // Fetch product list based on debounced search term
     const fetchProduct = async () => {
@@ -165,7 +180,7 @@ const Sales = () => {
             <div className="">
                 {/* <h1 className="text-2xl font-bold mb-4">Point of Sales - Add to Cart</h1> */}
                 <Header title={"Store - Sales"} />
-                <div className="py-8">
+                <div className="py-8 relative">
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div className="grid sm:grid-cols-5 gap-4 sm:h-[70vh]">
                             <div className="col-span-1 sm:col-span-3">
@@ -185,8 +200,8 @@ const Sales = () => {
                                     )}
                                 </div>
                             </div>
-                            <div className="col-span-1 sm:col-span-2 bg-white rounded-2xl p-4 shadow-md">
-                                <div className="flex justify-between items-center mb-4">
+                            <div className="hidden sm:block col-span-1 sm:col-span-2 bg-white rounded-2xl p-4 shadow-md">
+                                <div className="sm:flex justify-between items-center mb-4">
                                     <h1 className="font-bold">Items ({cart.length})</h1>
                                     <button onClick={handleClearCart} className="text-red-600 hover:underline">
                                         Clear all
@@ -270,6 +285,93 @@ const Sales = () => {
                                 </Modal>
                             </div>
                         </div>
+
+                        {/* Checkout session mobile */}
+                        {cart.length > 0 && (
+                            <div ref={cartMobileRef} className="fixed sm:hidden bottom-0 w-full bg-white p-4 border">
+                                <div className="flex justify-between items-center">
+                                    <button onClick={() => setShowCartMobile(!showCartMobile)} className="group font-bold">
+                                        <ChevronUpIcon
+                                            className={`w-5 h-5 inline ${
+                                                showCartMobile ? "rotate-180 group-hover:translate-y-1 " : "group-hover:-translate-y-1 "
+                                            } transition-transform duration-300 ease-out`}
+                                        />{" "}
+                                        Items ({cart.length})
+                                    </button>
+                                    <button onClick={handleClearCart} className="text-red-600 hover:underline">
+                                        Clear all
+                                    </button>
+                                </div>
+                                <div
+                                    className={`overflow-y-auto ${
+                                        showCartMobile ? "max-h-[399px] my-4" : "max-h-0 my-2"
+                                    } transition-all duration-300 ease-in-out`}
+                                >
+                                    <div className="bg-slate-200 rounded-2xl p-4">
+                                        {cart.length === 0 ? (
+                                            <div>Cart is empty</div>
+                                        ) : (
+                                            cart.map((item) => (
+                                                <div className="border-b border-gray-300 border-dashed py-2 last:border-0" key={item.id}>
+                                                    <div className="flex justify-between align-top">
+                                                        <h1 className="font-bold text-xs">{item.name}</h1>
+                                                        <button onClick={() => handleRemoveFromCart(item)} className="hover:scale-105">
+                                                            <TrashIcon className="w-4 h-4 text-red-600" />
+                                                        </button>
+                                                    </div>
+                                                    <div className="flex justify-between items-center my-2">
+                                                        <div className="flex items-center gap-1">
+                                                            <button
+                                                                onClick={() => handleDecrementQuantity(item)}
+                                                                className="active:text-red-500 active:scale-95"
+                                                            >
+                                                                <MinusCircleIcon className="w-5 h-5" />
+                                                            </button>
+                                                            <span className="mx-2">{item.quantity}</span>
+                                                            <button
+                                                                onClick={() => handleIncrementQuantity(item)}
+                                                                className="active:text-red-500 active:scale-95"
+                                                            >
+                                                                <PlusCircleIcon className="w-5 h-5" />
+                                                            </button>
+                                                        </div>
+                                                        {/* <h1 className="text-lg text-gray-700 font-bold">
+                                                    {formatNumber(
+                                                        item.price *
+                                                            item.quantity,
+                                                    )}
+                                                </h1> */}
+                                                        <div>
+                                                            <input
+                                                                type="number"
+                                                                value={item.price}
+                                                                onChange={(e) => handleUpdatePrice(item, e.target.value)}
+                                                                className="w-full text-xs text-end py-1 border border-slate-300 rounded-lg"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <span className="text-xs block text-end text-gray-500">
+                                                        Subtotal: {formatNumber(item.price * item.quantity)}
+                                                    </span>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setIsModalCheckOutOpen(true)}
+                                    className="bg-indigo-600 w-full hover:bg-indigo-500 text-white py-4 px-6 rounded-full flex justify-between items-center"
+                                >
+                                    <span>Checkout</span>
+                                    <div>
+                                        <span className="font-bold text-yellow-200">
+                                            {formatNumber(totalPrice)} <br />
+                                        </span>
+                                    </div>
+                                </button>
+                            </div>
+                        )}
+                        {/* End checkout session mobile */}
                     </div>
                 </div>
             </div>

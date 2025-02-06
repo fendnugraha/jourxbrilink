@@ -32,25 +32,37 @@ const CreateDeposit = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
     };
     return (
         <form>
-            <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Harga jual</Label>
-                <div className="col-span-2">
-                    <Input type="number" placeholder="Rp." value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
+                <div className="col-span-1 sm:col-span-2">
+                    <Input
+                        type="number"
+                        className={"w-full sm:w-1/2 text-xs sm:text-sm"}
+                        placeholder="Rp."
+                        value={formData.price}
+                        onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                    />
                     {errors.price && <span className="text-red-500 text-xs">{errors.price}</span>}
                 </div>
             </div>
-            <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Harga modal</Label>
-                <div className="col-span-2">
-                    <Input type="number" placeholder="Rp." value={formData.cost} onChange={(e) => setFormData({ ...formData, cost: e.target.value })} />
+                <div className="col-span-1 sm:col-span-2">
+                    <Input
+                        type="number"
+                        className={"w-full sm:w-1/2 text-xs sm:text-sm"}
+                        placeholder="Rp."
+                        value={formData.cost}
+                        onChange={(e) => setFormData({ ...formData, cost: e.target.value })}
+                    />
                     {errors.cost && <span className="text-red-500 text-xs">{errors.cost}</span>}
                 </div>
             </div>
-            <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Keterangan</Label>
-                <div className="col-span-2">
+                <div className="col-span-1 sm:col-span-2">
                     <textarea
-                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full rounded-md border text-xs sm:text-sm p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         type="text"
                         placeholder="(Optional)"
                         value={formData.description}

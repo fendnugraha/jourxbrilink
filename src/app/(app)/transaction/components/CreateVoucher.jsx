@@ -76,13 +76,13 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
     };
     return (
         <form>
-            <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Product</Label>
-                <div className="col-span-2">
+                <div className="col-span-1 sm:col-span-2">
                     <select
                         onChange={(e) => setFormData({ ...formData, product_id: e.target.value, qty: 1 })}
                         value={formData.product_id}
-                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full text-xs sm:text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     >
                         <option value="">--Pilih barang--</option>
                         {filteredProducts?.map((product) => (
@@ -94,7 +94,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                     {errors.product_id && <span className="text-red-500 text-xs">{errors.product_id}</span>}
                 </div>
             </div>
-            <div className="my-3 grid grid-cols-3 gap-4 items-center">
+            <div className="my-4 grid grid-cols-3 gap-4 items-center">
                 <Label>Qty</Label>
                 <div className="col-span-2 flex items-center gap-2">
                     <button
@@ -114,11 +114,11 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                     </button>
                 </div>
             </div>
-            <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+            <div className="mb-3 grid grid-cols-3 gap-4 items-center">
                 <Label>Harga</Label>
                 <div className="col-span-1">
                     <Input
-                        className={"w-full"}
+                        className={"w-full text-xs sm:text-sm"}
                         type="number"
                         placeholder="Rp."
                         min="0"
@@ -129,11 +129,11 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                 </div>
                 <span className="text-lg font-bold">Rp. {formatNumber(formData.qty * formData.price)}</span>
             </div>
-            <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Keterangan</Label>
-                <div className="col-span-2">
+                <div className="col-span-1 sm:col-span-2">
                     <textarea
-                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full text-xs sm:text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         type="text"
                         placeholder="(Optional)"
                         value={formData.description}

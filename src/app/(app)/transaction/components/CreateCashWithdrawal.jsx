@@ -44,13 +44,13 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
     return (
         <>
             <form>
-                <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+                <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Ke Rekening</Label>
-                    <div className="col-span-2">
+                    <div className="col-span-1 sm:col-span-2">
                         <select
                             onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })}
                             value={formData.debt_code}
-                            className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="w-full text-xs sm:text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         >
                             <option value="">--Pilih Rekening--</option>
                             {filteredCashBankByWarehouse.map((cashBank) => (
@@ -62,11 +62,11 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                         {errors.debt_code && <span className="text-red-500 text-xs">{errors.debt_code}</span>}
                     </div>
                 </div>
-                <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+                <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Jumlah Penarikan</Label>
                     <div className="col-span-1">
                         <Input
-                            className={"w-full"}
+                            className={"w-full text-xs sm:text-sm"}
                             type="number"
                             placeholder="Rp."
                             value={formData.amount}
@@ -74,13 +74,13 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                         />
                         {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
                     </div>
-                    <h1 className="text-lg font-bold">{formatNumber(formData.amount)}</h1>
+                    <h1 className="textsm sm:text-lg font-bold">{formatNumber(formData.amount)}</h1>
                 </div>
-                <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+                <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Fee (Admin)</Label>
                     <div className="col-span-1">
                         <Input
-                            className={"w-3/4"}
+                            className={"w-full sm:w-3/4 text-xs sm:text-sm"}
                             type="number"
                             placeholder="Rp."
                             value={formData.fee_amount}
@@ -88,13 +88,13 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                         />
                         {errors.fee_amount && <span className="text-red-500 text-xs">{errors.fee_amount}</span>}
                     </div>
-                    <h1 className="text-lg font-bold">{formatNumber(formData.fee_amount)}</h1>
+                    <h1 className="textsm sm:text-lg font-bold">{formatNumber(formData.fee_amount)}</h1>
                 </div>
-                <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+                <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Keterangan</Label>
-                    <div className="col-span-2">
+                    <div className="col-span-1 sm:col-span-2">
                         <textarea
-                            className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="w-full text-xs sm:text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             type="text"
                             placeholder="(Optional)"
                             value={formData.description}

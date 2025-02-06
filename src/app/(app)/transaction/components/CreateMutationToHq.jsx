@@ -37,13 +37,13 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
     };
     return (
         <form>
-            <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Dari (Cabang)</Label>
-                <div className="col-span-2">
+                <div className="col-span-1 sm:col-span-2">
                     <select
                         onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })}
                         value={formData.cred_code}
-                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     >
                         <option value="">--Pilih sumber dana--</option>
                         {branchAccount.map((br) => (
@@ -55,13 +55,13 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                     {errors.cred_code && <span className="text-red-500 text-xs">{errors.cred_code}</span>}
                 </div>
             </div>
-            <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Ke (Pusat)</Label>
-                <div className="col-span-2">
+                <div className="col-span-1 sm:col-span-2">
                     <select
                         onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })}
                         value={formData.debt_code}
-                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     >
                         <option value="">--Pilih tujuan mutasi--</option>
                         {hqAccount.map((hq) => (
@@ -73,25 +73,25 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                     {errors.debt_code && <span className="text-red-500 text-xs">{errors.debt_code}</span>}
                 </div>
             </div>
-            <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Jumlah transfer</Label>
                 <div className="col-span-1">
                     <Input
                         type="number"
-                        className={"w-full"}
+                        className={"w-full text-xs sm:text-sm"}
                         placeholder="Rp."
                         value={formData.amount}
                         onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                     />
                     {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
                 </div>
-                <h1 className="text-lg font-bold">{formatNumber(formData.amount)}</h1>
+                <h1 className="text-sm sm:text-lg font-bold">{formatNumber(formData.amount)}</h1>
             </div>
-            <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Keterangan</Label>
-                <div className="col-span-2">
+                <div className="col-span-1 sm:col-span-2">
                     <textarea
-                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         type="text"
                         placeholder="(Optional)"
                         value={formData.description}

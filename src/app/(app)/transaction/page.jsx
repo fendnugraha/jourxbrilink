@@ -184,13 +184,13 @@ const TransactionPage = () => {
                     <div className="text-white flex justify-between items-center">
                         <button
                             onClick={() => setIsModalCreateTransferOpen(true)}
-                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2"
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2 focus:bg-white focus:text-indigo-600"
                         >
                             <ArrowUpCircleIcon className="w-7 h-7" /> Transfer
                         </button>
                         <button
                             onClick={() => setIsModalCreateCashWithdrawalOpen(true)}
-                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2"
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2 focus:bg-white focus:text-indigo-600"
                         >
                             <ArrowDownCircleIcon className="w-7 h-7" /> Tarik Tunai
                         </button>
@@ -208,7 +208,7 @@ const TransactionPage = () => {
                                 setIsExpenseMenuOpen(!isExpenseMenuOpen);
                                 setIsVoucherMenuOpen(false);
                             }}
-                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2"
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2 focus:bg-white focus:text-indigo-600"
                         >
                             <HandCoinsIcon className="w-7 h-7" /> Biaya
                         </button>

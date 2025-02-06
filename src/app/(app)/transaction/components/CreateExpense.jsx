@@ -53,9 +53,9 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
     };
     return (
         <form>
-            <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Dari Rekening</Label>
-                <div className="col-span-2">
+                <div className="col-span-1 sm:col-span-2">
                     <select
                         onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })}
                         value={formData.debt_code}
@@ -71,9 +71,9 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                     {errors.debt_code && <span className="text-red-500 text-xs">{errors.debt_code}</span>}
                 </div>
             </div>
-            <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Jumlah</Label>
-                <div className="col-span-2">
+                <div className="col-span-1 sm:col-span-2">
                     <Input
                         type="number"
                         placeholder="Rp."
@@ -83,9 +83,9 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                     {errors.fee_amount && <span className="text-red-500 text-xs">{errors.fee_amount}</span>}
                 </div>
             </div>
-            <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Keterangan</Label>
-                <div className="col-span-2">
+                <div className="col-span-1 sm:col-span-2">
                     <textarea
                         className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         type="text"

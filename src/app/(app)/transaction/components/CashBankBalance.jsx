@@ -7,25 +7,26 @@ const CashBankBalance = ({ accountBalance, isValidating }) => {
     const summarizeBalance = accountBalance?.data?.reduce((total, account) => total + account.balance, 0);
     const [showBalances, setShowBalances] = useState(true);
     return (
-        <div>
+        <div className="relative">
+            {isValidating && (
+                <div className="absolute top-0 left-2">
+                    <LoaderCircle className="w-4 h-4 inline animate-spin" />
+                </div>
+            )}
             <div className="flex justify-center items-center flex-col bg-amber-400 hover:bg-amber-300 py-4 rounded-t-2xl text-slate-800 shadow-lg">
-                {!isValidating ? (
+                {accountBalance?.data?.length > 0 ? (
                     <>
                         <h1 className="text-xs">Total Saldo Kas & Bank</h1>
                         <h1 className="text-2xl font-black">{formatNumber(summarizeBalance ?? 0)}</h1>
                     </>
                 ) : (
-                    <>
-                        <span className="font-normal text-sm">
-                            Loading... <LoaderCircle className="w-4 h-4 inline animate-spin" />
-                        </span>
-                    </>
+                    <span className="font-normal text-sm">Loading...</span>
                 )}
             </div>
 
             <div
                 className={`bg-indigo-500 px-2 transform ${
-                    showBalances ? "opacity-100 scale-y-100 max-h-[500px] overflow-auto" : "opacity-0 scale-y-0 max-h-0 "
+                    showBalances ? "opacity-100 scale-y-100 max-h-[700px]" : "opacity-0 scale-y-0 max-h-0 "
                 } origin-top transition-all duration-300 ease-in-out`}
             >
                 {accountBalance?.data?.map((account) => (

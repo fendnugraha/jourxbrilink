@@ -192,7 +192,8 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                                 <tr key={index} className="hover:bg-slate-100">
                                     <td>
                                         <span className="text-xs text-slate-500 block">
-                                            #{journal.id} {journal.invoice} | {formatDateTime(journal.created_at)}
+                                            #{journal.id} {formatDateTime(journal.created_at)}{" "}
+                                            <span className="font-bold hidden sm:inline">{journal.invoice}</span>
                                         </span>
                                         Note: {journal.description}
                                         <span className="font-bold text-xs block">
@@ -212,7 +213,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                                         </span>
                                         {journal.fee_amount !== 0 && <span className="text-xs text-blue-600 block">{formatNumber(journal.fee_amount)}</span>}
                                     </td>
-                                    <td className="hidden sm:table-cell">
+                                    <td className="">
                                         <div className="flex justify-center gap-3">
                                             <button
                                                 className=" hover:scale-125 transtition-all duration-200"

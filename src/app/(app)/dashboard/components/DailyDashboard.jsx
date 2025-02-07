@@ -110,9 +110,9 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
             >
                 <RefreshCcwIcon className="w-5 h-5" />
             </button>
-            <div className="min-h-[28rem] grid grid-cols-1 sm:grid-cols-5 sm:grid-rows-4 gap-1 sm:gap-3">
+            <div className="min-h-[28rem] grid grid-cols-1 sm:grid-cols-5 sm:grid-rows-4 gap-1 sm:gap-3 px-1 sm:px-0">
                 <div
-                    className={`bg-gray-800 w-full h-full p-3 rounded-lg sm:rounded-3xl flex flex-col gap-6 items-center justify-center col-span-2 row-span-2 ${
+                    className={`bg-gray-700 w-full h-full p-3 rounded-2xl sm:rounded-3xl flex flex-col gap-2 sm:gap-4 items-center justify-center col-span-2 row-span-2 ${
                         isLoading ? "animate-pulse" : ""
                     }`}
                 >
@@ -142,7 +142,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                     </div>
                 </div>
                 <div
-                    className={`bg-gray-800 w-full h-full p-3 rounded-lg sm:rounded-3xl flex flex-col gap-2 items-center justify-center col-span-2 row-span-2 ${
+                    className={`bg-gray-700 w-full h-full p-3 rounded-2xl sm:rounded-3xl flex flex-col gap-2 items-center justify-center col-span-2 row-span-2 ${
                         isLoading ? "animate-pulse" : ""
                     } `}
                 >
@@ -164,7 +164,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                     </div>
                 </div>
                 <div
-                    className={`bg-violet-700 rounded-lg sm:rounded-3xl w-full h-full p-3 flex flex-col gap-1 items-center justify-center ${
+                    className={`bg-violet-500 rounded-2xl sm:rounded-3xl w-full h-full p-3 flex flex-col gap-1 items-center justify-center ${
                         isLoading ? "animate-pulse" : ""
                     }`}
                 >
@@ -184,7 +184,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                     </h1>
                 </div>
                 <div
-                    className={`bg-orange-500 rounded-lg sm:rounded-3xl w-full h-full p-3 flex flex-col gap-1 items-center justify-center ${
+                    className={`bg-orange-500 rounded-2xl sm:rounded-3xl w-full h-full p-3 flex flex-col gap-1 items-center justify-center ${
                         isLoading ? "animate-pulse" : ""
                     }`}
                 >
@@ -194,7 +194,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                     </h1>
                 </div>
                 <div
-                    className={`bg-gray-800 w-full h-full p-3 rounded-lg sm:rounded-3xl flex flex-col gap-4 sm:gap-6 items-center justify-center col-span-2 row-span-2 ${
+                    className={`bg-gray-700 w-full h-full p-3 rounded-2xl sm:rounded-3xl flex flex-col gap-2 sm:gap-6 items-center justify-center col-span-2 row-span-2 ${
                         isLoading ? "animate-pulse" : ""
                     }`}
                 >
@@ -220,7 +220,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                     </div>
                 </div>
                 <div
-                    className={`bg-gray-800 w-full h-full p-3 rounded-lg sm:rounded-3xl flex flex-col gap-2 items-center justify-center col-span-2 row-span-2 ${
+                    className={`bg-gray-700 w-full h-full p-3 rounded-2xl sm:rounded-3xl flex flex-col gap-2 items-center justify-center col-span-2 row-span-2 ${
                         isLoading ? "animate-pulse" : ""
                     } `}
                 >
@@ -230,7 +230,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                     </h1>
                 </div>
                 <div
-                    className={`bg-red-600 rounded-lg sm:rounded-3xl w-full h-full p-3 flex flex-col gap-1 items-center justify-center ${
+                    className={`bg-red-500 rounded-2xl sm:rounded-3xl w-full h-full p-3 flex flex-col gap-1 items-center justify-center ${
                         isLoading ? "animate-pulse" : ""
                     }`}
                 >
@@ -244,7 +244,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                     </h1>
                 </div>
                 <div
-                    className={`bg-gray-700 rounded-lg sm:rounded-3xl w-full h-full p-3 flex flex-col gap-1 items-center justify-center ${
+                    className={`bg-blue-500 rounded-2xl sm:rounded-3xl w-full h-full p-3 flex flex-col gap-1 items-center justify-center ${
                         isLoading ? "animate-pulse" : ""
                     }`}
                 >

@@ -248,9 +248,12 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                         <tfoot>
                             <tr>
                                 <th>
-                                    Total <span className="font-bold">{formatNumber(accountBalance.reduce((sum, acc) => sum + acc.balance, 0))}</span>
+                                    Total{" "}
+                                    <span className="font-bold text-blue-500">{formatNumber(accountBalance.reduce((sum, acc) => sum + acc.balance, 0))}</span>
                                 </th>
-                                <th className="text-end font-bold">{formatNumber(accountBalance.reduce((sum, acc) => sum + acc.balance, 0))}</th>
+                                <th className="text-end font-bold hidden sm:table-cell">
+                                    {formatNumber(accountBalance.reduce((sum, acc) => sum + acc.balance, 0))}
+                                </th>
                                 <th className="text-end">{formatNumber(mutationInSum)}</th>
                                 <th className="text-end">{formatNumber(mutationOutSum)}</th>
                             </tr>

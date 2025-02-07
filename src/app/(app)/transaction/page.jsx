@@ -133,7 +133,7 @@ const TransactionPage = () => {
     }, []); // Include startDate and endDate in the dependency array
 
     useEffect(() => {
-        mutate(`/api/get-cash-bank-balance/${selectedWarehouseId}`);
+        mutate(`/api/get-cash-bank-balance/${selectedWarehouseId}/${endDate}`);
     }, [journalsByWarehouse]);
 
     const fetchCashBank = async () => {
@@ -352,7 +352,7 @@ const TransactionPage = () => {
                                     user={user}
                                 />
                             </div>
-                            <div className="order-1 sm:order-2">
+                            <div className="order-1 sm:order-2 px-2 sm:px-0">
                                 <CashBankBalance warehouse={warehouse} accountBalance={accountBalance} isValidating={isValidating} />
                             </div>
                         </div>

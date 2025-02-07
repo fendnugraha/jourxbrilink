@@ -6,7 +6,7 @@ import Input from "@/components/Input";
 
 const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notification, fetchJournalsByWarehouse }) => {
     const [formData, setFormData] = useState({
-        debt_code: 49,
+        debt_code: 46,
         cred_code: "",
         amount: "",
         fee_amount: "",

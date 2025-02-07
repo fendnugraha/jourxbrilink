@@ -245,7 +245,7 @@ const TransactionPage = () => {
                                 trigger={
                                     <button className="bg-green-600 text-sm hover:bg-green-700 text-white py-2 px-6 rounded-lg group">
                                         Voucher & Deposit
-                                        <ChevronRightIcon size={18} className="inline group-hover:rotate-90 transition-transform duration-200" />
+                                        <ChevronRightIcon size={18} className="inline group-hover:rotate-90 transition-transform delay-300 duration-200" />
                                     </button>
                                 }
                                 align="left"
@@ -267,7 +267,7 @@ const TransactionPage = () => {
                                 trigger={
                                     <button className="bg-red-600 text-sm hover:bg-red-700 text-white py-2 px-6 rounded-lg group">
                                         Pengeluaran (Biaya){" "}
-                                        <ChevronRightIcon size={18} className="inline group-hover:rotate-90 transition-transform duration-200" />
+                                        <ChevronRightIcon size={18} className="inline group-hover:rotate-90 delay-300 transition-transform duration-200" />
                                     </button>
                                 }
                                 align="left"

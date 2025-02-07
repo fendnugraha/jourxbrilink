@@ -75,7 +75,8 @@ const LoginPage = () => {
                 </button>
             </form>
             <p className="text-center mt-6 text-xs">
-                &copy; 2022 Jour Apps by <Image src="/eightnite.png" alt="Logo" width={75} height={75} className="inline-block" /> All rights reserved
+                &copy; 2022 Jour Apps by <Image src="/eightnite.png" alt="Logo" width={60} height={60} className="inline-block mx-1 w-auto" /> All rights
+                reserved
             </p>
         </div>
     );

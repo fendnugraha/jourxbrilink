@@ -1,16 +1,26 @@
 "use client";
 import formatNumber from "@/libs/formatNumber";
-import { ChevronDown, LoaderIcon, Settings } from "lucide-react";
+import { ChevronDown, LoaderCircle } from "lucide-react";
 import { useState } from "react";
 
-const CashBankBalance = ({ accountBalance }) => {
+const CashBankBalance = ({ accountBalance, isValidating }) => {
     const summarizeBalance = accountBalance?.data?.reduce((total, account) => total + account.balance, 0);
     const [showBalances, setShowBalances] = useState(true);
     return (
         <div>
             <div className="flex justify-center items-center flex-col bg-amber-400 hover:bg-amber-300 py-4 rounded-t-2xl text-slate-800 shadow-lg">
-                <h1 className="text-xs">Total Saldo Kas & Bank</h1>
-                <h1 className="text-2xl font-black">{formatNumber(summarizeBalance ?? 0)}</h1>
+                {!isValidating ? (
+                    <>
+                        <h1 className="text-xs">Total Saldo Kas & Bank</h1>
+                        <h1 className="text-2xl font-black">{formatNumber(summarizeBalance ?? 0)}</h1>
+                    </>
+                ) : (
+                    <>
+                        <span className="font-normal text-sm">
+                            Loading... <LoaderCircle className="w-4 h-4 inline animate-spin" />
+                        </span>
+                    </>
+                )}
             </div>
 
             <div
@@ -30,7 +40,11 @@ const CashBankBalance = ({ accountBalance }) => {
                     </div>
                 ))}
             </div>
-            <button onClick={() => setShowBalances(!showBalances)} className="bg-indigo-500 hover:bg-indigo-600 w-full pb-1 rounded-b-2xl shadow-md text-white">
+            <button
+                onClick={() => setShowBalances(!showBalances)}
+                className="bg-indigo-500 hover:bg-indigo-600 w-full pb-1 rounded-b-2xl shadow-md text-white disabled:bg-indigo-100"
+                disabled={accountBalance?.data?.length === 0}
+            >
                 <ChevronDown className={`w-4 h-4 inline ${showBalances ? "rotate-180" : ""} transition delay-500 ease-in-out`} />
             </button>
         </div>

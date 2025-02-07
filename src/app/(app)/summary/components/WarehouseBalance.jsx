@@ -89,7 +89,7 @@ const WarehouseBalance = () => {
                             </tr>
                         ) : (
                             warehouseBalance.warehouse?.map((w, i) => (
-                                <tr className="" key={i}>
+                                <tr className="hover:bg-gray-100" key={i}>
                                     <td className="">{w.name}</td>
                                     <td className="text-end">{formatNumber(w.cash)}</td>
                                     <td className="text-end">{formatNumber(w.bank)}</td>

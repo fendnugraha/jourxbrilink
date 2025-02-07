@@ -17,17 +17,7 @@ import CreateBankAdminFee from "./components/CreateBankAdminFee";
 import CreateExpense from "./components/CreateExpense";
 import CashBankBalance from "./components/CashBankBalance";
 import Loading from "../loading";
-import {
-    ArrowDownCircleIcon,
-    ArrowUpCircleIcon,
-    ChevronDownIcon,
-    ChevronRightIcon,
-    CoinsIcon,
-    HandCoinsIcon,
-    PlusCircleIcon,
-    ShoppingBagIcon,
-    TicketIcon,
-} from "lucide-react";
+import { ArrowDownCircleIcon, ArrowUpCircleIcon, ChevronRightIcon, HandCoinsIcon, ShoppingBagIcon } from "lucide-react";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -39,12 +29,12 @@ const getCurrentDate = () => {
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
-const useCashBankBalance = (selectedWarehouseId) => {
+const useCashBankBalance = (selectedWarehouseId, endDate) => {
     const {
         data: accountBalance,
         error,
         isValidating,
-    } = useSWR(selectedWarehouseId ? `/api/get-cash-bank-balance/${selectedWarehouseId}` : null, fetcher, {
+    } = useSWR(selectedWarehouseId ? `/api/get-cash-bank-balance/${selectedWarehouseId}/${endDate}` : null, fetcher, {
         revalidateOnFocus: true, // Refetch data when the window is focused
         dedupingInterval: 60000, // Avoid duplicate requests for the same data within 1 minute
         fallbackData: [], // Optional: you can specify default data here while it's loading
@@ -74,8 +64,7 @@ const TransactionPage = () => {
     const [isModalCreateBankAdminFeeOpen, setIsModalCreateBankAdminFeeOpen] = useState(false);
     const [isModalCreateMutationToHqOpen, setIsModalCreateMutationToHqOpen] = useState(false);
     const [notification, setNotification] = useState("");
-    const getDailyDashboard = () => JSON.parse(localStorage.getItem("dailyDashboard")) || [];
-    const [dailyDashboard, setDailyDashboard] = useState(getDailyDashboard);
+    const [endDate, setEndDate] = useState(getCurrentDate());
 
     const [isVoucherMenuOpen, setIsVoucherMenuOpen] = useState(false);
     const [isExpenseMenuOpen, setIsExpenseMenuOpen] = useState(false);
@@ -108,7 +97,7 @@ const TransactionPage = () => {
     };
     const warehouse = user.role?.warehouse_id;
     const [selectedWarehouseId, setSelectedWarehouseId] = useState(warehouse);
-    const { accountBalance, loading: balanceLoading, error } = useCashBankBalance(selectedWarehouseId);
+    const { accountBalance, error: accountBalanceError, loading: isValidating } = useCashBankBalance(selectedWarehouseId, endDate);
 
     const [warehouses, setWarehouses] = useState([]);
     const fetchWarehouses = async (url = "/api/get-all-warehouses") => {
@@ -161,7 +150,6 @@ const TransactionPage = () => {
     }, []);
 
     const filteredCashBankByWarehouse = cashBank.filter((cashBank) => cashBank.warehouse_id === selectedWarehouseId);
-
     return (
         <>
             <Header title="Transaction" />
@@ -365,7 +353,7 @@ const TransactionPage = () => {
                                 />
                             </div>
                             <div className="order-1 sm:order-2">
-                                <CashBankBalance warehouse={warehouse} accountBalance={accountBalance} />
+                                <CashBankBalance warehouse={warehouse} accountBalance={accountBalance} isValidating={isValidating} />
                             </div>
                         </div>
                     </div>

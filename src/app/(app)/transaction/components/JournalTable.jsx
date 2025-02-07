@@ -152,6 +152,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
 
                             setIsModalFilterJournalOpen(false);
                             setSelectedAccount("");
+                            setCurrentPage(1);
                         }}
                         className="btn-primary"
                     >

@@ -1,22 +1,8 @@
 import NavLink from "@/components/NavLink";
 import { useAuth } from "@/libs/auth";
-import {
-    BarChart,
-    ChartAreaIcon,
-    CogIcon,
-    CoinsIcon,
-    DockIcon,
-    LandmarkIcon,
-    LogOutIcon,
-    MapIcon,
-    MapPinnedIcon,
-    MenuIcon,
-    ShoppingBag,
-    StoreIcon,
-    User2Icon,
-} from "lucide-react";
+import { ArrowRightLeftIcon, ChartAreaIcon, CircleDollarSignIcon, CogIcon, LayoutDashboardIcon, LogOutIcon, MenuIcon, StoreIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { use, useState } from "react";
+import { useState } from "react";
 
 const Navigation = ({ user }) => {
     const { logout } = useAuth();
@@ -53,7 +39,7 @@ const Navigation = ({ user }) => {
                     <div className=" text-sm mt-4">
                         <NavLink href="/dashboard" isOpen={isOpen} active={pathname === "/dashboard"}>
                             <div className="">
-                                <ChartAreaIcon className="w-5 h-5" />
+                                <LayoutDashboardIcon className="w-5 h-5" />
                             </div>
                             <span
                                 className={`transition-all duration-300 ease-in-out transform text-nowrap ${
@@ -66,7 +52,7 @@ const Navigation = ({ user }) => {
                         </NavLink>
                         <NavLink href="/transaction" isOpen={isOpen} active={pathname === "/transaction"}>
                             <div>
-                                <ShoppingBag className="w-5 h-5" />
+                                <ArrowRightLeftIcon className="w-5 h-5" />
                             </div>
                             <span
                                 className={`transition-all duration-300 ease-in-out transform text-nowrap ${
@@ -94,7 +80,7 @@ const Navigation = ({ user }) => {
                             <>
                                 <NavLink href="/finance" isOpen={isOpen} active={pathname === "/finance"}>
                                     <div>
-                                        <LandmarkIcon className="w-5 h-5" />
+                                        <CircleDollarSignIcon className="w-5 h-5" />
                                     </div>
                                     <span
                                         className={`transition-all duration-300 ease-in-out transform text-nowrap ${
@@ -107,7 +93,7 @@ const Navigation = ({ user }) => {
                                 </NavLink>
                                 <NavLink href="/summary" isOpen={isOpen} active={pathname === "/summary"}>
                                     <div>
-                                        <BarChart className="w-5 h-5" />
+                                        <ChartAreaIcon className="w-5 h-5" />
                                     </div>
                                     <span
                                         className={`transition-all duration-300 ease-in-out transform text-nowrap ${

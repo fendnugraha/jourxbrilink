@@ -112,7 +112,7 @@ const RevenueReport = () => {
                             </tr>
                         ) : (
                             revenue.revenue?.map((item, index) => (
-                                <tr key={index}>
+                                <tr key={index} className="hover:bg-gray-100">
                                     <td className="">{item.warehouse}</td>
                                     <td className="text-end">{formatNumber(item.transfer)}</td>
                                     <td className="text-end">{formatNumber(item.tarikTunai)}</td>

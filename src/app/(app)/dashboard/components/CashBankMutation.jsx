@@ -52,7 +52,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
     const [accountBalance, setAccountBalance] = useState([]);
     const getAccountBalance = async () => {
         try {
-            const response = await axios.get(`/api/get-cash-bank-balance/${selectedWarehouse}`);
+            const response = await axios.get(`/api/get-cash-bank-balance/${selectedWarehouse}/${endDate}`);
             setAccountBalance(response.data.data);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);

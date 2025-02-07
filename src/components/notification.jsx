@@ -30,7 +30,7 @@ const Notification = ({ type = "success", notification, onClose }) => {
     }
 
     return (
-        <div className={`${notificationStyles} fixed top-5 right-5 sm:right-8 z-[1000] rounded-xl px-4 py-2 shadow-lg`}>
+        <div className={`${notificationStyles} fixed w-full sm:w-fit top-5 sm:right-8 z-[1000] rounded-xl px-4 py-2 shadow-lg`}>
             <div className="flex items-center gap-4">
                 <div className="py-1">
                     {/* <svg className={`fill-current h-6 w-5 text-white mr-4`} viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

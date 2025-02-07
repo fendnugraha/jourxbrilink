@@ -67,13 +67,13 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
     };
     return (
         <div>
-            <div className="px-4 mb-4 flex justify-start items-center gap-2 w-full">
+            <div className="px-4 flex justify-between gap-2">
                 <select
                     onChange={(e) => {
                         setItemsPerPage(Number(e.target.value));
                         setCurrentPage(1);
                     }}
-                    className="rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    className="rounded-md hidden sm:block border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 >
                     <option value={5}>5</option>
                     <option value={10}>10</option>

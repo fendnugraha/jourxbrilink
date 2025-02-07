@@ -23,7 +23,7 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
         setLoading(true);
         try {
             const response = await axios.post("/api/create-transfer", formData);
-            notification(response.data.message);
+            notification("error", response.data.message);
             setFormData({
                 debt_code: formData.debt_code,
                 cred_code: user.role.warehouse.chart_of_account_id,

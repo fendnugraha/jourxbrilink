@@ -14,7 +14,7 @@ const CashBankBalance = ({ accountBalance }) => {
             </div>
 
             <div
-                className={`bg-indigo-500 px-2 shadow-lg transform ${
+                className={`bg-indigo-500 px-2 transform ${
                     showBalances ? "opacity-100 scale-y-100 max-h-[500px] overflow-auto" : "opacity-0 scale-y-0 max-h-0 "
                 } origin-top transition-all duration-300 ease-in-out`}
             >
@@ -30,7 +30,7 @@ const CashBankBalance = ({ accountBalance }) => {
                     </div>
                 ))}
             </div>
-            <button onClick={() => setShowBalances(!showBalances)} className="bg-indigo-500 hover:bg-indigo-600 w-full pb-1 rounded-b-2xl text-white">
+            <button onClick={() => setShowBalances(!showBalances)} className="bg-indigo-500 hover:bg-indigo-600 w-full pb-1 rounded-b-2xl shadow-md text-white">
                 <ChevronDown className={`w-4 h-4 inline ${showBalances ? "rotate-180" : ""} transition delay-500 ease-in-out`} />
             </button>
         </div>

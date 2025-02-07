@@ -239,7 +239,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                         {loading ? (
                             <LoaderIcon className="animate-pulse" />
                         ) : (
-                            formatNumber(dailyDashboard?.data?.totalExpense < 0 ? data?.totalExpense * -1 : 0)
+                            formatNumber(dailyDashboard?.data?.totalExpense < 0 ? dailyDashboard?.data?.totalExpense * -1 : 0)
                         )}
                     </h1>
                 </div>

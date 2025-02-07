@@ -18,11 +18,14 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
     const [errors, setErrors] = useState([]);
 
     const fetchProducts = async () => {
+        setLoading(true);
         try {
             const response = await axios.get("/api/get-all-products");
             setProducts(response.data.data);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -64,7 +67,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
             fetchJournalsByWarehouse();
             setFormData({
                 product_id: "",
-                qty: 1,
+                qty: 0,
                 price: 0,
                 description: "",
             });
@@ -82,6 +85,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                     <select
                         onChange={(e) => setFormData({ ...formData, product_id: e.target.value, qty: 1 })}
                         value={formData.product_id}
+                        disabled={loading}
                         className="w-full text-xs sm:text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     >
                         <option value="">--Pilih barang--</option>
@@ -127,7 +131,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                     />
                     {errors.price && <span className="text-red-500 text-xs">{errors.price}</span>}
                 </div>
-                <span className="text-lg font-bold">Rp. {formatNumber(formData.qty * formData.price)}</span>
+                <span className="text-sm sm:text-lg font-bold">Rp. {formatNumber(formData.qty * formData.price)}</span>
             </div>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Keterangan</Label>
@@ -142,7 +146,11 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                     {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                 </div>
             </div>
-            <button onClick={handleSubmit} className="bg-indigo-500 hover:bg-indigo-600 rounded-xl px-8 py-3 text-white" disabled={loading}>
+            <button
+                onClick={handleSubmit}
+                className="bg-indigo-500 hover:bg-indigo-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
+                disabled={loading}
+            >
                 {loading ? "Loading..." : "Simpan"}
             </button>
         </form>

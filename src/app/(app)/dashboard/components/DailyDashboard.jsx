@@ -132,7 +132,11 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                         <div>
                             <h4 className="text-xs text-yellow-400">Total Kas & Bank</h4>
                             <h1 className="text-sm font-bold text-white">
-                                {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(dailyDashboard?.data?.totalCash + data?.totalBank)}
+                                {isLoading ? (
+                                    <LoaderIcon className="animate-pulse" />
+                                ) : (
+                                    formatNumber(dailyDashboard?.data?.totalCash + dailyDashboard?.data?.totalBank)
+                                )}
                             </h1>
                         </div>
                     </div>
@@ -169,7 +173,13 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                         {loading ? (
                             <LoaderIcon className="animate-pulse" />
                         ) : (
-                            formatNumber(dailyDashboard?.data?.totalCashDeposit + data?.profit + data?.totalCash + data?.totalVoucher + data?.totalAccessories)
+                            formatNumber(
+                                dailyDashboard?.data?.totalCashDeposit +
+                                    dailyDashboard?.data?.profit +
+                                    dailyDashboard?.data?.totalCash +
+                                    dailyDashboard?.data?.totalVoucher +
+                                    dailyDashboard?.data?.totalAccessories
+                            )
                         )}
                     </h1>
                 </div>

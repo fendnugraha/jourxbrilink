@@ -10,6 +10,7 @@ const LoginPage = () => {
     const [errors, setErrors] = useState([]);
     const [status, setStatus] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
     const router = useRouter();
     const { login } = useAuth({
         middleware: "guest",
@@ -26,16 +27,8 @@ const LoginPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
-        try {
-            await login({ email, password, setErrors, setStatus });
-        } catch (error) {
-            setErrors(error.response?.data?.errors || ["Something went wrong."]);
-        } finally {
-            setLoading(false);
-        }
+        await login({ email, password, setErrors, setStatus, setMessage, setLoading });
     };
-
     return (
         <div className="bg-white p-6 rounded-2xl shadow-2xl w-full sm:w-[400px] md:1/3">
             <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Login to Your Account</h2>
@@ -68,10 +61,10 @@ const LoginPage = () => {
                 </div>
                 <button
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || message === "Login successful!"}
                     className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    {loading ? "Loging in ..." : "Login"}
+                    {loading || message === "Login successful!" ? "Loging in ..." : "Login"}
                 </button>
             </form>
             <p className="text-center mt-6 text-xs">

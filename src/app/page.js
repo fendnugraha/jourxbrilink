@@ -8,9 +8,10 @@ export default function Home() {
             style={{ backgroundImage: "url('/bg.jpg')", backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center" }}
         >
             <div className="absolute top-4 left-4 flex justify-center items-center gap-2">
-                <Image src="/jour-logo.svg" alt="Logo" width={50} height={50} /> <h1 className="text-lg">Jour Apps x BRIlink</h1>
+                <Image src="/jour-logo.svg" alt="Logo" width={50} height={50} className="drop-shadow-lg" />{" "}
+                <h1 className="text-lg text-white drop-shadow-lg">Jour Apps x BRIlink</h1>
             </div>
-            <h1 className="text-4xl sm:text-7xl text-white font-bold mb-4">
+            <h1 className="text-5xl sm:text-7xl text-slate-400 drop-shadow-lg font-bold mb-4">
                 THREE <span className="font-normal">KOMUNIKA</span>
             </h1>
             <LoginLinks />

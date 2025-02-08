@@ -56,7 +56,6 @@ const MutationHistory = ({ account }) => {
     const handleChangePage = (url) => {
         fetchMutation(url);
     };
-    console.log(mutation.journals?.last_page);
     return (
         <div className="bg-white rounded-lg mb-3 relative">
             <div className="p-4">

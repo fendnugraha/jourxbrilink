@@ -17,7 +17,15 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
             .get("/api/user")
             .then((res) => res.data)
             .catch((error) => {
-                if (error.response.status !== 409) throw error;
+                // Avoid logging the 401 error to the console
+                if (error.response && error.response.status === 401) {
+                    return null; // Return null or handle the case as needed
+                }
+
+                // If it's any other error, throw it
+                if (error.response && error.response.status !== 409) {
+                    throw error;
+                }
 
                 router.push("/");
             })
@@ -25,7 +33,8 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
     const csrf = () => axios.get("/sanctum/csrf-cookie");
 
-    const login = async ({ setErrors, setStatus, ...props }) => {
+    const login = async ({ setErrors, setStatus, setMessage, setLoading, ...props }) => {
+        setLoading(true); // Set loading state to true before login starts
         await csrf();
 
         setErrors([]);
@@ -33,10 +42,18 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
         axios
             .post("/login", props)
-            .then(() => mutate())
-            .catch((error) => {
-                if (error.response.status !== 422) throw error;
+            .then(() => {
+                mutate();
+                setMessage("Login successful!");
+                setLoading(false); // Set loading state to false once login is successful
 
+                // Add your routing logic here, for example:
+                // history.push("/dashboard"); // if using react-router
+            })
+            .catch((error) => {
+                setLoading(false); // Set loading state to false if an error occurs
+                if (error.response.status !== 422) throw error;
+                setStatus(error.response.status);
                 setErrors(error.response.data.errors);
             });
     };

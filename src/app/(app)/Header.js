@@ -1,7 +1,17 @@
 "use client";
 
 import ResponsiveNavLink, { ResponsiveNavButton } from "@/components/ResponsiveNavLink";
-import { MenuIcon, TrophyIcon } from "lucide-react";
+import {
+    MenuIcon,
+    TrophyIcon,
+    ChartAreaIcon,
+    CircleDollarSignIcon,
+    CirclePowerIcon,
+    CogIcon,
+    LayoutDashboardIcon,
+    StoreIcon,
+    ArrowRightLeftIcon,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/libs/auth";
 import { useEffect, useState } from "react";
@@ -52,36 +62,38 @@ const Header = ({ title }) => {
                 <ul className="space-y-2">
                     <li className="">
                         <ResponsiveNavLink href="/dashboard" active={usePathname() === "/dashboard"}>
-                            Dashboard
+                            <LayoutDashboardIcon size={20} className="mr-2 inline" /> Dashboard
                         </ResponsiveNavLink>
                     </li>
                     <li className="">
                         <ResponsiveNavLink href="/transaction" active={usePathname() === "/transaction"}>
-                            Transaction
+                            <ArrowRightLeftIcon size={20} className="mr-2 inline" /> Transaction
                         </ResponsiveNavLink>
                     </li>
                     <li className="">
                         <ResponsiveNavLink href="/store" active={usePathname() === "/store"}>
-                            Store
+                            <StoreIcon size={20} className="mr-2 inline" /> Store
                         </ResponsiveNavLink>
                     </li>
                     <li className="">
                         <ResponsiveNavLink href="/finance" active={usePathname() === "/finance"}>
-                            Finance
+                            <CircleDollarSignIcon size={20} className="mr-2 inline" /> Finance
                         </ResponsiveNavLink>
                     </li>
                     <li className="">
                         <ResponsiveNavLink href="/summary" active={usePathname() === "/summary"}>
-                            Summary
+                            <ChartAreaIcon size={20} className="mr-2 inline" /> Summary
                         </ResponsiveNavLink>
                     </li>
                     <li className="border-t py-2">
                         <ResponsiveNavLink href="/setting" active={usePathname().startsWith("/setting")}>
-                            Setting
+                            <CogIcon size={20} className="mr-2 inline" /> Setting
                         </ResponsiveNavLink>
                     </li>
                     <li className="border-t py-4">
-                        <ResponsiveNavButton onClick={logout}>Logout</ResponsiveNavButton>
+                        <ResponsiveNavButton onClick={logout}>
+                            <CirclePowerIcon size={20} className="mr-2 inline" /> Logout
+                        </ResponsiveNavButton>
                     </li>
                 </ul>
             </div>

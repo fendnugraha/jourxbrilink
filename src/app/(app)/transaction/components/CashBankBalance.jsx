@@ -43,7 +43,7 @@ const CashBankBalance = ({ accountBalance, isValidating }) => {
             </div>
             <button
                 onClick={() => setShowBalances(!showBalances)}
-                className="bg-indigo-500 hover:bg-indigo-600 w-full pb-1 rounded-b-2xl shadow-md text-white disabled:bg-indigo-100"
+                className="bg-indigo-400 hover:bg-indigo-500 w-full pb-1 rounded-b-2xl shadow-md text-white disabled:bg-indigo-100"
                 disabled={accountBalance?.data?.length === 0}
             >
                 <ChevronDown className={`w-4 h-4 inline ${showBalances ? "rotate-180" : ""} transition delay-500 ease-in-out`} />

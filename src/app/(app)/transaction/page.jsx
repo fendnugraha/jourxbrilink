@@ -156,26 +156,26 @@ const TransactionPage = () => {
             <div className="py-8 relative">
                 <div ref={menuRef} className="fixed sm:hidden bottom-0 w-full z-[999]">
                     <div className={`text-white shadow-xl ${!isVoucherMenuOpen ? "hidden" : "flex flex-col justify-between items-center"}`}>
-                        <button onClick={() => setIsModalCreateVoucherOpen(true)} className="bg-white w-full text-slate-600 p-4 border-t hover:bg-slate-200">
-                            Voucher
+                        <button onClick={() => setIsModalCreateVoucherOpen(true)} className="bg-indigo-400 w-full text-white p-4 border-t hover:bg-slate-200">
+                            Penjualan Voucher
                         </button>
-                        <button onClick={() => setIsModalCreateDepositOpen(true)} className="bg-white w-full text-slate-600 p-4 border-t hover:bg-slate-200">
-                            Deposit
+                        <button onClick={() => setIsModalCreateDepositOpen(true)} className="bg-indigo-400 w-full text-white p-4 border-t hover:bg-slate-200">
+                            Input Deposit
                         </button>
                     </div>
                     <div className={`text-white ${!isExpenseMenuOpen ? "hidden" : "flex flex-col justify-between items-center"}`}>
                         <button
                             onClick={() => setIsModalCreateMutationToHqOpen(true)}
-                            className="bg-white w-full text-slate-600 p-4 border-t hover:bg-slate-200"
+                            className="bg-indigo-400 w-full text-white p-4 border-t hover:bg-slate-200"
                         >
                             Pengembailan Saldo
                         </button>
-                        <button onClick={() => setIsModalCreateExpenseOpen(true)} className="bg-white w-full text-slate-600 p-4 border-t hover:bg-slate-200">
+                        <button onClick={() => setIsModalCreateExpenseOpen(true)} className="bg-indigo-400 w-full text-white p-4 border-t hover:bg-slate-200">
                             Biaya Operasional
                         </button>
                         <button
                             onClick={() => setIsModalCreateBankAdminFeeOpen(true)}
-                            className="bg-white w-full text-slate-600 p-4 border-t hover:bg-slate-200"
+                            className="bg-indigo-400 w-full text-white p-4 border-t hover:bg-slate-200"
                         >
                             Biaya Admin Bank
                         </button>
@@ -183,13 +183,13 @@ const TransactionPage = () => {
                     <div className="text-white flex justify-between items-center">
                         <button
                             onClick={() => setIsModalCreateTransferOpen(true)}
-                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2 focus:bg-white focus:text-indigo-600"
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2 focus:bg-indigo-500"
                         >
                             <ArrowUpCircleIcon className="w-7 h-7" /> Transfer
                         </button>
                         <button
                             onClick={() => setIsModalCreateCashWithdrawalOpen(true)}
-                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2 focus:bg-white focus:text-indigo-600"
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2 focus:bg-indigo-500"
                         >
                             <ArrowDownCircleIcon className="w-7 h-7" /> Tarik Tunai
                         </button>
@@ -198,7 +198,7 @@ const TransactionPage = () => {
                                 setIsVoucherMenuOpen(!isVoucherMenuOpen);
                                 setIsExpenseMenuOpen(false);
                             }}
-                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2 focus:bg-white focus:text-indigo-600"
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2 focus:bg-indigo-500"
                         >
                             <ShoppingBagIcon className="w-7 h-7" /> Voucher
                         </button>
@@ -207,7 +207,7 @@ const TransactionPage = () => {
                                 setIsExpenseMenuOpen(!isExpenseMenuOpen);
                                 setIsVoucherMenuOpen(false);
                             }}
-                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2 focus:bg-white focus:text-indigo-600"
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-sm gap-2 focus:bg-indigo-500"
                         >
                             <HandCoinsIcon className="w-7 h-7" /> Biaya
                         </button>

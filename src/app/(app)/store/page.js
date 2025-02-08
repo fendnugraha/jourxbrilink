@@ -42,10 +42,10 @@ const StorePage = () => {
         setIsModalDeleteTrxOpen(false);
     };
 
-    const fetchTransaction = async () => {
+    const fetchTransaction = async (url = `/api/get-trx-by-warehouse/${selectedWarehouse}/${startDate}/${endDate}`) => {
         setLoading(true);
         try {
-            const response = await axios.get(`/api/get-trx-by-warehouse/${selectedWarehouse}/${startDate}/${endDate}`);
+            const response = await axios.get(url);
             setTransactions(response.data.data);
         } catch (error) {
             setNotification(error.response?.data?.message || "Something went wrong.");
@@ -214,10 +214,11 @@ const StorePage = () => {
                                                             )}{" "}
                                                             <span className="">{transaction.transaction_type}</span>
                                                         </td>
-                                                        <td>
-                                                            <span className="text-xs block text-slate-500">
-                                                                {formatDateTime(transaction.created_at)} | {transaction.product.category}
+                                                        <td className="font-bold">
+                                                            <span className="text-xs font-normal block text-slate-500">
+                                                                {formatDateTime(transaction.created_at)}
                                                             </span>
+
                                                             {transaction.product.name}
                                                         </td>
                                                         <td className="text-center">

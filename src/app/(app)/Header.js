@@ -41,14 +41,15 @@ const Header = ({ title }) => {
                     <h1 className="text-lg sm:text-md text-white">
                         {WarehouseRank > 0 &&
                             (WarehouseRank === 1 ? (
-                                <>
-                                    <TrophyIcon className="w-5 h-5 text-amber-200 inline" /> <span className="hidden sm:inline">{userWarehouseName}</span>
-                                </>
-                            ) : (
-                                <>
-                                    <span className="text-amber-200 font-bold">#{WarehouseRank}</span>{" "}
+                                <div className="flex items-center gap-2">
+                                    <TrophyIcon size={26} strokeWidth={3} className="text-amber-200 inline" />{" "}
                                     <span className="hidden sm:inline">{userWarehouseName}</span>
-                                </>
+                                </div>
+                            ) : (
+                                <div className="flex items-center gap-2">
+                                    <span className="text-amber-200 font-bold text-xl">#{WarehouseRank}</span>{" "}
+                                    <span className="hidden sm:inline">{userWarehouseName}</span>
+                                </div>
                             ))}
                     </h1>
                     <button className=" text-white sm:hidden">

@@ -17,7 +17,7 @@ const CashBankBalance = ({ accountBalance, isValidating }) => {
                 {accountBalance?.data?.length > 0 ? (
                     <>
                         <h1 className="text-xs">Total Saldo Kas & Bank</h1>
-                        <h1 className="text-2xl font-black">{formatNumber(summarizeBalance ?? 0)}</h1>
+                        <h1 className="text-2xl text-yellow-200 font-black">{formatNumber(summarizeBalance ?? 0)}</h1>
                     </>
                 ) : (
                     <span className="font-normal text-sm">Loading...</span>
@@ -34,7 +34,7 @@ const CashBankBalance = ({ accountBalance, isValidating }) => {
                         <div className="flex flex-col justify-between text-white">
                             <h1 className="text-xs">{account.acc_name}</h1>
 
-                            <h1 className="text-sm sm:text-xl group-hover:scale-105 group-hover:text-yellow-200 font-bold text-end transition delay-100 duration-150 ease-out">
+                            <h1 className="text-sm sm:text-xl group-hover:scale-105 text-yellow-200 font-bold text-end transition delay-100 duration-150 ease-out">
                                 {formatNumber(account.balance)}
                             </h1>
                         </div>

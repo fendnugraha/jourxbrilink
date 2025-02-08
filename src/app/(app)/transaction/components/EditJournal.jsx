@@ -60,13 +60,13 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
     return (
         <div className="relative">
             {journalById.id === undefined && <div className="absolute h-full w-full flex items-center justify-center bg-white">Loading data ...</div>}
-            <h1 className="text-xl font-bold mb-4">
+            <h1 className="text-sm sm:text-xl font-bold mb-4">
                 {journalById.trx_type} ({journalById.invoice})
             </h1>
             <form onSubmit={handleSubmit}>
-                <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+                <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Rekening</Label>
-                    <div className="col-span-2">
+                    <div className="col-span-1 sm:col-span-2">
                         <select
                             onChange={(e) => {
                                 if (journalById.trx_type === "Tarik Tunai") {
@@ -89,7 +89,7 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                         {errors.debt_code && <span className="text-red-500 text-xs">{errors.debt_code}</span>}
                     </div>
                 </div>
-                <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+                <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Jumlah</Label>
                     <div className="col-span-1">
                         <Input
@@ -103,7 +103,7 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                     </div>
                     <h1 className="text-lg font-bold">{formatNumber(formData.amount)}</h1>
                 </div>
-                <div className="mb-2 grid grid-cols-3 gap-4 items-center">
+                <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Fee</Label>
                     <div className="col-span-1">
                         <Input
@@ -117,9 +117,9 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                     </div>
                     <h1 className="text-lg font-bold">{formatNumber(formData.fee_amount)}</h1>
                 </div>
-                <div className="mb-2 grid grid-cols-3 gap-4">
+                <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 gap-4">
                     <Label>Keterangan</Label>
-                    <div className="col-span-2">
+                    <div className="col-span-1 sm:col-span-2">
                         <textarea
                             className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             type="text"

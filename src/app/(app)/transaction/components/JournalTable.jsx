@@ -97,7 +97,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                     ))}
                 </select>
                 <button
-                    onClick={() => setIsModalFilterDataOpen(true)}
+                    onClick={() => setIsModalFilterJournalOpen(true)}
                     className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
                 >
                     <FilterIcon className="size-4" />

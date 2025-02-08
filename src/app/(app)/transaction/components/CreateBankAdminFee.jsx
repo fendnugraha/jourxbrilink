@@ -23,7 +23,7 @@ const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notifica
             const response = await axios.post("/api/create-mutation", formData);
             notification(response.data.message);
             setFormData({
-                debt_code: 49,
+                debt_code: user?.role?.warehouse?.chart_of_account_id,
                 cred_code: "",
                 amount: "",
                 fee_amount: "",

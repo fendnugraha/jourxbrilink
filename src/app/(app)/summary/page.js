@@ -6,8 +6,11 @@ import WarehouseBalance from "./components/WarehouseBalance";
 import RevenueReport from "./components/RevenueReport";
 import MutationHistory from "./components/MutationHistory";
 import axios from "@/libs/axios";
+import { useAuth } from "@/libs/auth";
 
 const SummaryPage = () => {
+    const { user } = useAuth({ middleware: "auth" });
+
     const [account, setAccount] = useState(null);
     const [notification, setNotification] = useState("");
     const [errors, setErrors] = useState([]);
@@ -34,7 +37,7 @@ const SummaryPage = () => {
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <WarehouseBalance />
                         <RevenueReport />
-                        <MutationHistory account={account} />
+                        <MutationHistory account={account} notification={(message) => setNotification(message)} user={user} />
                     </div>
                 </div>
             </div>

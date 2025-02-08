@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
 import formatDateTime from "@/libs/formatDateTime";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, MessageCircleWarningIcon, TrashIcon } from "lucide-react";
 import { FilterIcon } from "lucide-react";
 import Modal from "@/components/Modal";
 import Label from "@/components/Label";
@@ -19,15 +19,17 @@ const getCurrentDate = () => {
     return `${year}-${month}-${day}`;
 };
 
-const MutationHistory = ({ account }) => {
+const MutationHistory = ({ account, notification, user }) => {
+    const warehouseCashId = user?.role?.warehouse?.chart_of_account_id;
     const [search, setSearch] = useState("");
     const [mutation, setMutation] = useState([]);
-    const [notification, setNotification] = useState("");
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
-    const [selectedAccount, setSelectedAccount] = useState(null);
+    const [selectedAccount, setSelectedAccount] = useState(warehouseCashId);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
+    const [isModalDeleteJournalOpen, setIsModalDeleteJournalOpen] = useState(false);
+    const [selectedJournalId, setSelectedJournalId] = useState(null);
 
     const closeModal = () => {
         setIsModalFilterDataOpen(false);
@@ -43,7 +45,7 @@ const MutationHistory = ({ account }) => {
             });
             setMutation(response.data.data);
         } catch (error) {
-            setNotification(error.response?.data?.message || "Something went wrong.");
+            notification(error.response?.data?.message || "Something went wrong.");
         } finally {
             setLoading(false);
         }
@@ -56,6 +58,17 @@ const MutationHistory = ({ account }) => {
     const handleChangePage = (url) => {
         fetchMutation(url);
     };
+
+    const handleDeleteJournal = async (id) => {
+        try {
+            const response = await axios.delete(`/api/journals/${id}`);
+            notification(response.data.message);
+            fetchMutation();
+        } catch (error) {
+            notification(error.response?.data?.message || "Something went wrong.");
+        }
+    };
+
     return (
         <div className="bg-white rounded-lg mb-3 relative">
             <div className="p-4">
@@ -87,6 +100,7 @@ const MutationHistory = ({ account }) => {
             <div className="mb-2 px-4 flex gap-2">
                 <select
                     onChange={(e) => setSelectedAccount(e.target.value)}
+                    value={selectedAccount}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 >
                     <option value="0">Pilih Akun</option>
@@ -132,6 +146,7 @@ const MutationHistory = ({ account }) => {
                         <tr>
                             <th>Keterangan</th>
                             <th>Jumlah</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -145,7 +160,7 @@ const MutationHistory = ({ account }) => {
                                     <tr key={index}>
                                         <td>
                                             <span className="text-xs text-slate-500 block">
-                                                {item.invoice} | {formatDateTime(item.created_at)}
+                                                #{item.id} {item.invoice} | {formatDateTime(item.created_at)}
                                             </span>
                                             Note: {item.description}
                                             <span className="block font-bold text-xs">
@@ -162,6 +177,18 @@ const MutationHistory = ({ account }) => {
                                             </span>
                                             {item.fee_amount !== 0 && <span className="text-xs text-blue-600 block">{formatNumber(item.fee_amount)}</span>}
                                         </td>
+                                        <td className="text-center">
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedJournalId(item.id);
+                                                    setIsModalDeleteJournalOpen(true);
+                                                }}
+                                                disabled={["Voucher & SP", "Accessories"].includes(item.trx_type)}
+                                                className=" disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transtition-all duration-200"
+                                            >
+                                                <TrashIcon className="size-4" />
+                                            </button>
+                                        </td>
                                     </tr>
                                 ))
                             ) : (
@@ -176,6 +203,29 @@ const MutationHistory = ({ account }) => {
                         )}
                     </tbody>
                 </table>
+                <Modal isOpen={isModalDeleteJournalOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
+                    <div className="flex flex-col items-center justify-center gap-3 mb-4">
+                        <MessageCircleWarningIcon size={72} className="text-red-600" />
+                        <p className="text-sm">Apakah anda yakin ingin menghapus transaksi ini (ID: {selectedJournalId})?</p>
+                    </div>
+                    <div className="flex justify-center gap-3">
+                        <button
+                            onClick={() => {
+                                handleDeleteJournal(selectedJournalId);
+                                setIsModalDeleteJournalOpen(false);
+                            }}
+                            className="btn-primary w-full"
+                        >
+                            Ya
+                        </button>
+                        <button
+                            onClick={() => setIsModalDeleteJournalOpen(false)}
+                            className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                            Tidak
+                        </button>
+                    </div>
+                </Modal>
             </div>
             {mutation.journals?.last_page > 1 && (
                 <div className="px-4">

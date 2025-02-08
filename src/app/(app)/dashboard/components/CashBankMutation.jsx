@@ -104,8 +104,6 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
         }
         return journal.trx_type === "Mutasi Kas" && (checkedAccounts.includes(journal.cred_code) || checkedAccounts.includes(journal.debt_code));
     });
-    const [selectedWarehouseId, setSelectedWarehouseId] = useState(1);
-    const branchAccount = cashBank.filter((cashBank) => cashBank.warehouse_id === Number(selectedWarehouseId));
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5; // Number of items per page
@@ -224,7 +222,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                                     <tr key={index}>
                                         <td>
                                             {account.acc_name}
-                                            <span className="text-xs font-bold block sm:hidden">{formatNumber(account.balance)}</span>
+                                            <span className="text-xs text-blue-600 font-bold block sm:hidden">{formatNumber(account.balance)}</span>
                                         </td>
                                         <td className="text-end font-bold hidden sm:table-cell">{formatNumber(account.balance ?? 0)}</td>
                                         <td className="text-end">{formatNumber(mutationInSumById(account.id) ?? 0)}</td>
@@ -249,7 +247,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                             <tr>
                                 <th>
                                     Total{" "}
-                                    <span className="font-bold text-blue-500 sm:hidden">
+                                    <span className="font-bold text-blue-500 block sm:hidden">
                                         {formatNumber(accountBalance.reduce((sum, acc) => sum + acc.balance, 0))}
                                     </span>
                                 </th>

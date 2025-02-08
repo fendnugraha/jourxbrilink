@@ -187,7 +187,7 @@ const TransactionPage = () => {
                                 setIsExpenseMenuOpen(false);
                                 setIsVoucherMenuOpen(false);
                             }}
-                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-2 text-sm gap-1"
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-2 text-xs gap-1"
                         >
                             <ArrowUpCircleIcon className="w-7 h-7" /> Transfer
                         </button>
@@ -197,7 +197,7 @@ const TransactionPage = () => {
                                 setIsExpenseMenuOpen(false);
                                 setIsVoucherMenuOpen(false);
                             }}
-                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-2 text-sm gap-1"
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-2 text-xs gap-1"
                         >
                             <ArrowDownCircleIcon className="w-7 h-7" /> Tarik Tunai
                         </button>
@@ -206,7 +206,7 @@ const TransactionPage = () => {
                                 setIsVoucherMenuOpen(!isVoucherMenuOpen);
                                 setIsExpenseMenuOpen(false);
                             }}
-                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-2 text-sm gap-1 focus:bg-amber-500"
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-2 text-xs gap-1 focus:bg-amber-500"
                         >
                             <ShoppingBagIcon className="w-7 h-7" /> Voucher
                         </button>
@@ -215,7 +215,7 @@ const TransactionPage = () => {
                                 setIsExpenseMenuOpen(!isExpenseMenuOpen);
                                 setIsVoucherMenuOpen(false);
                             }}
-                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-2 text-sm gap-1 focus:bg-amber-500"
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-2 text-xs gap-1 focus:bg-amber-500"
                         >
                             <HandCoinsIcon className="w-7 h-7" /> Biaya
                         </button>

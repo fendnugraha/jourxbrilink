@@ -53,7 +53,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
 
     return (
         <div className="relative">
-            <div className="w-full sm:w-1/2 mb-2 flex gap-2">
+            <div className="w-full sm:w-1/2 mb-2 flex gap-2 px-2">
                 {userRole === "Administrator" && (
                     <select
                         value={selectedWarehouse}

@@ -4,9 +4,9 @@ import axios from "@/libs/axios";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
 
-const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notification, fetchJournalsByWarehouse }) => {
+const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notification, fetchJournalsByWarehouse, user }) => {
     const [formData, setFormData] = useState({
-        debt_code: 46,
+        debt_code: user?.role?.warehouse?.chart_of_account_id,
         cred_code: "",
         amount: "",
         fee_amount: "",

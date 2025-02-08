@@ -170,7 +170,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                 >
                     <h4 className="text-md sm:text-xl text-white">Total Setoran</h4>
                     <h1 className="text-2xl font-extrabold text-white">
-                        {loading ? (
+                        {isLoading ? (
                             <LoaderIcon className="animate-pulse" />
                         ) : (
                             formatNumber(

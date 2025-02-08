@@ -329,6 +329,7 @@ const TransactionPage = () => {
                                 isModalOpen={setIsModalCreateBankAdminFeeOpen}
                                 notification={(message) => setNotification(message)}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                                user={user}
                             />
                         </Modal>
                         <Modal isOpen={isModalCreateExpenseOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Biaya Operasional">

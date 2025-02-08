@@ -51,7 +51,6 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
             setLoading(false);
         }
     };
-    console.log(formData);
     return (
         <form>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">

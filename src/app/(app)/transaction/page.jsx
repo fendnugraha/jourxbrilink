@@ -219,19 +219,19 @@ const TransactionPage = () => {
                         <div className="mb-2 hidden sm:flex justify-start gap-2">
                             <button
                                 onClick={() => setIsModalCreateTransferOpen(true)}
-                                className="bg-indigo-600 group text-sm min-w-44 hover:bg-indigo-700 text-white py-2 px-6 rounded-lg"
+                                className="bg-indigo-600 group text-sm min-w-44 hover:bg-indigo-500 text-white py-2 px-6 rounded-lg"
                             >
                                 Tansfer Uang <ArrowUpCircleIcon className="size-4 group-hover:scale-110 inline" />
                             </button>
                             <button
                                 onClick={() => setIsModalCreateCashWithdrawalOpen(true)}
-                                className="bg-indigo-600 group text-sm min-w-44 hover:bg-indigo-700 text-white py-2 px-6 rounded-lg"
+                                className="bg-indigo-600 group text-sm min-w-44 hover:bg-indigo-500 text-white py-2 px-6 rounded-lg"
                             >
                                 Tarik Tunai <ArrowDownCircleIcon className="size-4 group-hover:scale-110 inline" />
                             </button>
                             <Dropdown
                                 trigger={
-                                    <button className="bg-green-600 text-sm hover:bg-green-700 text-white py-2 px-6 rounded-lg group">
+                                    <button className="bg-green-600 text-sm hover:bg-green-500 text-white py-2 px-6 rounded-lg group">
                                         Voucher & Deposit
                                         <ChevronRightIcon size={18} className="inline group-hover:rotate-90 transition-transform delay-300 duration-200" />
                                     </button>
@@ -253,7 +253,7 @@ const TransactionPage = () => {
                             </Dropdown>
                             <Dropdown
                                 trigger={
-                                    <button className="bg-red-600 text-sm hover:bg-red-700 text-white py-2 px-6 rounded-lg group">
+                                    <button className="bg-red-600 text-sm hover:bg-red-500 text-white py-2 px-6 rounded-lg group">
                                         Pengeluaran (Biaya){" "}
                                         <ChevronRightIcon size={18} className="inline group-hover:rotate-90 delay-300 transition-transform duration-200" />
                                     </button>

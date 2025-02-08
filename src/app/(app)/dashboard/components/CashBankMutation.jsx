@@ -249,7 +249,9 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                             <tr>
                                 <th>
                                     Total{" "}
-                                    <span className="font-bold text-blue-500">{formatNumber(accountBalance.reduce((sum, acc) => sum + acc.balance, 0))}</span>
+                                    <span className="font-bold text-blue-500 sm:hidden">
+                                        {formatNumber(accountBalance.reduce((sum, acc) => sum + acc.balance, 0))}
+                                    </span>
                                 </th>
                                 <th className="text-end font-bold hidden sm:table-cell">
                                     {formatNumber(accountBalance.reduce((sum, acc) => sum + acc.balance, 0))}

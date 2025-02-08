@@ -10,10 +10,10 @@ const CashBankBalance = ({ accountBalance, isValidating }) => {
         <div className="relative">
             {isValidating && (
                 <div className="absolute top-0 left-2">
-                    <LoaderCircle className="w-4 h-4 inline animate-spin" />
+                    <LoaderCircle className="w-4 h-4 inline text-white animate-spin" />
                 </div>
             )}
-            <div className="flex justify-center items-center flex-col bg-amber-400 hover:bg-amber-300 py-4 rounded-t-2xl text-slate-800 shadow-lg">
+            <div className="flex justify-center items-center flex-col bg-indigo-400 hover:bg-indigo-300 py-4 rounded-t-2xl text-white shadow-lg">
                 {accountBalance?.data?.length > 0 ? (
                     <>
                         <h1 className="text-xs">Total Saldo Kas & Bank</h1>
@@ -34,7 +34,7 @@ const CashBankBalance = ({ accountBalance, isValidating }) => {
                         <div className="flex flex-col justify-between text-white">
                             <h1 className="text-xs">{account.acc_name}</h1>
 
-                            <h1 className="text-sm sm:text-xl group-hover:scale-105 group-hover:text-yellow-200 font-bold text-end transition delay-100 duration-300 ease-out">
+                            <h1 className="text-sm sm:text-xl group-hover:scale-105 group-hover:text-yellow-200 font-bold text-end transition delay-100 duration-150 ease-out">
                                 {formatNumber(account.balance)}
                             </h1>
                         </div>

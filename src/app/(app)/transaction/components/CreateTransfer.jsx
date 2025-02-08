@@ -43,7 +43,7 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
     };
     return (
         <>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Dari Rekening</Label>
                     <div className="col-span-1 sm:col-span-2">
@@ -117,7 +117,7 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                     </div>
                 </div>
                 <button
-                    onClick={handleSubmit}
+                    type="submit"
                     className="bg-indigo-500 hover:bg-indigo-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
                     disabled={loading}
                 >

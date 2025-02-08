@@ -1,6 +1,6 @@
 import NavLink from "@/components/NavLink";
 import { useAuth } from "@/libs/auth";
-import { ArrowRightLeftIcon, ChartAreaIcon, CircleDollarSignIcon, CogIcon, LayoutDashboardIcon, LogOutIcon, MenuIcon, StoreIcon } from "lucide-react";
+import { ArrowRightLeftIcon, ChartAreaIcon, CircleDollarSignIcon, CirclePowerIcon, CogIcon, LayoutDashboardIcon, MenuIcon, StoreIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -144,13 +144,15 @@ const Navigation = ({ user }) => {
             </div>
             <button
                 onClick={logout}
-                className="px-4 py-4 w-full hover:bg-slate-500 border-y hover:text-white cursor-pointer flex items-center gap-4 justify-center"
+                className="px-4 py-4 w-full bg-gray-600 hover:bg-gray-500 border-t text-white cursor-pointer flex items-center gap-4 justify-center"
             >
                 <div>
-                    <LogOutIcon className="w-5 h-5" />
+                    <CirclePowerIcon className="w-5 h-5" />
                 </div>
                 <span
-                    className={`transition-all duration-300 ease-in-out transform text-nowrap ${isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
+                    className={`text-sm transition-all duration-300 ease-in-out transform text-nowrap ${
+                        isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                    }`}
                     style={{ display: isOpen ? "inline" : "none" }}
                 >
                     Logout

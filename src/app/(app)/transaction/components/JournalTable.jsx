@@ -67,7 +67,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
     };
     return (
         <div>
-            <div className="px-4 flex justify-end gap-2">
+            <div className="px-4 flex gap-2">
                 <select
                     onChange={(e) => {
                         setItemsPerPage(Number(e.target.value));
@@ -87,7 +87,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                         setCurrentPage(1);
                     }}
                     value={selectedAccount}
-                    className="rounded-md flex-1 border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 >
                     <option value="">Semua Akun</option>
                     {branchAccount.map((account, index) => (
@@ -97,8 +97,8 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                     ))}
                 </select>
                 <button
-                    onClick={() => setIsModalFilterJournalOpen(true)}
-                    className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 w-full"
+                    onClick={() => setIsModalFilterDataOpen(true)}
+                    className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
                 >
                     <FilterIcon className="size-4" />
                 </button>

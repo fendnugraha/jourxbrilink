@@ -13,7 +13,7 @@ const CashBankBalance = ({ accountBalance, isValidating }) => {
                     <LoaderCircle className="w-4 h-4 inline text-white animate-spin" />
                 </div>
             )}
-            <div className="flex justify-center items-center flex-col bg-indigo-400 hover:bg-indigo-300 py-4 rounded-t-2xl text-white shadow-lg">
+            <div className="flex justify-center items-center flex-col bg-indigo-500 hover:bg-indigo-400 py-4 rounded-t-2xl text-white shadow-lg">
                 {accountBalance?.data?.length > 0 ? (
                     <>
                         <h1 className="text-xs">Total Saldo Kas & Bank</h1>
@@ -25,7 +25,7 @@ const CashBankBalance = ({ accountBalance, isValidating }) => {
             </div>
 
             <div
-                className={`bg-indigo-500 px-2 transform ${
+                className={`bg-indigo-400 px-2 transform ${
                     showBalances ? "opacity-100 scale-y-100 max-h-[700px]" : "opacity-0 scale-y-0 max-h-0 "
                 } origin-top transition-all duration-300 ease-in-out`}
             >

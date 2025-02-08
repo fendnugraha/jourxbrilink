@@ -126,57 +126,57 @@ const MutationHistory = ({ account }) => {
                     </button>
                 </Modal>
             </div>
-
-            <table className="table w-full text-xs">
-                <thead>
-                    <tr>
-                        <th>Keterangan</th>
-                        <th>Jumlah</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {loading ? (
+            <div className="overflow-x-auto">
+                <table className="table w-full text-xs">
+                    <thead>
                         <tr>
-                            <td colSpan={2}>Loading...</td>
+                            <th>Keterangan</th>
+                            <th>Jumlah</th>
                         </tr>
-                    ) : selectedAccount > 0 ? (
-                        mutation.journals?.data?.length > 0 ? (
-                            mutation.journals?.data?.map((item, index) => (
-                                <tr key={index}>
-                                    <td>
-                                        <span className="text-xs text-slate-500 block">
-                                            {item.invoice} | {formatDateTime(item.created_at)}
-                                        </span>
-                                        Note: {item.description}
-                                        <span className="block font-bold text-xs">
-                                            {item.cred.acc_name} <ArrowRightIcon className="size-4 inline" /> {item.debt.acc_name}
-                                        </span>
-                                    </td>
-                                    <td className="font-bold">
-                                        <span
-                                            className={`${Number(item.debt_code) === Number(selectedAccount) ? "text-green-500" : ""}
+                    </thead>
+                    <tbody>
+                        {loading ? (
+                            <tr>
+                                <td colSpan={2}>Loading...</td>
+                            </tr>
+                        ) : selectedAccount > 0 ? (
+                            mutation.journals?.data?.length > 0 ? (
+                                mutation.journals?.data?.map((item, index) => (
+                                    <tr key={index}>
+                                        <td>
+                                            <span className="text-xs text-slate-500 block">
+                                                {item.invoice} | {formatDateTime(item.created_at)}
+                                            </span>
+                                            Note: {item.description}
+                                            <span className="block font-bold text-xs">
+                                                {item.cred.acc_name} <ArrowRightIcon className="size-4 inline" /> {item.debt.acc_name}
+                                            </span>
+                                        </td>
+                                        <td className="font-bold">
+                                            <span
+                                                className={`${Number(item.debt_code) === Number(selectedAccount) ? "text-green-500" : ""}
                                             ${Number(item.cred_code) === Number(selectedAccount) ? "text-red-500" : ""}
                                                 text-sm md:text-base sm:text-lg`}
-                                        >
-                                            {formatNumber(item.amount)}
-                                        </span>
-                                        {item.fee_amount !== 0 && <span className="text-xs text-blue-600 block">{formatNumber(item.fee_amount)}</span>}
-                                    </td>
+                                            >
+                                                {formatNumber(item.amount)}
+                                            </span>
+                                            {item.fee_amount !== 0 && <span className="text-xs text-blue-600 block">{formatNumber(item.fee_amount)}</span>}
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={2}>Tidak ada data.</td>
                                 </tr>
-                            ))
+                            )
                         ) : (
                             <tr>
-                                <td colSpan={2}>Tidak ada data.</td>
+                                <td colSpan={2}>Silahkan pilih akun.</td>
                             </tr>
-                        )
-                    ) : (
-                        <tr>
-                            <td colSpan={2}>Silahkan pilih akun.</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-
+                        )}
+                    </tbody>
+                </table>
+            </div>
             {mutation.journals?.last_page > 1 && (
                 <div className="px-4">
                     <Paginator links={mutation.journals} handleChangePage={handleChangePage} />

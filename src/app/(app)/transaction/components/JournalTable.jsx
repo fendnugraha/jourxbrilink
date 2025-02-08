@@ -67,7 +67,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
     };
     return (
         <div>
-            <div className="px-4 flex justify-between gap-2">
+            <div className="px-4 flex justify-end gap-2">
                 <select
                     onChange={(e) => {
                         setItemsPerPage(Number(e.target.value));
@@ -98,7 +98,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                 </select>
                 <button
                     onClick={() => setIsModalFilterJournalOpen(true)}
-                    className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
+                    className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 w-full"
                 >
                     <FilterIcon className="size-4" />
                 </button>

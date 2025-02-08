@@ -107,42 +107,44 @@ const VoucherSalesTable = ({ warehouse, warehouses, userRole }) => {
                         </button>
                     </Modal>
                 </div>
-                <table className="table w-full text-xs">
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Qty</th>
-                            <th>Jual</th>
-                            <th>Modal</th>
-                            <th>Laba</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {loading ? (
+                <div className="overflow-x-auto">
+                    <table className="table w-full text-xs">
+                        <thead>
                             <tr>
-                                <td colSpan="5" className="text-center">
-                                    Loading...
-                                </td>
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th>Jual</th>
+                                <th>Modal</th>
+                                <th>Laba</th>
                             </tr>
-                        ) : transactions.length === 0 ? (
-                            <tr>
-                                <td colSpan="5" className="text-center">
-                                    Tidak ada data
-                                </td>
-                            </tr>
-                        ) : (
-                            transactions?.map((transaction) => (
-                                <tr key={transaction.product_id}>
-                                    <td>{transaction.product.name}</td>
-                                    <td className="text-center">{formatNumber(-transaction.quantity)}</td>
-                                    <td className="text-end">{formatNumber(-transaction.total_price)}</td>
-                                    <td className="text-end">{formatNumber(-transaction.total_cost)}</td>
-                                    <td className="text-end">{formatNumber(-Number(transaction.total_price - transaction.total_cost))}</td>
+                        </thead>
+                        <tbody>
+                            {loading ? (
+                                <tr>
+                                    <td colSpan="5" className="text-center">
+                                        Loading...
+                                    </td>
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                            ) : transactions.length === 0 ? (
+                                <tr>
+                                    <td colSpan="5" className="text-center">
+                                        Tidak ada data
+                                    </td>
+                                </tr>
+                            ) : (
+                                transactions?.map((transaction) => (
+                                    <tr key={transaction.product_id}>
+                                        <td>{transaction.product.name}</td>
+                                        <td className="text-center">{formatNumber(-transaction.quantity)}</td>
+                                        <td className="text-end">{formatNumber(-transaction.total_price)}</td>
+                                        <td className="text-end">{formatNumber(-transaction.total_cost)}</td>
+                                        <td className="text-end">{formatNumber(-Number(transaction.total_price - transaction.total_cost))}</td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div className="bg-sky-700 py-2 text-white overflow-hidden shadow-sm sm:rounded-2xl flex-1 flex flex-col justify-center items-center">
                 <h1>Cost Total</h1>

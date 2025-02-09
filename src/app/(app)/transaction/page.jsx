@@ -4,7 +4,6 @@ import CreateTransfer from "./components/CreateTransfer";
 import Header from "../Header";
 import { useState, useEffect, useRef } from "react";
 import axios from "@/libs/axios";
-import useSWR, { mutate } from "swr";
 import Notification from "@/components/notification";
 import { useAuth } from "@/libs/auth";
 import CreateCashWithdrawal from "./components/CreateCashWithdrawal";
@@ -18,6 +17,8 @@ import CreateExpense from "./components/CreateExpense";
 import CashBankBalance from "./components/CashBankBalance";
 import Loading from "../loading";
 import { ArrowDownCircleIcon, ArrowUpCircleIcon, ChevronRightIcon, HandCoinsIcon, ShoppingBagIcon } from "lucide-react";
+import useCashBankBalance from "@/libs/cashBankBalance";
+import { mutate } from "swr";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -25,26 +26,6 @@ const getCurrentDate = () => {
     const month = String(today.getMonth() + 1).padStart(2, "0"); // Month is 0-indexed
     const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
-};
-
-const fetcher = (url) => axios.get(url).then((res) => res.data);
-
-const useCashBankBalance = (selectedWarehouseId, endDate) => {
-    const {
-        data: accountBalance,
-        error,
-        isValidating,
-    } = useSWR(selectedWarehouseId ? `/api/get-cash-bank-balance/${selectedWarehouseId}/${endDate}` : null, fetcher, {
-        revalidateOnFocus: true, // Refetch data when the window is focused
-        dedupingInterval: 60000, // Avoid duplicate requests for the same data within 1 minute
-        fallbackData: [], // Optional: you can specify default data here while it's loading
-    });
-
-    // Handle loading, errors, and data
-    if (error) return { error: error.response?.data?.errors || ["Something went wrong."] };
-    if (!accountBalance && !isValidating) return { loading: true };
-
-    return { accountBalance, loading: isValidating, error: error?.response?.data?.errors };
 };
 const TransactionPage = () => {
     const { user } = useAuth({ middleware: "auth" });

@@ -11,6 +11,8 @@ import { FilterIcon, MoveRightIcon, PlusCircleIcon } from "lucide-react";
 import CreateJournal from "./CreateJournal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
+import useCashBankBalance from "@/libs/cashBankBalance";
+import { mutate } from "swr";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -49,15 +51,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
         fetchCashBank();
     }, []);
 
-    const [accountBalance, setAccountBalance] = useState([]);
-    const getAccountBalance = async () => {
-        try {
-            const response = await axios.get(`/api/get-cash-bank-balance/${selectedWarehouse}/${endDate}`);
-            setAccountBalance(response.data.data);
-        } catch (error) {
-            setErrors(error.response?.data?.errors || ["Something went wrong."]);
-        }
-    };
+    const { accountBalance, error: accountBalanceError, loading: isValidating } = useCashBankBalance(selectedWarehouse, endDate);
 
     const fetchJournalsByWarehouse = async () => {
         setLoading(true);
@@ -90,12 +84,12 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
     }, [selectedWarehouse]);
 
     useEffect(() => {
-        getAccountBalance();
+        mutate(`/api/get-cash-bank-balance/${selectedWarehouse}/${endDate}`);
     }, [journalsByWarehouse]);
 
-    const mutationInSum = accountBalance.reduce((sum, acc) => sum + mutationInSumById(acc.id), 0);
+    const mutationInSum = accountBalance?.data?.reduce((sum, acc) => sum + mutationInSumById(acc.id), 0);
 
-    const mutationOutSum = accountBalance.reduce((sum, acc) => sum + mutationOutSumById(acc.id), 0);
+    const mutationOutSum = accountBalance?.data?.reduce((sum, acc) => sum + mutationOutSumById(acc.id), 0);
 
     const [checkedAccounts, setCheckedAccounts] = useState(null);
     const filteredJournals = journalsByWarehouse.data?.filter((journal) => {
@@ -194,7 +188,6 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                             cashBank={cashBank}
                             isModalOpen={setIsModalCreateJournalOpen}
                             notification={(message) => setNotification(message)}
-                            getAccountBalance={getAccountBalance}
                             warehouses={warehouses}
                         />
                     </Modal>
@@ -213,12 +206,12 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {loading ? (
+                            {loading || isValidating ? (
                                 <tr className="text-center">
                                     <td colSpan={4}>Loading ...</td>
                                 </tr>
                             ) : (
-                                accountBalance.map((account, index) => (
+                                accountBalance?.data?.map((account, index) => (
                                     <tr key={index}>
                                         <td>
                                             {account.acc_name}
@@ -248,11 +241,11 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                                 <th>
                                     Total{" "}
                                     <span className="font-bold text-blue-500 block sm:hidden">
-                                        {formatNumber(accountBalance.reduce((sum, acc) => sum + acc.balance, 0))}
+                                        {formatNumber(accountBalance?.data?.reduce((sum, acc) => sum + acc.balance, 0))}
                                     </span>
                                 </th>
                                 <th className="text-end font-bold hidden sm:table-cell">
-                                    {formatNumber(accountBalance.reduce((sum, acc) => sum + acc.balance, 0))}
+                                    {formatNumber(accountBalance?.data?.reduce((sum, acc) => sum + acc.balance, 0))}
                                 </th>
                                 <th className="text-end">{formatNumber(mutationInSum)}</th>
                                 <th className="text-end">{formatNumber(mutationOutSum)}</th>

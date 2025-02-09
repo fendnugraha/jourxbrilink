@@ -22,7 +22,7 @@ const useGetdailyDashboard = (warehouse, startDate, endDate) => {
         error,
         isValidating,
     } = useSWR(`/api/daily-dashboard/${warehouse}/${startDate}/${endDate}`, fetcher, {
-        // revalidateOnFocus: true, // Refetch data when the window is focused
+        revalidateOnFocus: true, // Refetch data when the window is focused
         dedupingInterval: 60000, // Avoid duplicate requests for the same data within 1 minute
         fallbackData: [], // Optional: you can specify default data here while it's loading
     });

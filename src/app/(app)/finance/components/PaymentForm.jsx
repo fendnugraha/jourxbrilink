@@ -5,7 +5,7 @@ import axios from "@/libs/axios";
 import Label from "@/components/Label";
 import formatNumber from "@/libs/formatNumber";
 
-const PaymentForm = ({ contactId }) => {
+const PaymentForm = ({ contactId, notification, fetchFinance, isModalOpen }) => {
     const [formData, setFormData] = useState({
         contact_id: contactId,
         invoice: "",
@@ -17,7 +17,7 @@ const PaymentForm = ({ contactId }) => {
     const [accounts, setAccounts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectedInvoice, setSelectedInvoice] = useState("");
-    const [notification, setNotification] = useState("");
+    const [errors, setErrors] = useState([]);
 
     const fetchFinanceData = async () => {
         setLoading(true);
@@ -29,7 +29,6 @@ const PaymentForm = ({ contactId }) => {
         } finally {
             setLoading(false);
         }
-        console.log("contactId", contactId);
     };
 
     useEffect(() => {
@@ -52,13 +51,29 @@ const PaymentForm = ({ contactId }) => {
         fetchAccounts({ account_ids: [1, 2] });
     }, []);
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const response = await axios.post("/api/store-payment", formData);
+            notification(response.data.message);
+            fetchFinance();
+            fetchFinanceData();
+            isModalOpen(false);
+        } catch (error) {
+            notification(error.response?.data?.message || "Something went wrong.");
+            setErrors(error.response?.data?.errors);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const contactName = financeData[0]?.contact.name;
     const filterDataByInvoice = financeData.filter((finance) => finance.invoice === selectedInvoice);
-    console.log(contactId);
     return (
         <div>
             <h1 className="text-lg mb-4">Contact: {contactName}</h1>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                     <Label>Invoice No.</Label>
                     <select
@@ -72,11 +87,11 @@ const PaymentForm = ({ contactId }) => {
                         <option value="">Select Invoice</option>
                         {financeData.map((finance, index) => (
                             <option key={index} value={finance.invoice} hidden={finance.sisa <= 0}>
-                                {finance.invoice}, Total Tagihan : {formatNumber(finance.tagihan)}
+                                {finance.invoice}, Total Tagihan : {formatNumber(finance.sisa)}
                             </option>
                         ))}
                     </select>
-                    <h1 className="text-sm">Tagihan: RP. {selectedInvoice && formatNumber(filterDataByInvoice[0]?.tagihan)}</h1>
+                    <h1 className="text-sm">Tagihan: RP. {selectedInvoice && formatNumber(filterDataByInvoice[0]?.sisa)}</h1>
                 </div>
                 <div className="mb-4">
                     <Label>Rekening</Label>
@@ -92,6 +107,7 @@ const PaymentForm = ({ contactId }) => {
                             </option>
                         ))}
                     </select>
+                    {errors.account_id && <span className="text-red-500 text-sm">{errors.account_id}</span>}
                 </div>
                 <div className="mb-4">
                     <div className="grid grid-cols-2 gap-4">
@@ -103,8 +119,9 @@ const PaymentForm = ({ contactId }) => {
                                 type="number"
                                 className="w-full border rounded-lg p-2"
                             />
-                            <h1 className="text-xs">Sisa Tagihan: {selectedInvoice && formatNumber(filterDataByInvoice[0]?.tagihan - formData.amount)}</h1>
+                            <h1 className="text-xs">Sisa Tagihan: {selectedInvoice && formatNumber(filterDataByInvoice[0]?.sisa - formData.amount)}</h1>
                         </div>
+                        {errors.amount && <span className="text-red-500 text-sm">{errors.amount}</span>}
                     </div>
                 </div>
                 <div className="mb-4">
@@ -117,6 +134,7 @@ const PaymentForm = ({ contactId }) => {
                             className="w-full border rounded-lg p-2"
                         />
                     </div>
+                    {errors.notes && <span className="text-red-500 text-sm">{errors.notes}</span>}
                 </div>
                 <button
                     type="submit"

@@ -10,13 +10,12 @@ import formatNumber from "@/libs/formatNumber";
 import formatDateTime from "@/libs/formatDateTime";
 import PaymentForm from "./PaymentForm";
 import Paginator from "@/components/Paginator";
-const Payable = () => {
+const Payable = ({ notification }) => {
     const [isModalCreateContactOpen, setIsModalCreateContactOpen] = useState(false);
     const [isModalCreatePayableOpen, setIsModalCreatePayableOpen] = useState(false);
     const [isModalDeleteFinanceOpen, setIsModalDeleteFinanceOpen] = useState(false);
     const [isModalPaymentOpen, setIsModalPaymentOpen] = useState(false);
     const [finance, setFinance] = useState([]);
-    const [notification, setNotification] = useState("");
     const [financeType, setFinanceType] = useState("Payable");
     const [selectedFinanceId, setSelectedFinanceId] = useState(null);
     const [selectedContactId, setSelectedContactId] = useState("All");
@@ -29,7 +28,7 @@ const Payable = () => {
             const response = await axios.get(url);
             setFinance(response.data.data);
         } catch (error) {
-            setNotification(error.response?.data?.message || "Something went wrong.");
+            notification(error.response?.data?.message || "Something went wrong.");
         } finally {
             setLoading(false);
         }
@@ -50,10 +49,10 @@ const Payable = () => {
     const handleDeleteFinance = async (id) => {
         try {
             const response = await axios.delete(`/api/finance/${id}`);
-            setNotification(response.data.message);
+            notification(response.data.message);
             fetchFinance();
         } catch (error) {
-            setNotification(error.response?.data?.message || "Something went wrong.");
+            notification(error.response?.data?.message || "Something went wrong.");
         }
     };
     const handleChangePage = (url) => {
@@ -78,7 +77,6 @@ const Payable = () => {
                 </div>
             </div>
             <div className="overflow-hidden">
-                {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
                 <div className="bg-white shadow-sm sm:rounded-2xl mb-4">
                     <div className="p-4 flex justify-between flex-col sm:flex-row">
                         <h1 className="text-2xl font-bold mb-4">{financeType === "Payable" ? "Hutang" : "Piutang"}</h1>
@@ -92,7 +90,7 @@ const Payable = () => {
                             <Modal isOpen={isModalCreatePayableOpen} onClose={closeModal} modalTitle="Create Payable">
                                 <CreatePayable
                                     isModalOpen={setIsModalCreatePayableOpen}
-                                    notification={(message) => setNotification(message)}
+                                    notification={(message) => notification(message)}
                                     fetchFinance={fetchFinance}
                                 />
                             </Modal>
@@ -100,7 +98,7 @@ const Payable = () => {
                                 <PlusCircleIcon className="w-4 h-4 mr-2 inline" /> Contact
                             </button>
                             <Modal isOpen={isModalCreateContactOpen} onClose={closeModal} modalTitle="Create Contact">
-                                <CreateContact isModalOpen={setIsModalCreateContactOpen} notification={(message) => setNotification(message)} />
+                                <CreateContact isModalOpen={setIsModalCreateContactOpen} notification={(message) => notification(message)} />
                             </Modal>
                         </div>
                     </div>
@@ -238,7 +236,13 @@ const Payable = () => {
                     </div>
                 </Modal>
                 <Modal isOpen={isModalPaymentOpen} onClose={closeModal} modalTitle="Form Pembayaran" maxWidth="max-w-xl">
-                    <PaymentForm contactId={selectedContactIdPayment} onClose={closeModal} />
+                    <PaymentForm
+                        contactId={selectedContactIdPayment}
+                        notification={(message) => notification(message)}
+                        isModalOpen={setIsModalPaymentOpen}
+                        fetchFinance={fetchFinance}
+                        onClose={closeModal}
+                    />
                 </Modal>
             </div>
         </>

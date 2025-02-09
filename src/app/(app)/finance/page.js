@@ -20,7 +20,7 @@ const Finance = () => {
                 <Header title={"Finance"} />
                 <div className="py-8">
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                        <Payable notification={notification} />
+                        <Payable notification={(message) => setNotification(message)} />
                     </div>
                 </div>
             </div>

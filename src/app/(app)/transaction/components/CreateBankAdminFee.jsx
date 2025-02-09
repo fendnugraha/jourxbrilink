@@ -21,7 +21,7 @@ const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notifica
         setLoading(true);
         try {
             const response = await axios.post("/api/create-mutation", formData);
-            notification(response.data.message);
+            notification("Pengeluaran biaya administrasi bank berhasil");
             setFormData({
                 debt_code: user?.role?.warehouse?.chart_of_account_id,
                 cred_code: "",

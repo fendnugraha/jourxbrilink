@@ -25,7 +25,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
         setLoading(true);
         try {
             const response = await axios.post("/api/create-mutation", formData);
-            notification(response.data.message);
+            notification("Pengembalian saldo berhasil");
             fetchJournalsByWarehouse();
             isModalOpen(false);
         } catch (error) {

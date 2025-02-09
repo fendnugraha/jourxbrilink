@@ -37,6 +37,7 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
             // isModalOpen(false);
         } catch (error) {
             setErrors(error.response.data.errors || ["Something went wrong."]);
+            notification("error", error.response?.data?.message || "Something went wrong.");
         } finally {
             setLoading(false);
         }

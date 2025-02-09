@@ -35,7 +35,7 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
         setLoading(true);
         try {
             const response = await axios.post("/api/create-mutation", formData);
-            notification(response.data.message);
+            notification("Pengeluaran biaya operasional berhasil");
             fetchJournalsByWarehouse();
             setFormData({
                 debt_code: "",

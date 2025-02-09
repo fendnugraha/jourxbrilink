@@ -48,7 +48,6 @@ const useCashBankBalance = (selectedWarehouseId, endDate) => {
 };
 const TransactionPage = () => {
     const { user } = useAuth({ middleware: "auth" });
-    const userRole = user.role?.role;
     if (!user) {
         return <Loading />;
     }
@@ -63,7 +62,10 @@ const TransactionPage = () => {
     const [isModalCreateExpenseOpen, setIsModalCreateExpenseOpen] = useState(false);
     const [isModalCreateBankAdminFeeOpen, setIsModalCreateBankAdminFeeOpen] = useState(false);
     const [isModalCreateMutationToHqOpen, setIsModalCreateMutationToHqOpen] = useState(false);
-    const [notification, setNotification] = useState("");
+    const [notification, setNotification] = useState({
+        type: "",
+        message: "",
+    });
     const [endDate, setEndDate] = useState(getCurrentDate());
 
     const [isVoucherMenuOpen, setIsVoucherMenuOpen] = useState(false);
@@ -121,7 +123,6 @@ const TransactionPage = () => {
             const response = await axios.get(`/api/get-journal-by-warehouse/${selectedWarehouse}/${startDate}/${endDate}`);
             setJournalsByWarehouse(response.data);
         } catch (error) {
-            console.error(error);
             setNotification(error.response?.data?.message || "Something went wrong.");
         } finally {
             setLoading(false);
@@ -222,7 +223,9 @@ const TransactionPage = () => {
                     </div>
                 </div>
                 <div className="max-w-7xl mx-auto sm:px-6">
-                    {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
+                    {notification.message && (
+                        <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
+                    )}
                     <div className="overflow-hidden sm:rounded-lg">
                         <div className="mb-2 hidden sm:flex justify-start gap-2">
                             <button
@@ -291,7 +294,7 @@ const TransactionPage = () => {
                             <CreateTransfer
                                 filteredCashBankByWarehouse={filteredCashBankByWarehouse}
                                 isModalOpen={setIsModalCreateTransferOpen}
-                                notification={(message) => setNotification(message)}
+                                notification={(message) => setNotification({ message })}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
                             />
@@ -301,7 +304,7 @@ const TransactionPage = () => {
                             <CreateCashWithdrawal
                                 filteredCashBankByWarehouse={filteredCashBankByWarehouse}
                                 isModalOpen={setIsModalCreateCashWithdrawalOpen}
-                                notification={(message) => setNotification(message)}
+                                notification={(message) => setNotification({ message })}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
                             />
@@ -309,7 +312,7 @@ const TransactionPage = () => {
                         <Modal isOpen={isModalCreateVoucherOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Penjualan Voucher & Kartu">
                             <CreateVoucher
                                 isModalOpen={setIsModalCreateVoucherOpen}
-                                notification={(message) => setNotification(message)}
+                                notification={(message) => setNotification({ message })}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
                             />
@@ -317,7 +320,7 @@ const TransactionPage = () => {
                         <Modal isOpen={isModalCreateDepositOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Penjualan Deposit">
                             <CreateDeposit
                                 isModalOpen={setIsModalCreateDepositOpen}
-                                notification={(message) => setNotification(message)}
+                                notification={(message) => setNotification({ message })}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                             />
                         </Modal>
@@ -326,7 +329,7 @@ const TransactionPage = () => {
                             <CreateMutationToHq
                                 cashBank={cashBank}
                                 isModalOpen={setIsModalCreateMutationToHqOpen}
-                                notification={(message) => setNotification(message)}
+                                notification={(message) => setNotification({ message })}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
                             />
@@ -335,7 +338,7 @@ const TransactionPage = () => {
                             <CreateBankAdminFee
                                 filteredCashBankByWarehouse={filteredCashBankByWarehouse}
                                 isModalOpen={setIsModalCreateBankAdminFeeOpen}
-                                notification={(message) => setNotification(message)}
+                                notification={(message) => setNotification({ message })}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
                             />
@@ -343,7 +346,7 @@ const TransactionPage = () => {
                         <Modal isOpen={isModalCreateExpenseOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Biaya Operasional">
                             <CreateExpense
                                 isModalOpen={setIsModalCreateExpenseOpen}
-                                notification={(message) => setNotification(message)}
+                                notification={(message) => setNotification({ message })}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
                             />
@@ -352,7 +355,7 @@ const TransactionPage = () => {
                             <div className="col-span-1 sm:col-span-3 bg-white py-6 rounded-2xl order-2 sm:order-1">
                                 <JournalTable
                                     cashBank={cashBank}
-                                    notification={(message) => setNotification(message)}
+                                    notification={(message) => setNotification({ message })}
                                     fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                     journalsByWarehouse={journalsByWarehouse}
                                     warehouses={warehouses}

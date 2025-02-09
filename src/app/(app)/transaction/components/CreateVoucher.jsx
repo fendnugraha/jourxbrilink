@@ -86,7 +86,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                         onChange={(e) => setFormData({ ...formData, product_id: e.target.value, qty: 1 })}
                         value={formData.product_id}
                         disabled={loading}
-                        className="w-full text-xs sm:text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     >
                         <option value="">--Pilih barang--</option>
                         {filteredProducts?.map((product) => (
@@ -122,7 +122,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                 <Label>Harga</Label>
                 <div className="col-span-1">
                     <Input
-                        className={"w-full text-xs sm:text-sm"}
+                        className={"w-full text-sm"}
                         type="number"
                         placeholder="Rp."
                         min="0"
@@ -137,7 +137,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                 <Label>Keterangan</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <textarea
-                        className="w-full text-xs sm:text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         type="text"
                         placeholder="(Optional)"
                         value={formData.description}

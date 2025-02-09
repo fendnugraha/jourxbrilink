@@ -51,7 +51,7 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                         <select
                             onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })}
                             value={formData.cred_code}
-                            className="w-full text-xs sm:text-sm rounded-md shadow-sm p-2 border border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="w-full text-sm rounded-md shadow-sm p-2 border border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         >
                             <option value="">--Pilih Rekening--</option>
                             {filteredCashBankByWarehouse.map((cashBank) => (
@@ -67,7 +67,7 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                     <Label>Jumlah transfer</Label>
                     <div>
                         <Input
-                            className="w-full text-xs sm:text-sm"
+                            className="w-full text-sm"
                             type="number"
                             placeholder="Rp."
                             value={formData.amount}
@@ -81,7 +81,7 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                     <Label>Fee (Admin)</Label>
                     <div className="">
                         <Input
-                            className={"w-full sm:w-3/4 text-xs sm:text-sm"}
+                            className={"w-full sm:w-3/4 text-sm"}
                             type="number"
                             placeholder="Rp."
                             value={formData.fee_amount}
@@ -95,7 +95,7 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                     <Label>Nama Rek. Customer</Label>
                     <div className="col-span-1 sm:col-span-2">
                         <Input
-                            className={"w-full text-xs sm:text-sm"}
+                            className={"w-full text-sm"}
                             type="text"
                             placeholder="Atasnama"
                             value={formData.custName}
@@ -108,7 +108,7 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                     <Label>Keterangan</Label>
                     <div className="col-span-1 sm:col-span-2">
                         <textarea
-                            className="w-full text-xs sm:text-sm rounded-md shadow-sm p-2 border border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="w-full text-sm rounded-md shadow-sm p-2 border border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             type="text"
                             placeholder="(Optional)"
                             value={formData.description}

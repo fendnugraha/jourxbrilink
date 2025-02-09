@@ -37,7 +37,7 @@ const CreateDeposit = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
                 <div className="col-span-1 sm:col-span-2">
                     <Input
                         type="number"
-                        className={"w-full sm:w-1/2 text-xs sm:text-sm"}
+                        className={"w-full sm:w-1/2 text-sm"}
                         placeholder="Rp."
                         value={formData.price}
                         onChange={(e) => setFormData({ ...formData, price: e.target.value })}
@@ -50,7 +50,7 @@ const CreateDeposit = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
                 <div className="col-span-1 sm:col-span-2">
                     <Input
                         type="number"
-                        className={"w-full sm:w-1/2 text-xs sm:text-sm"}
+                        className={"w-full sm:w-1/2 text-sm"}
                         placeholder="Rp."
                         value={formData.cost}
                         onChange={(e) => setFormData({ ...formData, cost: e.target.value })}
@@ -62,7 +62,7 @@ const CreateDeposit = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
                 <Label>Keterangan</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <textarea
-                        className="w-full rounded-md border text-xs sm:text-sm p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="w-full rounded-md border text-sm p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         type="text"
                         placeholder="(Optional)"
                         value={formData.description}

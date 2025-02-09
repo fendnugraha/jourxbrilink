@@ -51,7 +51,7 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                         <select
                             onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })}
                             value={formData.debt_code}
-                            className="w-full text-xs sm:text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="w-full text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         >
                             <option value="">--Pilih Rekening--</option>
                             {filteredCashBankByWarehouse.map((cashBank) => (
@@ -67,7 +67,7 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                     <Label>Jumlah Penarikan</Label>
                     <div className="col-span-1">
                         <Input
-                            className={"w-full text-xs sm:text-sm"}
+                            className={"w-full text-sm"}
                             type="number"
                             placeholder="Rp."
                             value={formData.amount}
@@ -81,7 +81,7 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                     <Label>Fee (Admin)</Label>
                     <div className="col-span-1">
                         <Input
-                            className={"w-full sm:w-3/4 text-xs sm:text-sm"}
+                            className={"w-full sm:w-3/4 text-sm"}
                             type="number"
                             placeholder="Rp."
                             value={formData.fee_amount}
@@ -95,7 +95,7 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                     <Label>Keterangan</Label>
                     <div className="col-span-1 sm:col-span-2">
                         <textarea
-                            className="w-full text-xs sm:text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="w-full text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             type="text"
                             placeholder="(Optional)"
                             value={formData.description}

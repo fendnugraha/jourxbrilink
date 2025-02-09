@@ -13,7 +13,7 @@ const CashBankBalance = ({ accountBalance, isValidating }) => {
                     <LoaderCircle className="w-4 h-4 inline text-white animate-spin" />
                 </div>
             )}
-            <div className="flex justify-center items-center flex-col bg-indigo-500 hover:bg-indigo-400 py-4 rounded-t-2xl text-white shadow-lg">
+            <div className="flex justify-center items-center flex-col bg-gray-600 hover:bg-gray-500 py-4 rounded-t-2xl text-white shadow-lg">
                 {accountBalance?.data?.length > 0 ? (
                     <>
                         <h1 className="text-xs">Total Saldo Kas & Bank</h1>
@@ -25,7 +25,7 @@ const CashBankBalance = ({ accountBalance, isValidating }) => {
             </div>
 
             <div
-                className={`bg-indigo-400 px-2 transform ${
+                className={`bg-gray-500 px-2 transform ${
                     showBalances ? "opacity-100 scale-y-100 max-h-[700px]" : "opacity-0 scale-y-0 max-h-0 "
                 } origin-top transition-all duration-300 ease-in-out`}
             >
@@ -43,7 +43,7 @@ const CashBankBalance = ({ accountBalance, isValidating }) => {
             </div>
             <button
                 onClick={() => setShowBalances(!showBalances)}
-                className="bg-indigo-400 hover:bg-indigo-500 w-full pb-1 rounded-b-2xl shadow-md text-white disabled:bg-indigo-100"
+                className="bg-gray-400 hover:bg-gray-500 w-full pb-1 rounded-b-2xl shadow-md text-white disabled:bg-gray-100"
                 disabled={accountBalance?.data?.length === 0}
             >
                 <ChevronDown className={`w-4 h-4 inline ${showBalances ? "rotate-180" : ""} transition delay-500 ease-in-out`} />

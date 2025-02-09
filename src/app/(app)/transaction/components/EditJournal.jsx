@@ -6,7 +6,6 @@ import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
 
 const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJournalsByWarehouse }) => {
-    const [journalById, setJournalById] = useState({});
     const [formData, setFormData] = useState({
         debt_code: "",
         cred_code: "",
@@ -17,37 +16,24 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
 
-    const fetchJournalById = async (id) => {
-        try {
-            const response = await axios.get(`/api/journals/${id}`);
-            setJournalById(response.data.data);
-        } catch (error) {
-            setErrors(error.response?.data?.errors || ["Something went wrong."]);
-        }
-    };
-
-    useEffect(() => {
-        fetchJournalById(journal);
-    }, []);
-
     // Update formData when journalById changes
     useEffect(() => {
-        if (journalById.debt_code || journalById.cred_code) {
+        if (journal.debt_code || journal.cred_code) {
             setFormData({
-                debt_code: journalById.debt_code || "",
-                cred_code: journalById.cred_code || "",
-                amount: journalById.amount || "",
-                fee_amount: journalById.fee_amount || "",
-                description: journalById.description || "",
+                debt_code: journal.debt_code || "",
+                cred_code: journal.cred_code || "",
+                amount: journal.amount || "",
+                fee_amount: journal.fee_amount || "",
+                description: journal.description || "",
             });
         }
-    }, [journalById]);
+    }, [journal]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await axios.put(`/api/journals/${journal}`, formData);
+            const response = await axios.put(`/api/journals/${journal.id}`, formData);
             notification(response.data.message);
             fetchJournalsByWarehouse();
             isModalOpen(false);
@@ -59,9 +45,9 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
     };
     return (
         <div className="relative">
-            {journalById.id === undefined && <div className="absolute h-full w-full flex items-center justify-center bg-white">Loading data ...</div>}
+            {journal.id === undefined && <div className="absolute h-full w-full flex items-center justify-center bg-white">Loading data ...</div>}
             <h1 className="text-sm sm:text-xl font-bold mb-4">
-                {journalById.trx_type} ({journalById.invoice})
+                {journal.trx_type} ({journal.invoice})
             </h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 sm:gap-4 items-center">
@@ -69,13 +55,13 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                     <div className="col-span-1 sm:col-span-2">
                         <select
                             onChange={(e) => {
-                                if (journalById.trx_type === "Tarik Tunai") {
+                                if (journal.trx_type === "Tarik Tunai") {
                                     setFormData({ ...formData, debt_code: e.target.value });
                                 } else {
                                     setFormData({ ...formData, cred_code: e.target.value });
                                 }
                             }}
-                            value={journalById.trx_type === "Tarik Tunai" ? formData.debt_code : formData.cred_code}
+                            value={journal.trx_type === "Tarik Tunai" ? formData.debt_code : formData.cred_code}
                             className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         >
                             <option value="">--Pilih rekening--</option>

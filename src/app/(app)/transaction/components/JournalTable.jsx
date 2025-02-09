@@ -40,6 +40,8 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
         setIsModalEditJournalOpen(false);
     };
 
+    const filterSelectedJournalId = journalsByWarehouse?.data?.find((journal) => journal.id === selectedJournalId);
+
     const handleDeleteJournal = async (id) => {
         try {
             const response = await axios.delete(`/api/journals/${id}`);
@@ -273,7 +275,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
             <Modal isOpen={isModalEditJournalOpen} onClose={closeModal} modalTitle="Edit Journal" maxWidth="max-w-2xl">
                 <EditJournal
                     isModalOpen={setIsModalEditJournalOpen}
-                    journal={selectedJournalId}
+                    journal={filterSelectedJournalId}
                     branchAccount={branchAccount}
                     notification={notification}
                     fetchJournalsByWarehouse={fetchJournalsByWarehouse}

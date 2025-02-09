@@ -73,7 +73,8 @@ const LoginPage = () => {
                     reserved
                 </p>
             </div>
-            <div className="italics mt-4">{message && <p className="text-green-500 text-xs">{message}</p>}</div>
+
+            <div className="italics fixed bottom-5 right-8">{message && <p className="text-green-500 text-xs">{message}</p>}</div>
         </>
     );
 };

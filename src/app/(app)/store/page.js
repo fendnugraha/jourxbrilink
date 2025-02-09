@@ -136,7 +136,7 @@ const StorePage = () => {
                                                         value={selectedWarehouse}
                                                         className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                                     >
-                                                        <option value="">Semua Akun</option>
+                                                        <option value="all">Semua Akun</option>
                                                         {warehouses.map((w) => (
                                                             <option key={w.id} value={w.id}>
                                                                 {w.name}
@@ -168,7 +168,7 @@ const StorePage = () => {
                                             </div>
                                             <button
                                                 onClick={() => {
-                                                    fetchTransaction(`/api/transactions/${selectedWarehouse}/${startDate}/${endDate}`);
+                                                    fetchTransaction();
                                                     setIsModalFilterJournalOpen(false);
                                                 }}
                                                 className="btn-primary"

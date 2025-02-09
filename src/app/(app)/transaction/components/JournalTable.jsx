@@ -197,7 +197,11 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                                         </span>
                                         Note: {journal.description}
                                         <span className="font-bold text-xs block">
-                                            {journal.debt_code === warehouseCash ? journal.cred.acc_name : journal.debt.acc_name}{" "}
+                                            {journal.trx_type === "Mutasi Kas"
+                                                ? journal.cred.acc_name + " -> " + journal.debt.acc_name
+                                                : journal.debt_code === warehouseCash
+                                                ? journal.cred.acc_name
+                                                : journal.debt.acc_name}
                                         </span>
                                         <span className="text-xs block text-slate-500">
                                             Last update at <TimeAgo timestamp={journal.updated_at} />

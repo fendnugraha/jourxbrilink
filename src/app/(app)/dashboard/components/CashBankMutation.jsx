@@ -283,7 +283,9 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                                     currentItems.map((journal, index) => (
                                         <tr key={index}>
                                             <td className="">
-                                                <span className="block font-bold text-slate-500">{formatDateTime(journal.created_at)}</span>
+                                                <span className="block font-bold text-slate-500">
+                                                    {formatDateTime(journal.created_at)} | {journal.invoice}
+                                                </span>
                                                 {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt.acc_name}
                                                 <span className="block sm:hidden font-bold text-blue-500">{formatNumber(journal.amount)}</span>
                                             </td>

@@ -28,11 +28,15 @@ const Header = ({ title }) => {
     const userWarehouseId = user?.role?.warehouse_id;
     const userWarehouseName = user?.role?.warehouse?.name;
     const WarehouseRank = profit?.data?.findIndex((item) => Number(item.warehouse_id) === userWarehouseId) + 1 || 0;
+    const toOrdinal = (number) => {
+        const suffixes = ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"];
+        const mod = number % 100;
+        return number + (suffixes[mod - 10] || suffixes[mod] || suffixes[0]);
+    };
 
     useEffect(() => {
         mutate();
     });
-
     return (
         <>
             <header className={`h-[72px] px-4 md:px-6 flex justify-between items-center border-b bg-blue-800`}>
@@ -47,7 +51,10 @@ const Header = ({ title }) => {
                                 </div>
                             ) : (
                                 <div className="flex items-center gap-2">
-                                    <span className="font-bold text-xl">#{WarehouseRank}</span> <span className="hidden sm:inline">{userWarehouseName}</span>
+                                    <span className="font-bold text-xl">
+                                        #{toOrdinal(WarehouseRank)}/{profit?.data?.length}
+                                    </span>{" "}
+                                    <span className="hidden sm:inline">{userWarehouseName}</span>
                                 </div>
                             ))}
                     </h1>

@@ -88,6 +88,21 @@ const StorePage = () => {
             console.log(error);
         }
     };
+    const [selectedCategory, setSelectedCategory] = useState([]);
+    const addToSelectedCategory = (category) => {
+        if (selectedCategory.includes(category)) {
+            setSelectedCategory(selectedCategory.filter((item) => item !== category));
+        } else {
+            setSelectedCategory([...selectedCategory, category]);
+        }
+    };
+
+    const filterTransactionByCategoryArray = (categoryArray) => {
+        const filteredTransactions = transactions.filter((transaction) => {
+            return categoryArray.includes(transaction.category);
+        });
+        setTransactions(filteredTransactions);
+    };
 
     return (
         <>

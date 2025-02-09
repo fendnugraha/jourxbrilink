@@ -153,7 +153,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                                 {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(dailyDashboard?.data?.totalVoucher)}
                             </h1>
                         </div>
-                        {data?.totalAccessories > 0 && (
+                        {dailyDashboard?.data?.totalAccessories > 0 && (
                             <div className="flex gap-2 flex-col justify-center items-center">
                                 <h4 className="text-md sm:text-lg font-bold text-white">Accessories</h4>
                                 <h1 className="text-2xl sm:text-3xl font-black text-yellow-300">

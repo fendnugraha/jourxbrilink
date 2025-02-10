@@ -16,7 +16,7 @@ import CreateBankAdminFee from "./components/CreateBankAdminFee";
 import CreateExpense from "./components/CreateExpense";
 import CashBankBalance from "./components/CashBankBalance";
 import Loading from "../loading";
-import { ArrowDownCircleIcon, ArrowUpCircleIcon, ChevronRightIcon, HandCoinsIcon, ShoppingBagIcon } from "lucide-react";
+import { ArrowDownCircleIcon, ArrowUpCircleIcon, ChevronRightIcon, HandCoinsIcon, LoaderCircleIcon, ShoppingBagIcon } from "lucide-react";
 import useCashBankBalance from "@/libs/cashBankBalance";
 import useSWR, { mutate } from "swr";
 
@@ -335,7 +335,8 @@ const TransactionPage = () => {
                             />
                         </Modal>
                         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-20 sm:mb-0">
-                            <div className="col-span-1 sm:col-span-3 bg-white py-6 rounded-2xl order-2 sm:order-1">
+                            <div className="relative col-span-1 sm:col-span-3 bg-white py-6 rounded-2xl order-2 sm:order-1">
+                                {journalLoading && <LoaderCircleIcon size={20} className="absolute top-1 left-1 animate-spin text-slate-300" />}
                                 <JournalTable
                                     cashBank={cashBank}
                                     notification={(message) => setNotification({ message })}

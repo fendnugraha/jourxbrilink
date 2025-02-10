@@ -5,7 +5,7 @@ import formatDateTime from "@/libs/formatDateTime";
 import axios from "@/libs/axios";
 import { useState } from "react";
 import Pagination from "@/components/PaginateList";
-import { ArrowRightIcon, FilterIcon, MessageCircleWarningIcon, PencilIcon, TrashIcon } from "lucide-react";
+import { ArrowRightIcon, FilterIcon, LoaderCircleIcon, MessageCircleWarningIcon, PencilIcon, TrashIcon } from "lucide-react";
 import Modal from "@/components/Modal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
@@ -67,7 +67,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
         setCurrentPage(page);
     };
     return (
-        <div>
+        <div className="">
             <div className="px-4 flex gap-2">
                 <select
                     onChange={(e) => {
@@ -176,16 +176,10 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                         </tr>
                     </thead>
                     <tbody>
-                        {loading ? (
+                        {currentItems.length === 0 ? (
                             <tr>
                                 <td colSpan="3" className="text-center">
-                                    <span className="text-sm text-slate-500">Loading...</span>
-                                </td>
-                            </tr>
-                        ) : currentItems.length === 0 ? (
-                            <tr>
-                                <td colSpan="3" className="text-center">
-                                    <span className="text-sm text-slate-500">Tidak ada transaksi</span>
+                                    <span className="text-sm text-slate-500">{loading ? "Loading..." : "No data found."}</span>
                                 </td>
                             </tr>
                         ) : (

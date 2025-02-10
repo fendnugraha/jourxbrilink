@@ -160,10 +160,10 @@ const VoucherSalesTable = ({ warehouse, warehouses, userRole }) => {
                     <h1 className="text-4xl font-bold">{formatNumber(totalCostVoucher < 0 ? totalCostVoucher * -1 : 0)}</h1>
                 </div>
             </div>
-            {filterTrxNonVoucher.lenth > 0 && (
+            {filterTrxNonVoucher.length > 0 && (
                 <div className="my-4 flex gap-4 sm:flex-row flex-col">
                     <div className="bg-white overflow-hidden w-full shadow-sm sm:rounded-2xl sm:w-3/4">
-                        <h1 className="px-2 sm:px-6 pt-4 font-bold text-xl text-blue-600">
+                        <h1 className="px-2 sm:px-6 pt-4 font-bold text-xl text-green-600">
                             Total Penjualan Accesories
                             <span className="text-xs block font-normal">
                                 Periode: {startDate} - {endDate}
@@ -208,7 +208,7 @@ const VoucherSalesTable = ({ warehouse, warehouses, userRole }) => {
                             </table>
                         </div>
                     </div>
-                    <div className="bg-sky-700 py-2 text-white overflow-hidden shadow-sm sm:rounded-2xl flex-1 flex flex-col justify-center items-center">
+                    <div className="bg-green-700 py-2 text-white overflow-hidden shadow-sm sm:rounded-2xl flex-1 flex flex-col justify-center items-center">
                         <h1>Total</h1>
                         <h1 className="text-4xl font-bold">{formatNumber(totalCostNonVoucher < 0 ? totalCostNonVoucher * -1 : 0)}</h1>
                     </div>

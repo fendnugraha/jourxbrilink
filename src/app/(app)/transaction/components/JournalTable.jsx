@@ -20,11 +20,10 @@ const getCurrentDate = () => {
     return `${year}-${month}-${day}`;
 };
 
-const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, warehouseId, notification, fetchJournalsByWarehouse, user }) => {
+const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, warehouseId, notification, fetchJournalsByWarehouse, user, loading }) => {
     const [selectedAccount, setSelectedAccount] = useState("");
     const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
-    const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
     const [isModalFilterJournalOpen, setIsModalFilterJournalOpen] = useState(false);

@@ -36,6 +36,7 @@ const TransactionPage = () => {
 
     const [journalsByWarehouse, setJournalsByWarehouse] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [journalLoading, setJournalLoading] = useState(false);
     const [cashBank, setCashBank] = useState([]);
     const [isModalCreateTransferOpen, setIsModalCreateTransferOpen] = useState(false);
     const [isModalCreateCashWithdrawalOpen, setIsModalCreateCashWithdrawalOpen] = useState(false);
@@ -100,14 +101,14 @@ const TransactionPage = () => {
         fetchWarehouses();
     }, []);
     const fetchJournalsByWarehouse = async (selectedWarehouse = warehouse, startDate = getCurrentDate(), endDate = getCurrentDate()) => {
-        setLoading(true);
+        setJournalLoading(true);
         try {
             const response = await axios.get(`/api/get-journal-by-warehouse/${selectedWarehouse}/${startDate}/${endDate}`);
             setJournalsByWarehouse(response.data);
         } catch (error) {
             setNotification(error.response?.data?.message || "Something went wrong.");
         } finally {
-            setLoading(false);
+            setJournalLoading(false);
         }
     };
 
@@ -344,6 +345,7 @@ const TransactionPage = () => {
                                     warehouse={warehouse}
                                     warehouseId={(warehouseId) => setSelectedWarehouseId(warehouseId)}
                                     user={user}
+                                    loading={journalLoading}
                                 />
                             </div>
                             <div className="order-1 sm:order-2 px-2 sm:px-0">

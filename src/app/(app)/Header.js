@@ -31,7 +31,7 @@ const Header = ({ title }) => {
     const toOrdinal = (number) => {
         const suffixes = ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"];
         const mod = number % 100;
-        return number + (suffixes[mod - 10] || suffixes[mod] || suffixes[0]);
+        return suffixes[mod - 10] || suffixes[mod] || suffixes[0];
     };
 
     useEffect(() => {
@@ -42,24 +42,28 @@ const Header = ({ title }) => {
             <header className={`h-[72px] px-4 md:px-6 flex justify-between items-center border-b bg-blue-800`}>
                 <h1 className="text-xl font-bold text-white">{title}</h1>
                 <div className="flex items-center gap-2">
-                    <h1 className="text-lg sm:text-md text-white flex flex-col justify-end items-end">
+                    <div className="text-lg sm:text-md text-white flex flex-col justify-end items-end">
                         {WarehouseRank > 0 &&
                             (WarehouseRank === 1 ? (
-                                <div className="flex items-center gap-2">
+                                <h1 className="flex items-center gap-2">
                                     <TrophyIcon size={26} strokeWidth={2} className="text-amber-200 inline" />{" "}
                                     <span className="hidden uppercase font-bold sm:inline">{userWarehouseName}</span>
-                                </div>
+                                </h1>
                             ) : (
                                 <>
                                     <div className="flex items-center gap-2">
-                                        <span className="font-bold text-xl">
-                                            #{toOrdinal(WarehouseRank)}/{profit?.data?.length}
-                                        </span>{" "}
+                                        <h1 className="font-bold text-xl">
+                                            #{WarehouseRank}
+                                            <span className="text-sm">
+                                                {""}
+                                                <sup>{toOrdinal(WarehouseRank)}</sup>/{profit?.data?.length}
+                                            </span>
+                                        </h1>{" "}
                                         <span className="hidden sm:inline">{userWarehouseName}</span>
                                     </div>
                                 </>
                             ))}
-                    </h1>
+                    </div>
                     <button className=" text-white sm:hidden">
                         <MenuIcon className="w-8 h-8" onClick={() => setIsOpen(!isOpen)} />
                     </button>

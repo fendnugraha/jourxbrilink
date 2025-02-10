@@ -144,7 +144,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                                     onChange={(e) => setSelectedWarehouse(e.target.value)}
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                 >
-                                    {warehouses.map((warehouse) => (
+                                    {warehouses?.data?.map((warehouse) => (
                                         <option key={warehouse.id} value={warehouse.id}>
                                             {warehouse.name}
                                         </option>
@@ -185,7 +185,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                             isModalOpen={setIsModalCreateMutationFromHqOpen}
                             notification={(message) => setNotification(message)}
                             fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                            warehouses={warehouses}
+                            warehouses={warehouses?.data}
                         />
                     </Modal>
                     <Modal isOpen={isModalCreateJournalOpen} onClose={closeModal} modalTitle="Jurnal umum">
@@ -193,7 +193,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                             cashBank={cashBank}
                             isModalOpen={setIsModalCreateJournalOpen}
                             notification={(message) => setNotification(message)}
-                            warehouses={warehouses}
+                            warehouses={warehouses?.data}
                         />
                     </Modal>
                 </div>

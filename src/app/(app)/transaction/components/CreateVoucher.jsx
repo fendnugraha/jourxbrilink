@@ -4,6 +4,7 @@ import Label from "@/components/Label";
 import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
 import { MinusCircleIcon, PlusCircleIcon } from "lucide-react";
+import useGetProducts from "@/libs/getAllProducts";
 
 const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, user }) => {
     const [formData, setFormData] = useState({
@@ -13,28 +14,11 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
         description: "",
     });
 
-    const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
 
-    const fetchProducts = async () => {
-        setLoading(true);
-        try {
-            const response = await axios.get("/api/get-all-products");
-            setProducts(response.data.data);
-        } catch (error) {
-            setErrors(error.response?.data?.errors || ["Something went wrong."]);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchProducts();
-    }, []);
-
-    const filteredProducts = products.filter((product) => product.category === "Voucher & SP");
-
+    const { products, productsError, isValidating } = useGetProducts();
+    const filteredProducts = products?.data?.filter((product) => product.category === "Voucher & SP");
     const incrementQty = (e) => {
         e.preventDefault();
         setFormData({ ...formData, qty: formData.qty + 1 });
@@ -48,7 +32,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
     };
 
     const selectedProduct = () => {
-        const product = filteredProducts.find((product) => product.id === Number(formData.product_id));
+        const product = filteredProducts?.find((product) => product.id === Number(formData.product_id));
         return product;
     };
 
@@ -85,7 +69,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                     <select
                         onChange={(e) => setFormData({ ...formData, product_id: e.target.value, qty: 1 })}
                         value={formData.product_id}
-                        disabled={loading}
+                        disabled={isValidating}
                         className="w-full text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     >
                         <option value="">--Pilih barang--</option>

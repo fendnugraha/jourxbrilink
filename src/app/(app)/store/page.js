@@ -2,7 +2,7 @@
 import Notification from "@/components/notification";
 import Header from "../Header";
 import { useEffect, useState } from "react";
-import { ArrowBigDown, ArrowBigUp, FilterIcon, MessageCircleWarningIcon, PlusCircleIcon, XCircleIcon } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp, FilterIcon, MessageCircleWarningIcon, PlusCircleIcon, SearchIcon, XCircleIcon } from "lucide-react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
 import formatDateTime from "@/libs/formatDateTime";
@@ -36,6 +36,7 @@ const StorePage = () => {
     const [warehouses, setWarehouses] = useState([]);
     const [isModalDeleteTrxOpen, setIsModalDeleteTrxOpen] = useState(false);
     const [selectedTrxId, setSelectedTrxId] = useState(null);
+    const [search, setSearch] = useState("");
 
     const closeModal = () => {
         setIsModalFilterJournalOpen(false);
@@ -45,7 +46,11 @@ const StorePage = () => {
     const fetchTransaction = async (url = `/api/get-trx-by-warehouse/${selectedWarehouse}/${startDate}/${endDate}`) => {
         setLoading(true);
         try {
-            const response = await axios.get(url);
+            const response = await axios.get(url, {
+                params: {
+                    search: search,
+                },
+            });
             setTransactions(response.data.data);
         } catch (error) {
             setNotification(error.response?.data?.message || "Something went wrong.");
@@ -118,15 +123,15 @@ const StorePage = () => {
                                     <h1 className="text-2xl font-bold mb-4">
                                         Transaksi Barang
                                         <span className="text-xs block text-slate-500 font-normal">
-                                            Cabang: {warehouses.find((w) => w.id === Number(selectedWarehouse))?.name} Periode: {startDate} - {endDate}
+                                            Cabang: {warehouses.find((w) => w.id === Number(selectedWarehouse))?.name}, Periode: {startDate} - {endDate}
                                         </span>
                                     </h1>
                                     <div className="flex items-center gap-2">
-                                        <Link href="/store/sales" className="btn-primary text-xs">
+                                        <Link href="/store/sales" className="btn-primary text-sm font-normal">
                                             <PlusCircleIcon className="w-4 h-4 inline" /> Penjualan
                                         </Link>
                                         {userRole === "Administrator" && (
-                                            <Link href="/store/purchase" className="btn-primary text-xs">
+                                            <Link href="/store/purchase" className="btn-primary text-sm font-normal">
                                                 <PlusCircleIcon className="w-4 h-4 inline" /> Pembelian
                                             </Link>
                                         )}
@@ -136,9 +141,9 @@ const StorePage = () => {
                                         </button> */}
                                         <button
                                             onClick={() => setIsModalFilterJournalOpen(true)}
-                                            className="bg-white font-bold p-2 rounded-lg border border-gray-300 hover:border-gray-400"
+                                            className="bg-white font-bold p-2 rounded-lg border border-gray-500 hover:border-gray-400"
                                         >
-                                            <FilterIcon className="size-4" />
+                                            <FilterIcon className="size-5" />
                                         </button>
                                         <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                                             {userRole === "Administrator" && (
@@ -193,6 +198,24 @@ const StorePage = () => {
                                         </Modal>
                                     </div>
                                 </div>
+                                <div className="px-4 mb-2 flex">
+                                    <Input
+                                        type="search"
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        placeholder="Cari barang..."
+                                        className="w-full text-sm rounded-l-lg rounded-r-none border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    />
+                                    <button
+                                        onClick={() => {
+                                            fetchTransaction();
+                                        }}
+                                        className="bg-slate-500 text-sm text-white min-w-20 sm:min-w-32 p-2 rounded-r-lg border border-gray-500 hover:border-gray-400 w-fit"
+                                        disabled={!search}
+                                    >
+                                        <SearchIcon size={24} className="inline" /> <span className="hidden sm:inline">Search</span>
+                                    </button>
+                                </div>
                                 <div className="overflow-x-auto">
                                     <table className="table w-full text-xs">
                                         <thead>
@@ -231,7 +254,7 @@ const StorePage = () => {
                                                         </td>
                                                         <td className="font-bold">
                                                             <span className="text-xs font-normal block text-slate-500">
-                                                                {formatDateTime(transaction.created_at)}
+                                                                {formatDateTime(transaction.created_at)} {transaction.invoice}
                                                             </span>
 
                                                             {transaction.product.name}

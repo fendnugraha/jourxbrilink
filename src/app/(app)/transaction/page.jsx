@@ -18,7 +18,7 @@ import CashBankBalance from "./components/CashBankBalance";
 import Loading from "../loading";
 import { ArrowDownCircleIcon, ArrowUpCircleIcon, ChevronRightIcon, HandCoinsIcon, ShoppingBagIcon } from "lucide-react";
 import useCashBankBalance from "@/libs/cashBankBalance";
-import { mutate } from "swr";
+import useSWR, { mutate } from "swr";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -27,6 +27,7 @@ const getCurrentDate = () => {
     const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
 };
+
 const TransactionPage = () => {
     const { user } = useAuth({ middleware: "auth" });
     if (!user) {

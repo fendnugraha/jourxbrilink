@@ -53,7 +53,6 @@ const VoucherSalesTable = ({ warehouse, warehouses, userRole }) => {
     const totalCostNonVoucher = filterTrxNonVoucher?.reduce((total, transaction) => {
         return total + Number(transaction.total_cost);
     }, 0);
-
     return (
         <>
             <div className="my-4 flex gap-4 sm:flex-row flex-col">
@@ -161,58 +160,60 @@ const VoucherSalesTable = ({ warehouse, warehouses, userRole }) => {
                     <h1 className="text-4xl font-bold">{formatNumber(totalCostVoucher < 0 ? totalCostVoucher * -1 : 0)}</h1>
                 </div>
             </div>
-            <div className="my-4 flex gap-4 sm:flex-row flex-col">
-                <div className="bg-white overflow-hidden w-full shadow-sm sm:rounded-2xl sm:w-3/4">
-                    <h1 className="px-2 sm:px-6 pt-4 font-bold text-xl text-blue-600">
-                        Total Penjualan Accesories
-                        <span className="text-xs block font-normal">
-                            Periode: {startDate} - {endDate}
-                        </span>
-                    </h1>
-                    <div className="overflow-x-auto">
-                        <table className="table w-full text-xs">
-                            <thead>
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Qty</th>
-                                    <th>Jual</th>
-                                    <th>Modal</th>
-                                    <th>Laba</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {loading ? (
+            {filterTrxNonVoucher.lenth > 0 && (
+                <div className="my-4 flex gap-4 sm:flex-row flex-col">
+                    <div className="bg-white overflow-hidden w-full shadow-sm sm:rounded-2xl sm:w-3/4">
+                        <h1 className="px-2 sm:px-6 pt-4 font-bold text-xl text-blue-600">
+                            Total Penjualan Accesories
+                            <span className="text-xs block font-normal">
+                                Periode: {startDate} - {endDate}
+                            </span>
+                        </h1>
+                        <div className="overflow-x-auto">
+                            <table className="table w-full text-xs">
+                                <thead>
                                     <tr>
-                                        <td colSpan="5" className="text-center">
-                                            Loading...
-                                        </td>
+                                        <th>Product</th>
+                                        <th>Qty</th>
+                                        <th>Jual</th>
+                                        <th>Modal</th>
+                                        <th>Laba</th>
                                     </tr>
-                                ) : transactions.length === 0 ? (
-                                    <tr>
-                                        <td colSpan="5" className="text-center">
-                                            Tidak ada data
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    filterTrxNonVoucher?.map((transaction) => (
-                                        <tr key={transaction.product_id}>
-                                            <td>{transaction.product.name}</td>
-                                            <td className="text-center">{formatNumber(-transaction.quantity)}</td>
-                                            <td className="text-end">{formatNumber(-transaction.total_price)}</td>
-                                            <td className="text-end">{formatNumber(-transaction.total_cost)}</td>
-                                            <td className="text-end">{formatNumber(-Number(transaction.total_price - transaction.total_cost))}</td>
+                                </thead>
+                                <tbody>
+                                    {loading ? (
+                                        <tr>
+                                            <td colSpan="5" className="text-center">
+                                                Loading...
+                                            </td>
                                         </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
+                                    ) : transactions.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="5" className="text-center">
+                                                Tidak ada data
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        filterTrxNonVoucher?.map((transaction) => (
+                                            <tr key={transaction.product_id}>
+                                                <td>{transaction.product.name}</td>
+                                                <td className="text-center">{formatNumber(-transaction.quantity)}</td>
+                                                <td className="text-end">{formatNumber(-transaction.total_price)}</td>
+                                                <td className="text-end">{formatNumber(-transaction.total_cost)}</td>
+                                                <td className="text-end">{formatNumber(-Number(transaction.total_price - transaction.total_cost))}</td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div className="bg-sky-700 py-2 text-white overflow-hidden shadow-sm sm:rounded-2xl flex-1 flex flex-col justify-center items-center">
+                        <h1>Total</h1>
+                        <h1 className="text-4xl font-bold">{formatNumber(totalCostNonVoucher < 0 ? totalCostNonVoucher * -1 : 0)}</h1>
                     </div>
                 </div>
-                <div className="bg-sky-700 py-2 text-white overflow-hidden shadow-sm sm:rounded-2xl flex-1 flex flex-col justify-center items-center">
-                    <h1>Total</h1>
-                    <h1 className="text-4xl font-bold">{formatNumber(totalCostNonVoucher < 0 ? totalCostNonVoucher * -1 : 0)}</h1>
-                </div>
-            </div>
+            )}
         </>
     );
 };

@@ -7,7 +7,7 @@ import Modal from "@/components/Modal";
 import CreateMutationFromHq from "./CreateMutationFromHq";
 import Notification from "@/components/notification";
 import Pagination from "@/components/PaginateList";
-import { FilterIcon, MoveRightIcon, PlusCircleIcon } from "lucide-react";
+import { FilterIcon, LoaderCircleIcon, MoveRightIcon, PlusCircleIcon } from "lucide-react";
 import CreateJournal from "./CreateJournal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
@@ -91,16 +91,20 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
 
     const mutationOutSum = accountBalance?.data?.reduce((sum, acc) => sum + mutationOutSumById(acc.id), 0);
 
+    const [searchTerm, setSearchTerm] = useState("");
     const [checkedAccounts, setCheckedAccounts] = useState(null);
     const filteredJournals = journalsByWarehouse.data?.filter((journal) => {
-        if (checkedAccounts === null) {
+        if (!searchTerm) {
             return journal.trx_type === "Mutasi Kas";
         }
-        return journal.trx_type === "Mutasi Kas" && (checkedAccounts.includes(journal.cred_code) || checkedAccounts.includes(journal.debt_code));
+        return (
+            journal.trx_type === "Mutasi Kas" &&
+            (journal.cred.acc_name.toLowerCase().includes(searchTerm) || journal.debt.acc_name.toLowerCase().includes(searchTerm))
+        );
     });
 
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5; // Number of items per page
+    const [itemsPerPage, setItemsPerPage] = useState(5); // Number of items per page
     const totalItems = filteredJournals?.length || 0;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -112,7 +116,8 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
     return (
         <div className="my-4">
             {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
-            <div className="mb-4 bg-white shadow-sm sm:rounded-2xl">
+            <div className="mb-4 bg-white shadow-sm sm:rounded-2xl relative">
+                {loading || (isValidating && <LoaderCircleIcon size={20} className="animate-spin absolute top-1 text-slate-400 left-1" />)}
                 <div className="px-2 sm:px-6 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <h1 className="font-bold text-xl">Mutasi Saldo</h1>
                     <div className="sm:flex gap-2 w-full sm:col-span-2">
@@ -206,23 +211,17 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {loading || isValidating ? (
-                                <tr className="text-center">
-                                    <td colSpan={4}>Loading ...</td>
+                            {accountBalance?.data?.map((account, index) => (
+                                <tr key={index}>
+                                    <td>
+                                        {account.acc_name}
+                                        <span className="text-xs text-blue-600 font-bold block sm:hidden">{formatNumber(account.balance)}</span>
+                                    </td>
+                                    <td className="text-end font-bold hidden sm:table-cell">{formatNumber(account.balance ?? 0)}</td>
+                                    <td className="text-end">{formatNumber(mutationInSumById(account.id) ?? 0)}</td>
+                                    <td className="text-end">{formatNumber(mutationOutSumById(account.id) ?? 0)}</td>
                                 </tr>
-                            ) : (
-                                accountBalance?.data?.map((account, index) => (
-                                    <tr key={index}>
-                                        <td>
-                                            {account.acc_name}
-                                            <span className="text-xs text-blue-600 font-bold block sm:hidden">{formatNumber(account.balance)}</span>
-                                        </td>
-                                        <td className="text-end font-bold hidden sm:table-cell">{formatNumber(account.balance ?? 0)}</td>
-                                        <td className="text-end">{formatNumber(mutationInSumById(account.id) ?? 0)}</td>
-                                        <td className="text-end">{formatNumber(mutationOutSumById(account.id) ?? 0)}</td>
-                                    </tr>
-                                ))
-                            )}
+                            ))}
                             <tr>
                                 <td className="font-bold ">Penambahan saldo dari HQ</td>
                                 <td className="text-end font-bold hidden sm:table-cell"></td>
@@ -230,6 +229,8 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                                 <td className="text-end font-bold">
                                     {mutationOutSum - mutationInSum === 0 ? (
                                         <span className="text-green-600">Completed</span>
+                                    ) : loading || isValidating ? (
+                                        "..."
                                     ) : (
                                         formatNumber(mutationOutSum - mutationInSum)
                                     )}
@@ -241,65 +242,87 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                                 <th>
                                     Total{" "}
                                     <span className="font-bold text-blue-500 block sm:hidden">
-                                        {formatNumber(accountBalance?.data?.reduce((sum, acc) => sum + acc.balance, 0))}
+                                        {loading || (isValidating && formatNumber(accountBalance?.data?.reduce((sum, acc) => sum + acc.balance, 0)))}
                                     </span>
                                 </th>
                                 <th className="text-end font-bold hidden sm:table-cell">
-                                    {formatNumber(accountBalance?.data?.reduce((sum, acc) => sum + acc.balance, 0))}
+                                    {loading || isValidating ? "..." : formatNumber(accountBalance?.data?.reduce((sum, acc) => sum + acc.balance, 0))}
                                 </th>
-                                <th className="text-end">{formatNumber(mutationInSum)}</th>
-                                <th className="text-end">{formatNumber(mutationOutSum)}</th>
+                                <th className="text-end">{loading || isValidating ? "..." : formatNumber(mutationInSum)}</th>
+                                <th className="text-end">{loading || isValidating ? "..." : formatNumber(mutationOutSum)}</th>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
             </div>
-            {currentItems.length > 0 && (
-                <div className="mb-4 bg-white shadow-sm sm:rounded-2xl">
-                    <h1 className="px-2 sm:px-6 pt-6 font-bold text-xl text-green-600">History Mutasi Kas</h1>
-                    <div className="overflow-x-auto">
-                        <table className="table w-full text-xs">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        Dari <MoveRightIcon className="size-5 inline" /> Ke
-                                    </th>
-                                    <th className="hidden sm:table-cell">Jumlah</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {loading ? (
-                                    <tr className="text-center">
-                                        <td colSpan={2}>Loading ...</td>
-                                    </tr>
-                                ) : (
-                                    currentItems.map((journal, index) => (
-                                        <tr key={index}>
-                                            <td className="">
-                                                <span className="block font-bold text-slate-500">
-                                                    {formatDateTime(journal.created_at)} | {journal.invoice}
-                                                </span>
-                                                {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt.acc_name}
-                                                <span className="block sm:hidden font-bold text-blue-500">{formatNumber(journal.amount)}</span>
-                                            </td>
-                                            <td className="text-end hidden sm:table-cell">{formatNumber(journal.amount)}</td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                        {totalPages > 1 && (
-                            <Pagination
-                                className="w-full px-2 sm:px-6 pb-6"
-                                totalItems={totalItems}
-                                itemsPerPage={itemsPerPage}
-                                currentPage={currentPage}
-                                onPageChange={handlePageChange}
-                            />
-                        )}
-                    </div>
+
+            <div className="mb-4 bg-white shadow-sm sm:rounded-2xl">
+                <h1 className="px-2 sm:px-6 pt-6 font-bold text-xl text-green-600">History Mutasi Kas</h1>
+                <div className="px-2 sm:px-6 pt-2 flex gap-2">
+                    <select
+                        onChange={(e) => {
+                            setItemsPerPage(Number(e.target.value));
+                            setCurrentPage(1);
+                        }}
+                        value={itemsPerPage}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                    >
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                    </select>
+                    <Input
+                        type="search"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        placeholder="Cari..."
+                    />
                 </div>
-            )}
+                <div className="overflow-x-auto">
+                    <table className="table w-full text-xs">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Dari <MoveRightIcon className="size-5 inline" /> Ke
+                                </th>
+                                <th className="hidden sm:table-cell">Jumlah</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {loading ? (
+                                <tr className="text-center">
+                                    <td colSpan={2}>Loading ...</td>
+                                </tr>
+                            ) : (
+                                currentItems.map((journal, index) => (
+                                    <tr key={index}>
+                                        <td className="">
+                                            <span className="block font-bold text-slate-500">
+                                                {formatDateTime(journal.created_at)} | {journal.invoice}
+                                            </span>
+                                            {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt.acc_name}
+                                            <span className="block sm:hidden font-bold text-blue-500">{formatNumber(journal.amount)}</span>
+                                        </td>
+                                        <td className="text-end hidden sm:table-cell">{formatNumber(journal.amount)}</td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                    {totalPages > 1 && (
+                        <Pagination
+                            className="w-full px-2 sm:px-6 pb-6"
+                            totalItems={totalItems}
+                            itemsPerPage={itemsPerPage}
+                            currentPage={currentPage}
+                            onPageChange={handlePageChange}
+                        />
+                    )}
+                </div>
+            </div>
         </div>
     );
 };

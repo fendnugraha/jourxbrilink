@@ -51,19 +51,11 @@ const Header = ({ title }) => {
                                 </div>
                             ) : (
                                 <>
-                                    <div className="flex items-center gap-2 scale-75">
-                                        <span className="font-bold text-xl">#{toOrdinal(WarehouseRank - 1)}</span>{" "}
-                                        <span className="hidden sm:inline">{profit?.data[WarehouseRank - 2].warehouse?.name}</span>
-                                    </div>
                                     <div className="flex items-center gap-2">
                                         <span className="font-bold text-xl">
                                             #{toOrdinal(WarehouseRank)}/{profit?.data?.length}
                                         </span>{" "}
                                         <span className="hidden sm:inline">{userWarehouseName}</span>
-                                    </div>
-                                    <div className="flex items-center gap-2 scale-75">
-                                        <span className="font-bold text-xl">#{toOrdinal(WarehouseRank + 1)}</span>{" "}
-                                        <span className="hidden sm:inline">{profit?.data[WarehouseRank + 2].warehouse?.name}</span>
                                     </div>
                                 </>
                             ))}

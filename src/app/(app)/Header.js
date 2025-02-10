@@ -42,7 +42,7 @@ const Header = ({ title }) => {
             <header className={`h-[72px] px-4 md:px-6 flex justify-between items-center border-b bg-blue-800`}>
                 <h1 className="text-xl font-bold text-white">{title}</h1>
                 <div className="flex items-center gap-2">
-                    <h1 className="text-lg sm:text-md text-white">
+                    <h1 className="text-lg sm:text-md text-white flex flex-col justify-end items-end">
                         {WarehouseRank > 0 &&
                             (WarehouseRank === 1 ? (
                                 <div className="flex items-center gap-2">
@@ -50,12 +50,22 @@ const Header = ({ title }) => {
                                     <span className="hidden uppercase font-bold sm:inline">{userWarehouseName}</span>
                                 </div>
                             ) : (
-                                <div className="flex items-center gap-2">
-                                    <span className="font-bold text-xl">
-                                        #{toOrdinal(WarehouseRank)}/{profit?.data?.length}
-                                    </span>{" "}
-                                    <span className="hidden sm:inline">{userWarehouseName}</span>
-                                </div>
+                                <>
+                                    <div className="flex items-center gap-2 scale-75">
+                                        <span className="font-bold text-xl">#{toOrdinal(WarehouseRank - 1)}</span>{" "}
+                                        <span className="hidden sm:inline">{profit?.data[WarehouseRank - 2].warehouse?.name}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="font-bold text-xl">
+                                            #{toOrdinal(WarehouseRank)}/{profit?.data?.length}
+                                        </span>{" "}
+                                        <span className="hidden sm:inline">{userWarehouseName}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 scale-75">
+                                        <span className="font-bold text-xl">#{toOrdinal(WarehouseRank + 1)}</span>{" "}
+                                        <span className="hidden sm:inline">{profit?.data[WarehouseRank + 2].warehouse?.name}</span>
+                                    </div>
+                                </>
                             ))}
                     </h1>
                     <button className=" text-white sm:hidden">

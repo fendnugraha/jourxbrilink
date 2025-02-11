@@ -15,13 +15,14 @@ import {
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/libs/auth";
 import { useEffect, useState } from "react";
-import RankByProfit from "@/components/RankByProfit";
+
 import { mutate } from "swr";
+import useGetProfit from "@/components/RankByProfit";
 
 const Header = ({ title }) => {
     const { user, logout } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
-    const { profit, loading, error } = RankByProfit();
+    const { profit, loading, error } = useGetProfit();
 
     const pathname = usePathname();
 
@@ -33,10 +34,6 @@ const Header = ({ title }) => {
         const mod = number % 100;
         return suffixes[mod - 10] || suffixes[mod] || suffixes[0];
     };
-
-    useEffect(() => {
-        mutate();
-    });
     return (
         <>
             <header className={`h-[72px] px-4 md:px-6 flex justify-between items-center border-b bg-blue-800`}>

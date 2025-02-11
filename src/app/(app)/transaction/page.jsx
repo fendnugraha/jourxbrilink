@@ -19,6 +19,7 @@ import Loading from "../loading";
 import { ArrowDownCircleIcon, ArrowUpCircleIcon, ChevronRightIcon, HandCoinsIcon, LoaderCircleIcon, ShoppingBagIcon } from "lucide-react";
 import useCashBankBalance from "@/libs/cashBankBalance";
 import useSWR, { mutate } from "swr";
+import useGetWarehouses from "@/libs/getAllWarehouse";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -84,22 +85,7 @@ const TransactionPage = () => {
     const [selectedWarehouseId, setSelectedWarehouseId] = useState(warehouse);
     const { accountBalance, error: accountBalanceError, loading: isValidating } = useCashBankBalance(selectedWarehouseId, endDate);
 
-    const [warehouses, setWarehouses] = useState([]);
-    const fetchWarehouses = async (url = "/api/get-all-warehouses") => {
-        setLoading(true);
-        try {
-            const response = await axios.get(url);
-            setWarehouses(response.data.data);
-        } catch (error) {
-            setErrors(error.response?.data?.errors || ["Something went wrong."]);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchWarehouses();
-    }, []);
+    const { warehouses, warehousesError } = useGetWarehouses();
     const fetchJournalsByWarehouse = async (selectedWarehouse = warehouse, startDate = getCurrentDate(), endDate = getCurrentDate()) => {
         setJournalLoading(true);
         try {

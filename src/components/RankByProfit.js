@@ -1,6 +1,6 @@
-"use client";
 import axios from "@/libs/axios";
 import useSWR from "swr";
+
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 const useGetProfit = () => {
     const {
@@ -19,14 +19,4 @@ const useGetProfit = () => {
     return { profit, loading: isValidating, error: error?.response?.data?.errors };
 };
 
-const RankByProfit = () => {
-    const { profit, loading, error } = useGetProfit();
-
-    return {
-        profit,
-        loading,
-        error,
-    };
-};
-
-export default RankByProfit;
+export default useGetProfit;

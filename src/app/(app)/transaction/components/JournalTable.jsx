@@ -138,7 +138,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                                 className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             >
                                 <option value="">Semua Akun</option>
-                                {warehouses.map((w) => (
+                                {warehouses?.data?.map((w) => (
                                     <option key={w.id} value={w.id}>
                                         {w.name}
                                     </option>
@@ -197,7 +197,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
             </div>
             <div className="px-4">
                 <h4 className="text-xs text-slate-500">
-                    {warehouses.find((w) => w.id === Number(selectedWarehouse))?.name} Periode {startDate} s/d {endDate}
+                    {warehouses?.data?.find((w) => w.id === Number(selectedWarehouse))?.name} Periode {startDate} s/d {endDate}
                 </h4>
             </div>
             <div className="overflow-x-auto">

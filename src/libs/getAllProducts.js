@@ -9,6 +9,7 @@ const useGetProducts = () => {
         error: productsError,
         isValidating,
     } = useSWR("/api/get-all-products", fetcher, {
+        revalidateOnFocus: true, // Refetch data when the window is focused
         dedupingInterval: 60000, // Avoid duplicate requests for the same data within 1 minute
         fallbackData: [], // Optional: you can specify default data here while it's loading
     });

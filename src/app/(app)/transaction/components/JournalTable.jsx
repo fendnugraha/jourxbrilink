@@ -5,7 +5,7 @@ import formatDateTime from "@/libs/formatDateTime";
 import axios from "@/libs/axios";
 import { useState } from "react";
 import Pagination from "@/components/PaginateList";
-import { ArrowRightIcon, FilterIcon, LoaderCircleIcon, MessageCircleWarningIcon, PencilIcon, TrashIcon } from "lucide-react";
+import { ArrowRightIcon, FilterIcon, LoaderCircleIcon, MessageCircleWarningIcon, PencilIcon, SearchIcon, TrashIcon } from "lucide-react";
 import Modal from "@/components/Modal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
@@ -22,6 +22,7 @@ const getCurrentDate = () => {
 
 const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, warehouseId, notification, fetchJournalsByWarehouse, user, loading }) => {
     const [selectedAccount, setSelectedAccount] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
     const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
     const [currentPage, setCurrentPage] = useState(1);
@@ -52,11 +53,32 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
     };
 
     const branchAccount = cashBank.filter((cashBank) => cashBank.warehouse_id === Number(selectedWarehouse));
-    const filteredJournals = selectedAccount
-        ? journalsByWarehouse?.data?.filter(
-              (journal) => Number(journal.cred_code) === Number(selectedAccount) || Number(journal.debt_code) === Number(selectedAccount)
-          )
-        : journalsByWarehouse?.data || [];
+    const filteredJournals =
+        journalsByWarehouse?.data?.filter((journal) => {
+            const matchAccount =
+                selectedAccount && (Number(journal.cred_code) === Number(selectedAccount) || Number(journal.debt_code) === Number(selectedAccount));
+
+            const matchSearchTerm =
+                searchTerm &&
+                ((journal.debt?.name ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    (journal.cred?.name ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    (journal.description ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    (journal.transaction ?? []).some((t) => (t.product?.name ?? "").toLowerCase().includes(searchTerm.toLowerCase())));
+
+            if (selectedAccount && searchTerm) {
+                return matchAccount && matchSearchTerm;
+            }
+
+            if (selectedAccount) {
+                return matchAccount;
+            }
+
+            if (searchTerm) {
+                return matchSearchTerm;
+            }
+
+            return true;
+        }) || [];
 
     const totalItems = filteredJournals?.length || 0;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -161,6 +183,18 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                     </button>
                 </Modal>
             </div>
+            <div className="px-4 pt-2 flex">
+                <button className="rounded-l-lg bg-white p-2 border border-gray-300">
+                    <SearchIcon size={20} />
+                </button>
+                <Input
+                    type="search"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Search..."
+                    className="w-full rounded-e-lg rounded-l-none border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+            </div>
             <div className="px-4">
                 <h4 className="text-xs text-slate-500">
                     {warehouses.find((w) => w.id === Number(selectedWarehouse))?.name} Periode {startDate} s/d {endDate}
@@ -184,21 +218,31 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                             </tr>
                         ) : (
                             currentItems.map((journal, index) => (
-                                <tr key={index} className="hover:bg-slate-100">
+                                <tr key={index} className="group hover:bg-slate-600 hover:text-white odd:bg-slate-50">
                                     <td>
-                                        <span className="text-xs text-slate-500 block">
-                                            #{journal.id} {formatDateTime(journal.created_at)}{" "}
-                                            <span className="font-bold hidden sm:inline">{journal.invoice}</span>
+                                        <span className="text-xs text-slate-500 group-hover:text-orange-300 block">
+                                            #{journal.id} <span className="font-bold hidden sm:inline">{journal.invoice}</span>{" "}
+                                            {formatDateTime(journal.created_at)}
                                         </span>
                                         Note: {journal.description}
                                         <span className="font-bold text-xs block">
-                                            {journal.trx_type === "Mutasi Kas"
-                                                ? journal.cred.acc_name + " -> " + journal.debt.acc_name
-                                                : journal.debt_code === warehouseCash
-                                                ? journal.cred.acc_name
-                                                : journal.debt.acc_name}
+                                            {journal.trx_type === "Voucher & SP" || journal.trx_type === "Accessories" ? (
+                                                <ul className="list-disc font-normal scale-95">
+                                                    {journal.transaction.map((trx) => (
+                                                        <li key={trx.id}>
+                                                            {trx.product.name} x {trx.quantity * -1}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            ) : journal.trx_type === "Mutasi Kas" ? (
+                                                journal.cred.acc_name + " -> " + journal.debt.acc_name
+                                            ) : journal.debt_code === warehouseCash ? (
+                                                journal.cred.acc_name
+                                            ) : (
+                                                journal.debt.acc_name
+                                            )}
                                         </span>
-                                        <span className="text-xs block text-slate-500">
+                                        <span className="text-xs block text-slate-500 group-hover:text-white">
                                             Last update at <TimeAgo timestamp={journal.updated_at} />
                                         </span>
                                     </td>
@@ -206,11 +250,13 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                                         <span
                                             className={`${Number(journal.debt_code) === Number(selectedAccount) ? "text-green-500" : ""}
                                     ${Number(journal.cred_code) === Number(selectedAccount) ? "text-red-500" : ""}
-                                        text-sm md:text-base sm:text-lg`}
+                                        text-sm text-sky-700 group-hover:text-yellow-400 sm:text-base xl:text-lg`}
                                         >
                                             {formatNumber(journal.amount)}
                                         </span>
-                                        {journal.fee_amount !== 0 && <span className="text-xs text-blue-600 block">{formatNumber(journal.fee_amount)}</span>}
+                                        {journal.fee_amount !== 0 && (
+                                            <span className="text-xs text-yellow-600 group-hover:text-white block">{formatNumber(journal.fee_amount)}</span>
+                                        )}
                                     </td>
                                     <td className="">
                                         <div className="flex justify-center gap-3">
@@ -222,7 +268,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                                                     setIsModalEditJournalOpen(true);
                                                 }}
                                             >
-                                                <PencilIcon className="size-4 text-indigo-700" />
+                                                <PencilIcon className="size-4 text-indigo-700 group-hover:text-white" />
                                             </button>
                                             <button
                                                 onClick={() => {
@@ -230,7 +276,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                                                     setIsModalDeleteJournalOpen(true);
                                                 }}
                                                 disabled={["Voucher & SP", "Accessories"].includes(journal.trx_type)}
-                                                className=" disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transtition-all duration-200"
+                                                className=" disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transtition-all group-hover:text-white duration-200"
                                             >
                                                 <TrashIcon className="size-4" />
                                             </button>

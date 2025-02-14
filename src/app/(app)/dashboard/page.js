@@ -33,9 +33,9 @@ const Dashboard = () => {
     //     }
     // };
 
-    useEffect(() => {
-        mutate("/api/get-all-warehouses");
-    }, []);
+    // useEffect(() => {
+    //     mutate("/api/get-all-warehouses");
+    // }, []);
 
     // console.log(warehouses);
     return (

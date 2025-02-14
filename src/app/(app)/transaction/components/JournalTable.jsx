@@ -246,11 +246,11 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                                             Last update at <TimeAgo timestamp={journal.updated_at} />
                                         </span>
                                     </td>
-                                    <td className="font-bold text-end">
+                                    <td className="font-bold text-end text-sky-700 ">
                                         <span
                                             className={`${Number(journal.debt_code) === Number(selectedAccount) ? "text-green-500" : ""}
                                     ${Number(journal.cred_code) === Number(selectedAccount) ? "text-red-500" : ""}
-                                        text-sm text-sky-700 group-hover:text-yellow-400 sm:text-base xl:text-lg`}
+                                        text-sm group-hover:text-yellow-400 sm:text-base xl:text-lg`}
                                         >
                                             {formatNumber(journal.amount)}
                                         </span>

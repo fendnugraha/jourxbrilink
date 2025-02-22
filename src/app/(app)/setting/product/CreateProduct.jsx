@@ -3,28 +3,14 @@ import Input from "@/components/Input";
 import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
 
-const CreateProduct = ({ isModalOpen, notification, fetchProducts }) => {
+const CreateProduct = ({ isModalOpen, notification, fetchProducts, productCategories }) => {
     const [errors, setErrors] = useState([]);
-    const [productCategories, setProductCategories] = useState([]);
     const [newProduct, setNewProduct] = useState({
         name: "",
         category: "",
         price: 0,
         cost: 0,
     });
-
-    const fetchProductCategories = async () => {
-        try {
-            const response = await axios.get("api/product-categories");
-            setProductCategories(response.data.data);
-        } catch (error) {
-            setErrors(error.response?.message || ["Something went wrong."]);
-        }
-    };
-
-    useEffect(() => {
-        fetchProductCategories();
-    }, []);
 
     const handleCreateProduct = async (e) => {
         e.preventDefault();

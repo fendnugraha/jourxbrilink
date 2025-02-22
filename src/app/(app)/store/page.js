@@ -211,7 +211,6 @@ const StorePage = () => {
                                             fetchTransaction();
                                         }}
                                         className="bg-slate-500 text-sm text-white min-w-20 sm:min-w-32 p-2 rounded-r-lg border border-gray-500 hover:border-gray-400 w-fit"
-                                        disabled={!search}
                                     >
                                         <SearchIcon size={24} className="inline" /> <span className="hidden sm:inline">Search</span>
                                     </button>

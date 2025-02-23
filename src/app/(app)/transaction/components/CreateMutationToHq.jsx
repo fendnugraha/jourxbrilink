@@ -25,18 +25,26 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
         setLoading(true);
         try {
             const response = await axios.post("/api/create-mutation", formData);
-            notification("Pengembalian saldo berhasil");
+            notification("success", "Pengembalian saldo berhasil");
+            setFormData({
+                debt_code: "",
+                cred_code: "",
+                amount: "",
+                fee_amount: 0,
+                trx_type: "Mutasi Kas",
+                description: "",
+            });
             fetchJournalsByWarehouse();
-            isModalOpen(false);
+            setErrors([]);
         } catch (error) {
-            notification(error.response?.data?.message || "Something went wrong.");
+            notification("error", error.response?.data?.message || "Something went wrong.");
             setErrors(error.response?.data?.errors);
         } finally {
             setLoading(false);
         }
     };
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Dari (Cabang)</Label>
                 <div className="col-span-1 sm:col-span-2">
@@ -100,13 +108,22 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                     {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                 </div>
             </div>
-            <button
-                onClick={handleSubmit}
-                className="bg-indigo-500 hover:bg-indigo-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
-                disabled={loading}
-            >
-                {loading ? "Loading..." : "Simpan"}
-            </button>
+            <div className="flex justify-end gap-2">
+                <button
+                    onClick={() => isModalOpen(false)}
+                    type="button"
+                    className="bg-white border border-red-300 hover:bg-red-200 rounded-xl px-8 py-3 text-red-600 disabled:bg-slate-300 disabled:cursor-not-allowed"
+                >
+                    Cancel
+                </button>
+                <button
+                    type="submit"
+                    className="bg-indigo-500 hover:bg-indigo-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
+                    disabled={loading}
+                >
+                    {loading ? "Loading..." : "Simpan"}
+                </button>
+            </div>
         </form>
     );
 };

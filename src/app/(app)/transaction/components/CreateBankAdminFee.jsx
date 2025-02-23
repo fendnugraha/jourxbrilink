@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "@/libs/axios";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
+import { set } from "date-fns";
 
 const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notification, fetchJournalsByWarehouse, user }) => {
     const [formData, setFormData] = useState({
@@ -21,7 +22,7 @@ const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notifica
         setLoading(true);
         try {
             const response = await axios.post("/api/create-mutation", formData);
-            notification("Pengeluaran biaya administrasi bank berhasil");
+            notification("success", "Pengeluaran biaya administrasi bank berhasil");
             setFormData({
                 debt_code: user?.role?.warehouse?.chart_of_account_id,
                 cred_code: "",
@@ -32,16 +33,17 @@ const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notifica
             });
             fetchJournalsByWarehouse();
             isModalOpen(false);
+            setErrors([]);
         } catch (error) {
             setErrors(error.response.data.errors || ["Something went wrong."]);
-            notification(error.response?.data?.message || "Something went wrong.");
+            notification("error", error.response?.data?.message || "Something went wrong.");
         } finally {
             setLoading(false);
         }
     };
     return (
         <>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Dari Rekening</Label>
                     <div className="col-span-1 sm:col-span-2">
@@ -85,13 +87,22 @@ const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notifica
                         {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                     </div>
                 </div>
-                <button
-                    onClick={handleSubmit}
-                    className="bg-indigo-500 hover:bg-indigo-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
-                    disabled={loading}
-                >
-                    {loading ? "Loading..." : "Simpan"}
-                </button>
+                <div className="flex justify-end gap-2">
+                    <button
+                        onClick={() => isModalOpen(false)}
+                        type="button"
+                        className="bg-white border border-red-300 hover:bg-red-200 rounded-xl px-8 py-3 text-red-600 disabled:bg-slate-300 disabled:cursor-not-allowed"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="bg-indigo-500 hover:bg-indigo-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
+                        disabled={loading}
+                    >
+                        {loading ? "Loading..." : "Simpan"}
+                    </button>
+                </div>
             </form>
         </>
     );

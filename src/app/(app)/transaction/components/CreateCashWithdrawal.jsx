@@ -23,7 +23,7 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
         setLoading(true);
         try {
             const response = await axios.post("/api/create-transfer", formData);
-            notification(response.data.message);
+            notification("success", response.data.message);
             setFormData({
                 debt_code: formData.debt_code,
                 cred_code: user.role.warehouse.chart_of_account_id,
@@ -35,6 +35,7 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
             });
             fetchJournalsByWarehouse();
             // isModalOpen(false);
+            setErrors([]);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
             notification("error", error.response?.data?.message || "Something went wrong.");
@@ -44,7 +45,7 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
     };
     return (
         <>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Ke Rekening</Label>
                     <div className="col-span-1 sm:col-span-2">
@@ -104,13 +105,22 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                         {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                     </div>
                 </div>
-                <button
-                    onClick={handleSubmit}
-                    className="bg-indigo-500 hover:bg-indigo-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
-                    disabled={loading}
-                >
-                    {loading ? "Loading..." : "Simpan"}
-                </button>
+                <div className="flex justify-end gap-2">
+                    <button
+                        onClick={() => isModalOpen(false)}
+                        type="button"
+                        className="bg-white border border-red-300 hover:bg-red-200 rounded-xl px-8 py-3 text-red-600 disabled:bg-slate-300 disabled:cursor-not-allowed"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="bg-indigo-500 hover:bg-indigo-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
+                        disabled={loading}
+                    >
+                        {loading ? "Loading..." : "Simpan"}
+                    </button>
+                </div>
             </form>
         </>
     );

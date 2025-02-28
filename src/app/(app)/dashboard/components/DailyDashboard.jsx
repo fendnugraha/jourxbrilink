@@ -143,7 +143,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
             </button>
             <div className="min-h-[28rem] grid grid-cols-1 sm:grid-cols-5 sm:grid-rows-4 gap-1 sm:gap-3 px-1 sm:px-0">
                 <div
-                    className={`bg-gray-700 w-full h-full p-3 rounded-2xl sm:rounded-3xl flex flex-col gap-2 sm:gap-4 items-center justify-center col-span-2 row-span-2 ${
+                    className={`bg-gray-600 w-full h-full p-3 rounded-2xl sm:rounded-3xl flex flex-col gap-2 sm:gap-4 items-center justify-center col-span-2 row-span-2 ${
                         isLoading ? "animate-pulse" : ""
                     }`}
                 >
@@ -173,7 +173,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                     </div>
                 </div>
                 <div
-                    className={`bg-gray-700 w-full h-full p-3 rounded-2xl sm:rounded-3xl flex flex-col gap-2 items-center justify-center col-span-2 row-span-2 ${
+                    className={`bg-gray-600 w-full h-full p-3 rounded-2xl sm:rounded-3xl flex flex-col gap-2 items-center justify-center col-span-2 row-span-2 ${
                         isLoading ? "animate-pulse" : ""
                     } `}
                 >
@@ -225,7 +225,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                     </h1>
                 </div>
                 <div
-                    className={`bg-gray-700 w-full h-full p-3 rounded-2xl sm:rounded-3xl flex flex-col gap-2 sm:gap-6 items-center justify-center col-span-2 row-span-2 ${
+                    className={`bg-gray-600 w-full h-full p-3 rounded-2xl sm:rounded-3xl flex flex-col gap-2 sm:gap-6 items-center justify-center col-span-2 row-span-2 ${
                         isLoading ? "animate-pulse" : ""
                     }`}
                 >
@@ -251,7 +251,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                     </div>
                 </div>
                 <div
-                    className={`bg-gray-700 w-full h-full p-3 rounded-2xl sm:rounded-3xl flex flex-col gap-2 items-center justify-center col-span-2 row-span-2 ${
+                    className={`bg-gray-600 w-full h-full p-3 rounded-2xl sm:rounded-3xl flex flex-col gap-2 items-center justify-center col-span-2 row-span-2 ${
                         isLoading ? "animate-pulse" : ""
                     } `}
                 >

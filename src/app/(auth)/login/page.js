@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/libs/auth";
 import Image from "next/image";
+import Loading from "./loading";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -74,7 +75,8 @@ const LoginPage = () => {
                 </p>
             </div>
 
-            <div className="italics fixed bottom-5 right-8">{message && <p className="text-green-500 text-xs">{message}</p>}</div>
+            {/* <div className="italics font-bold fixed bottom-5 right-8">{message && <p className="text-green-500 text-xs">{message}</p>}</div> */}
+            {message && <Loading />}
         </>
     );
 };

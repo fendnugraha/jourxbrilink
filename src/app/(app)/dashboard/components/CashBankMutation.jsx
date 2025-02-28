@@ -227,12 +227,12 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                                 <td className="text-end font-bold hidden sm:table-cell"></td>
                                 <td className="text-end font-bold"></td>
                                 <td className="text-end font-bold">
-                                    {mutationOutSum - mutationInSum === 0 ? (
+                                    {mutationInSum - mutationOutSum === 0 ? (
                                         <span className="text-green-600">Completed</span>
                                     ) : loading || isValidating ? (
                                         "..."
                                     ) : (
-                                        formatNumber(mutationOutSum - mutationInSum)
+                                        formatNumber(mutationInSum - mutationOutSum)
                                     )}
                                 </td>
                             </tr>

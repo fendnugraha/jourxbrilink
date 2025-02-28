@@ -23,6 +23,7 @@ const Header = ({ title }) => {
     const { user, logout } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const { profit, loading, error } = useGetProfit();
+    const [prayerTimes, setPrayerTimes] = useState(null);
 
     const pathname = usePathname();
 
@@ -34,10 +35,44 @@ const Header = ({ title }) => {
         const mod = number % 100;
         return suffixes[mod - 10] || suffixes[mod] || suffixes[0];
     };
+
+    const hijrianDate = (date) => {
+        const options = { year: "numeric", month: "long", day: "numeric" };
+        const hijriDate = new Date(date).toLocaleDateString("ar-SA-u-nu-latn", options);
+        return hijriDate;
+    };
+    // Imsak,Fajr,Sunrise,Dhuhr,Asr,Maghrib,Sunset,Isha,Midnight
+    const fetchPrayerTimes = async (date, latitude, longitude, method = 20, timezonestring = "Asia/Jakarta", tune = "3,3,3,3,4,7,3,2,3") => {
+        try {
+            const response = await fetch(
+                `https://api.aladhan.com/v1/timingsByCity/${date}?city=Bandung&country=ID&state=Jawa%20Barat&latitude=${latitude}&longitude=${longitude}&method=${method}&shafaq=general&tune=${tune}&timezonestring=${timezonestring}&calendarMethod=UAQ`
+            );
+            if (!response.ok) {
+                throw new Error("Failed to fetch data");
+            }
+            const data = await response.json();
+            setPrayerTimes(data.data.timings); // Mengambil waktu sholat saja
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
+    useEffect(() => {
+        const date = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" }); // Format: YYYY-MM-DD
+        const latitude = -6.9175; // Latitude Bandung
+        const longitude = 107.6191; // Longitude Bandung
+        fetchPrayerTimes(date, latitude, longitude);
+    }, []);
+    console.log(prayerTimes, new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" }));
     return (
         <>
             <header className={`h-[72px] px-4 md:px-6 flex justify-between items-center border-b bg-blue-800`}>
-                <h1 className="text-xl font-bold text-white">{title}</h1>
+                <h1 className="text-xl font-bold text-white">
+                    {title}
+                    <span className="text-xs font-normal p-0 block">
+                        {hijrianDate(new Date())}, {"Imsak: " + prayerTimes?.Imsak}, {"Maghrib: " + prayerTimes?.Maghrib}
+                    </span>
+                </h1>
                 <div className="flex items-center gap-2">
                     <div className="text-lg sm:text-md text-white flex flex-col justify-end items-end">
                         {WarehouseRank > 0 &&
@@ -51,7 +86,7 @@ const Header = ({ title }) => {
                                     <div className="flex items-center gap-2">
                                         <h1 className="font-bold text-xl">
                                             #{WarehouseRank}
-                                            <span className="text-sm">
+                                            <span className="text-sm hidden sm:inline">
                                                 {""}
                                                 <sup>{toOrdinal(WarehouseRank)}</sup>/{profit?.data?.length}
                                             </span>

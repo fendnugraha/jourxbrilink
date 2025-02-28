@@ -63,7 +63,6 @@ const Header = ({ title }) => {
         const longitude = 107.6191; // Longitude Bandung
         fetchPrayerTimes(date, latitude, longitude);
     }, []);
-    console.log(prayerTimes, new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" }));
     return (
         <>
             <header className={`h-[72px] px-4 md:px-6 flex justify-between items-center border-b bg-blue-800`}>

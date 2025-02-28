@@ -23,7 +23,7 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
         setLoading(true);
         try {
             const response = await axios.post("/api/create-transfer", formData);
-            notification(response.data.message);
+            notification("success", response.data.message);
             setFormData({
                 debt_code: user.role.warehouse.chart_of_account_id,
                 cred_code: formData.cred_code,
@@ -35,6 +35,7 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
             });
             fetchJournalsByWarehouse();
             // isModalOpen(false);
+            setErrors([]);
         } catch (error) {
             setErrors(error.response.data.errors || ["Something went wrong."]);
             notification("error", error.response?.data?.message || "Something went wrong.");
@@ -117,13 +118,22 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                         {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                     </div>
                 </div>
-                <button
-                    type="submit"
-                    className="bg-indigo-500 hover:bg-indigo-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
-                    disabled={loading}
-                >
-                    {loading ? "Loading..." : "Simpan"}
-                </button>
+                <div className="flex justify-end gap-2">
+                    <button
+                        onClick={() => isModalOpen(false)}
+                        type="button"
+                        className="bg-white border border-red-300 hover:bg-red-200 rounded-xl px-8 py-3 text-red-600 disabled:bg-slate-300 disabled:cursor-not-allowed"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="bg-indigo-500 hover:bg-indigo-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
+                        disabled={loading}
+                    >
+                        {loading ? "Loading..." : "Simpan"}
+                    </button>
+                </div>
             </form>
         </>
     );

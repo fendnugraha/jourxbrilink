@@ -263,7 +263,7 @@ const TransactionPage = () => {
                             <CreateTransfer
                                 filteredCashBankByWarehouse={filteredCashBankByWarehouse}
                                 isModalOpen={setIsModalCreateTransferOpen}
-                                notification={(message) => setNotification({ message })}
+                                notification={(type, message) => setNotification({ type, message })}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
                             />
@@ -273,7 +273,7 @@ const TransactionPage = () => {
                             <CreateCashWithdrawal
                                 filteredCashBankByWarehouse={filteredCashBankByWarehouse}
                                 isModalOpen={setIsModalCreateCashWithdrawalOpen}
-                                notification={(message) => setNotification({ message })}
+                                notification={(type, message) => setNotification({ type, message })}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
                             />
@@ -281,7 +281,7 @@ const TransactionPage = () => {
                         <Modal isOpen={isModalCreateVoucherOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Penjualan Voucher & Kartu">
                             <CreateVoucher
                                 isModalOpen={setIsModalCreateVoucherOpen}
-                                notification={(message) => setNotification({ message })}
+                                notification={(type, message) => setNotification({ type, message })}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
                             />
@@ -289,7 +289,7 @@ const TransactionPage = () => {
                         <Modal isOpen={isModalCreateDepositOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Penjualan Deposit">
                             <CreateDeposit
                                 isModalOpen={setIsModalCreateDepositOpen}
-                                notification={(message) => setNotification({ message })}
+                                notification={(type, message) => setNotification({ type, message })}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                             />
                         </Modal>
@@ -298,7 +298,7 @@ const TransactionPage = () => {
                             <CreateMutationToHq
                                 cashBank={cashBank}
                                 isModalOpen={setIsModalCreateMutationToHqOpen}
-                                notification={(message) => setNotification({ message })}
+                                notification={(type, message) => setNotification({ type, message })}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
                             />
@@ -307,7 +307,7 @@ const TransactionPage = () => {
                             <CreateBankAdminFee
                                 filteredCashBankByWarehouse={filteredCashBankByWarehouse}
                                 isModalOpen={setIsModalCreateBankAdminFeeOpen}
-                                notification={(message) => setNotification({ message })}
+                                notification={(type, message) => setNotification({ type, message })}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
                             />
@@ -315,7 +315,7 @@ const TransactionPage = () => {
                         <Modal isOpen={isModalCreateExpenseOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Biaya Operasional">
                             <CreateExpense
                                 isModalOpen={setIsModalCreateExpenseOpen}
-                                notification={(message) => setNotification({ message })}
+                                notification={(type, message) => setNotification({ type, message })}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
                             />
@@ -325,7 +325,7 @@ const TransactionPage = () => {
                                 {journalLoading && <LoaderCircleIcon size={20} className="absolute top-1 left-1 animate-spin text-slate-300" />}
                                 <JournalTable
                                     cashBank={cashBank}
-                                    notification={(message) => setNotification({ message })}
+                                    notification={(type, message) => setNotification({ type, message })}
                                     fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                     journalsByWarehouse={journalsByWarehouse}
                                     warehouses={warehouses}

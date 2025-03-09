@@ -7,6 +7,7 @@ import { FilterIcon } from "lucide-react";
 import Modal from "@/components/Modal";
 import Input from "@/components/Input";
 import Label from "@/components/Label";
+import Link from "next/link";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -50,7 +51,6 @@ const RevenueReport = () => {
         }, 0);
         // console.log(revenue.revenue?.[0][trxType]);
     };
-
     return (
         <div className="bg-white rounded-lg mb-3 relative">
             <div className="p-4 flex justify-between">
@@ -113,7 +113,9 @@ const RevenueReport = () => {
                         ) : (
                             revenue.revenue?.map((item, index) => (
                                 <tr key={index} className="hover:bg-gray-100">
-                                    <td className="">{item.warehouse}</td>
+                                    <td className="">
+                                        <Link href={`/summary/warehouse/${item.warehouseId}`}>{item.warehouse}</Link>
+                                    </td>
                                     <td className="text-end">{formatNumber(item.transfer)}</td>
                                     <td className="text-end">{formatNumber(item.tarikTunai)}</td>
                                     <td className="text-end">{formatNumber(item.voucher)}</td>

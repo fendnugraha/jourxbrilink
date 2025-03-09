@@ -7,6 +7,7 @@ import { FilterIcon } from "lucide-react";
 import Modal from "@/components/Modal";
 import Input from "@/components/Input";
 import Label from "@/components/Label";
+import Link from "next/link";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -42,7 +43,6 @@ const WarehouseBalance = () => {
     useEffect(() => {
         fetchWarehouseBalance();
     }, []);
-
     return (
         <div className="bg-white rounded-lg mb-3 relative">
             <div className="p-4 flex justify-between">
@@ -90,7 +90,9 @@ const WarehouseBalance = () => {
                         ) : (
                             warehouseBalance.warehouse?.map((w, i) => (
                                 <tr className="hover:bg-gray-100" key={i}>
-                                    <td className="">{w.name}</td>
+                                    <td className="">
+                                        <Link href={`/summary/warehouse/${w.id}`}>{w.name}</Link>
+                                    </td>
                                     <td className="text-end">{formatNumber(w.cash)}</td>
                                     <td className="text-end">{formatNumber(w.bank)}</td>
                                     <td className="text-end font-bold">{formatNumber(w.cash + w.bank)}</td>

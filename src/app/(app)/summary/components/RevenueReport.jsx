@@ -114,7 +114,9 @@ const RevenueReport = () => {
                             revenue.revenue?.map((item, index) => (
                                 <tr key={index} className="hover:bg-gray-100">
                                     <td className="">
-                                        <Link href={`/summary/warehouse/${item.warehouseId}`}>{item.warehouse}</Link>
+                                        <Link className="hover:underline" href={`/summary/warehouse/${item.warehouseId}`}>
+                                            {item.warehouse}
+                                        </Link>
                                     </td>
                                     <td className="text-end">{formatNumber(item.transfer)}</td>
                                     <td className="text-end">{formatNumber(item.tarikTunai)}</td>

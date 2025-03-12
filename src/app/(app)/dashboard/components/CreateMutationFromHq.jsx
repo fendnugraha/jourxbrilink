@@ -30,7 +30,15 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
             const response = await axios.post("/api/create-mutation", formData);
             notification(response.data.message);
             fetchJournalsByWarehouse();
-            isModalOpen(false);
+            isModalOpen(true);
+            setFormData({
+                debt_code: "",
+                amount: "",
+                fee_amount: 0,
+                trx_type: "Mutasi Kas",
+                description: "",
+                admin_fee: "" || 0,
+            });
         } catch (error) {
             notification(error.response?.data?.message || "Something went wrong.");
             setErrors(error.response?.data?.errors);

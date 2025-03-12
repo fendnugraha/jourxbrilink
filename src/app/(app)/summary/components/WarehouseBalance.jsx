@@ -91,7 +91,9 @@ const WarehouseBalance = () => {
                             warehouseBalance.warehouse?.map((w, i) => (
                                 <tr className="hover:bg-gray-100" key={i}>
                                     <td className="">
-                                        <Link href={`/summary/warehouse/${w.id}`}>{w.name}</Link>
+                                        <Link className="hover:underline" href={`/summary/warehouse/${w.id}`}>
+                                            {w.name}
+                                        </Link>
                                     </td>
                                     <td className="text-end">{formatNumber(w.cash)}</td>
                                     <td className="text-end">{formatNumber(w.bank)}</td>

@@ -60,9 +60,12 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
 
             const matchSearchTerm =
                 searchTerm &&
-                ((journal.debt?.name ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    (journal.cred?.name ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+                ((journal.debt?.acc_name ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    (journal.cred?.acc_name ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
                     (journal.description ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    (journal.id ?? "").toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    (journal.invoice ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    (journal.amount ?? "").toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
                     (journal.transaction ?? []).some((t) => (t.product?.name ?? "").toLowerCase().includes(searchTerm.toLowerCase())));
 
             if (selectedAccount && searchTerm) {

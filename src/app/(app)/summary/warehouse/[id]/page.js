@@ -152,29 +152,34 @@ const WarehouseReport = ({ params }) => {
                                 </span>
                                 <div className="flex justify-end items-center gap-5">
                                     <div>
-                                        <span className="text-gray-600 text-xs">Total Transfer</span>
+                                        <span className="text-gray-600 text-xs">Transfer</span>
                                         <h1 className="text-2xl font-bold">
-                                            {formatNumberToK(revenue?.totals?.totalTransfer)}{" "}
+                                            {formatNumberToK(revenue?.totals?.totalTransfer || 0)}{" "}
                                             <span className="text-gray-500 text-xs">{calculateTransferPercentage} %</span>
                                         </h1>
                                     </div>
                                     <div>
-                                        <span className="text-gray-600 text-xs">Total Tarik TUnai</span>
+                                        <span className="text-gray-600 text-xs">Tarik Tunai</span>
                                         <h1 className="text-2xl font-bold">
-                                            {formatNumberToK(revenue?.totals?.totalTarikTunai)}{" "}
+                                            {formatNumberToK(revenue?.totals?.totalTarikTunai || 0)}{" "}
                                             <span className="text-gray-500 text-xs">{calculateWithdrawalPercentage} %</span>
                                         </h1>
                                     </div>
                                     <div>
-                                        <span className="text-gray-600 text-xs">Total Transaksi</span>
-                                        <h1 className="text-2xl font-bold">{formatNumber(revenue?.totals?.totalTrx)}</h1>
+                                        <span className="text-gray-600 text-xs">Transaksi</span>
+                                        <h1 className="text-2xl font-bold">{formatNumber(revenue?.totals?.totalTrx || 0)}</h1>
                                     </div>
                                     <div>
-                                        <span className="text-gray-600 text-xs">Total Laba Bersih</span>
-                                        <h1 className="text-2xl font-bold">{formatNumber(revenue?.totals?.totalFee)}</h1>
+                                        <span className="text-gray-600 text-xs">Net Profit</span>
+                                        <h1 className="text-2xl font-bold">{formatNumber(revenue?.totals?.totalFee || 0)}</h1>
                                     </div>
                                 </div>
-                                <div className="overflow-x-auto">
+                                <div className="overflow-x-auto relative">
+                                    {loading && (
+                                        <div className="flex justify-center items-center font-medium bg-white/50 h-full w-full backdrop-blur-sm absolute z-10">
+                                            Loading data, please wait ...
+                                        </div>
+                                    )}
                                     <table className="table w-full text-xs mb-2">
                                         <thead className="">
                                             <tr>

@@ -11,6 +11,7 @@ import {
     LayoutDashboardIcon,
     StoreIcon,
     ArrowRightLeftIcon,
+    GemIcon,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/libs/auth";
@@ -18,6 +19,7 @@ import { useEffect, useState } from "react";
 
 import { mutate } from "swr";
 import useGetProfit from "@/components/RankByProfit";
+import formatNumber from "@/libs/formatNumber";
 
 const Header = ({ title }) => {
     const { user, logout } = useAuth();
@@ -30,6 +32,7 @@ const Header = ({ title }) => {
     const userWarehouseId = user?.role?.warehouse_id;
     const userWarehouseName = user?.role?.warehouse?.name;
     const WarehouseRank = profit?.data?.findIndex((item) => Number(item.warehouse_id) === userWarehouseId) + 1 || 0;
+    const WarehouseRankProfit = profit?.data?.find((item) => Number(item.warehouse_id) === userWarehouseId)?.total || 0;
     const toOrdinal = (number) => {
         const suffixes = ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"];
         const mod = number % 100;
@@ -76,21 +79,33 @@ const Header = ({ title }) => {
                     <div className="text-lg sm:text-md text-white flex flex-col justify-end items-end">
                         {WarehouseRank > 0 &&
                             (WarehouseRank === 1 ? (
-                                <h1 className="flex items-center gap-2">
-                                    <TrophyIcon size={26} strokeWidth={2} className="text-amber-200 inline" />{" "}
-                                    <span className="hidden uppercase font-bold sm:inline">{userWarehouseName}</span>
-                                </h1>
+                                <div className="flex items-center gap-2">
+                                    <TrophyIcon size={28} strokeWidth={2} className="text-amber-200 inline" />{" "}
+                                    <h1 className="hidden uppercase text-sm font-bold sm:inline">
+                                        {userWarehouseName}
+                                        <span className="hidden text-end font-light text-xs text-slate-300 sm:block ">
+                                            {" "}
+                                            <GemIcon className="w-3 h-3 inline" /> {formatNumber(WarehouseRankProfit)}
+                                        </span>
+                                    </h1>
+                                </div>
                             ) : (
                                 <>
                                     <div className="flex items-center gap-2">
-                                        <h1 className="font-bold text-xl">
+                                        <h1 className="font-bold text-2xl">
                                             #{WarehouseRank}
                                             <span className="text-sm hidden sm:inline">
                                                 {""}
                                                 <sup>{toOrdinal(WarehouseRank)}</sup>/{profit?.data?.length}
                                             </span>
                                         </h1>{" "}
-                                        <span className="hidden sm:inline">{userWarehouseName}</span>
+                                        <h1 className="hidden text-sm uppercase sm:inline">
+                                            {userWarehouseName}
+                                            <span className="hidden text-end font-light text-xs text-slate-300 sm:block ">
+                                                {" "}
+                                                <GemIcon className="w-3 h-3 inline" /> {formatNumber(WarehouseRankProfit)}
+                                            </span>
+                                        </h1>
                                     </div>
                                 </>
                             ))}

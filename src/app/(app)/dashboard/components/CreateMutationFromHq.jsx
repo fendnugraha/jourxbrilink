@@ -33,12 +33,14 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
             isModalOpen(true);
             setFormData({
                 debt_code: "",
+                cred_code: formData.cred_code,
                 amount: "",
                 fee_amount: 0,
                 trx_type: "Mutasi Kas",
                 description: "",
                 admin_fee: "" || 0,
             });
+            setErrors([]);
         } catch (error) {
             notification(error.response?.data?.message || "Something went wrong.");
             setErrors(error.response?.data?.errors);
@@ -63,7 +65,6 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                             </option>
                         ))}
                     </select>
-                    {errors.debt_code && <span className="text-red-500 text-xs">{errors.debt_code}</span>}
                 </div>
             </div>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">

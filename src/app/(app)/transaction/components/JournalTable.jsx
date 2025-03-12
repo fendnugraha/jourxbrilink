@@ -221,7 +221,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                             </tr>
                         ) : (
                             currentItems.map((journal, index) => (
-                                <tr key={index} className="group hover:bg-slate-600 hover:text-white odd:bg-slate-50">
+                                <tr key={index} className="group hover:bg-slate-600 hover:text-white">
                                     <td>
                                         <span className="text-xs text-slate-500 group-hover:text-orange-300 block">
                                             #{journal.id} <span className="font-bold hidden sm:inline">{journal.invoice}</span>{" "}
@@ -249,7 +249,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                                             Last update at <TimeAgo timestamp={journal.updated_at} />
                                         </span>
                                     </td>
-                                    <td className="font-bold text-end text-sky-700 ">
+                                    <td className="font-bold text-end text-slate-700 ">
                                         <span
                                             className={`${Number(journal.debt_code) === Number(selectedAccount) ? "text-green-500" : ""}
                                     ${Number(journal.cred_code) === Number(selectedAccount) ? "text-red-500" : ""}

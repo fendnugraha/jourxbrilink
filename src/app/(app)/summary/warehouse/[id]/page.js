@@ -148,7 +148,7 @@ const WarehouseReport = ({ params }) => {
                             <div>
                                 <h1 className="text-2xl font-bold">Warehouse Report ({filterWarehouse?.name || "Loading..."})</h1>
                                 <span className="text-gray-600 text-xs">
-                                    Periode: {getMonthName(month)} Tahun {year}
+                                    Periode: {getMonthName(month)} {year}
                                 </span>
                                 <div className="flex justify-end items-center gap-5">
                                     <div>

@@ -7,8 +7,9 @@ import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
 import { formatNumberToK } from "@/libs/formatNumberToK";
 import useGetWarehouses from "@/libs/getAllWarehouse";
-import { FilterIcon } from "lucide-react";
+import { DownloadIcon, FilterIcon } from "lucide-react";
 import { use, useCallback, useEffect, useState } from "react";
+import exportToExcel from "@/libs/exportToExcel";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -79,6 +80,19 @@ const WarehouseReport = ({ params }) => {
     const calculateTransferPercentage = calculatePercentage(Number(revenue?.totals?.totalTransfer), sumTransferAndWithdrawal);
 
     const calculateWithdrawalPercentage = calculatePercentage(Number(revenue?.totals?.totalTarikTunai), sumTransferAndWithdrawal);
+
+    //export to excel
+    const headersRevenue = [
+        { key: "date", label: "Tanggal" },
+        { key: "transfer", label: "Transfer" },
+        { key: "tarikTunai", label: "Tarik Tunai" },
+        { key: "voucher", label: "Voucher" },
+        { key: "deposit", label: "Deposit" },
+        { key: "trx", label: "Transaksi" },
+        { key: "expense", label: "Pengeluaran" },
+        { key: "fee", label: "Profit" },
+    ];
+
     return (
         <>
             <Header title={"Summary Report by Warehouse"} />
@@ -104,6 +118,19 @@ const WarehouseReport = ({ params }) => {
                                     className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
                                 >
                                     <FilterIcon className="size-4" />
+                                </button>
+                                <button
+                                    onClick={() =>
+                                        exportToExcel(
+                                            revenue?.revenue,
+                                            headersRevenue,
+                                            `Summary Report by Warehouse ${filterWarehouse?.name} ${getMonthName(month)} ${year}.xlsx`,
+                                            `Summary Report by Warehouse ${filterWarehouse?.name} ${getMonthName(month)} ${year}`
+                                        )
+                                    }
+                                    className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
+                                >
+                                    <DownloadIcon className="size-4" />
                                 </button>
                                 <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                                     <div className="mb-4">

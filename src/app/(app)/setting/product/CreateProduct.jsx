@@ -54,6 +54,7 @@ const CreateProduct = ({ isModalOpen, notification, fetchProducts, productCatego
                         errors.name ? "border-red-500" : ""
                     }`}
                     placeholder="Enter product name"
+                    autocomplete="off"
                 />
                 {errors.name && <p className="text-red-500 text-xs">{errors.name}</p>}
             </div>

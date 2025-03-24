@@ -31,6 +31,7 @@ const Purchase = () => {
     const [loading, setLoading] = useState(false);
 
     const [productList, setProductList] = useState([]);
+    const [productCategories, setProductCategories] = useState([]);
     const [search, setSearch] = useState("");
     const debouncedSearch = useDebounce(search, 500); // Apply debounce with 500ms delay
     const [cart, setCart] = useState([]);
@@ -76,6 +77,19 @@ const Purchase = () => {
             setProductList([]); // Clear product list if search is too short
         }
     };
+
+    const fetchProductCategories = async () => {
+        try {
+            const response = await axios.get("api/product-categories");
+            setProductCategories(response.data.data);
+        } catch (error) {
+            setErrors(error.response?.message || ["Something went wrong."]);
+        }
+    };
+
+    useEffect(() => {
+        fetchProductCategories();
+    }, []);
 
     // Add product to Cart
     const handleAddToCart = (product) => {
@@ -207,6 +221,7 @@ const Purchase = () => {
                                             isModalOpen={setIsModalCreateProductOpen}
                                             notification={(message) => setNotification(message)}
                                             fetchProducts={fetchProduct}
+                                            productCategories={productCategories}
                                         />
                                     </Modal>
                                 </div>

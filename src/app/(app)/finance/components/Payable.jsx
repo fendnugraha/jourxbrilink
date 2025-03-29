@@ -10,9 +10,11 @@ import formatNumber from "@/libs/formatNumber";
 import formatDateTime from "@/libs/formatDateTime";
 import PaymentForm from "./PaymentForm";
 import Paginator from "@/components/Paginator";
+import CreateReceivable from "./CreateReceivable";
 const Payable = ({ notification }) => {
     const [isModalCreateContactOpen, setIsModalCreateContactOpen] = useState(false);
     const [isModalCreatePayableOpen, setIsModalCreatePayableOpen] = useState(false);
+    const [isModalCreateReceivableOpen, setIsModalCreateReceivableOpen] = useState(false);
     const [isModalDeleteFinanceOpen, setIsModalDeleteFinanceOpen] = useState(false);
     const [isModalPaymentOpen, setIsModalPaymentOpen] = useState(false);
     const [finance, setFinance] = useState([]);
@@ -40,6 +42,7 @@ const Payable = ({ notification }) => {
     const closeModal = () => {
         setIsModalCreateContactOpen(false);
         setIsModalCreatePayableOpen(false);
+        setIsModalCreateReceivableOpen(false);
         setIsModalDeleteFinanceOpen(false);
         setIsModalPaymentOpen(false);
     };
@@ -84,12 +87,22 @@ const Payable = ({ notification }) => {
                             <button onClick={() => setIsModalCreatePayableOpen(true)} className="btn-primary text-xs mr-2">
                                 <PlusCircleIcon className="w-4 h-4 mr-2 inline" /> Hutang
                             </button>
-                            <button className="btn-primary text-xs mr-2 disabled:bg-slate-400 disabled:cursor-not-allowed" disabled={true}>
+                            <button
+                                onClick={() => setIsModalCreateReceivableOpen(true)}
+                                className="btn-primary text-xs mr-2 disabled:bg-slate-400 disabled:cursor-not-allowed"
+                            >
                                 <PlusCircleIcon className="w-4 h-4 mr-2 inline" /> Piutang
                             </button>
                             <Modal isOpen={isModalCreatePayableOpen} onClose={closeModal} modalTitle="Create Payable">
                                 <CreatePayable
                                     isModalOpen={setIsModalCreatePayableOpen}
+                                    notification={(message) => notification(message)}
+                                    fetchFinance={fetchFinance}
+                                />
+                            </Modal>
+                            <Modal isOpen={isModalCreateReceivableOpen} onClose={closeModal} modalTitle="Create Receivable">
+                                <CreateReceivable
+                                    isModalOpen={setIsModalCreateReceivableOpen}
                                     notification={(message) => notification(message)}
                                     fetchFinance={fetchFinance}
                                 />

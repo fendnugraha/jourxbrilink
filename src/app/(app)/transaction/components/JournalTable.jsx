@@ -278,7 +278,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                                                     setSelectedJournalId(journal.id);
                                                     setIsModalDeleteJournalOpen(true);
                                                 }}
-                                                disabled={["Voucher & SP", "Accessories"].includes(journal.trx_type)}
+                                                disabled={["Voucher & SP", "Accessories", null].includes(journal.trx_type)}
                                                 className=" disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transtition-all group-hover:text-white duration-200"
                                             >
                                                 <TrashIcon className="size-4" />

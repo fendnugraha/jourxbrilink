@@ -183,7 +183,7 @@ const MutationHistory = ({ account, notification, user }) => {
                                                     setSelectedJournalId(item.id);
                                                     setIsModalDeleteJournalOpen(true);
                                                 }}
-                                                disabled={["Voucher & SP", "Accessories"].includes(item.trx_type)}
+                                                disabled={["Voucher & SP", "Accessories", null].includes(item.trx_type)}
                                                 className=" disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transtition-all duration-200"
                                             >
                                                 <TrashIcon className="size-4" />

@@ -45,7 +45,8 @@ const MutationHistory = ({ account, notification, user }) => {
             });
             setMutation(response.data.data);
         } catch (error) {
-            notification(error.response?.data?.message || "Something went wrong.");
+            notification(error.response?.data?.message);
+            console.log(error);
         } finally {
             setLoading(false);
         }
@@ -68,7 +69,6 @@ const MutationHistory = ({ account, notification, user }) => {
             notification(error.response?.data?.message || "Something went wrong.");
         }
     };
-
     return (
         <div className="bg-white rounded-lg mb-3 relative">
             <div className="p-4">
@@ -135,7 +135,7 @@ const MutationHistory = ({ account, notification, user }) => {
                             className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         />
                     </div>
-                    <button onClick={fetchMutation} className="btn-primary">
+                    <button onClick={() => fetchMutation()} className="btn-primary">
                         Submit
                     </button>
                 </Modal>

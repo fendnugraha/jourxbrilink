@@ -66,13 +66,14 @@ const Header = ({ title }) => {
         const longitude = 107.6191; // Longitude Bandung
         fetchPrayerTimes(date, latitude, longitude);
     }, []);
+    console.log(profit);
     return (
         <>
             <header className={`h-[72px] px-4 md:px-6 flex justify-between items-center border-b bg-blue-800`}>
                 <h1 className="text-xl font-bold text-white">
                     {title}
                     <span className="text-xs font-normal p-0 block">
-                        {hijrianDate(new Date())}, {"Imsak: " + prayerTimes?.Imsak}, {"Maghrib: " + prayerTimes?.Maghrib}
+                        {/* {hijrianDate(new Date())}, {"Imsak: " + prayerTimes?.Imsak}, {"Maghrib: " + prayerTimes?.Maghrib} */}
                     </span>
                 </h1>
                 <div className="flex items-center gap-2">

@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
-import { FilterIcon } from "lucide-react";
+import { DownloadIcon, FilterIcon } from "lucide-react";
 import Modal from "@/components/Modal";
 import Input from "@/components/Input";
 import Label from "@/components/Label";
 import Link from "next/link";
+import exportToExcel from "@/libs/exportToExcel";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -51,6 +52,19 @@ const RevenueReport = () => {
         }, 0);
         // console.log(revenue.revenue?.[0][trxType]);
     };
+
+    //export to excel
+    const headersRevenue = [
+        { key: "warehouse", label: "Cabang" },
+        { key: "transfer", label: "Transfer" },
+        { key: "tarikTunai", label: "Tarik Tunai" },
+        { key: "voucher", label: "Voucher" },
+        { key: "accessories", label: "Accessories" },
+        { key: "deposit", label: "Deposit" },
+        { key: "trx", label: "Transaksi" },
+        { key: "expense", label: "Pengeluaran" },
+        { key: "fee", label: "Profit" },
+    ];
     return (
         <div className="bg-white rounded-lg mb-3 relative">
             <div className="p-4 flex justify-between">
@@ -60,36 +74,51 @@ const RevenueReport = () => {
                         Periode: {startDate} - {endDate}
                     </span>
                 </h4>
-
-                <button
-                    onClick={() => setIsModalFilterDataOpen(true)}
-                    className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
-                >
-                    <FilterIcon className="size-4" />
-                </button>
-                <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
-                    <div className="mb-4">
-                        <Label className="font-bold">Tanggal</Label>
-                        <Input
-                            type="date"
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                            className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <Label className="font-bold">s/d</Label>
-                        <Input
-                            type="date"
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
-                            className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                        />
-                    </div>
-                    <button onClick={fetchRevenueReport} className="btn-primary">
-                        Submit
+                <div className="flex gap-1">
+                    <button
+                        onClick={() => setIsModalFilterDataOpen(true)}
+                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
+                    >
+                        <FilterIcon className="size-4" />
                     </button>
-                </Modal>
+                    <button
+                        onClick={() =>
+                            exportToExcel(
+                                revenue?.revenue,
+                                headersRevenue,
+                                `Summary Report by Warehouse ${startDate} s/d ${endDate}.xlsx`,
+                                `Summary Report by Warehouse ${startDate} s/d ${endDate}`
+                            )
+                        }
+                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed"
+                        disabled={revenue?.revenue?.length === 0}
+                    >
+                        <DownloadIcon className="size-4" />
+                    </button>
+                    <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
+                        <div className="mb-4">
+                            <Label className="font-bold">Tanggal</Label>
+                            <Input
+                                type="date"
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
+                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <Label className="font-bold">s/d</Label>
+                            <Input
+                                type="date"
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            />
+                        </div>
+                        <button onClick={fetchRevenueReport} className="btn-primary">
+                            Submit
+                        </button>
+                    </Modal>
+                </div>
             </div>
             <div className="overflow-x-auto">
                 <table className="table w-full text-xs mb-2">
@@ -99,6 +128,7 @@ const RevenueReport = () => {
                             <th className="">Transfer</th>
                             <th className="">Tarik Tunai</th>
                             <th className="">Voucher</th>
+                            <th className="">Accessories</th>
                             <th className="">Deposit</th>
                             <th className="">Trx</th>
                             <th className="">Biaya</th>
@@ -121,6 +151,7 @@ const RevenueReport = () => {
                                     <td className="text-end">{formatNumber(item.transfer)}</td>
                                     <td className="text-end">{formatNumber(item.tarikTunai)}</td>
                                     <td className="text-end">{formatNumber(item.voucher)}</td>
+                                    <td className="text-end">{formatNumber(item.accessories)}</td>
                                     <td className="text-end">{formatNumber(item.deposit)}</td>
                                     <td className="text-end">{formatNumber(item.trx)}</td>
                                     <td className="text-end font-bold text-red-500">{formatNumber(item.expense)}</td>
@@ -140,6 +171,7 @@ const RevenueReport = () => {
                                 <th className="font-bold">{formatNumber(sumByTrxType("transfer"))}</th>
                                 <th className="font-bold">{formatNumber(sumByTrxType("tarikTunai"))}</th>
                                 <th className="font-bold">{formatNumber(sumByTrxType("voucher"))}</th>
+                                <th className="font-bold">{formatNumber(sumByTrxType("accessories"))}</th>
                                 <th className="font-bold">{formatNumber(sumByTrxType("deposit"))}</th>
                                 <th className="font-bold">{formatNumber(sumByTrxType("trx"))}</th>
                                 <th className="font-bold text-red-500">{formatNumber(sumByTrxType("expense"))}</th>

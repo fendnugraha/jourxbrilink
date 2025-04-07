@@ -15,9 +15,8 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/libs/auth";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { mutate } from "swr";
 import useGetProfit from "@/components/RankByProfit";
 import formatNumber from "@/libs/formatNumber";
 
@@ -39,34 +38,43 @@ const Header = ({ title }) => {
         return suffixes[mod - 10] || suffixes[mod] || suffixes[0];
     };
 
+    const getCurrentDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const longMonthName = today.toLocaleDateString("id-ID", { month: "long" });
+        const day = String(today.getDate()).padStart(2, "0");
+        const dayName = today.toLocaleDateString("id-ID", { weekday: "long" });
+        return `${dayName}, ${day} ${longMonthName} ${year}`;
+    };
+
     const hijrianDate = (date) => {
         const options = { year: "numeric", month: "long", day: "numeric" };
         const hijriDate = new Date(date).toLocaleDateString("ar-SA-u-nu-latn", options);
         return hijriDate;
     };
-    // Imsak,Fajr,Sunrise,Dhuhr,Asr,Maghrib,Sunset,Isha,Midnight
-    const fetchPrayerTimes = async (date, latitude, longitude, method = 20, timezonestring = "Asia/Jakarta", tune = "0,0,0,0,0,0,0,0,0") => {
-        try {
-            const response = await fetch(
-                `https://api.aladhan.com/v1/timingsByCity/${date}?city=Bandung&country=ID&state=Jawa%20Barat&latitude=${latitude}&longitude=${longitude}&method=${method}&shafaq=general&tune=${tune}&timezonestring=${timezonestring}&calendarMethod=UAQ`
-            );
-            if (!response.ok) {
-                throw new Error("Failed to fetch data");
-            }
-            const data = await response.json();
-            setPrayerTimes(data.data.timings); // Mengambil waktu sholat saja
-        } catch (err) {
-            setError(err.message);
-        }
-    };
 
-    useEffect(() => {
-        const date = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" }); // Format: YYYY-MM-DD
-        const latitude = -6.9175; // Latitude Bandung
-        const longitude = 107.6191; // Longitude Bandung
-        fetchPrayerTimes(date, latitude, longitude);
-    }, []);
-    console.log(profit);
+    // Imsak,Fajr,Sunrise,Dhuhr,Asr,Maghrib,Sunset,Isha,Midnight
+    // const fetchPrayerTimes = async (date, latitude, longitude, method = 20, timezonestring = "Asia/Jakarta", tune = "0,0,0,0,0,0,0,0,0") => {
+    //     try {
+    //         const response = await fetch(
+    //             `https://api.aladhan.com/v1/timingsByCity/${date}?city=Bandung&country=ID&state=Jawa%20Barat&latitude=${latitude}&longitude=${longitude}&method=${method}&shafaq=general&tune=${tune}&timezonestring=${timezonestring}&calendarMethod=UAQ`
+    //         );
+    //         if (!response.ok) {
+    //             throw new Error("Failed to fetch data");
+    //         }
+    //         const data = await response.json();
+    //         setPrayerTimes(data.data.timings); // Mengambil waktu sholat saja
+    //     } catch (err) {
+    //         setError(err.message);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     const date = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" }); // Format: YYYY-MM-DD
+    //     const latitude = -6.9175; // Latitude Bandung
+    //     const longitude = 107.6191; // Longitude Bandung
+    //     fetchPrayerTimes(date, latitude, longitude);
+    // }, []);
     return (
         <>
             <header className={`h-[72px] px-4 md:px-6 flex justify-between items-center border-b bg-blue-800`}>
@@ -74,6 +82,7 @@ const Header = ({ title }) => {
                     {title}
                     <span className="text-xs font-normal p-0 block">
                         {/* {hijrianDate(new Date())}, {"Imsak: " + prayerTimes?.Imsak}, {"Maghrib: " + prayerTimes?.Maghrib} */}
+                        {getCurrentDate()}
                     </span>
                 </h1>
                 <div className="flex items-center gap-2">

@@ -92,7 +92,6 @@ const WarehouseReport = ({ params }) => {
         { key: "expense", label: "Pengeluaran" },
         { key: "fee", label: "Profit" },
     ];
-
     return (
         <>
             <Header title={"Summary Report by Warehouse"} />
@@ -128,7 +127,8 @@ const WarehouseReport = ({ params }) => {
                                             `Summary Report by Warehouse ${filterWarehouse?.name} ${getMonthName(month)} ${year}`
                                         )
                                     }
-                                    className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
+                                    className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed"
+                                    disabled={revenue?.revenue?.length === 0}
                                 >
                                     <DownloadIcon className="size-4" />
                                 </button>

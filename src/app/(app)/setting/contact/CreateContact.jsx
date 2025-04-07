@@ -2,6 +2,7 @@ import Input from "@/components/Input";
 import Label from "@/components/Label";
 import { useState } from "react";
 import axios from "@/libs/axios";
+import { set } from "date-fns";
 
 const CreateContact = ({ isModalOpen, notification, fetchContacts }) => {
     const [name, setName] = useState("");
@@ -29,8 +30,14 @@ const CreateContact = ({ isModalOpen, notification, fetchContacts }) => {
             isModalOpen(false);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
+        } finally {
+            setLoading(false);
+            setName(" ");
+            setDescription(" ");
+            setPhoneNumber(" ");
+            setAddress(" ");
+            setType(" ");
         }
-        setLoading(false);
     };
 
     return (

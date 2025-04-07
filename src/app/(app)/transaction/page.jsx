@@ -16,10 +16,24 @@ import CreateBankAdminFee from "./components/CreateBankAdminFee";
 import CreateExpense from "./components/CreateExpense";
 import CashBankBalance from "./components/CashBankBalance";
 import Loading from "../loading";
-import { ArrowDownCircleIcon, ArrowUpCircleIcon, ChevronRightIcon, HandCoinsIcon, LoaderCircleIcon, ShoppingBagIcon } from "lucide-react";
+import {
+    ArrowDownCircleIcon,
+    ArrowUpCircleIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
+    HandCoinsIcon,
+    LayoutDashboardIcon,
+    LoaderCircleIcon,
+    RefreshCcwIcon,
+    ShoppingBagIcon,
+} from "lucide-react";
 import useCashBankBalance from "@/libs/cashBankBalance";
 import useSWR, { mutate } from "swr";
 import useGetWarehouses from "@/libs/getAllWarehouse";
+import { useGetDailyDashboard } from "@/libs/getDailyDashboard";
+import formatNumber from "@/libs/formatNumber";
+import Label from "@/components/Label";
+import Input from "@/components/Input";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -34,6 +48,7 @@ const TransactionPage = () => {
     if (!user) {
         return <Loading />;
     }
+    const warehouse = user.role?.warehouse_id;
 
     const [journalsByWarehouse, setJournalsByWarehouse] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -50,12 +65,43 @@ const TransactionPage = () => {
         type: "",
         message: "",
     });
+    const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
 
     const [isVoucherMenuOpen, setIsVoucherMenuOpen] = useState(false);
     const [isExpenseMenuOpen, setIsExpenseMenuOpen] = useState(false);
+    const [isDailyReportOpen, setIsDailyReportOpen] = useState(false);
+    const [openingCash, setOpeningCash] = useState(0);
 
     const menuRef = useRef(null);
+    const { dailyDashboard, loading: isLoading, error: dailyDashboardError } = useGetDailyDashboard(warehouse, getCurrentDate(), getCurrentDate());
+
+    const drawerRef = useRef();
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (drawerRef.current && !drawerRef.current.contains(event.target)) {
+                setIsDailyReportOpen(false);
+            }
+        }
+
+        if (isDailyReportOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isDailyReportOpen]);
+
+    const totalSetoran =
+        dailyDashboard.data?.totalFee +
+        dailyDashboard.data?.totalCash +
+        dailyDashboard.data?.totalCashDeposit +
+        dailyDashboard.data?.totalAccessories +
+        dailyDashboard.data?.totalVoucher +
+        dailyDashboard.data?.totalExpense;
 
     // Event listener untuk klik di luar menu
     useEffect(() => {
@@ -81,7 +127,6 @@ const TransactionPage = () => {
         setIsModalCreateBankAdminFeeOpen(false);
         setIsModalCreateExpenseOpen(false);
     };
-    const warehouse = user.role?.warehouse_id;
     const [selectedWarehouseId, setSelectedWarehouseId] = useState(warehouse);
     const { accountBalance, error: accountBalanceError, loading: isValidating } = useCashBankBalance(selectedWarehouseId, endDate);
 
@@ -119,7 +164,7 @@ const TransactionPage = () => {
         fetchCashBank();
     }, []);
 
-    const filteredCashBankByWarehouse = cashBank.filter((cashBank) => cashBank.warehouse_id === selectedWarehouseId);
+    const filteredCashBankByWarehouse = cashBank.filter((cashBank) => cashBank.warehouse_id === warehouse);
     return (
         <>
             <Header title="Transaction" />
@@ -189,6 +234,16 @@ const TransactionPage = () => {
                         >
                             <HandCoinsIcon className="w-7 h-7" /> Biaya
                         </button>
+                        <button
+                            onClick={() => {
+                                setIsDailyReportOpen(!isDailyReportOpen);
+                                setIsVoucherMenuOpen(false);
+                                setIsExpenseMenuOpen(false);
+                            }}
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-2 text-xs gap-1 focus:bg-amber-500"
+                        >
+                            <LayoutDashboardIcon className="w-7 h-7" /> Report
+                        </button>
                     </div>
                 </div>
                 <div className="max-w-7xl mx-auto sm:px-6">
@@ -197,18 +252,20 @@ const TransactionPage = () => {
                     )}
                     <div className="overflow-hidden sm:rounded-lg">
                         <div className="mb-2 hidden sm:flex justify-start gap-2">
-                            <button
-                                onClick={() => setIsModalCreateTransferOpen(true)}
-                                className="bg-indigo-600 group text-sm min-w-44 hover:bg-indigo-500 text-white py-2 px-6 rounded-lg"
-                            >
-                                Tansfer Uang <ArrowUpCircleIcon className="size-4 group-hover:scale-110 inline" />
-                            </button>
-                            <button
-                                onClick={() => setIsModalCreateCashWithdrawalOpen(true)}
-                                className="bg-indigo-600 group text-sm min-w-44 hover:bg-indigo-500 text-white py-2 px-6 rounded-lg"
-                            >
-                                Tarik Tunai <ArrowDownCircleIcon className="size-4 group-hover:scale-110 inline" />
-                            </button>
+                            <div className="">
+                                <button
+                                    onClick={() => setIsModalCreateTransferOpen(true)}
+                                    className="bg-gray-600 group text-sm min-w-44 hover:bg-gray-700 text-white hover:text-red-500 py-2 px-6 rounded-s-lg"
+                                >
+                                    Tansfer Uang <ArrowUpCircleIcon className="size-4 group-hover:scale-125 inline" />
+                                </button>
+                                <button
+                                    onClick={() => setIsModalCreateCashWithdrawalOpen(true)}
+                                    className="bg-gray-600 group text-sm min-w-44 hover:bg-gray-700 text-white hover:text-green-500 py-2 px-6 rounded-e-lg"
+                                >
+                                    <ArrowDownCircleIcon className="size-4 group-hover:scale-125 inline" /> Tarik Tunai
+                                </button>
+                            </div>
                             <Dropdown
                                 trigger={
                                     <button className="bg-green-600 text-sm hover:bg-green-500 text-white py-2 px-6 rounded-lg group">
@@ -340,6 +397,112 @@ const TransactionPage = () => {
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            {/* Daily report */}
+            <div
+                className={`fixed top-[72px] right-0 h-full z-[100] shadow-lg w-full sm:w-1/4 ${
+                    isDailyReportOpen ? "translate-x-0" : "translate-x-full"
+                } transition-transform duration-300 ease-in-out bg-white`}
+                ref={drawerRef}
+            >
+                <button
+                    className={` ${
+                        isDailyReportOpen ? "w-8 -left-8" : "-left-8 w-8"
+                    } h-8 py-1 px-2 top-0 absolute bg-orange-300 shadow-lg text-xs hidden sm:flex items-center justify-start rounded-s-lg transition-all duration-300 ease-in-out text-nowrap hover:bg-orange-200`}
+                    onClick={() => setIsDailyReportOpen(!isDailyReportOpen)}
+                >
+                    <ChevronLeftIcon
+                        size={20}
+                        className={`inline ${isDailyReportOpen ? "rotate-180" : ""} transition-transform duration-300 delay-300 ease-in-out`}
+                    />{" "}
+                    {/* {isDailyReportOpen ? "" : "Daily Report"} */}
+                </button>
+                <div className="px-4 py-2">
+                    <div className="flex justify-between items-center">
+                        <h1 className="text-lg font-bold">Daily Report</h1>
+                        <button
+                            className="text-slate-400 hover:scale-110 transition-transform duration-75"
+                            onClick={() => mutate(`/api/daily-dashboard/${warehouse}/${startDate}/${endDate}`)}
+                        >
+                            <RefreshCcwIcon className={`w-5 h-5 ${isLoading ? "animate-spin" : ""}`} />
+                        </button>
+                    </div>
+                    <span className="block text-xs mb-4 text-slate-400">{getCurrentDate()}</span>
+                    <div className="flex justify-between mb-1">
+                        <h1 className="text-xs text-slate-600">Uang Tunai</h1>
+                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard.data?.totalCash)}</h1>
+                    </div>
+                    <div className="flex justify-between mb-1">
+                        <h1 className="text-xs text-slate-600">Voucher</h1>
+                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard.data?.totalVoucher)}</h1>
+                    </div>
+                    <div className="flex justify-between mb-1">
+                        <h1 className="text-xs text-slate-600">Accessories</h1>
+                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard.data?.totalAccessories)}</h1>
+                    </div>
+                    <div className="flex justify-between mb-1">
+                        <h1 className="text-xs text-slate-600">Deposit</h1>
+                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard.data?.totalCashDeposit)}</h1>
+                    </div>
+                    <hr className="border border-dashed" />
+                    <div className="flex justify-between mt-1 mb-4">
+                        <h1 className="text-xs font-bold text-slate-700">Pendapatan</h1>
+                        <h1 className="text-xs font-bold text-end text-green-500">
+                            {formatNumber(
+                                dailyDashboard.data?.totalCash +
+                                    dailyDashboard.data?.totalCashDeposit +
+                                    dailyDashboard.data?.totalAccessories +
+                                    dailyDashboard.data?.totalVoucher
+                            )}
+                        </h1>
+                    </div>
+                    <div className="flex justify-between mb-1">
+                        <h1 className="text-xs text-slate-600">Fee Admin</h1>
+                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard.data?.totalFee ?? 0)}</h1>
+                    </div>
+                    <div className="flex justify-between mb-1">
+                        <h1 className="text-xs text-slate-600">Biaya</h1>
+                        <h1 className="text-xs font-bold text-red-500 text-end">{formatNumber(dailyDashboard.data?.totalExpense ?? 0)}</h1>
+                    </div>
+                    <hr className="border border-dashed" />
+                    <div className="flex justify-between mt-1 mb-4">
+                        <h1 className="text-xs font-bold text-slate-700">Profit (Laba)</h1>
+                        <h1 className="text-xs font-bold text-end text-green-500">{formatNumber(dailyDashboard.data?.profit)}</h1>
+                    </div>
+                    <div className="flex justify-between mt-1 mb-4">
+                        <h1 className="text-xs font-bold text-slate-700">Total Pendapatan</h1>
+                        <h1 className="text-xs font-bold text-end text-green-500">
+                            {formatNumber(
+                                dailyDashboard.data?.totalFee +
+                                    dailyDashboard.data?.totalCash +
+                                    dailyDashboard.data?.totalCashDeposit +
+                                    dailyDashboard.data?.totalAccessories +
+                                    dailyDashboard.data?.totalVoucher +
+                                    dailyDashboard.data?.totalExpense
+                            )}
+                        </h1>
+                    </div>
+                    <div className="mb-4">
+                        <Label>Set Uang Awal</Label>
+                        <Input
+                            type="number"
+                            className={"w-full text-end text-sm"}
+                            value={openingCash}
+                            onChange={(e) => setOpeningCash(e.target.value)}
+                            placeholder="Contoh: 9.000.000"
+                        />
+                    </div>
+
+                    <div className="mb-4 p-2 border rounded-xl">
+                        <h1 className="text-xs font-bold text-slate-700">Total Uang Disetor</h1>
+                        <h1 className="text-xs text-end text-red-400">{formatNumber(openingCash > 0 ? -openingCash : 0)}</h1>
+                        <h1 className="text-lg font-bold text-end text-green-500">{formatNumber(totalSetoran - openingCash)}</h1>
+                    </div>
+
+                    <button type="button" className="w-full sm:hidden bg-blue-500 text-white py-2 px-4 rounded-md" onClick={() => setIsDailyReportOpen(false)}>
+                        Tutup
+                    </button>
                 </div>
             </div>
         </>

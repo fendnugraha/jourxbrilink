@@ -3,7 +3,7 @@ import { saveAs } from "file-saver";
 
 const exportToExcel = (data, headers, fileName = "data.xlsx", title = "Laporan Data") => {
     if (data.length === 0) {
-        console.error("Data kosong, tidak dapat diekspor.");
+        // notification("error", "Data tidak ditemukan.");
         return;
     }
 

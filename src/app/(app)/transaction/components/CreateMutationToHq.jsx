@@ -114,7 +114,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                 <Label></Label>
                 <div className="col-span-1 sm:col-span-2">
                     <h1 className="text-sm sm:text-sm font-bold">
-                        {formData.amount && formData.cred_code && (
+                        {formData.cred_code && (
                             <>
                                 {formatNumber(filterSelectedBranchAccount[0]?.balance)} - {formatNumber(formData.amount)} ={" "}
                                 {formatNumber((filterSelectedBranchAccount[0]?.balance || 0) - (formData.amount || 0))}

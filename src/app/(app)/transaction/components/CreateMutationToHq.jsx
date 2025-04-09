@@ -5,7 +5,7 @@ import Label from "@/components/Label";
 import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
 
-const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, user }) => {
+const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, user, accountBalance }) => {
     const [formData, setFormData] = useState({
         debt_code: "",
         cred_code: "",
@@ -43,6 +43,8 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
             setLoading(false);
         }
     };
+    const filterSelectedBranchAccount = accountBalance.data?.filter((account) => account.id === Number(formData.cred_code));
+    console.log(filterSelectedBranchAccount);
     return (
         <form onSubmit={handleSubmit}>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
@@ -106,6 +108,19 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     />
                     {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
+                </div>
+            </div>
+            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+                <Label></Label>
+                <div className="col-span-1 sm:col-span-2">
+                    <h1 className="text-sm sm:text-sm font-bold">
+                        {formData.amount && formData.cred_code && (
+                            <>
+                                {formatNumber(filterSelectedBranchAccount[0]?.balance)} - {formatNumber(formData.amount)} ={" "}
+                                {formatNumber((filterSelectedBranchAccount[0]?.balance || 0) - (formData.amount || 0))}
+                            </>
+                        )}
+                    </h1>
                 </div>
             </div>
             <div className="flex justify-end gap-2">

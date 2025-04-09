@@ -28,7 +28,7 @@ import {
     ShoppingBagIcon,
 } from "lucide-react";
 import useCashBankBalance from "@/libs/cashBankBalance";
-import useSWR, { mutate } from "swr";
+import { mutate } from "swr";
 import useGetWarehouses from "@/libs/getAllWarehouse";
 import { useGetDailyDashboard } from "@/libs/getDailyDashboard";
 import formatNumber from "@/libs/formatNumber";
@@ -71,7 +71,8 @@ const TransactionPage = () => {
     const [isVoucherMenuOpen, setIsVoucherMenuOpen] = useState(false);
     const [isExpenseMenuOpen, setIsExpenseMenuOpen] = useState(false);
     const [isDailyReportOpen, setIsDailyReportOpen] = useState(false);
-    const [openingCash, setOpeningCash] = useState(0);
+    const initCashValue = localStorage.getItem("openingCash") || 0;
+    const [openingCash, setOpeningCash] = useState(initCashValue);
 
     const menuRef = useRef(null);
     const { dailyDashboard, loading: isLoading, error: dailyDashboardError } = useGetDailyDashboard(warehouse, getCurrentDate(), getCurrentDate());
@@ -358,6 +359,7 @@ const TransactionPage = () => {
                                 notification={(type, message) => setNotification({ type, message })}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
+                                accountBalance={accountBalance}
                             />
                         </Modal>
                         <Modal isOpen={isModalCreateBankAdminFeeOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Biaya Administrasi Bank">
@@ -489,7 +491,11 @@ const TransactionPage = () => {
                             type="number"
                             className={"w-full text-end text-sm"}
                             value={openingCash}
-                            onChange={(e) => setOpeningCash(e.target.value)}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                setOpeningCash(value);
+                                localStorage.setItem("openingCash", value);
+                            }}
                             placeholder="Contoh: 9.000.000"
                         />
                     </div>

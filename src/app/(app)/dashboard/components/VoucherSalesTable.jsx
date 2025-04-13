@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
-import { FilterIcon } from "lucide-react";
+import { FilterIcon, RefreshCcwIcon } from "lucide-react";
 import Modal from "@/components/Modal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
@@ -79,7 +79,9 @@ const VoucherSalesTable = ({ warehouse, warehouses, userRole }) => {
                                 ))}
                             </select>
                         )}
-
+                        <button onClick={() => fetchTransaction()} className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400">
+                            <RefreshCcwIcon className="size-4" />
+                        </button>
                         <button
                             onClick={() => setIsModalFilterDataOpen(true)}
                             className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
-import { DownloadIcon, FilterIcon } from "lucide-react";
+import { DownloadIcon, FilterIcon, RefreshCcwIcon } from "lucide-react";
 import Modal from "@/components/Modal";
 import Input from "@/components/Input";
 import Label from "@/components/Label";
@@ -76,10 +76,10 @@ const RevenueReport = () => {
                 </h4>
                 <div className="flex gap-1">
                     <button
-                        onClick={() => setIsModalFilterDataOpen(true)}
-                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
+                        onClick={() => fetchRevenueReport()}
+                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed"
                     >
-                        <FilterIcon className="size-4" />
+                        <RefreshCcwIcon className="size-4" />
                     </button>
                     <button
                         onClick={() =>
@@ -94,6 +94,12 @@ const RevenueReport = () => {
                         disabled={revenue?.revenue?.length === 0}
                     >
                         <DownloadIcon className="size-4" />
+                    </button>
+                    <button
+                        onClick={() => setIsModalFilterDataOpen(true)}
+                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
+                    >
+                        <FilterIcon className="size-4" />
                     </button>
                     <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                         <div className="mb-4">

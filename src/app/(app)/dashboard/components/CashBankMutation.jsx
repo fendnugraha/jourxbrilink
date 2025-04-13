@@ -113,6 +113,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
+    console.log(selectedWarehouse);
     return (
         <div className="my-4">
             {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
@@ -223,17 +224,23 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                                 </tr>
                             ))}
                             <tr>
-                                <td className="font-bold ">Penambahan saldo dari HQ</td>
+                                <td className="font-bold ">{Number(selectedWarehouse) === 1 ? "Penambahan saldo ke Cabang" : "Penambahan saldo dari HQ"}</td>
                                 <td className="text-end font-bold hidden sm:table-cell"></td>
                                 <td className="text-end font-bold"></td>
                                 <td className="text-end font-bold">
-                                    {mutationInSum - mutationOutSum === 0 ? (
-                                        <span className="text-green-600">Completed</span>
-                                    ) : loading || isValidating ? (
-                                        "..."
-                                    ) : (
-                                        formatNumber(mutationInSum - mutationOutSum)
-                                    )}
+                                    {(() => {
+                                        const remaining = mutationInSum - mutationOutSum;
+
+                                        if (remaining === 0) {
+                                            return <span className="text-green-600">Completed</span>;
+                                        }
+
+                                        if (loading || isValidating) {
+                                            return "...";
+                                        }
+
+                                        return <span className="text-red-600">{formatNumber(remaining)}</span>;
+                                    })()}
                                 </td>
                             </tr>
                         </tbody>

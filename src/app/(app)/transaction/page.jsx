@@ -97,12 +97,12 @@ const TransactionPage = () => {
     }, [isDailyReportOpen]);
 
     const totalSetoran =
-        dailyDashboard.data?.totalFee +
-        dailyDashboard.data?.totalCash +
-        dailyDashboard.data?.totalCashDeposit +
-        dailyDashboard.data?.totalAccessories +
-        dailyDashboard.data?.totalVoucher +
-        dailyDashboard.data?.totalExpense;
+        dailyDashboard?.data?.totalFee +
+        dailyDashboard?.data?.totalCash +
+        dailyDashboard?.data?.totalCashDeposit +
+        dailyDashboard?.data?.totalAccessories +
+        dailyDashboard?.data?.totalVoucher +
+        dailyDashboard?.data?.totalExpense;
 
     // Event listener untuk klik di luar menu
     useEffect(() => {

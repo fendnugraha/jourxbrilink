@@ -20,7 +20,18 @@ const getCurrentDate = () => {
     return `${year}-${month}-${day}`;
 };
 
-const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, warehouseId, notification, fetchJournalsByWarehouse, user, loading }) => {
+const JournalTable = ({
+    cashBank,
+    journalsByWarehouse,
+    warehouses,
+    warehouse,
+    warehouseId,
+    notification,
+    fetchJournalsByWarehouse,
+    user,
+    loading,
+    hqCashBank,
+}) => {
     const [selectedAccount, setSelectedAccount] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [startDate, setStartDate] = useState(getCurrentDate());
@@ -91,6 +102,7 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
+    const hqCashBankIds = hqCashBank.map((cashBank) => cashBank.id);
     return (
         <div className="">
             <div className="px-4 flex gap-2">
@@ -278,8 +290,11 @@ const JournalTable = ({ cashBank, journalsByWarehouse, warehouses, warehouse, wa
                                                     setSelectedJournalId(journal.id);
                                                     setIsModalDeleteJournalOpen(true);
                                                 }}
-                                                disabled={["Voucher & SP", "Accessories", null].includes(journal.trx_type)}
-                                                className=" disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transtition-all group-hover:text-white duration-200"
+                                                disabled={
+                                                    ["Voucher & SP", "Accessories", null].includes(journal.trx_type) ||
+                                                    (userRole !== "Administrator" && hqCashBankIds.includes(journal.cred_code))
+                                                }
+                                                className="disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transition-all group-hover:text-white duration-200"
                                             >
                                                 <TrashIcon className="size-4" />
                                             </button>

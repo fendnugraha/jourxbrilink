@@ -172,17 +172,19 @@ const RevenueReport = () => {
                                 <td colSpan={9}>Loading...</td>
                             </tr>
                         ) : (
-                            <tr>
-                                <th className="font-bold">Total</th>
-                                <th className="font-bold">{formatNumber(sumByTrxType("transfer"))}</th>
-                                <th className="font-bold">{formatNumber(sumByTrxType("tarikTunai"))}</th>
-                                <th className="font-bold">{formatNumber(sumByTrxType("voucher"))}</th>
-                                <th className="font-bold">{formatNumber(sumByTrxType("accessories"))}</th>
-                                <th className="font-bold">{formatNumber(sumByTrxType("deposit"))}</th>
-                                <th className="font-bold">{formatNumber(sumByTrxType("trx"))}</th>
-                                <th className="font-bold text-red-500">{formatNumber(sumByTrxType("expense"))}</th>
-                                <th className="font-bold text-green-500">{formatNumber(sumByTrxType("fee"))}</th>
-                            </tr>
+                            revenue?.revenue?.length > 0 && (
+                                <tr>
+                                    <th className="font-bold">Total</th>
+                                    <th className="font-bold">{formatNumber(sumByTrxType("transfer"))}</th>
+                                    <th className="font-bold">{formatNumber(sumByTrxType("tarikTunai"))}</th>
+                                    <th className="font-bold">{formatNumber(sumByTrxType("voucher"))}</th>
+                                    <th className="font-bold">{formatNumber(sumByTrxType("accessories"))}</th>
+                                    <th className="font-bold">{formatNumber(sumByTrxType("deposit"))}</th>
+                                    <th className="font-bold">{formatNumber(sumByTrxType("trx"))}</th>
+                                    <th className="font-bold text-red-500">{formatNumber(sumByTrxType("expense"))}</th>
+                                    <th className="font-bold text-green-500">{formatNumber(sumByTrxType("fee"))}</th>
+                                </tr>
+                            )
                         )}
                     </tfoot>
                 </table>

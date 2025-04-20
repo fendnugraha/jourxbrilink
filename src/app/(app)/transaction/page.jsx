@@ -166,6 +166,7 @@ const TransactionPage = () => {
     }, []);
 
     const filteredCashBankByWarehouse = cashBank.filter((cashBank) => cashBank.warehouse_id === warehouse);
+    const hqCashBank = cashBank.filter((cashBank) => cashBank.warehouse_id === 1);
     return (
         <>
             <Header title="Transaction" />
@@ -392,6 +393,7 @@ const TransactionPage = () => {
                                     warehouseId={(warehouseId) => setSelectedWarehouseId(warehouseId)}
                                     user={user}
                                     loading={journalLoading}
+                                    hqCashBank={hqCashBank}
                                 />
                             </div>
                             <div className="order-1 sm:order-2 px-2 sm:px-0">

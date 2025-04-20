@@ -113,7 +113,6 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
-    console.log(selectedWarehouse);
     return (
         <div className="my-4">
             {notification && <Notification notification={notification} onClose={() => setNotification("")} />}

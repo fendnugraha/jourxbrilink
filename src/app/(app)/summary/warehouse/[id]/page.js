@@ -81,6 +81,8 @@ const WarehouseReport = ({ params }) => {
 
     const calculateWithdrawalPercentage = calculatePercentage(Number(revenue?.totals?.totalTarikTunai), sumTransferAndWithdrawal);
 
+    const calculateAverageDailyProfit = (Number(revenue?.totals?.totalFee) / Number(revenue?.revenue?.length)).toFixed(2);
+
     //export to excel
     const headersRevenue = [
         { key: "date", label: "Tanggal" },
@@ -195,6 +197,10 @@ const WarehouseReport = ({ params }) => {
                                     <div>
                                         <span className="text-gray-600 text-xs">Transaksi</span>
                                         <h1 className="text-2xl font-bold">{formatNumber(revenue?.totals?.totalTrx || 0)}</h1>
+                                    </div>
+                                    <div>
+                                        <span className="text-gray-600 text-xs">Profit Rata2</span>
+                                        <h1 className="text-2xl font-bold">{formatNumberToK(calculateAverageDailyProfit || 0)}</h1>
                                     </div>
                                     <div>
                                         <span className="text-gray-600 text-xs">Net Profit</span>

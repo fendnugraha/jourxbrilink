@@ -7,6 +7,7 @@ import RevenueReport from "./components/RevenueReport";
 import MutationHistory from "./components/MutationHistory";
 import axios from "@/libs/axios";
 import { useAuth } from "@/libs/auth";
+import LogActivity from "./components/LogActivity";
 
 const SummaryPage = () => {
     const { user } = useAuth({ middleware: "auth" });
@@ -38,6 +39,7 @@ const SummaryPage = () => {
                         <WarehouseBalance />
                         <RevenueReport />
                         <MutationHistory account={account} notification={(message) => setNotification(message)} user={user} />
+                        <LogActivity />
                     </div>
                 </div>
             </div>

@@ -62,8 +62,9 @@ const CreateContact = ({ isModalOpen, notification, fetchContacts }) => {
                         className="rounded-md w-full border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     >
                         <option value="">Select type</option>
-                        <option value="Customer">Customer</option>
-                        <option value="Supplier">Supplier</option>
+                        <option value="Customer">Customer (Pelanggan)</option>
+                        <option value="Supplier">Supplier (Vendor)</option>
+                        <option value="Employee">Employee (Karyawan)</option>
                     </select>
                     {errors.type && <p className="text-red-500 text-xs">{errors.type}</p>}
                 </div>

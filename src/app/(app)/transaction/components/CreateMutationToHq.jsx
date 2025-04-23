@@ -44,7 +44,6 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
         }
     };
     const filterSelectedBranchAccount = accountBalance.data?.filter((account) => account.id === Number(formData.cred_code));
-    console.log(filterSelectedBranchAccount);
     return (
         <form onSubmit={handleSubmit}>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
@@ -98,19 +97,6 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                 <h1 className="text-sm sm:text-lg font-bold">{formatNumber(formData.amount)}</h1>
             </div>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
-                <Label>Keterangan</Label>
-                <div className="col-span-1 sm:col-span-2">
-                    <textarea
-                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                        type="text"
-                        placeholder="(Optional)"
-                        value={formData.description}
-                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    />
-                    {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
-                </div>
-            </div>
-            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label></Label>
                 <div className="col-span-1 sm:col-span-2">
                     <h1 className="text-sm sm:text-sm font-bold">
@@ -121,6 +107,19 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                             </>
                         )}
                     </h1>
+                </div>
+            </div>
+            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+                <Label>Keterangan</Label>
+                <div className="col-span-1 sm:col-span-2">
+                    <textarea
+                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        type="text"
+                        placeholder="(Optional)"
+                        value={formData.description}
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    />
+                    {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                 </div>
             </div>
             <div className="flex justify-end gap-2">

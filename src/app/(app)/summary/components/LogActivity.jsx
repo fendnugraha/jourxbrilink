@@ -30,7 +30,7 @@ const LogActivity = () => {
         setIsModalFilterDataOpen(false);
     };
 
-    const fetchLogActivity = async (url = `/api/log-activity`) => {
+    const fetchLogActivity = async (url = `/api/log-activity/${startDate}/${endDate}`) => {
         setLoading(true);
         try {
             const response = await axios.get(url);
@@ -66,9 +66,9 @@ const LogActivity = () => {
                     >
                         <RefreshCcwIcon className="size-4" />
                     </button>
-                    <button className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed">
+                    {/* <button className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed">
                         <DownloadIcon className="size-4" />
-                    </button>
+                    </button> */}
                     <button
                         onClick={() => setIsModalFilterDataOpen(true)}
                         className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
@@ -94,7 +94,7 @@ const LogActivity = () => {
                                 className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             />
                         </div>
-                        <button onClick={fetchLogActivity} className="btn-primary">
+                        <button onClick={() => fetchLogActivity()} className="btn-primary">
                             Submit
                         </button>
                     </Modal>
@@ -114,7 +114,7 @@ const LogActivity = () => {
                                 <td className="border-y px-2 py-1">{item.activity}</td>
                                 <td className="border-y px-2 py-1 whitespace-normal break-words max-w-xs">
                                     <span className="text-xs block text-slate-500 font-bold">
-                                        ID:{item.id} User:{item.user.name} Wh:{item.warehouse.name}
+                                        ID:{item.id} by {item.user.name} on {item.warehouse.name}
                                     </span>
                                     {item.description}
                                     <span className="text-xs block text-slate-500 font-normal">

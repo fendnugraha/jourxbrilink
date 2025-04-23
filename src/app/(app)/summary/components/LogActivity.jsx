@@ -102,19 +102,17 @@ const LogActivity = () => {
             </div>
             <div className="overflow-x-auto">
                 <table className="table-auto w-full text-xs mb-2">
-                    <thead className="">
+                    {/* <thead className="">
                         <tr>
-                            <th className="border-y px-2 py-2">Activity</th>
                             <th className="border-y px-2 py-1">Description</th>
                         </tr>
-                    </thead>
+                    </thead> */}
                     <tbody>
                         {logActivity?.data?.map((item, index) => (
                             <tr key={index}>
-                                <td className="border-y px-2 py-1">{item.activity}</td>
                                 <td className="border-y px-2 py-1 whitespace-normal break-words max-w-xs">
                                     <span className="text-xs block text-slate-500 font-bold">
-                                        ID:{item.id} by {item.user.name} on {item.warehouse.name}
+                                        ID:{item.id} {item.activity} by {item.user.name} on {item.warehouse.name}
                                     </span>
                                     {item.description}
                                     <span className="text-xs block text-slate-500 font-normal">

@@ -112,7 +112,7 @@ const LogActivity = () => {
                             <tr key={index}>
                                 <td className="border-y px-2 py-1 whitespace-normal break-words max-w-xs">
                                     <span className="text-xs block text-slate-500 font-bold">
-                                        ID:{item.id} {item.activity} by {item.user.name} on {item.warehouse.name}
+                                        {item.user.name} {item.activity} at {item.warehouse.name}. Log ID: {item.id}
                                     </span>
                                     {item.description}
                                     <span className="text-xs block text-slate-500 font-normal">

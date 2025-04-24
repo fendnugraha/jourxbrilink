@@ -11,6 +11,7 @@ import Label from "@/components/Label";
 import Input from "@/components/Input";
 import EditJournal from "./EditJournal";
 import TimeAgo from "@/libs/formatDateDistance";
+import EditMutationJournal from "./EditMutationJournal";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -41,6 +42,7 @@ const JournalTable = ({
     const [isModalFilterJournalOpen, setIsModalFilterJournalOpen] = useState(false);
     const [isModalDeleteJournalOpen, setIsModalDeleteJournalOpen] = useState(false);
     const [isModalEditJournalOpen, setIsModalEditJournalOpen] = useState(false);
+    const [isModalEditMutationJournalOpen, setIsModalEditMutationJournalOpen] = useState(false);
     const [selectedJournalId, setSelectedJournalId] = useState(null);
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
     const userRole = user?.role?.role;
@@ -49,6 +51,7 @@ const JournalTable = ({
         setIsModalFilterJournalOpen(false);
         setIsModalDeleteJournalOpen(false);
         setIsModalEditJournalOpen(false);
+        setIsModalEditMutationJournalOpen(false);
     };
 
     const filterSelectedJournalId = journalsByWarehouse?.data?.find((journal) => journal.id === selectedJournalId);
@@ -286,6 +289,16 @@ const JournalTable = ({
                                                 <PencilIcon className="size-4 text-indigo-700 group-hover:text-white" />
                                             </button>
                                             <button
+                                                className=" hover:scale-125 transtition-all duration-200"
+                                                hidden={!["Mutasi Kas"].includes(journal.trx_type) || hqCashBankIds.includes(journal.cred_code)}
+                                                onClick={() => {
+                                                    setSelectedJournalId(journal.id);
+                                                    setIsModalEditMutationJournalOpen(true);
+                                                }}
+                                            >
+                                                <PencilIcon className="size-4 text-indigo-700 group-hover:text-white" />
+                                            </button>
+                                            <button
                                                 onClick={() => {
                                                     setSelectedJournalId(journal.id);
                                                     setIsModalDeleteJournalOpen(true);
@@ -334,6 +347,16 @@ const JournalTable = ({
                     isModalOpen={setIsModalEditJournalOpen}
                     journal={filterSelectedJournalId}
                     branchAccount={branchAccount}
+                    notification={notification}
+                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                />
+            </Modal>
+            <Modal isOpen={isModalEditMutationJournalOpen} onClose={closeModal} modalTitle="Edit Mutasi Journal" maxWidth="max-w-2xl">
+                <EditMutationJournal
+                    isModalOpen={setIsModalEditMutationJournalOpen}
+                    selectedWarehouse={selectedWarehouse}
+                    journal={filterSelectedJournalId}
+                    cashBank={cashBank}
                     notification={notification}
                     fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                 />

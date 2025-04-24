@@ -7,7 +7,7 @@ import Modal from "@/components/Modal";
 import CreateMutationFromHq from "./CreateMutationFromHq";
 import Notification from "@/components/notification";
 import Pagination from "@/components/PaginateList";
-import { FilterIcon, LoaderCircleIcon, MoveRightIcon, PlusCircleIcon } from "lucide-react";
+import { FilterIcon, LoaderCircleIcon, MessageCircleWarningIcon, MoveRightIcon, PlusCircleIcon, TrashIcon } from "lucide-react";
 import CreateJournal from "./CreateJournal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
@@ -31,11 +31,14 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
     const [isModalCreateJournalOpen, setIsModalCreateJournalOpen] = useState(false);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
     const [notification, setNotification] = useState("");
+    const [selectedJournalId, setSelectedJournalId] = useState(null);
+    const [isModalDeleteJournalOpen, setIsModalDeleteJournalOpen] = useState(false);
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
     const closeModal = () => {
         setIsModalCreateMutationFromHqOpen(false);
         setIsModalCreateJournalOpen(false);
         setIsModalFilterDataOpen(false);
+        setIsModalDeleteJournalOpen(false);
     };
 
     const fetchCashBank = async () => {
@@ -113,6 +116,18 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
+
+    const handleDeleteJournal = async (id) => {
+        try {
+            const response = await axios.delete(`/api/journals/${id}`);
+            setNotification(response.data.message);
+            fetchJournalsByWarehouse();
+        } catch (error) {
+            setNotification(error.response?.data?.message || "Something went wrong.");
+        }
+    };
+
+    const hqCashBankIds = cashBank?.filter((cashBank) => cashBank.warehouse_id === 1)?.map((cashBank) => cashBank.id);
     return (
         <div className="my-4">
             {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
@@ -313,6 +328,19 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                                             <span className="block sm:hidden font-bold text-blue-500">{formatNumber(journal.amount)}</span>
                                         </td>
                                         <td className="text-end hidden sm:table-cell">{formatNumber(journal.amount)}</td>
+                                        <td>
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedJournalId(journal.id);
+                                                    setIsModalDeleteJournalOpen(true);
+                                                }}
+                                                hidden={userRole !== "Administrator"}
+                                                disabled={!hqCashBankIds.includes(journal.cred_code)}
+                                                className="disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transition-all group-hover:text-white duration-200"
+                                            >
+                                                <TrashIcon className="size-4" />
+                                            </button>
+                                        </td>
                                     </tr>
                                 ))
                             )}
@@ -329,6 +357,29 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                     )}
                 </div>
             </div>
+            <Modal isOpen={isModalDeleteJournalOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
+                <div className="flex flex-col items-center justify-center gap-3 mb-4">
+                    <MessageCircleWarningIcon size={72} className="text-red-600" />
+                    <p className="text-sm">Apakah anda yakin ingin menghapus transaksi ini (ID: {selectedJournalId})?</p>
+                </div>
+                <div className="flex justify-center gap-3">
+                    <button
+                        onClick={() => {
+                            handleDeleteJournal(selectedJournalId);
+                            setIsModalDeleteJournalOpen(false);
+                        }}
+                        className="btn-primary w-full"
+                    >
+                        Ya
+                    </button>
+                    <button
+                        onClick={() => setIsModalDeleteJournalOpen(false)}
+                        className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    >
+                        Tidak
+                    </button>
+                </div>
+            </Modal>
         </div>
     );
 };

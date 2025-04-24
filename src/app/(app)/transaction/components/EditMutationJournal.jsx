@@ -5,12 +5,12 @@ import Label from "@/components/Label";
 import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
 
-const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJournalsByWarehouse }) => {
+const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse, notification, fetchJournalsByWarehouse }) => {
     const [formData, setFormData] = useState({
         debt_code: "",
         cred_code: "",
         amount: "",
-        fee_amount: "",
+        fee_amount: 0,
         description: "",
     });
     const [loading, setLoading] = useState(false);
@@ -23,7 +23,7 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                 debt_code: journal.debt_code || "",
                 cred_code: journal.cred_code || "",
                 amount: journal.amount || "",
-                fee_amount: journal.fee_amount || "",
+                fee_amount: 0,
                 description: journal.description || "",
             });
         }
@@ -43,6 +43,9 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
             setLoading(false);
         }
     };
+
+    const branchAccount = cashBank.filter((cashBank) => cashBank.warehouse_id === Number(selectedWarehouse));
+    const hqAccount = cashBank.filter((cashBank) => cashBank.warehouse_id === 1);
     return (
         <div className="relative">
             {journal.id === undefined && <div className="absolute h-full w-full flex items-center justify-center bg-white">Loading data ...</div>}
@@ -51,17 +54,13 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
             </h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 sm:gap-4 items-center">
-                    <Label>Rekening</Label>
+                    <Label>Dari (Cabang)</Label>
                     <div className="col-span-1 sm:col-span-2">
                         <select
                             onChange={(e) => {
-                                if (journal.trx_type === "Tarik Tunai") {
-                                    setFormData({ ...formData, debt_code: e.target.value });
-                                } else {
-                                    setFormData({ ...formData, cred_code: e.target.value });
-                                }
+                                setFormData({ ...formData, cred_code: e.target.value });
                             }}
-                            value={journal.trx_type === "Tarik Tunai" ? formData.debt_code : formData.cred_code}
+                            value={formData.cred_code}
                             className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         >
                             <option value="">--Pilih rekening--</option>
@@ -72,6 +71,25 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                             ))}
                         </select>
                         {errors.cred_code && <span className="text-red-500 text-xs">{errors.cred_code}</span>}
+                    </div>
+                </div>
+                <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 sm:gap-4 items-center">
+                    <Label>Ke (Pusat)</Label>
+                    <div className="col-span-1 sm:col-span-2">
+                        <select
+                            onChange={(e) => {
+                                setFormData({ ...formData, debt_code: e.target.value });
+                            }}
+                            value={formData.debt_code}
+                            className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        >
+                            <option value="">--Pilih rekening--</option>
+                            {hqAccount.map((br) => (
+                                <option key={br.id} value={br.id}>
+                                    {br.acc_name}
+                                </option>
+                            ))}
+                        </select>
                         {errors.debt_code && <span className="text-red-500 text-xs">{errors.debt_code}</span>}
                     </div>
                 </div>
@@ -88,20 +106,6 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                         {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
                     </div>
                     <h1 className="text-lg font-bold">{formatNumber(formData.amount)}</h1>
-                </div>
-                <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 sm:gap-4 items-center">
-                    <Label>Fee</Label>
-                    <div className="col-span-1">
-                        <Input
-                            type="number"
-                            className={"w-1/2"}
-                            placeholder="Rp."
-                            value={formData.fee_amount}
-                            onChange={(e) => setFormData({ ...formData, fee_amount: e.target.value })}
-                        />
-                        {errors.fee_amount && <span className="text-red-500 text-xs">{errors.fee_amount}</span>}
-                    </div>
-                    <h1 className="text-lg font-bold">{formatNumber(formData.fee_amount)}</h1>
                 </div>
                 <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 gap-4">
                     <Label>Keterangan</Label>
@@ -127,4 +131,4 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
     );
 };
 
-export default EditJournal;
+export default EditMutationJournal;

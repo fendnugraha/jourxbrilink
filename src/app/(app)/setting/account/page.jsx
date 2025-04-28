@@ -237,7 +237,8 @@ export default function Account() {
                                                     </td>
                                                     <td className="">
                                                         <span className="font-bold text-blue-800">
-                                                            {account.acc_name} {account.is_locked === 1 && <LockIcon size={16} className="inline" />}
+                                                            ID: {account.id}. {account.acc_name}{" "}
+                                                            {account.is_locked === 1 && <LockIcon size={16} className="inline" />}
                                                         </span>
                                                         <br />
                                                         <span className="text-slate-600">

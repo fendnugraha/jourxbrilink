@@ -5,7 +5,7 @@ import Label from "@/components/Label";
 import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
 
-const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, user, accountBalance }) => {
+const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, user, accountBalance, openingCash }) => {
     const [formData, setFormData] = useState({
         debt_code: "",
         cred_code: "",
@@ -44,13 +44,22 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
         }
     };
     const filterSelectedBranchAccount = accountBalance.data?.filter((account) => account.id === Number(formData.cred_code));
+    const filterCashAccountBalance = accountBalance?.data?.filter((account) => account.id === user.role.warehouse.chart_of_account_id);
+    const calculateDepositCash = filterCashAccountBalance[0]?.balance - openingCash;
     return (
         <form onSubmit={handleSubmit}>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Dari (Cabang)</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <select
-                        onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                cred_code: e.target.value,
+                                amount: Number(e.target.value) === user?.role?.warehouse?.chart_of_account_id ? Number(calculateDepositCash) : "",
+                                debt_code: Number(e.target.value) === user?.role?.warehouse?.chart_of_account_id ? 2 : "",
+                            })
+                        }
                         value={formData.cred_code}
                         className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     >
@@ -68,7 +77,12 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                 <Label>Ke (Pusat)</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <select
-                        onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                debt_code: e.target.value,
+                            })
+                        }
                         value={formData.debt_code}
                         className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     >

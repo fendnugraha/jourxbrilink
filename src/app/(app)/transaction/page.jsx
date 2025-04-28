@@ -21,6 +21,7 @@ import {
     ArrowUpCircleIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
+    CircleAlertIcon,
     HandCoinsIcon,
     LayoutDashboardIcon,
     LoaderCircleIcon,
@@ -263,7 +264,7 @@ const TransactionPage = () => {
                                 </button>
                                 <button
                                     onClick={() => setIsModalCreateCashWithdrawalOpen(true)}
-                                    className="bg-gray-600 group text-sm min-w-44 hover:bg-gray-700 text-white hover:text-green-500 py-2 px-6 rounded-e-lg"
+                                    className="bg-gray-600 group text-sm min-w-44 hover:bg-gray-700 text-white hover:text-teal-500 py-2 px-6 rounded-e-lg"
                                 >
                                     <ArrowDownCircleIcon className="size-4 group-hover:scale-125 inline" /> Tarik Tunai
                                 </button>
@@ -361,6 +362,7 @@ const TransactionPage = () => {
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
                                 accountBalance={accountBalance}
+                                openingCash={openingCash}
                             />
                         </Modal>
                         <Modal isOpen={isModalCreateBankAdminFeeOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Biaya Administrasi Bank">
@@ -435,55 +437,57 @@ const TransactionPage = () => {
                     <span className="block text-xs mb-4 text-slate-400">{getCurrentDate()}</span>
                     <div className="flex justify-between mb-1">
                         <h1 className="text-xs text-slate-600">Uang Tunai</h1>
-                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard.data?.totalCash)}</h1>
+                        <h1 className={`text-xs font-bold text-end ${dailyDashboard?.data?.totalCash < openingCash ? "text-red-500" : ""}`}>
+                            {formatNumber(dailyDashboard?.data?.totalCash)}
+                        </h1>
                     </div>
                     <div className="flex justify-between mb-1">
                         <h1 className="text-xs text-slate-600">Voucher</h1>
-                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard.data?.totalVoucher)}</h1>
+                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard?.data?.totalVoucher)}</h1>
                     </div>
                     <div className="flex justify-between mb-1">
                         <h1 className="text-xs text-slate-600">Accessories</h1>
-                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard.data?.totalAccessories)}</h1>
+                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard?.data?.totalAccessories)}</h1>
                     </div>
                     <div className="flex justify-between mb-1">
                         <h1 className="text-xs text-slate-600">Deposit</h1>
-                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard.data?.totalCashDeposit)}</h1>
+                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard?.data?.totalCashDeposit)}</h1>
                     </div>
                     <hr className="border border-dashed" />
                     <div className="flex justify-between mt-1 mb-4">
                         <h1 className="text-xs font-bold text-slate-700">Pendapatan</h1>
-                        <h1 className="text-xs font-bold text-end text-green-500">
+                        <h1 className="text-xs font-bold text-end text-teal-500">
                             {formatNumber(
-                                dailyDashboard.data?.totalCash +
-                                    dailyDashboard.data?.totalCashDeposit +
-                                    dailyDashboard.data?.totalAccessories +
-                                    dailyDashboard.data?.totalVoucher
+                                dailyDashboard?.data?.totalCash +
+                                    dailyDashboard?.data?.totalCashDeposit +
+                                    dailyDashboard?.data?.totalAccessories +
+                                    dailyDashboard?.data?.totalVoucher
                             )}
                         </h1>
                     </div>
                     <div className="flex justify-between mb-1">
                         <h1 className="text-xs text-slate-600">Fee Admin</h1>
-                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard.data?.totalFee ?? 0)}</h1>
+                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard?.data?.totalFee ?? 0)}</h1>
                     </div>
                     <div className="flex justify-between mb-1">
                         <h1 className="text-xs text-slate-600">Biaya</h1>
-                        <h1 className="text-xs font-bold text-red-500 text-end">{formatNumber(dailyDashboard.data?.totalExpense ?? 0)}</h1>
+                        <h1 className="text-xs font-bold text-red-500 text-end">{formatNumber(dailyDashboard?.data?.totalExpense ?? 0)}</h1>
                     </div>
                     <hr className="border border-dashed" />
                     <div className="flex justify-between mt-1 mb-4">
                         <h1 className="text-xs font-bold text-slate-700">Profit (Laba)</h1>
-                        <h1 className="text-xs font-bold text-end text-green-500">{formatNumber(dailyDashboard.data?.profit)}</h1>
+                        <h1 className="text-xs font-bold text-end text-teal-500">{formatNumber(dailyDashboard?.data?.profit)}</h1>
                     </div>
                     <div className="flex justify-between mt-1 mb-4">
                         <h1 className="text-xs font-bold text-slate-700">Total Pendapatan</h1>
-                        <h1 className="text-xs font-bold text-end text-green-500">
+                        <h1 className="text-xs font-bold text-end text-teal-500">
                             {formatNumber(
-                                dailyDashboard.data?.totalFee +
-                                    dailyDashboard.data?.totalCash +
-                                    dailyDashboard.data?.totalCashDeposit +
-                                    dailyDashboard.data?.totalAccessories +
-                                    dailyDashboard.data?.totalVoucher +
-                                    dailyDashboard.data?.totalExpense
+                                dailyDashboard?.data?.totalFee +
+                                    dailyDashboard?.data?.totalCash +
+                                    dailyDashboard?.data?.totalCashDeposit +
+                                    dailyDashboard?.data?.totalAccessories +
+                                    dailyDashboard?.data?.totalVoucher +
+                                    dailyDashboard?.data?.totalExpense
                             )}
                         </h1>
                     </div>
@@ -504,8 +508,21 @@ const TransactionPage = () => {
 
                     <div className="mb-4 p-2 border rounded-xl">
                         <h1 className="text-xs font-bold text-slate-700">Total Uang Disetor</h1>
-                        <h1 className="text-xs text-end text-red-400">{formatNumber(openingCash > 0 ? -openingCash : 0)}</h1>
-                        <h1 className="text-lg font-bold text-end text-green-500">{formatNumber(totalSetoran - openingCash)}</h1>
+
+                        <h1 className="text-xs text-end text-red-400">
+                            {dailyDashboard?.data?.totalCash < openingCash && (
+                                <div className="flex items-center text-red-400 text-xs">
+                                    <CircleAlertIcon className="w-3 h-3 mr-1" />
+                                    <span>Kas kurang dari uang awal</span>
+                                </div>
+                            )}
+                        </h1>
+                        <h1 className="text-xs text-end text-red-400">
+                            {formatNumber(openingCash > 0 && dailyDashboard?.data?.totalCash > openingCash ? -openingCash : 0)}
+                        </h1>
+                        <h1 className="text-lg font-bold text-end text-teal-500">
+                            {formatNumber(dailyDashboard?.data?.totalCash > openingCash ? totalSetoran - openingCash : totalSetoran)}
+                        </h1>
                     </div>
 
                     <button type="button" className="w-full sm:hidden bg-blue-500 text-white py-2 px-4 rounded-md" onClick={() => setIsDailyReportOpen(false)}>

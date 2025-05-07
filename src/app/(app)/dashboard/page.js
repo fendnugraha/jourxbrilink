@@ -17,6 +17,7 @@ const Dashboard = () => {
 
     const [notification, setNotification] = useState("");
     const warehouse = user?.role?.warehouse_id;
+    const warehouseName = user?.role?.warehouse?.name;
 
     const [loading, setLoading] = useState(false);
     const { warehouses, warehousesError } = useGetWarehouses();
@@ -48,7 +49,7 @@ const Dashboard = () => {
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <DailyDashboard warehouse={warehouse} warehouses={warehouses} userRole={userRole} />
                         <CashBankMutation warehouse={warehouse} warehouses={warehouses} userRole={userRole} />
-                        <VoucherSalesTable warehouse={warehouse} warehouses={warehouses} userRole={userRole} />
+                        <VoucherSalesTable warehouse={warehouse} warehouseName={warehouseName} warehouses={warehouses} userRole={userRole} />
                         <ExpenseTable warehouse={warehouse} warehouses={warehouses} userRole={userRole} />
                     </div>
                 </div>

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
-import { FilterIcon, RefreshCcwIcon } from "lucide-react";
+import { CopyIcon, FilterIcon, RefreshCcwIcon } from "lucide-react";
 import Modal from "@/components/Modal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
@@ -14,7 +14,7 @@ const getCurrentDate = () => {
     const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
 };
-const VoucherSalesTable = ({ warehouse, warehouses, userRole }) => {
+const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) => {
     const [transactions, setTransactions] = useState([]);
     const [notification, setNotification] = useState("");
     const [loading, setLoading] = useState(false);
@@ -22,6 +22,7 @@ const VoucherSalesTable = ({ warehouse, warehouses, userRole }) => {
     const [endDate, setEndDate] = useState(getCurrentDate());
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
+    const [isCopied, setIsCopied] = useState(false);
 
     const closeModal = () => {
         setIsModalFilterDataOpen(false);
@@ -53,6 +54,27 @@ const VoucherSalesTable = ({ warehouse, warehouses, userRole }) => {
     const totalCostNonVoucher = filterTrxNonVoucher?.reduce((total, transaction) => {
         return total + Number(transaction.total_cost);
     }, 0);
+
+    const formatVoucherText = () => {
+        const qtyByProduct = {};
+
+        transactions?.forEach((trx) => {
+            const name = trx.product.name;
+            const qty = Number(trx.quantity);
+
+            qtyByProduct[name] = (qtyByProduct[name] || 0) + qty;
+        });
+
+        const lines = Object.entries(qtyByProduct).map(([name, qty]) => `${name}: *${qty * -1}* pcs`);
+
+        return `Voucher ` + warehouseName + `:\n\n${lines.join("\n")}`;
+    };
+
+    const copySalesVoucher = async () => {
+        await navigator.clipboard.writeText(formatVoucherText());
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 3000);
+    };
     return (
         <>
             <div className="my-4 flex gap-4 sm:flex-row flex-col">
@@ -81,6 +103,12 @@ const VoucherSalesTable = ({ warehouse, warehouses, userRole }) => {
                         )}
                         <button onClick={() => fetchTransaction()} className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400">
                             <RefreshCcwIcon className="size-4" />
+                        </button>
+                        <button
+                            onClick={() => copySalesVoucher()}
+                            className={`bg-white ${isCopied ? "text-green-600" : ""} font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400`}
+                        >
+                            <CopyIcon className="size-4" />
                         </button>
                         <button
                             onClick={() => setIsModalFilterDataOpen(true)}

@@ -58,7 +58,7 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
     const formatVoucherText = () => {
         const qtyByProduct = {};
 
-        transactions?.forEach((trx) => {
+        filterTrxVoucher?.forEach((trx) => {
             const name = trx.product.name;
             const qty = Number(trx.quantity);
 

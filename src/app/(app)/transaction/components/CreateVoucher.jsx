@@ -108,11 +108,12 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                 <Label>Harga</Label>
                 <div className="col-span-1">
                     <Input
-                        className={"w-full text-sm"}
+                        className={"w-full text-sm disabled:bg-slate-300 disabled:text-white disabled:cursor-not-allowed"}
                         type="number"
                         placeholder="Rp."
                         min="0"
                         value={formData.price}
+                        disabled={selectedProduct() === undefined}
                         onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     />
                     {errors.price && <span className="text-red-500 text-xs">{errors.price}</span>}

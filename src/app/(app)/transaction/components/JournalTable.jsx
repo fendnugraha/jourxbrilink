@@ -106,6 +106,18 @@ const JournalTable = ({
         setCurrentPage(page);
     };
     const hqCashBankIds = hqCashBank.map((cashBank) => cashBank.id);
+
+    const formatLongDate = (dateString) => {
+        const tanggal = new Date(dateString);
+        const formatted = new Intl.DateTimeFormat("id-ID", {
+            weekday: "long",
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+        }).format(tanggal);
+
+        return formatted;
+    };
     return (
         <div className="">
             <div className="px-4 flex gap-2">
@@ -202,7 +214,7 @@ const JournalTable = ({
                 </Modal>
             </div>
             <div className="px-4 pt-2 flex">
-                <button className="rounded-l-lg bg-white p-2 border border-gray-300">
+                <button className="rounded-l-lg bg-white py-2 px-6 border-y border-s border-gray-300">
                     <SearchIcon size={20} />
                 </button>
                 <Input
@@ -210,14 +222,16 @@ const JournalTable = ({
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search..."
-                    className="w-full rounded-e-lg rounded-l-none border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    className="w-full rounded-e-lg rounded-l-none border-y border-e p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 />
             </div>
-            <div className="px-4">
+            <div className="px-4 pt-1">
                 <h4 className="text-xs text-slate-500">
-                    {warehouses?.data?.find((w) => w.id === Number(selectedWarehouse))?.name} Periode {startDate} s/d {endDate}
+                    {warehouses?.data?.find((w) => w.id === Number(selectedWarehouse))?.name},{" "}
+                    {startDate === endDate ? formatLongDate(endDate) : `${formatLongDate(startDate)} s/d ${formatLongDate(endDate)}`}
                 </h4>
             </div>
+
             <div className="overflow-x-auto">
                 <table className="table w-full text-xs">
                     <thead>

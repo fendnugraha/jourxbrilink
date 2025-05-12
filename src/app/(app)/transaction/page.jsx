@@ -22,6 +22,7 @@ import {
     ChevronLeftIcon,
     ChevronRightIcon,
     CircleAlertIcon,
+    CopyIcon,
     HandCoinsIcon,
     LayoutDashboardIcon,
     LoaderCircleIcon,
@@ -74,9 +75,11 @@ const TransactionPage = () => {
     const [isDailyReportOpen, setIsDailyReportOpen] = useState(false);
     const initCashValue = localStorage.getItem("openingCash") || 0;
     const [openingCash, setOpeningCash] = useState(initCashValue);
+    const [isCopied, setIsCopied] = useState(false);
 
     const menuRef = useRef(null);
     const { dailyDashboard, loading: isLoading, error: dailyDashboardError } = useGetDailyDashboard(warehouse, getCurrentDate(), getCurrentDate());
+    const warehouseName = user?.role?.warehouse?.name;
 
     const drawerRef = useRef();
     useEffect(() => {
@@ -168,6 +171,29 @@ const TransactionPage = () => {
 
     const filteredCashBankByWarehouse = cashBank.filter((cashBank) => cashBank.warehouse_id === warehouse);
     const hqCashBank = cashBank.filter((cashBank) => cashBank.warehouse_id === 1);
+
+    const copyData = async () => {
+        await navigator.clipboard.writeText(copyDailyReport());
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 3000);
+    };
+
+    const copyDailyReport = () => {
+        const dailyReportData = [
+            { name: "Kas", value: formatNumber(dailyDashboard?.data?.totalCash - openingCash) },
+            { name: "Voucher", value: formatNumber(dailyDashboard?.data?.totalVoucher) },
+            { name: "Deposit", value: formatNumber(dailyDashboard?.data?.totalCashDeposit) },
+            { name: "Acc", value: formatNumber(dailyDashboard?.data?.totalAccessories) },
+            { name: "Laba", value: formatNumber(dailyDashboard?.data?.profit) },
+        ];
+
+        const lines = dailyReportData.map(({ name, value }) => `${name}: ${value}`);
+
+        return `Report ${warehouseName}:\n\n${lines.join("\n")}\n\nTotal Setoran: ${formatNumber(
+            dailyDashboard?.data?.totalCash > openingCash ? totalSetoran - openingCash : totalSetoran
+        )}`;
+    };
+
     return (
         <>
             <Header title="Transaction" />
@@ -427,12 +453,17 @@ const TransactionPage = () => {
                 <div className="px-4 py-2">
                     <div className="flex justify-between items-center">
                         <h1 className="text-lg font-bold">Daily Report</h1>
-                        <button
-                            className="text-slate-400 hover:scale-110 transition-transform duration-75"
-                            onClick={() => mutate(`/api/daily-dashboard/${warehouse}/${startDate}/${endDate}`)}
-                        >
-                            <RefreshCcwIcon className={`w-5 h-5 ${isLoading ? "animate-spin" : ""}`} />
-                        </button>
+                        <div>
+                            <button className="text-slate-400 hover:scale-110 transition-transform duration-75 mr-1" onClick={() => copyData()}>
+                                <CopyIcon className={`w-5 h-5 ${isCopied ? "text-green-500" : ""}`} />
+                            </button>
+                            <button
+                                className="text-slate-400 hover:scale-110 transition-transform duration-75"
+                                onClick={() => mutate(`/api/daily-dashboard/${warehouse}/${startDate}/${endDate}`)}
+                            >
+                                <RefreshCcwIcon className={`w-5 h-5 ${isLoading ? "animate-spin" : ""}`} />
+                            </button>
+                        </div>
                     </div>
                     <span className="block text-xs mb-4 text-slate-400">{getCurrentDate()}</span>
                     <div className="flex justify-between mb-1">

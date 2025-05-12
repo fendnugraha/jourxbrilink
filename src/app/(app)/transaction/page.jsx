@@ -27,7 +27,9 @@ import {
     LayoutDashboardIcon,
     LoaderCircleIcon,
     RefreshCcwIcon,
+    ScanQrCodeIcon,
     ShoppingBagIcon,
+    XCircleIcon,
 } from "lucide-react";
 import useCashBankBalance from "@/libs/cashBankBalance";
 import { mutate } from "swr";
@@ -36,6 +38,7 @@ import { useGetDailyDashboard } from "@/libs/getDailyDashboard";
 import formatNumber from "@/libs/formatNumber";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
+import { QRCodeSVG } from "qrcode.react";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -433,7 +436,7 @@ const TransactionPage = () => {
             </div>
             {/* Daily report */}
             <div
-                className={`fixed top-[72px] right-0 h-full z-[100] shadow-lg w-full sm:w-1/4 ${
+                className={`fixed top-[72px] right-0 min-h-full z-[100] shadow-lg w-full sm:w-1/4 ${
                     isDailyReportOpen ? "translate-x-0" : "translate-x-full"
                 } transition-transform duration-300 ease-in-out bg-white`}
                 ref={drawerRef}
@@ -450,11 +453,11 @@ const TransactionPage = () => {
                     />{" "}
                     {/* {isDailyReportOpen ? "" : "Daily Report"} */}
                 </button>
-                <div className="px-4 py-2">
+                <div className="px-4 pb-28 sm:py-2 max-h-[calc(100vh-72px)] overflow-auto">
                     <div className="flex justify-between items-center">
                         <h1 className="text-lg font-bold">Daily Report</h1>
-                        <div>
-                            <button className="text-slate-400 hover:scale-110 transition-transform duration-75 mr-1" onClick={() => copyData()}>
+                        <div className="flex gap-1 items-center">
+                            <button className="text-slate-400 hover:scale-110 transition-transform duration-75" onClick={() => copyData()}>
                                 <CopyIcon className={`w-5 h-5 ${isCopied ? "text-green-500" : ""}`} />
                             </button>
                             <button
@@ -463,9 +466,28 @@ const TransactionPage = () => {
                             >
                                 <RefreshCcwIcon className={`w-5 h-5 ${isLoading ? "animate-spin" : ""}`} />
                             </button>
+                            <button
+                                className="text-slate-400 hover:scale-110 transition-transform duration-75 sm:hidden"
+                                onClick={() => setIsDailyReportOpen(false)}
+                            >
+                                <XCircleIcon className={`w-5 h-5 ${isCopied ? "text-green-500" : ""}`} />
+                            </button>
                         </div>
                     </div>
                     <span className="block text-xs mb-4 text-slate-400">{getCurrentDate()}</span>
+
+                    <Dropdown
+                        trigger={
+                            <button className="text-slate-700 hover:scale-110 transition-transform duration-75" onClick={() => copyData()}>
+                                <ScanQrCodeIcon className={`w-5 h-5 ${isCopied ? "text-green-500" : ""}`} />
+                            </button>
+                        }
+                        align="left"
+                    >
+                        <div className="p-4">
+                            <QRCodeSVG value={copyDailyReport()} size={200} />
+                        </div>
+                    </Dropdown>
                     <div className="flex justify-between mb-1">
                         <h1 className="text-xs text-slate-600">Uang Tunai</h1>
                         <h1 className={`text-xs font-bold text-end ${dailyDashboard?.data?.totalCash < openingCash ? "text-red-500" : ""}`}>
@@ -555,10 +577,6 @@ const TransactionPage = () => {
                             {formatNumber(dailyDashboard?.data?.totalCash > openingCash ? totalSetoran - openingCash : totalSetoran)}
                         </h1>
                     </div>
-
-                    <button type="button" className="w-full sm:hidden bg-blue-500 text-white py-2 px-4 rounded-md" onClick={() => setIsDailyReportOpen(false)}>
-                        Tutup
-                    </button>
                 </div>
             </div>
         </>

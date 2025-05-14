@@ -24,20 +24,19 @@ const Header = ({ title }) => {
     const { user, logout } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const { profit, loading, error } = useGetProfit();
-    const [prayerTimes, setPrayerTimes] = useState(null);
+    // const [prayerTimes, setPrayerTimes] = useState(null);
 
     const pathname = usePathname();
 
     const userWarehouseId = user?.role?.warehouse_id;
     const userWarehouseName = user?.role?.warehouse?.name;
-    const WarehouseRank = profit?.data?.findIndex((item) => Number(item.warehouse_id) === userWarehouseId) + 1 || 0;
-    const WarehouseRankProfit = profit?.data?.find((item) => Number(item.warehouse_id) === userWarehouseId)?.total || 0;
+    const WarehouseRank = profit?.data?.findIndex((item) => Number(item.warehouse_id) === Number(userWarehouseId)) + 1 || 0;
+    const WarehouseRankProfit = profit?.data?.find((item) => Number(item.warehouse_id) === Number(userWarehouseId))?.total || 0;
     const toOrdinal = (number) => {
         const suffixes = ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"];
         const mod = number % 100;
         return suffixes[mod - 10] || suffixes[mod] || suffixes[0];
     };
-
     const getCurrentDate = () => {
         const today = new Date();
         const year = today.getFullYear();
@@ -47,11 +46,11 @@ const Header = ({ title }) => {
         return `${dayName}, ${day} ${longMonthName} ${year}`;
     };
 
-    const hijrianDate = (date) => {
-        const options = { year: "numeric", month: "long", day: "numeric" };
-        const hijriDate = new Date(date).toLocaleDateString("ar-SA-u-nu-latn", options);
-        return hijriDate;
-    };
+    // const hijrianDate = (date) => {
+    //     const options = { year: "numeric", month: "long", day: "numeric" };
+    //     const hijriDate = new Date(date).toLocaleDateString("ar-SA-u-nu-latn", options);
+    //     return hijriDate;
+    // };
 
     // Imsak,Fajr,Sunrise,Dhuhr,Asr,Maghrib,Sunset,Isha,Midnight
     // const fetchPrayerTimes = async (date, latitude, longitude, method = 20, timezonestring = "Asia/Jakarta", tune = "0,0,0,0,0,0,0,0,0") => {

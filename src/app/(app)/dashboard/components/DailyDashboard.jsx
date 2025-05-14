@@ -147,13 +147,13 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                         isLoading ? "animate-pulse" : ""
                     }`}
                 >
-                    <div className={`flex gap-2 flex-col justify-center items-center`}>
+                    <div className={`flex gap-2 flex-col justify-center items-center h-full`}>
                         <h4 className="text-md sm:text-xl font-bold text-white">Saldo Kas Tunai</h4>
                         <h1 className="text-2xl sm:text-4xl font-black text-yellow-300">
                             {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(Number(dailyDashboard?.data?.totalCash))}
                         </h1>
                     </div>
-                    <div className="flex gap-2 w-full justify-evenly">
+                    <div className="flex gap-2 w-full justify-evenly flex-1 bg-slate-500 p-2 rounded-xl">
                         <div>
                             <h4 className="text-xs text-white">Saldo Bank</h4>
                             <h1 className="text-sm font-bold text-white">

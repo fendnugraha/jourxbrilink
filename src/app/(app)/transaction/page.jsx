@@ -196,7 +196,6 @@ const TransactionPage = () => {
             dailyDashboard?.data?.totalCash > openingCash ? totalSetoran - openingCash : totalSetoran
         )}`;
     };
-    console.log(cashBank);
     return (
         <>
             <Header title="Transaction" />

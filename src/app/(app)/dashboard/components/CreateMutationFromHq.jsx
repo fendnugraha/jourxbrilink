@@ -20,8 +20,8 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
 
-    const hqAccount = cashBank.filter((cashBank) => cashBank.warehouse_id === 1);
-    const branchAccount = cashBank.filter((cashBank) => cashBank.warehouse_id === Number(selectedWarehouseId));
+    const hqAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === 1);
+    const branchAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === Number(selectedWarehouseId));
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -48,7 +48,6 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
             setLoading(false);
         }
     };
-    console.log(cashBank);
     return (
         <form>
             <div className="mb-6 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">

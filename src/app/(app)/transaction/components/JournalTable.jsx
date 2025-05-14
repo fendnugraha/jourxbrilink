@@ -66,7 +66,7 @@ const JournalTable = ({
         }
     };
 
-    const branchAccount = cashBank.filter((cashBank) => cashBank.warehouse_id === Number(selectedWarehouse));
+    const branchAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === Number(selectedWarehouse));
     const filteredJournals =
         journalsByWarehouse?.data?.filter((journal) => {
             const matchAccount =

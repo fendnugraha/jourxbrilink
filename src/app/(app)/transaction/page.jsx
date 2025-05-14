@@ -53,7 +53,7 @@ const TransactionPage = () => {
     if (!user) {
         return <Loading />;
     }
-    const warehouse = user.role?.warehouse_id;
+    const warehouse = Number(user.role?.warehouse_id);
 
     const [journalsByWarehouse, setJournalsByWarehouse] = useState([]);
     const [loading, setLoading] = useState(false);

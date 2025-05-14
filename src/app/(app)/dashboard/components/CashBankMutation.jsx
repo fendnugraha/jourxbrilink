@@ -129,7 +129,6 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
 
     const hqCashBankIds = cashBank?.filter((cashBank) => cashBank.warehouse_id === 1)?.map((cashBank) => cashBank.id);
 
-    console.log(cashBank);
     return (
         <div className="my-4">
             {notification && <Notification notification={notification} onClose={() => setNotification("")} />}

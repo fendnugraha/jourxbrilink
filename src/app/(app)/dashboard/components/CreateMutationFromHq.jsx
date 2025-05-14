@@ -48,7 +48,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
             setLoading(false);
         }
     };
-    console.log(hqAccount, branchAccount);
+    console.log(cashBank);
     return (
         <form>
             <div className="mb-6 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">

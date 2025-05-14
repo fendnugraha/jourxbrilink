@@ -17,8 +17,8 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
 
-    const hqAccount = cashBank.filter((cashBank) => cashBank.warehouse_id === 1);
-    const branchAccount = cashBank.filter((cashBank) => cashBank.warehouse_id === user.role?.warehouse_id);
+    const hqAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === 1);
+    const branchAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === Number(user.role?.warehouse_id));
 
     const handleSubmit = async (e) => {
         e.preventDefault();

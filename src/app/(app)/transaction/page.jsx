@@ -172,8 +172,8 @@ const TransactionPage = () => {
         fetchCashBank();
     }, []);
 
-    const filteredCashBankByWarehouse = cashBank.filter((cashBank) => cashBank.warehouse_id === warehouse);
-    const hqCashBank = cashBank.filter((cashBank) => cashBank.warehouse_id === 1);
+    const filteredCashBankByWarehouse = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === warehouse);
+    const hqCashBank = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === 1);
 
     const copyData = async () => {
         await navigator.clipboard.writeText(copyDailyReport());

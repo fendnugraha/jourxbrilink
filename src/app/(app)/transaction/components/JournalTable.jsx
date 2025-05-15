@@ -46,7 +46,7 @@ const JournalTable = ({
     const [selectedJournalId, setSelectedJournalId] = useState(null);
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
     const userRole = user?.role?.role;
-    const warehouseCash = user?.role?.warehouse?.chart_of_account_id;
+    const warehouseCash = Number(user?.role?.warehouse?.chart_of_account_id);
     const closeModal = () => {
         setIsModalFilterJournalOpen(false);
         setIsModalDeleteJournalOpen(false);

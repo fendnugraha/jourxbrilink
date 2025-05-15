@@ -43,8 +43,8 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
             setLoading(false);
         }
     };
-    const filterSelectedBranchAccount = accountBalance.data?.filter((account) => account.id === Number(formData.cred_code));
-    const filterCashAccountBalance = accountBalance?.data?.filter((account) => account.id === user.role.warehouse.chart_of_account_id);
+    const filterSelectedBranchAccount = accountBalance.data?.filter((account) => Number(account.id) === Number(formData.cred_code));
+    const filterCashAccountBalance = accountBalance?.data?.filter((account) => Number(account.id) === Number(user?.role?.warehouse?.chart_of_account_id));
     const calculateDepositCash = filterCashAccountBalance[0]?.balance - openingCash;
     return (
         <form onSubmit={handleSubmit}>
@@ -56,8 +56,8 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                             setFormData({
                                 ...formData,
                                 cred_code: e.target.value,
-                                amount: Number(e.target.value) === user?.role?.warehouse?.chart_of_account_id ? Number(calculateDepositCash) : "",
-                                debt_code: Number(e.target.value) === user?.role?.warehouse?.chart_of_account_id ? 2 : "",
+                                amount: Number(e.target.value) === Number(user?.role?.warehouse?.chart_of_account_id) ? Number(calculateDepositCash) : "",
+                                debt_code: Number(e.target.value) === Number(user?.role?.warehouse?.chart_of_account_id) ? 2 : "",
                             })
                         }
                         value={formData.cred_code}

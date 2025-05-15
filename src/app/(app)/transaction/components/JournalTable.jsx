@@ -268,7 +268,7 @@ const JournalTable = ({
                                                 </ul>
                                             ) : journal.trx_type === "Mutasi Kas" ? (
                                                 journal.cred.acc_name + " -> " + journal.debt.acc_name
-                                            ) : journal.debt_code === warehouseCash ? (
+                                            ) : Number(journal.debt_code) === warehouseCash ? (
                                                 journal.cred.acc_name
                                             ) : (
                                                 journal.debt.acc_name

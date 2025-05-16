@@ -201,61 +201,84 @@ const TransactionPage = () => {
             <Header title="Transaction" />
             <div className="py-8 relative">
                 <div ref={menuRef} className="fixed sm:hidden bottom-0 w-full z-[999]">
-                    <div className={`text-white shadow-xl ${!isVoucherMenuOpen ? "hidden" : "flex flex-col justify-between items-center"}`}>
-                        <button onClick={() => setIsModalCreateVoucherOpen(true)} className="bg-amber-500 w-full text-white p-4 border-t hover:bg-slate-200">
-                            Penjualan Voucher
-                        </button>
-                        <button onClick={() => setIsModalCreateDepositOpen(true)} className="bg-amber-500 w-full text-white p-4 border-t hover:bg-slate-200">
-                            Input Deposit
-                        </button>
+                    <div className={`text-white ${!isVoucherMenuOpen ? "hidden" : "flex flex-col justify-between items-center px-4"}`}>
+                        <div className="rounded-2xl bg-white w-full shadow-xl border border-slate-300">
+                            <button onClick={() => setIsModalCreateVoucherOpen(true)} className="w-full text-slate-700 p-2 border-b hover:bg-slate-200">
+                                Penjualan Voucher
+                            </button>
+                            <button onClick={() => setIsModalCreateDepositOpen(true)} className="w-full text-slate-700 p-2 hover:bg-slate-200">
+                                Input Deposit
+                            </button>
+                        </div>
                     </div>
-                    <div className={`text-white ${!isExpenseMenuOpen ? "hidden" : "flex flex-col justify-between items-center"}`}>
-                        <button
-                            onClick={() => setIsModalCreateMutationToHqOpen(true)}
-                            className="bg-amber-500 w-full text-white p-4 border-t hover:bg-slate-200"
-                        >
-                            Pengembalian Saldo
-                        </button>
-                        <button onClick={() => setIsModalCreateExpenseOpen(true)} className="bg-amber-500 w-full text-white p-4 border-t hover:bg-slate-200">
-                            Biaya Operasional
-                        </button>
-                        <button
-                            onClick={() => setIsModalCreateBankAdminFeeOpen(true)}
-                            className="bg-amber-500 w-full text-white p-4 border-t hover:bg-slate-200"
-                        >
-                            Biaya Admin Bank
-                        </button>
+                    <div className={`text-white ${!isExpenseMenuOpen ? "hidden" : "flex flex-col justify-between items-center px-4"}`}>
+                        <div className="rounded-2xl bg-white w-full shadow-xl border border-slate-300">
+                            <button onClick={() => setIsModalCreateMutationToHqOpen(true)} className="w-full text-slate-700 p-2 border-b hover:bg-slate-200">
+                                Pengembalian Saldo
+                            </button>
+                            <button onClick={() => setIsModalCreateExpenseOpen(true)} className="w-full text-slate-700 p-2 border-b hover:bg-slate-200">
+                                Biaya Operasional
+                            </button>
+                            <button onClick={() => setIsModalCreateBankAdminFeeOpen(true)} className="w-full text-slate-700 p-2 hover:bg-slate-200">
+                                Biaya Admin Bank
+                            </button>
+                        </div>
                     </div>
-                    <div className="text-white flex justify-between items-center">
-                        <button
-                            onClick={() => {
-                                setIsModalCreateTransferOpen(true);
-                                setIsExpenseMenuOpen(false);
-                                setIsVoucherMenuOpen(false);
-                            }}
-                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-2 text-xs gap-1"
-                        >
-                            <ArrowUpCircleIcon className="w-7 h-7" /> Transfer
-                        </button>
-                        <button
-                            onClick={() => {
-                                setIsModalCreateCashWithdrawalOpen(true);
-                                setIsExpenseMenuOpen(false);
-                                setIsVoucherMenuOpen(false);
-                            }}
-                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-2 text-xs gap-1"
-                        >
-                            <ArrowDownCircleIcon className="w-7 h-7" /> Tarik Tunai
-                        </button>
-                        <button
-                            onClick={() => {
-                                setIsVoucherMenuOpen(!isVoucherMenuOpen);
-                                setIsExpenseMenuOpen(false);
-                            }}
-                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-2 text-xs gap-1 focus:bg-amber-500"
-                        >
-                            <ShoppingBagIcon className="w-7 h-7" /> Voucher
-                        </button>
+                    <div className="h-20 p-2">
+                        <div className="flex bg-gray-600 shadow-xl border border-slate-300 justify-between items-center rounded-full text-white">
+                            <button
+                                onClick={() => {
+                                    setIsVoucherMenuOpen(!isVoucherMenuOpen);
+                                    setIsExpenseMenuOpen(false);
+                                }}
+                                className="w-full flex flex-col items-center justify-center py-2 text-xs gap-1"
+                            >
+                                <ShoppingBagIcon className="w-7 h-7" /> Voucher
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setIsExpenseMenuOpen(!isExpenseMenuOpen);
+                                    setIsVoucherMenuOpen(false);
+                                }}
+                                className="w-full flex flex-col items-center justify-center py-2 text-xs gap-1"
+                            >
+                                <HandCoinsIcon className="w-7 h-7" /> Biaya
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setIsDailyReportOpen(!isDailyReportOpen);
+                                    setIsVoucherMenuOpen(false);
+                                    setIsExpenseMenuOpen(false);
+                                }}
+                                className="w-full flex flex-col items-center justify-center py-2 text-xs gap-1"
+                            >
+                                <LayoutDashboardIcon className="w-7 h-7" /> Report
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setIsModalCreateTransferOpen(true);
+                                    setIsExpenseMenuOpen(false);
+                                    setIsVoucherMenuOpen(false);
+                                }}
+                                className="w-full flex flex-col items-center justify-center py-2 text-xs gap-1"
+                            >
+                                <ArrowUpCircleIcon className="w-7 h-7" /> Transfer
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setIsModalCreateCashWithdrawalOpen(true);
+                                    setIsExpenseMenuOpen(false);
+                                    setIsVoucherMenuOpen(false);
+                                }}
+                                className="w-full flex flex-col items-center justify-center py-2 text-xs gap-1"
+                            >
+                                <ArrowDownCircleIcon className="w-7 h-7" /> Tarik Tunai
+                            </button>
+                        </div>
+                    </div>
+                    {/* <div className="text-white flex justify-between items-center rounded-xl">
+                       
+                       
                         <button
                             onClick={() => {
                                 setIsExpenseMenuOpen(!isExpenseMenuOpen);
@@ -275,7 +298,7 @@ const TransactionPage = () => {
                         >
                             <LayoutDashboardIcon className="w-7 h-7" /> Report
                         </button>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="max-w-7xl mx-auto sm:px-6">
                     {notification.message && (

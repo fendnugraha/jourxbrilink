@@ -214,7 +214,7 @@ const TransactionPage = () => {
                             onClick={() => setIsModalCreateMutationToHqOpen(true)}
                             className="bg-amber-500 w-full text-white p-4 border-t hover:bg-slate-200"
                         >
-                            Pengembailan Saldo
+                            Pengembalian Saldo
                         </button>
                         <button onClick={() => setIsModalCreateExpenseOpen(true)} className="bg-amber-500 w-full text-white p-4 border-t hover:bg-slate-200">
                             Biaya Operasional

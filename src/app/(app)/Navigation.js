@@ -7,6 +7,7 @@ import { useState } from "react";
 const Navigation = ({ user }) => {
     const { logout } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
+    const [message, setMessage] = useState(null);
     const toggleNavbar = () => {
         setIsOpen(!isOpen);
     };
@@ -143,7 +144,7 @@ const Navigation = ({ user }) => {
                 </nav>
             </div>
             <button
-                onClick={logout}
+                onClick={() => logout({ setMessage })}
                 className="px-4 py-4 w-full bg-gray-600 hover:bg-gray-500 border-t text-white cursor-pointer flex items-center gap-4 justify-center"
             >
                 <div>

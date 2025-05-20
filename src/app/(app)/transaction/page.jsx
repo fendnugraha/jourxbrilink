@@ -433,8 +433,8 @@ const TransactionPage = () => {
                                 user={user}
                             />
                         </Modal>
-                        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-20 sm:mb-0">
-                            <div className="relative col-span-1 sm:col-span-3 bg-white py-6 rounded-2xl order-2 sm:order-1">
+                        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-20 sm:mb-0 mt-5">
+                            <div className="relative col-span-1 sm:col-span-3 rounded-2xl order-2 sm:order-1">
                                 {journalLoading && <LoaderCircleIcon size={20} className="absolute top-1 left-1 animate-spin text-slate-300" />}
                                 <JournalTable
                                     cashBank={cashBank}

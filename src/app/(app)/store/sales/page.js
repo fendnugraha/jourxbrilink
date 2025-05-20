@@ -4,7 +4,7 @@ import Header from "../../Header";
 import { useEffect, useRef, useState } from "react";
 import formatNumber from "@/libs/formatNumber";
 import Input from "@/components/Input";
-import { ChevronUpIcon, LoaderCircleIcon, MinusCircleIcon, PlusCircleIcon, TrashIcon } from "lucide-react";
+import { ChevronUpIcon, LoaderCircleIcon, MinusCircleIcon, PlusCircleIcon, ShoppingCartIcon, TrashIcon } from "lucide-react";
 import axios from "@/libs/axios";
 import ProductCard from "../components/ProductCard";
 import Modal from "@/components/Modal";
@@ -61,6 +61,7 @@ const Sales = () => {
     // Fetch product list based on debounced search term
     const fetchProduct = async () => {
         if (debouncedSearch.length > 3) {
+            setLoading(true);
             try {
                 const response = await axios.get("/api/products", {
                     params: { search: debouncedSearch },
@@ -69,6 +70,8 @@ const Sales = () => {
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.log("Error fetching products:", error);
+            } finally {
+                setLoading(false);
             }
         } else {
             setProductList([]); // Clear product list if search is too short
@@ -192,7 +195,8 @@ const Sales = () => {
                                     placeholder="Search product ..."
                                     className="mt-1 block w-full rounded-xl border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 />
-                                <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-3 max-h-[60vh] sm:max-h-full mb-10 sm:mb-0 overflow-y-auto">
+                                {loading && <LoaderCircleIcon size={20} className="animate-spin inline" />}
+                                <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-3 max-h-[60vh] sm:max-h-full mb-10 sm:mb-0 overflow-y-auto pb-4">
                                     {productList?.data?.length === 0 ? (
                                         <div className="text-center">Barang tidak ditemukan</div>
                                     ) : (
@@ -202,7 +206,15 @@ const Sales = () => {
                             </div>
                             <div className="hidden sm:block col-span-1 sm:col-span-2 bg-white rounded-2xl p-4 shadow-md">
                                 <div className="sm:flex justify-between items-center mb-4">
-                                    <h1 className="font-bold">Items ({cart.length})</h1>
+                                    <div className="flex justify-between items-center gap-2">
+                                        <h1 className="text-lg font-bold">Order Summary</h1>
+                                        <div className="relative">
+                                            <ShoppingCartIcon size={28} className="inline text-indigo-600" />{" "}
+                                            <span className="absolute -top-1 -right-1 text-xs w-4 h-4 bg-red-600 text-white rounded-full flex items-center justify-center">
+                                                {cart.length}
+                                            </span>
+                                        </div>
+                                    </div>
                                     <button onClick={handleClearCart} className="text-red-600 hover:underline">
                                         Clear all
                                     </button>

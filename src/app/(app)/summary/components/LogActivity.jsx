@@ -18,19 +18,20 @@ const getCurrentDate = () => {
     return `${year}-${month}-${day}`;
 };
 
-const LogActivity = () => {
+const LogActivity = ({ warehouses }) => {
     const [logActivity, setLogActivity] = useState([]);
     const [notification, setNotification] = useState("");
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
+    const [selectedWarehouse, setSelectedWarehouse] = useState("all");
 
     const closeModal = () => {
         setIsModalFilterDataOpen(false);
     };
 
-    const fetchLogActivity = async (url = `/api/log-activity/${startDate}/${endDate}`) => {
+    const fetchLogActivity = async (url = `/api/log-activity/${startDate}/${endDate}/${selectedWarehouse}`) => {
         setLoading(true);
         try {
             const response = await axios.get(url);
@@ -76,6 +77,21 @@ const LogActivity = () => {
                         <FilterIcon className="size-4" />
                     </button>
                     <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
+                        <div className="mb-4">
+                            <Label className="font-bold">Cabang</Label>
+                            <select
+                                value={selectedWarehouse}
+                                onChange={(e) => setSelectedWarehouse(e.target.value)}
+                                className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                            >
+                                <option value="all">Semua Cabang</option>
+                                {warehouses?.data?.map((warehouse) => (
+                                    <option key={warehouse.id} value={warehouse.id}>
+                                        {warehouse.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                         <div className="mb-4">
                             <Label className="font-bold">Tanggal</Label>
                             <Input

@@ -1,7 +1,7 @@
 "use client";
 import Notification from "@/components/notification";
 import Header from "../Header";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ArrowBigDown, ArrowBigUp, FilterIcon, MessageCircleWarningIcon, PlusCircleIcon, SearchIcon, XCircleIcon } from "lucide-react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
@@ -43,26 +43,33 @@ const StorePage = () => {
         setIsModalDeleteTrxOpen(false);
     };
 
-    const fetchTransaction = async (url = `/api/get-trx-by-warehouse/${selectedWarehouse}/${startDate}/${endDate}`) => {
-        setLoading(true);
-        try {
-            const response = await axios.get(url, {
-                params: {
-                    search: search,
-                },
-            });
-            setTransactions(response.data.data);
-        } catch (error) {
-            setNotification(error.response?.data?.message || "Something went wrong.");
-            console.log(error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const fetchTransaction = useCallback(
+        async (url = `/api/get-trx-by-warehouse/${selectedWarehouse}/${startDate}/${endDate}`) => {
+            setLoading(true);
+            try {
+                const response = await axios.get(url, {
+                    params: {
+                        search: search,
+                    },
+                });
+                setTransactions(response.data.data);
+            } catch (error) {
+                setNotification(error.response?.data?.message || "Something went wrong.");
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
+        },
+        [selectedWarehouse, startDate, endDate, search]
+    );
 
     useEffect(() => {
-        fetchTransaction();
-    }, []);
+        const timeout = setTimeout(() => {
+            fetchTransaction();
+        }, 500);
+        return () => clearTimeout(timeout);
+    }, [fetchTransaction]);
+
     const handleChangePage = (url) => {
         fetchTransaction(url);
     };
@@ -141,7 +148,7 @@ const StorePage = () => {
                                         </button> */}
                                         <button
                                             onClick={() => setIsModalFilterJournalOpen(true)}
-                                            className="bg-white font-bold p-2 rounded-lg border border-gray-500 hover:border-gray-400"
+                                            className="bg-white font-bold p-2 rounded-lg border border-gray-300 hover:border-gray-400"
                                         >
                                             <FilterIcon className="size-5" />
                                         </button>
@@ -198,22 +205,20 @@ const StorePage = () => {
                                         </Modal>
                                     </div>
                                 </div>
-                                <div className="px-4 mb-2 flex">
-                                    <Input
-                                        type="search"
-                                        value={search}
-                                        onChange={(e) => setSearch(e.target.value)}
-                                        placeholder="Cari barang..."
-                                        className="w-full text-sm rounded-l-lg rounded-r-none border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                    />
-                                    <button
-                                        onClick={() => {
-                                            fetchTransaction();
-                                        }}
-                                        className="bg-slate-500 text-sm text-white min-w-20 sm:min-w-32 p-2 rounded-r-lg border border-gray-500 hover:border-gray-400 w-fit"
-                                    >
-                                        <SearchIcon size={24} className="inline" /> <span className="hidden sm:inline">Search</span>
-                                    </button>
+                                <div className="px-4">
+                                    <div className="relative w-full sm:max-w-sm">
+                                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                            <SearchIcon className="w-6 h-6 text-gray-500" />
+                                        </div>
+                                        <input
+                                            type="search"
+                                            value={search}
+                                            onChange={(e) => setSearch(e.target.value)}
+                                            placeholder="Search..."
+                                            className="block w-full text-sm mb-2 pl-10 pr-4 py-2 text-gray-900 placeholder-gray-400 bg-white border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                            autoComplete="off"
+                                        />
+                                    </div>
                                 </div>
                                 <div className="overflow-x-auto">
                                     <table className="table w-full text-xs">

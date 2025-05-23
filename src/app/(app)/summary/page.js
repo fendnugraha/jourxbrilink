@@ -8,6 +8,7 @@ import MutationHistory from "./components/MutationHistory";
 import axios from "@/libs/axios";
 import { useAuth } from "@/libs/auth";
 import LogActivity from "./components/LogActivity";
+import useGetWarehouses from "@/libs/getAllWarehouse";
 
 const SummaryPage = () => {
     const { user } = useAuth({ middleware: "auth" });
@@ -15,6 +16,7 @@ const SummaryPage = () => {
     const [account, setAccount] = useState(null);
     const [notification, setNotification] = useState("");
     const [errors, setErrors] = useState([]);
+    const { warehouses, warehousesError } = useGetWarehouses();
 
     const fetchAccount = async (url = "/api/get-all-accounts") => {
         try {
@@ -39,7 +41,7 @@ const SummaryPage = () => {
                         <WarehouseBalance />
                         <RevenueReport />
                         <MutationHistory account={account} notification={(message) => setNotification(message)} user={user} />
-                        <LogActivity />
+                        <LogActivity warehouses={warehouses} />
                     </div>
                 </div>
             </div>

@@ -89,12 +89,7 @@ const User = () => {
                                 autoComplete="off"
                             />
                         </div>
-                        <div className="overflow-x-auto bg-white rounded-2xl relative">
-                            {loading && (
-                                <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 backdrop-blur-sm">
-                                    <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
-                                </div>
-                            )}
+                        <div className="overflow-x-auto bg-white rounded-2xl">
                             <table className="table w-full text-xs">
                                 <thead>
                                     <tr>

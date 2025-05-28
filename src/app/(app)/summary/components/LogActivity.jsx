@@ -50,7 +50,6 @@ const LogActivity = ({ warehouses }) => {
     const handleChangePage = (url) => {
         fetchLogActivity(url);
     };
-
     return (
         <div className="bg-white rounded-lg mb-3 relative">
             <div className="p-4 flex justify-between">
@@ -124,23 +123,29 @@ const LogActivity = ({ warehouses }) => {
                         </tr>
                     </thead> */}
                     <tbody>
-                        {logActivity?.data?.map((item, index) => (
-                            <tr key={index}>
-                                <td className="border-y px-2 py-1 whitespace-normal break-words max-w-xs">
-                                    <span className="text-xs block text-slate-500 font-bold">
-                                        {item.user.name} {item.activity} at {item.warehouse.name}. Log ID: {item.id}
-                                    </span>
-                                    {item.description}
-                                    <span className="text-xs block text-slate-500 font-normal">
-                                        {formatDistanceToNow(new Date(item.created_at), { addSuffix: true })} at {formatDateTime(item.created_at)}
-                                    </span>
-                                </td>
+                        {logActivity?.data?.length === 0 ? (
+                            <tr className="text-center">
+                                <td className="p-6">No log activity found.</td>
                             </tr>
-                        ))}
+                        ) : (
+                            logActivity?.data?.map((item, index) => (
+                                <tr key={index}>
+                                    <td className="border-y px-2 py-1 whitespace-normal break-words max-w-xs">
+                                        <span className="text-xs block text-slate-500 font-bold">
+                                            {item.user.name} {item.activity} at {item.warehouse.name}. Log ID: {item.id}
+                                        </span>
+                                        {item.description}
+                                        <span className="text-xs block text-slate-500 font-normal">
+                                            {formatDistanceToNow(new Date(item.created_at), { addSuffix: true })} at {formatDateTime(item.created_at)}
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>
-            <div className="px-4">{logActivity?.links && <Paginator links={logActivity} handleChangePage={handleChangePage} />}</div>
+            <div className="px-4">{logActivity?.total > 0 && <Paginator links={logActivity} handleChangePage={handleChangePage} />}</div>
         </div>
     );
 };

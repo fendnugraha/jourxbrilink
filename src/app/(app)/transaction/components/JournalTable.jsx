@@ -236,7 +236,7 @@ const JournalTable = ({
                     <table className="table w-full text-xs">
                         <thead>
                             <tr>
-                                <th>Keterangan</th>
+                                <th>Deskripsi</th>
                                 <th>Jumlah</th>
                                 <th className="hidden sm:table-cell">Action</th>
                             </tr>
@@ -257,7 +257,7 @@ const JournalTable = ({
                                                 {formatDateTime(journal.created_at)}
                                             </span>
                                             Note: {journal.description}
-                                            <span className="font-bold text-xs block">
+                                            <span className="font-bold text-xs block text-lime-600 group-hover:text-lime-300">
                                                 {journal.trx_type === "Voucher & SP" || journal.trx_type === "Accessories" ? (
                                                     <ul className="list-disc font-normal scale-95">
                                                         {journal.transaction.map((trx) => (
@@ -278,7 +278,7 @@ const JournalTable = ({
                                                 Last update at <TimeAgo timestamp={journal.updated_at} />
                                             </span>
                                         </td>
-                                        <td className="font-bold text-end text-slate-700 ">
+                                        <td className="font-bold text-end text-slate-600 ">
                                             <span
                                                 className={`${Number(journal.debt_code) === Number(selectedAccount) ? "text-green-500" : ""}
                                     ${Number(journal.cred_code) === Number(selectedAccount) ? "text-red-500" : ""}

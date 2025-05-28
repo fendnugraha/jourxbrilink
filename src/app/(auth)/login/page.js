@@ -32,7 +32,7 @@ const LoginPage = () => {
     };
     return (
         <>
-            <div className="bg-white p-6 rounded-2xl shadow-2xl w-full sm:w-[400px] md:1/3">
+            <div className="bg-white p-8 rounded-2xl drop-shadow-xl shadow-orange-500 w-full sm:w-[500px] md:1/3">
                 <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Login to Your Account</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="mb-4">
@@ -42,9 +42,12 @@ const LoginPage = () => {
                         <input
                             type="email"
                             id="email"
-                            className="w-full p-2 border border-gray-300 rounded-md"
+                            className="w-full px-4 py-3 bg-gray-100 border border-slate-300 rounded-lg focus:ring focus:ring-indigo-500 outline-none"
+                            placeholder="Enter your email address"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            autoComplete="off"
+                            required
                         />
                         {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
                     </div>
@@ -55,16 +58,20 @@ const LoginPage = () => {
                         <input
                             type="password"
                             id="password"
-                            className="w-full p-2 border border-gray-300 rounded-md"
+                            className="w-full px-4 py-3 bg-gray-100 border border-slate-300 rounded-lg focus:ring focus:ring-indigo-500 outline-none"
+                            placeholder="Enter your password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            autoComplete="off"
+                            required
                         />
                         {errors.password && <p className="text-red-500 text-xs">{errors.password}</p>}
                     </div>
                     <button
                         type="submit"
                         disabled={loading || message === "Login successful!"}
-                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        style={{ transition: "all 0.3s ease-in-out" }}
                     >
                         {loading || message === "Login successful!" ? "Loging in ..." : "Login"}
                     </button>

@@ -31,7 +31,9 @@ const Navigation = ({ user }) => {
                         style={{ display: isOpen ? "inline" : "none" }}
                     >
                         <div className="flex flex-col">
-                            <h1 className="font-bold text-yellow-300">JOUR APPS</h1>
+                            <h1 className="font-bold text-white">
+                                AgenBRI<span className="text-orange-400">Link</span>
+                            </h1>
                             <span className="text-xs text-white">{user.role?.warehouse?.name}</span>
                         </div>
                     </div>

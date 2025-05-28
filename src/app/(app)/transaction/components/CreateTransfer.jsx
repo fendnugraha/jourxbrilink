@@ -73,6 +73,7 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                             placeholder="Rp."
                             value={formData.amount}
                             onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                            autoFocus
                         />
                         {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
                     </div>

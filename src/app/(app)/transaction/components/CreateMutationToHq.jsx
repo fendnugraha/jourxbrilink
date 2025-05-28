@@ -16,6 +16,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
     });
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
+    const [balanceDifference, setBalanceDifference] = useState(0);
 
     const hqAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === 1);
     const branchAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === Number(user.role?.warehouse_id));
@@ -43,23 +44,37 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
             setLoading(false);
         }
     };
-    const filterSelectedBranchAccount = accountBalance.data?.filter((account) => Number(account.id) === Number(formData.cred_code));
-    const filterCashAccountBalance = accountBalance?.data?.filter((account) => Number(account.id) === Number(user?.role?.warehouse?.chart_of_account_id));
-    const calculateDepositCash = filterCashAccountBalance[0]?.balance - openingCash;
+
+    const initBalances = JSON.parse(localStorage.getItem("initBalances")) ?? {};
+    const selectedBranchAccount = accountBalance.data?.find((account) => Number(account.id) === Number(formData.cred_code));
+
+    const cashAccountBalance = accountBalance?.data?.find((account) => Number(account.id) === Number(user?.role?.warehouse?.chart_of_account_id));
+    const calculateDepositCash = cashAccountBalance?.balance - openingCash;
+
     return (
         <form onSubmit={handleSubmit}>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Dari (Cabang)</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <select
-                        onChange={(e) =>
+                        onChange={(e) => {
+                            const selectedCredCode = Number(e.target.value);
+
+                            const selectedAccount = accountBalance?.data?.find((acc) => acc.id === selectedCredCode);
+                            const initBalance = initBalances[selectedCredCode] ?? 0;
+                            const balanceDifference = (selectedAccount?.balance ?? 0) - initBalance;
                             setFormData({
                                 ...formData,
-                                cred_code: e.target.value,
-                                amount: Number(e.target.value) === Number(user?.role?.warehouse?.chart_of_account_id) ? Number(calculateDepositCash) : "",
+                                cred_code: Number(e.target.value),
+                                amount:
+                                    Number(e.target.value) === Number(user?.role?.warehouse?.chart_of_account_id)
+                                        ? Number(calculateDepositCash)
+                                        : balanceDifference > 0
+                                        ? balanceDifference
+                                        : 0,
                                 debt_code: Number(e.target.value) === Number(user?.role?.warehouse?.chart_of_account_id) ? 2 : "",
-                            })
-                        }
+                            });
+                        }}
                         value={formData.cred_code}
                         className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     >
@@ -116,8 +131,8 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                     <h1 className="text-sm sm:text-sm font-bold">
                         {formData.cred_code && (
                             <>
-                                {formatNumber(filterSelectedBranchAccount[0]?.balance)} - {formatNumber(formData.amount)} ={" "}
-                                {formatNumber((filterSelectedBranchAccount[0]?.balance || 0) - (formData.amount || 0))}
+                                {formatNumber(selectedBranchAccount?.balance)} - {formatNumber(formData.amount)} ={" "}
+                                {formatNumber((selectedBranchAccount?.balance || 0) - (formData.amount || 0))}
                             </>
                         )}
                     </h1>

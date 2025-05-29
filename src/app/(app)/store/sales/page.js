@@ -211,7 +211,7 @@ const Sales = () => {
                                 cart.map((item) => (
                                     <div className="border-b border-gray-300 border-dashed py-1 last:border-0" key={item.id}>
                                         <div className="flex justify-between align-top">
-                                            <h1 className="font-bold text-xs">{item.name}</h1>
+                                            <h1 className="font-bold text-xs text-slate-600">{item.name}</h1>
                                             <button onClick={() => handleRemoveFromCart(item)} className="hover:scale-105">
                                                 <TrashIcon className="w-4 h-4 text-red-600" />
                                             </button>

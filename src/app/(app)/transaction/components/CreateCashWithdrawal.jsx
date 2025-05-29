@@ -98,13 +98,13 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                         />
                         {errors.fee_amount && <span className="text-red-500 text-xs">{errors.fee_amount}</span>}
                         {formData.amount && (
-                            <button
+                            <span
                                 type="button"
                                 onClick={(e) => setFormData({ ...formData, fee_amount: calculateFee(formData.amount) })}
-                                className="block text-xs bg-slate-300 hover:bg-slate-200 rounded-sm px-2 py-1 mt-1"
+                                className="text-xs cursor-pointer bg-slate-300 hover:bg-slate-200 rounded-lg px-2 py-1 mt-1"
                             >
                                 {formatNumber(calculateFee(formData.amount))}
-                            </button>
+                            </span>
                         )}
                     </div>
                 </div>

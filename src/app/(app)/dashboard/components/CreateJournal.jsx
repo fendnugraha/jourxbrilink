@@ -5,7 +5,7 @@ import Label from "@/components/Label";
 import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
 
-const CreateJournal = ({ isModalOpen, notification, getAccountBalance }) => {
+const CreateJournal = ({ isModalOpen, notification, fetchJournalsByWarehouse }) => {
     const [formData, setFormData] = useState({
         debt_code: "",
         cred_code: "",
@@ -13,6 +13,7 @@ const CreateJournal = ({ isModalOpen, notification, getAccountBalance }) => {
         fee_amount: 0,
         trx_type: "Jurnal Umum",
         description: "",
+        admin_fee: "" || 0,
     });
     const [accounts, setAccounts] = useState([]);
 
@@ -39,17 +40,25 @@ const CreateJournal = ({ isModalOpen, notification, getAccountBalance }) => {
         setLoading(true);
         try {
             const response = await axios.post("/api/create-mutation", formData);
-            notification(response.data.message);
-            getAccountBalance();
+            notification("success", response.data.message);
+            fetchJournalsByWarehouse();
             isModalOpen(false);
+            setFormData({
+                debt_code: "",
+                cred_code: "",
+                amount: "",
+                fee_amount: 0,
+                trx_type: "Jurnal Umum",
+                description: "",
+                admin_fee: "" || 0,
+            });
         } catch (error) {
-            notification(error.response?.data?.message || "Something went wrong.");
+            notification("error", error.response?.data?.message || "Something went wrong.");
             setErrors(error.response?.data?.errors);
         } finally {
             setLoading(false);
         }
     };
-
     return (
         <form>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
@@ -67,7 +76,7 @@ const CreateJournal = ({ isModalOpen, notification, getAccountBalance }) => {
                             </option>
                         ))}
                     </select>
-                    {errors.cred_code && <span className="text-red-500 text-xs">{errors.cred_code}</span>}
+                    {errors?.cred_code && <span className="text-red-500 text-xs">{errors?.cred_code}</span>}
                 </div>
             </div>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
@@ -86,7 +95,7 @@ const CreateJournal = ({ isModalOpen, notification, getAccountBalance }) => {
                             </option>
                         ))}
                     </select>
-                    {errors.debt_code && <span className="text-red-500 text-xs">{errors.debt_code}</span>}
+                    {errors?.debt_code && <span className="text-red-500 text-xs">{errors?.debt_code}</span>}
                 </div>
             </div>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
@@ -99,7 +108,7 @@ const CreateJournal = ({ isModalOpen, notification, getAccountBalance }) => {
                         value={formData.amount}
                         onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                     />
-                    {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
+                    {errors?.amount && <span className="text-red-500 text-xs">{errors?.amount}</span>}
                 </div>
 
                 <h1 className="text-lg font-bold">{formatNumber(formData.amount)}</h1>
@@ -114,7 +123,7 @@ const CreateJournal = ({ isModalOpen, notification, getAccountBalance }) => {
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     />
-                    {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
+                    {errors?.description && <span className="text-red-500 text-xs">{errors?.description}</span>}
                 </div>
             </div>
             <button

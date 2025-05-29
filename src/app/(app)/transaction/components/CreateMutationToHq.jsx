@@ -77,6 +77,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                         }}
                         value={formData.cred_code}
                         className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        required
                     >
                         <option value="">--Pilih sumber dana--</option>
                         {branchAccount.map((br) => (
@@ -100,6 +101,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                         }
                         value={formData.debt_code}
                         className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        required
                     >
                         <option value="">--Pilih tujuan mutasi--</option>
                         {hqAccount.map((hq) => (
@@ -120,6 +122,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                         placeholder="Rp."
                         value={formData.amount}
                         onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                        required
                     />
                     {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
                 </div>

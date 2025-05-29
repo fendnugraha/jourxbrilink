@@ -73,6 +73,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                         value={formData.product_id}
                         disabled={isValidating}
                         className="w-full text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        required
                     >
                         <option value="">--Pilih barang--</option>
                         {filteredProducts?.map((product) => (
@@ -115,6 +116,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                         value={formData.price}
                         disabled={selectedProduct() === undefined}
                         onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                        required
                     />
                     {errors.price && <span className="text-red-500 text-xs">{errors.price}</span>}
                 </div>

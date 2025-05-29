@@ -196,6 +196,19 @@ const TransactionPage = () => {
             dailyDashboard?.data?.totalCash > openingCash ? totalSetoran - openingCash : totalSetoran
         )}`;
     };
+
+    const calculateFee = (amount) => {
+        if (amount < 100000) {
+            return 3000;
+        }
+
+        const chunkSize = 2500000;
+        const feePerChunk = 5000;
+
+        const chunkCount = Math.ceil(amount / chunkSize);
+        return chunkCount * feePerChunk;
+    };
+
     return (
         <>
             <Header title="Transaction" />
@@ -377,6 +390,7 @@ const TransactionPage = () => {
                                 notification={(type, message) => setNotification({ type, message })}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
+                                calculateFee={calculateFee}
                             />
                         </Modal>
 
@@ -387,6 +401,7 @@ const TransactionPage = () => {
                                 notification={(type, message) => setNotification({ type, message })}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
+                                calculateFee={calculateFee}
                             />
                         </Modal>
                         <Modal isOpen={isModalCreateVoucherOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Penjualan Voucher & Kartu">

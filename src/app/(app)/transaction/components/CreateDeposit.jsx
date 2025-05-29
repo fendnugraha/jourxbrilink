@@ -43,6 +43,7 @@ const CreateDeposit = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
                         placeholder="Rp."
                         value={formData.price}
                         onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                        required
                     />
                     {errors.price && <span className="text-red-500 text-xs">{errors.price}</span>}
                 </div>
@@ -56,6 +57,7 @@ const CreateDeposit = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
                         placeholder="Rp."
                         value={formData.cost}
                         onChange={(e) => setFormData({ ...formData, cost: e.target.value })}
+                        required
                     />
                     {errors.cost && <span className="text-red-500 text-xs">{errors.cost}</span>}
                 </div>

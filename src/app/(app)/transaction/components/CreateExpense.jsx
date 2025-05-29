@@ -63,6 +63,7 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                         onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })}
                         value={formData.debt_code}
                         className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        required
                     >
                         <option value="">--Pilih Rekening--</option>
                         {expense.map((expense) => (
@@ -82,6 +83,7 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                         placeholder="Rp."
                         value={formData.fee_amount * -1}
                         onChange={(e) => setFormData({ ...formData, fee_amount: -e.target.value })}
+                        required
                     />
                     {errors.fee_amount && <span className="text-red-500 text-xs">{errors.fee_amount}</span>}
                 </div>

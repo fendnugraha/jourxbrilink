@@ -28,7 +28,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
         setLoading(true);
         try {
             const response = await axios.post("/api/create-mutation", formData);
-            notification(response.data.message);
+            notification("success", response.data.message);
             fetchJournalsByWarehouse();
             isModalOpen(true);
             setFormData({
@@ -42,7 +42,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
             });
             setErrors([]);
         } catch (error) {
-            notification(error.response?.data?.message || "Something went wrong.");
+            notification("error", error.response?.data?.message || "Something went wrong.");
             setErrors(error.response?.data?.errors);
         } finally {
             setLoading(false);
@@ -57,6 +57,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                         onChange={(e) => setSelectedWarehouseId(e.target.value)}
                         value={selectedWarehouseId}
                         className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        required
                     >
                         {warehouses?.map((wh) => (
                             <option key={wh.id} value={wh.id}>
@@ -73,6 +74,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                         onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })}
                         value={formData.cred_code}
                         className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        required
                     >
                         <option value="">--Pilih sumber dana--</option>
                         {hqAccount.map((br) => (
@@ -92,6 +94,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                         value={formData.debt_code}
                         className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         disabled={!selectedWarehouseId}
+                        required
                     >
                         <option value="">--Pilih tujuan mutasi--</option>
                         {branchAccount.map((hq) => (
@@ -112,6 +115,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                         placeholder="Rp."
                         value={formData.amount}
                         onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                        required
                     />
                     {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
                 </div>

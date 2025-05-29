@@ -30,7 +30,10 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
     const [isModalCreateMutationFromHqOpen, setIsModalCreateMutationFromHqOpen] = useState(false);
     const [isModalCreateJournalOpen, setIsModalCreateJournalOpen] = useState(false);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
-    const [notification, setNotification] = useState("");
+    const [notification, setNotification] = useState({
+        type: "",
+        message: "",
+    });
     const [selectedJournalId, setSelectedJournalId] = useState(null);
     const [isModalDeleteJournalOpen, setIsModalDeleteJournalOpen] = useState(false);
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
@@ -131,7 +134,9 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
 
     return (
         <div className="my-4">
-            {notification && <Notification notification={notification} onClose={() => setNotification("")} />}
+            {notification.message && (
+                <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
+            )}
             <div className="mb-4 bg-white shadow-sm sm:rounded-2xl relative">
                 {loading || (isValidating && <LoaderCircleIcon size={20} className="animate-spin absolute top-1 text-slate-400 left-1" />)}
                 <div className="px-2 sm:px-6 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -199,7 +204,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                         <CreateMutationFromHq
                             cashBank={cashBank}
                             isModalOpen={setIsModalCreateMutationFromHqOpen}
-                            notification={(message) => setNotification(message)}
+                            notification={(type, message) => setNotification({ type, message })}
                             fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                             warehouses={warehouses?.data}
                         />
@@ -208,8 +213,9 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                         <CreateJournal
                             cashBank={cashBank}
                             isModalOpen={setIsModalCreateJournalOpen}
-                            notification={(message) => setNotification(message)}
+                            notification={(type, message) => setNotification({ type, message })}
                             warehouses={warehouses?.data}
+                            fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                         />
                     </Modal>
                 </div>

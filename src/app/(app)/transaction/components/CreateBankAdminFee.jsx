@@ -51,6 +51,7 @@ const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notifica
                             onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })}
                             value={formData.cred_code}
                             className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            required
                         >
                             <option value="">--Pilih Rekening--</option>
                             {filteredCashBankByWarehouse.map((cashBank) => (
@@ -70,6 +71,7 @@ const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notifica
                             placeholder="Rp."
                             value={formData.amount}
                             onChange={(e) => setFormData({ ...formData, amount: e.target.value, fee_amount: -e.target.value })}
+                            required
                         />
                         {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
                     </div>

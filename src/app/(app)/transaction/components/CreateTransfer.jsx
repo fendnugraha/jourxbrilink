@@ -5,7 +5,7 @@ import Label from "@/components/Label";
 import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
 
-const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification, fetchJournalsByWarehouse, user }) => {
+const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification, fetchJournalsByWarehouse, user, calculateFee }) => {
     const [formData, setFormData] = useState({
         debt_code: user.role.warehouse.chart_of_account_id,
         cred_code: "",
@@ -53,6 +53,7 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                             onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })}
                             value={formData.cred_code}
                             className="w-full text-sm rounded-md shadow-sm p-2 border border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            required
                         >
                             <option value="">--Pilih Rekening--</option>
                             {filteredCashBankByWarehouse.map((cashBank) => (
@@ -73,11 +74,10 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                             placeholder="Rp."
                             value={formData.amount}
                             onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                            autoFocus
+                            required
                         />
                         {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
                     </div>
-                    <h1 className="text-sm sm:text-lg font-bold">{formatNumber(formData.amount)}</h1>
                 </div>
                 <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Fee (Admin)</Label>
@@ -88,10 +88,19 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                             placeholder="Rp."
                             value={formData.fee_amount}
                             onChange={(e) => setFormData({ ...formData, fee_amount: e.target.value })}
+                            required
                         />
                         {errors.fee_amount && <span className="text-red-500 text-xs">{errors.fee_amount}</span>}
+                        {formData.amount && (
+                            <button
+                                type="button"
+                                onClick={(e) => setFormData({ ...formData, fee_amount: calculateFee(formData.amount) })}
+                                className="block text-xs bg-slate-300 hover:bg-slate-200 rounded-sm px-2 py-1 mt-1"
+                            >
+                                {formatNumber(calculateFee(formData.amount))}
+                            </button>
+                        )}
                     </div>
-                    <h1 className="text-sm sm:text-lg font-bold">{formatNumber(formData.fee_amount)}</h1>
                 </div>
                 <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Nama Rek. Customer</Label>
@@ -102,6 +111,7 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                             placeholder="Atasnama"
                             value={formData.custName}
                             onChange={(e) => setFormData({ ...formData, custName: e.target.value })}
+                            required
                         />
                         {errors.custName && <span className="text-red-500 text-xs">{errors.custName}</span>}
                     </div>
@@ -119,6 +129,11 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                         {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                     </div>
                 </div>
+                {formData.amount && (
+                    <h1 className="text-sm font-semibold">
+                        Jml: {formatNumber(formData.amount)}, Adm: {formatNumber(formData.fee_amount)}
+                    </h1>
+                )}
                 <div className="flex justify-end gap-2">
                     <button
                         onClick={() => isModalOpen(false)}

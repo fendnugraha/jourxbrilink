@@ -78,6 +78,11 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                         />
                         {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
                     </div>
+                    {formData.amount && (
+                        <h1 className="text-sm font-semibold sm:hidden">
+                            Jml: {formatNumber(formData.amount)}, Adm: {formatNumber(formData.fee_amount)}
+                        </h1>
+                    )}
                 </div>
                 <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Fee (Admin)</Label>
@@ -130,7 +135,7 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                     </div>
                 </div>
                 {formData.amount && (
-                    <h1 className="text-sm font-semibold">
+                    <h1 className="text-sm font-semibold hidden sm:block">
                         Jml: {formatNumber(formData.amount)}, Adm: {formatNumber(formData.fee_amount)}
                     </h1>
                 )}

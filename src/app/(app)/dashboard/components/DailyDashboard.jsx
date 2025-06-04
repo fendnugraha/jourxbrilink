@@ -7,6 +7,7 @@ import { FilterIcon, LoaderIcon, RefreshCcwIcon } from "lucide-react";
 import Modal from "@/components/Modal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
+import { useGetDailyDashboard } from "@/libs/getDailyDashboard";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -14,36 +15,6 @@ const getCurrentDate = () => {
     const month = String(today.getMonth() + 1).padStart(2, "0"); // Month is 0-indexed
     const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
-};
-const fetcher = async (url) => {
-    try {
-        const response = await axios.get(url);
-        return response.data;
-    } catch (error) {
-        throw error.response?.data?.errors || ["Something went wrong."];
-    }
-};
-export async function getServerSideProps(context) {
-    const { warehouse } = context.query;
-    const today = new Date().toISOString().split("T")[0];
-
-    const res = await axios.get(`/api/daily-dashboard/${warehouse || "all"}/${today}/${today}`);
-
-    return { props: { initialData: res.data, initialWarehouse: warehouse || "all" } };
-}
-const useGetdailyDashboard = (warehouse, startDate, endDate, initialData) => {
-    const {
-        data: dailyDashboard,
-        error: dailyDashboardError,
-        isValidating,
-    } = useSWR(`/api/daily-dashboard/${warehouse}/${startDate}/${endDate}`, fetcher, {
-        fallbackData: initialData,
-        revalidateOnFocus: true,
-        dedupingInterval: 60000,
-    });
-
-    console.log(dailyDashboardError);
-    return { dailyDashboard, dailyDashboardError, loading: isValidating };
 };
 
 const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
@@ -57,7 +28,8 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
     const [endDate, setEndDate] = useState(getCurrentDate());
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
-    const { dailyDashboard, loading: isLoading, error } = useGetdailyDashboard(selectedWarehouse, startDate, endDate);
+    const { dailyDashboard, loading: isLoading, error: dailyDashboardError } = useGetDailyDashboard(selectedWarehouse, startDate, endDate);
+    console.log(dailyDashboardError);
 
     const handleFilterData = () => {
         setStartDate(filterData.startDate);

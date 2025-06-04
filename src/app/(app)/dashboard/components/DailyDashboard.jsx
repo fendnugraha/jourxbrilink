@@ -29,7 +29,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
     const { dailyDashboard, loading: isLoading, error: dailyDashboardError } = useGetDailyDashboard(selectedWarehouse, startDate, endDate);
-    console.log(dailyDashboardError);
+    console.log(dailyDashboard, isLoading, dailyDashboardError);
 
     const handleFilterData = () => {
         setStartDate(filterData.startDate);

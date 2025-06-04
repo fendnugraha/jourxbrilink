@@ -2,14 +2,16 @@
 import axios from "@/libs/axios";
 import useSWR from "swr";
 
-const fetcher = (url) => axios.get(url).then((res) => res.data);
+const fetcher = ([url, params]) => axios.get(url, { params }).then((res) => res.data);
 
 export const useGetDailyDashboard = (warehouse, startDate, endDate) => {
+    const shouldFetch = warehouse && startDate && endDate;
+
     const {
         data: dailyDashboard,
         error,
         isValidating,
-    } = useSWR(`/api/daily-dashboard/${warehouse}/${startDate}/${endDate}`, fetcher, {
+    } = useSWR(shouldFetch ? ["/api/daily-dashboard", { warehouse, startDate, endDate }] : null, fetcher, {
         fallbackData: [],
         revalidateOnFocus: true,
         dedupingInterval: 60000,

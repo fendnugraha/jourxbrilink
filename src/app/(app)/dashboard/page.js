@@ -21,24 +21,7 @@ const Dashboard = () => {
 
     const [loading, setLoading] = useState(false);
     const { warehouses, warehousesError } = useGetWarehouses();
-    // const [warehouses, setWarehouses] = useState([]);
-    // const fetchWarehouses = async (url = "/api/get-all-warehouses") => {
-    //     setLoading(true);
-    //     try {
-    //         const response = await axios.get(url);
-    //         setWarehouses(response.data.data);
-    //     } catch (error) {
-    //         setErrors(error.response?.data?.errors || ["Something went wrong."]);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
 
-    // useEffect(() => {
-    //     mutate("/api/get-all-warehouses");
-    // }, []);
-
-    // console.log(warehouses);
     return (
         <>
             {notification && <Notification notification={notification} onClose={() => setNotification("")} />}

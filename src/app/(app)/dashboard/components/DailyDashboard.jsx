@@ -34,7 +34,7 @@ export async function getServerSideProps(context) {
 const useGetdailyDashboard = (warehouse, startDate, endDate, initialData) => {
     const {
         data: dailyDashboard,
-        error,
+        error: dailyDashboardError,
         isValidating,
     } = useSWR(`/api/daily-dashboard/${warehouse}/${startDate}/${endDate}`, fetcher, {
         fallbackData: initialData,
@@ -42,7 +42,8 @@ const useGetdailyDashboard = (warehouse, startDate, endDate, initialData) => {
         dedupingInterval: 60000,
     });
 
-    return { dailyDashboard, loading: isValidating, error };
+    console.log(dailyDashboardError);
+    return { dailyDashboard, dailyDashboardError, loading: isValidating };
 };
 
 const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {

@@ -93,9 +93,9 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
         mutate(`/api/get-cash-bank-balance/${selectedWarehouse}/${endDate}`);
     }, [journalsByWarehouse]);
 
-    const mutationInSum = accountBalance?.data?.reduce((sum, acc) => sum + mutationInSumById(acc.id), 0);
+    const mutationInSum = accountBalance?.data?.reduce((sum, acc) => sum + mutationInSumById(acc.account_id), 0);
 
-    const mutationOutSum = accountBalance?.data?.reduce((sum, acc) => sum + mutationOutSumById(acc.id), 0);
+    const mutationOutSum = accountBalance?.data?.reduce((sum, acc) => sum + mutationOutSumById(acc.account_id), 0);
 
     const [searchTerm, setSearchTerm] = useState("");
     const [checkedAccounts, setCheckedAccounts] = useState(null);

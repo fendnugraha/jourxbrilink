@@ -73,14 +73,14 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
     };
     const mutationInSumById = (acc_id) => {
         return journalsByWarehouse?.data?.reduce(
-            (sum, journal) => (Number(journal.debt_code) === acc_id && journal.trx_type === "Mutasi Kas" ? sum + Number(journal.amount) : sum),
+            (sum, journal) => (Number(journal.debt_code) === Number(acc_id) && journal.trx_type === "Mutasi Kas" ? sum + Number(journal.amount) : sum),
             0
         );
     };
 
     const mutationOutSumById = (acc_id) => {
         return journalsByWarehouse.data?.reduce(
-            (sum, journal) => (Number(journal.cred_code) === acc_id && journal.trx_type === "Mutasi Kas" ? sum + Number(journal.amount) : sum),
+            (sum, journal) => (Number(journal.cred_code) === Number(acc_id) && journal.trx_type === "Mutasi Kas" ? sum + Number(journal.amount) : sum),
             0
         );
     };

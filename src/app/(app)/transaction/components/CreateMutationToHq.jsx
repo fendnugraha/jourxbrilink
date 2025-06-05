@@ -46,9 +46,9 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
     };
 
     const initBalances = JSON.parse(localStorage.getItem("initBalances")) ?? {};
-    const selectedBranchAccount = accountBalance.data?.find((account) => Number(account.id) === Number(formData.cred_code));
+    const selectedBranchAccount = accountBalance.data?.find((account) => Number(account.account_id) === Number(formData.cred_code));
 
-    const cashAccountBalance = accountBalance?.data?.find((account) => Number(account.id) === Number(user?.role?.warehouse?.chart_of_account_id));
+    const cashAccountBalance = accountBalance?.data?.find((account) => Number(account.account_id) === Number(user?.role?.warehouse?.chart_of_account_id));
     const calculateDepositCash = cashAccountBalance?.balance - openingCash;
 
     return (
@@ -60,7 +60,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                         onChange={(e) => {
                             const selectedCredCode = Number(e.target.value);
 
-                            const selectedAccount = accountBalance?.data?.find((acc) => acc.id === selectedCredCode);
+                            const selectedAccount = accountBalance?.data?.find((acc) => Number(acc.account_id) === selectedCredCode);
                             const initBalance = initBalances[selectedCredCode] ?? 0;
                             const balanceDifference = (selectedAccount?.balance ?? 0) - initBalance;
                             setFormData({

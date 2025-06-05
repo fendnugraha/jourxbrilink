@@ -236,12 +236,12 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                             {accountBalance?.data?.map((account, index) => (
                                 <tr key={index}>
                                     <td>
-                                        {account.acc_name}
+                                        {account.account_name}
                                         <span className="text-xs text-blue-600 font-bold block sm:hidden">{formatNumber(account.balance)}</span>
                                     </td>
                                     <td className="text-end font-bold hidden sm:table-cell">{formatNumber(account.balance ?? 0)}</td>
-                                    <td className="text-end">{formatNumber(mutationInSumById(account.id) ?? 0)}</td>
-                                    <td className="text-end">{formatNumber(mutationOutSumById(account.id) ?? 0)}</td>
+                                    <td className="text-end">{formatNumber(mutationInSumById(account.account_id) ?? 0)}</td>
+                                    <td className="text-end">{formatNumber(mutationOutSumById(account.account_id) ?? 0)}</td>
                                 </tr>
                             ))}
                             <tr>

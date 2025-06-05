@@ -33,6 +33,7 @@ const CashBankBalance = ({ accountBalance, isValidating }) => {
     const closeModal = () => {
         setIsModalSettingInitBalancesOpen(false);
     };
+
     return (
         <div className="relative">
             {isValidating && (
@@ -45,14 +46,14 @@ const CashBankBalance = ({ accountBalance, isValidating }) => {
             </button>
             <Modal isOpen={isModalSettingInitBalancesOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Set Saldo Awal Kas & Bank">
                 {accountBalance?.data?.map((account) => (
-                    <div className="group border-b border-dashed last:border-none p-2" key={account.id}>
+                    <div className="group border-b border-dashed last:border-none p-2" key={account.account_id}>
                         <div className="grid grid-cols-2 gap-2">
-                            <h1 className="text-xs">{account.acc_name}</h1>
+                            <h1 className="text-xs">{account.account_name}</h1>
                             <input
                                 type="number"
                                 className="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                value={initBalances[account.id] || ""}
-                                onChange={(e) => addToInitBalances(account.id, Number(e.target.value))}
+                                value={initBalances[account.account_id] || ""}
+                                onChange={(e) => addToInitBalances(account.account_id, Number(e.target.value))}
                             />
                         </div>
                     </div>
@@ -75,9 +76,9 @@ const CashBankBalance = ({ accountBalance, isValidating }) => {
                 } origin-top transition-all duration-300 ease-in-out`}
             >
                 {accountBalance?.data?.map((account) => (
-                    <div className="group border-b border-dashed last:border-none p-2" key={account.id}>
+                    <div className="group border-b border-dashed last:border-none p-2" key={account.account_id}>
                         <div className="text-white">
-                            <h1 className="text-xs">{account.acc_name}</h1>
+                            <h1 className="text-xs">{account.account_name}</h1>
 
                             <div className="flex justify-between items-end">
                                 <h1 className="text-sm sm:text-lg group-hover:scale-105 text-yellow-200 font-bold transition delay-100 duration-150 ease-out">
@@ -85,11 +86,11 @@ const CashBankBalance = ({ accountBalance, isValidating }) => {
                                 </h1>
                                 <span
                                     className={`text-xs ${
-                                        account.balance - initBalances[account.id] > 0 ? "text-green-200" : "text-red-200"
+                                        account.balance - initBalances[account.account_id] > 0 ? "text-green-200" : "text-red-200"
                                     } group-hover:scale-105 transition delay-100 duration-150 ease-out`}
-                                    hidden={!initBalances[account.id]}
+                                    hidden={!initBalances[account.account_id]}
                                 >
-                                    {formatNumber(account.balance - initBalances[account.id])}
+                                    {formatNumber(account.balance - initBalances[account.account_id])}
                                 </span>
                             </div>
                         </div>

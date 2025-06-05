@@ -41,7 +41,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
     };
 
     useEffect(() => {
-        mutate(`/api/daily-dashboard/${selectedWarehouse}/${startDate}/${endDate}`);
+        mutate(["/api/daily-dashboard", { warehouse, startDate, endDate }]);
     }, [selectedWarehouse, startDate, endDate]);
 
     return (

@@ -499,7 +499,7 @@ const TransactionPage = () => {
                             </button>
                             <button
                                 className="text-slate-400 hover:scale-110 transition-transform duration-75"
-                                onClick={() => mutate(`/api/daily-dashboard/${warehouse}/${startDate}/${endDate}`)}
+                                onClick={() => mutate(["/api/daily-dashboard", { warehouse, startDate, endDate }])}
                             >
                                 <RefreshCcwIcon className={`w-5 h-5 ${isLoading ? "animate-spin" : ""}`} />
                             </button>

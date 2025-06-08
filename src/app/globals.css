@@ -17,9 +17,12 @@
         @apply divide-y divide-gray-200;
     }
 
-    .table th,
     .table td {
-        @apply px-6 py-2 whitespace-nowrap border-b;
+        @apply px-6 py-2 whitespace-nowrap;
+    }
+
+    .table tbody tr {
+        @apply border-b border-gray-200 last:border-0;
     }
 
     .table th {

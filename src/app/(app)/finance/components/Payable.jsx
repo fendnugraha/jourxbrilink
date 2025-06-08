@@ -93,26 +93,29 @@ const Payable = ({ notification }) => {
     };
     return (
         <>
-            <div className="bg-slate-400 rounded-2xl mb-4 p-1">
-                <div className="flex">
-                    <button
-                        onClick={() => setFinanceType("Payable")}
-                        className={`px-4 ${financeType === "Payable" ? "bg-white text-slate-600 rounded-2xl" : "text-white text-sm"}`}
-                    >
-                        Hutang
-                    </button>
-                    <button
-                        onClick={() => setFinanceType("Receivable")}
-                        className={`px-4 ${financeType === "Receivable" ? "bg-white text-slate-600 rounded-2xl" : "text-white text-sm"}`}
-                    >
-                        Piutang
-                    </button>
-                </div>
-            </div>
             <div className="overflow-hidden">
                 <div className="bg-white shadow-sm sm:rounded-2xl mb-4">
                     <div className="p-4 flex justify-between flex-col sm:flex-row">
-                        <h1 className="text-2xl font-bold mb-4">{financeType === "Payable" ? "Hutang" : "Piutang"}</h1>
+                        <div className="bg-slate-400 rounded-xl mb-4 p-1">
+                            <div className="flex">
+                                <button
+                                    onClick={() => setFinanceType("Payable")}
+                                    className={`px-4 text-xl ${
+                                        financeType === "Payable" ? "bg-white text-slate-600 font-semibold rounded-lg" : "text-white"
+                                    } transition duration-300 ease-out`}
+                                >
+                                    Hutang
+                                </button>
+                                <button
+                                    onClick={() => setFinanceType("Receivable")}
+                                    className={`px-4 text-xl ${
+                                        financeType === "Receivable" ? "bg-white text-slate-600 font-semibold rounded-lg" : "text-white"
+                                    } transition duration-300 ease-out`}
+                                >
+                                    Piutang
+                                </button>
+                            </div>
+                        </div>
                         <div>
                             <button onClick={() => setIsModalCreatePayableOpen(true)} className="btn-primary text-xs mr-2">
                                 <PlusCircleIcon className="w-4 h-4 mr-2 inline" /> Hutang

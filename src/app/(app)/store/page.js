@@ -126,11 +126,11 @@ const StorePage = () => {
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div className="overflow-hidden">
                             <div className="bg-white shadow-sm sm:rounded-2xl ">
-                                <div className="p-4 flex justify-between sm:flex-row flex-col">
+                                <div className="p-4 flex justify-between sm:flex-row flex-col items-start">
                                     <h1 className="text-2xl font-bold mb-4">
                                         Transaksi Barang
                                         <span className="text-xs block text-slate-500 font-normal">
-                                            Cabang: {warehouses.find((w) => w.id === Number(selectedWarehouse))?.name}, Periode: {startDate} - {endDate}
+                                            {warehouses.find((w) => w.id === Number(selectedWarehouse))?.name}, Periode: {startDate} - {endDate}
                                         </span>
                                     </h1>
                                     <div className="flex items-center gap-2">

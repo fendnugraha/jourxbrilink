@@ -322,20 +322,20 @@ const TransactionPage = () => {
                             <div className="">
                                 <button
                                     onClick={() => setIsModalCreateTransferOpen(true)}
-                                    className="bg-gray-600 group text-sm min-w-44 hover:bg-gray-700 text-white hover:text-red-500 py-2 px-6 rounded-s-lg"
+                                    className="bg-gray-600 group text-sm min-w-44 hover:bg-gray-700 text-white hover:text-red-500 py-3 px-6 rounded-s-xl"
                                 >
                                     Tansfer Uang <ArrowUpCircleIcon className="size-4 group-hover:scale-125 inline" />
                                 </button>
                                 <button
                                     onClick={() => setIsModalCreateCashWithdrawalOpen(true)}
-                                    className="bg-gray-600 group text-sm min-w-44 hover:bg-gray-700 text-white hover:text-teal-500 py-2 px-6 rounded-e-lg"
+                                    className="bg-gray-600 group text-sm min-w-44 hover:bg-gray-700 text-white hover:text-teal-500 py-3 px-6 rounded-e-xl"
                                 >
                                     <ArrowDownCircleIcon className="size-4 group-hover:scale-125 inline" /> Tarik Tunai
                                 </button>
                             </div>
                             <Dropdown
                                 trigger={
-                                    <button className="bg-green-600 text-sm hover:bg-green-500 text-white py-2 px-6 rounded-lg group">
+                                    <button className="bg-green-600 text-sm hover:bg-green-500 text-white py-3 px-6 rounded-xl group">
                                         Voucher & Deposit
                                         <ChevronRightIcon size={18} className="inline group-hover:rotate-90 transition-transform delay-300 duration-200" />
                                     </button>
@@ -348,7 +348,7 @@ const TransactionPage = () => {
                                             Voucher & SP
                                         </button>
                                     </li>
-                                    <li className="border-b hover:bg-slate-100 ">
+                                    <li className="hover:bg-slate-100 ">
                                         <button className="w-full text-sm text-left py-2 px-4" onClick={() => setIsModalCreateDepositOpen(true)}>
                                             Penjualan Pulsa dll.
                                         </button>
@@ -357,7 +357,7 @@ const TransactionPage = () => {
                             </Dropdown>
                             <Dropdown
                                 trigger={
-                                    <button className="bg-red-600 text-sm hover:bg-red-500 text-white py-2 px-6 rounded-lg group">
+                                    <button className="bg-red-600 text-sm hover:bg-red-500 text-white py-3 px-6 rounded-xl group">
                                         Pengeluaran (Biaya){" "}
                                         <ChevronRightIcon size={18} className="inline group-hover:rotate-90 delay-300 transition-transform duration-200" />
                                     </button>
@@ -375,7 +375,7 @@ const TransactionPage = () => {
                                             Biaya Operasional
                                         </button>
                                     </li>
-                                    <li className="border-b hover:bg-slate-100 ">
+                                    <li className="hover:bg-slate-100 ">
                                         <button className="w-full text-sm text-left py-2 px-4" onClick={() => setIsModalCreateBankAdminFeeOpen(true)}>
                                             Biaya Admin Bank
                                         </button>

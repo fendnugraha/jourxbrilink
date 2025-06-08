@@ -135,19 +135,6 @@ const JournalTable = ({
             <div className="flex gap-1">
                 <select
                     onChange={(e) => {
-                        setItemsPerPage(Number(e.target.value));
-                        setCurrentPage(1);
-                    }}
-                    className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-                >
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                    <option value={25}>25</option>
-                    <option value={50}>50</option>
-                    <option value={100}>100</option>
-                </select>
-                <select
-                    onChange={(e) => {
                         setSelectedAccount(e.target.value);
                         setCurrentPage(1);
                     }}
@@ -160,6 +147,19 @@ const JournalTable = ({
                             {account.acc_name}
                         </option>
                     ))}
+                </select>
+                <select
+                    onChange={(e) => {
+                        setItemsPerPage(Number(e.target.value));
+                        setCurrentPage(1);
+                    }}
+                    className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                >
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={25}>25</option>
+                    <option value={50}>50</option>
+                    <option value={100}>100</option>
                 </select>
                 <button
                     onClick={() => setIsModalFilterJournalOpen(true)}
@@ -252,11 +252,10 @@ const JournalTable = ({
                                 currentItems.map((journal, index) => (
                                     <tr key={index} className="group hover:bg-slate-600 hover:text-white">
                                         <td>
-                                            <span className="text-xs text-slate-500 group-hover:text-orange-300 block">
+                                            <span className="text-xs text-orange-500 group-hover:text-orange-300 block">
                                                 #{journal.id} <span className="font-bold hidden sm:inline">{journal.invoice}</span>{" "}
                                                 {formatDateTime(journal.created_at)}
                                             </span>
-                                            Note: {journal.description}
                                             <span className="font-bold text-xs block text-lime-600 group-hover:text-lime-300">
                                                 {journal.trx_type === "Voucher & SP" || journal.trx_type === "Accessories" ? (
                                                     <ul className="list-disc font-normal scale-95">
@@ -274,6 +273,7 @@ const JournalTable = ({
                                                     journal.debt.acc_name
                                                 )}
                                             </span>
+                                            Note: {journal.description}
                                             <span className="text-xs block text-slate-500 group-hover:text-white">
                                                 Last update at <TimeAgo timestamp={journal.updated_at} />
                                             </span>

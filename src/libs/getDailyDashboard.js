@@ -17,7 +17,7 @@ export const useGetDailyDashboard = (warehouse, startDate, endDate) => {
         dedupingInterval: 60000,
     });
 
-    if (error) return { error: error.response?.data?.errors || ["Something went wrong."] };
+    if (error) return { error: error.response?.data?.errors };
     if (!dailyDashboard && !isValidating) return { loading: true };
 
     return { dailyDashboard, loading: isValidating, error };

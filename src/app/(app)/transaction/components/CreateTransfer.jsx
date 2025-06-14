@@ -79,7 +79,7 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                         {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
                     </div>
                     {formData.amount && (
-                        <h1 className="text-sm font-semibold sm:hidden">
+                        <h1 className="text-sm font-semibold">
                             Jml: {formatNumber(formData.amount)}, Adm: {formatNumber(formData.fee_amount)}
                         </h1>
                     )}
@@ -133,11 +133,6 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                         {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                     </div>
                 </div>
-                {formData.amount && (
-                    <h1 className="text-sm font-semibold hidden sm:block">
-                        Jml: {formatNumber(formData.amount)}, Adm: {formatNumber(formData.fee_amount)}
-                    </h1>
-                )}
                 <div className="flex justify-end gap-2">
                     <button
                         onClick={() => isModalOpen(false)}

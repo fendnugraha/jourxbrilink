@@ -76,7 +76,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                             });
                         }}
                         value={formData.cred_code}
-                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-control"
                         required
                     >
                         <option value="">--Pilih sumber dana--</option>
@@ -100,7 +100,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                             })
                         }
                         value={formData.debt_code}
-                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-control"
                         required
                     >
                         <option value="">--Pilih tujuan mutasi--</option>
@@ -116,9 +116,9 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Jumlah transfer</Label>
                 <div className="col-span-1">
-                    <Input
+                    <input
                         type="number"
-                        className={"w-full text-xs sm:text-sm"}
+                        className={"form-control"}
                         placeholder="Rp."
                         value={formData.amount}
                         onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
@@ -145,7 +145,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                 <Label>Keterangan</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <textarea
-                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-control"
                         type="text"
                         placeholder="(Optional)"
                         value={formData.description}

@@ -60,14 +60,15 @@ const CreateJournal = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
         }
     };
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Dari</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <select
                         onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })}
                         value={formData.cred_code}
-                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-select"
+                        required
                     >
                         <option value="">--Pilih sumber dana--</option>
                         {accounts.map((br) => (
@@ -85,8 +86,9 @@ const CreateJournal = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
                     <select
                         onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })}
                         value={formData.debt_code}
-                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-select"
                         disabled={!formData.cred_code}
+                        required
                     >
                         <option value="">--Pilih tujuan mutasi--</option>
                         {destAccount.map((hq) => (
@@ -101,12 +103,13 @@ const CreateJournal = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Jumlah transfer</Label>
                 <div className="col-span-1">
-                    <Input
-                        className="w-full text-xs sm:text-sm"
+                    <input
+                        className="form-control"
                         type="number"
                         placeholder="Rp."
                         value={formData.amount}
                         onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                        required
                     />
                     {errors?.amount && <span className="text-red-500 text-xs">{errors?.amount}</span>}
                 </div>
@@ -117,7 +120,7 @@ const CreateJournal = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
                 <Label>Keterangan</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <textarea
-                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-control"
                         type="text"
                         placeholder="(Optional)"
                         value={formData.description}
@@ -127,7 +130,6 @@ const CreateJournal = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
                 </div>
             </div>
             <button
-                onClick={handleSubmit}
                 className="bg-indigo-500 hover:bg-indigo-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
                 disabled={loading}
             >

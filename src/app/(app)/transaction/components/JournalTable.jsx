@@ -252,7 +252,7 @@ const JournalTable = ({
                                 currentItems.map((journal, index) => (
                                     <tr key={index} className="group hover:bg-slate-600 hover:text-white">
                                         <td>
-                                            <span className="text-xs text-orange-500 group-hover:text-orange-300 block">
+                                            <span className="text-xs text-blue-500 group-hover:text-blue-300 block">
                                                 #{journal.id} <span className="font-bold hidden sm:inline">{journal.invoice}</span>{" "}
                                                 {formatDateTime(journal.created_at)}
                                             </span>

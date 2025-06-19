@@ -1,7 +1,7 @@
 import axios from "@/libs/axios";
 import { useState } from "react";
 import Label from "@/components/Label";
-import Input from "@/components/Input";
+import formatNumber from "@/libs/formatNumber";
 
 const CreateDeposit = ({ isModalOpen, notification, fetchJournalsByWarehouse }) => {
     const [formData, setFormData] = useState({
@@ -34,12 +34,12 @@ const CreateDeposit = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
     };
     return (
         <form onSubmit={handleSubmit}>
-            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+            <div className="mb-2 sm:mb-4 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Harga jual</Label>
                 <div className="col-span-1 sm:col-span-2">
-                    <Input
+                    <input
                         type="number"
-                        className={"w-full sm:w-1/2 text-sm"}
+                        className={"form-control"}
                         placeholder="Rp."
                         value={formData.price}
                         onChange={(e) => setFormData({ ...formData, price: e.target.value })}
@@ -48,25 +48,33 @@ const CreateDeposit = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
                     {errors.price && <span className="text-red-500 text-xs">{errors.price}</span>}
                 </div>
             </div>
-            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+            <div className="mb-2 sm:mb-4 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Harga modal</Label>
                 <div className="col-span-1 sm:col-span-2">
-                    <Input
+                    <input
                         type="number"
-                        className={"w-full sm:w-1/2 text-sm"}
+                        className={"form-control"}
                         placeholder="Rp."
                         value={formData.cost}
                         onChange={(e) => setFormData({ ...formData, cost: e.target.value })}
                         required
                     />
                     {errors.cost && <span className="text-red-500 text-xs">{errors.cost}</span>}
+
+                    {formData.price && formData.cost && (
+                        <div className="mt-1">
+                            <span className="text-sm font-bold">
+                                {formatNumber(formData.price)} - {formatNumber(formData.cost)} = {formatNumber(formData.price - formData.cost)}
+                            </span>
+                        </div>
+                    )}
                 </div>
             </div>
-            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+            <div className="mb-2 sm:mb-4 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Keterangan</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <textarea
-                        className="w-full rounded-md border text-sm p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-control"
                         type="text"
                         placeholder="(Optional)"
                         value={formData.description}

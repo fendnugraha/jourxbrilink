@@ -3,7 +3,7 @@ import axios from "@/libs/axios";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
-import { MinusCircleIcon, PlusCircleIcon } from "lucide-react";
+import { MinusCircleIcon, MinusIcon, PlusCircleIcon, PlusIcon } from "lucide-react";
 import useGetProducts from "@/libs/getAllProducts";
 
 const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, user }) => {
@@ -72,7 +72,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                         onChange={(e) => setFormData({ ...formData, product_id: e.target.value, qty: 1 })}
                         value={formData.product_id}
                         disabled={isValidating}
-                        className="w-full text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-select"
                         required
                     >
                         <option value="">--Pilih barang--</option>
@@ -87,29 +87,29 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
             </div>
             <div className="my-4 grid grid-cols-3 gap-4 items-center">
                 <Label>Qty</Label>
-                <div className="col-span-2 flex items-center gap-2">
+                <div className="flex items-center justify-between gap-2 bg-slate-500 p-1 rounded-2xl w-3/4">
                     <button
-                        className="hover:text-red-600 active:scale-95 disabled:text-slate-400 disabled:cursor-not-allowed"
+                        className="bg-white rounded-full hover:bg-red-300 text-slate-600 active:scale-95 disabled:bg-slate-400 disabled:cursor-not-allowed"
                         onClick={decrementQty}
                         disabled={formData.qty <= 1}
                     >
-                        <MinusCircleIcon className="w-6 h-6" />
+                        <MinusIcon className="w-6 h-6" />
                     </button>
-                    <span className="text-md text-center min-w-5">{formData.qty}</span>
+                    <span className="text-md text-center text-white min-w-5">{formData.qty}</span>
                     <button
-                        className="hover:text-red-600 active:scale-95 disabled:text-slate-400 disabled:cursor-not-allowed"
+                        className="bg-white rounded-full hover:bg-green-300 text-slate-600 active:scale-95 disabled:bg-slate-400 disabled:cursor-not-allowed"
                         onClick={incrementQty}
                         disabled={formData.product_id === ""}
                     >
-                        <PlusCircleIcon className="w-6 h-6" />
+                        <PlusIcon className="w-6 h-6" />
                     </button>
                 </div>
             </div>
             <div className="mb-3 grid grid-cols-3 gap-4 items-center">
                 <Label>Harga</Label>
                 <div className="col-span-1">
-                    <Input
-                        className={"w-full text-sm disabled:bg-slate-300 disabled:text-white disabled:cursor-not-allowed"}
+                    <input
+                        className={"form-control"}
                         type="number"
                         placeholder="Rp."
                         min="0"
@@ -122,11 +122,11 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                 </div>
                 <span className="text-sm sm:text-lg font-bold">Rp. {formatNumber(formData.qty * formData.price)}</span>
             </div>
-            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+            <div className="mb-4 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Keterangan</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <textarea
-                        className="w-full text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-control"
                         type="text"
                         placeholder="(Optional)"
                         value={formData.description}

@@ -61,7 +61,7 @@ const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse
                                 setFormData({ ...formData, cred_code: e.target.value });
                             }}
                             value={formData.cred_code}
-                            className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="form-select"
                         >
                             <option value="">--Pilih rekening--</option>
                             {branchAccount.map((br) => (
@@ -81,7 +81,7 @@ const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse
                                 setFormData({ ...formData, debt_code: e.target.value });
                             }}
                             value={formData.debt_code}
-                            className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="form-select"
                         >
                             <option value="">--Pilih rekening--</option>
                             {hqAccount.map((br) => (
@@ -96,9 +96,9 @@ const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse
                 <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Jumlah</Label>
                     <div className="col-span-1">
-                        <Input
+                        <input
                             type="number"
-                            className={"w-full"}
+                            className={"form-control"}
                             placeholder="Rp."
                             value={formData.amount}
                             onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
@@ -107,11 +107,11 @@ const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse
                     </div>
                     <h1 className="text-lg font-bold">{formatNumber(formData.amount)}</h1>
                 </div>
-                <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 gap-4">
+                <div className="mb-4 grid-cols-1 grid sm:grid-cols-3 gap-4">
                     <Label>Keterangan</Label>
                     <div className="col-span-1 sm:col-span-2">
                         <textarea
-                            className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="form-control"
                             type="text"
                             placeholder="(Optional)"
                             value={formData.description}

@@ -8,6 +8,7 @@ import Modal from "@/components/Modal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
 import { useGetDailyDashboard } from "@/libs/getDailyDashboard";
+import { formatNumberToK } from "@/libs/formatNumberToK";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -45,9 +46,17 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
     }, [selectedWarehouse, startDate, endDate]);
 
     return (
-        <div className="relative">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div className="mb-2 flex gap-2 px-2">
+        <div className="h-[calc(100vh-80px-64px)] mb-12 flex flex-col">
+            <div className="flex items-start justify-between mb-2">
+                <h1 className="font-bold text-xl text-slate-600">
+                    {selectedWarehouse === "all"
+                        ? "Semua Cabang"
+                        : warehouses?.data?.find((warehouse) => Number(warehouse.id) === Number(selectedWarehouse))?.name}
+                    <span className="text-xs block font-normal text-nowrap">
+                        Periode: {startDate} s/d {endDate}
+                    </span>
+                </h1>
+                <div className="mb-2 flex gap-2 px-2 wfull sm:w-1/2">
                     {userRole === "Administrator" && (
                         <select
                             value={selectedWarehouse}
@@ -100,79 +109,63 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                         Submit
                     </button>
                 </Modal>
-                <div className="flex flex-end items-center px-2">
-                    <h1 className="text-sm font-bold text-center sm:text-end text-slate-500 w-full">
-                        {selectedWarehouse === "all" ? "Semua Cabang" : warehouses?.data?.find((warehouse) => warehouse.id === selectedWarehouse)?.name},
-                        Periode: {startDate} s/d {endDate}
-                    </h1>
-                </div>
             </div>
-            <button
-                className="absolute bottom-3 left-3 text-white hover:scale-110 transition-transform duration-75"
-                onClick={() => mutate(`/api/daily-dashboard/${selectedWarehouse}/${startDate}/${endDate}`)}
-            >
-                <RefreshCcwIcon className="w-5 h-5" />
-            </button>
-            <div className="min-h-[28rem] grid grid-cols-1 sm:grid-cols-5 sm:grid-rows-4 gap-1 sm:gap-3 px-1 sm:px-0">
-                <div
-                    className={`bg-gray-600 w-full h-full p-3 rounded-2xl sm:rounded-3xl flex flex-col gap-2 sm:gap-4 items-center justify-center col-span-2 row-span-2 ${
-                        isLoading ? "animate-pulse" : ""
-                    }`}
-                >
-                    <div className={`flex gap-2 flex-col justify-center items-center`}>
-                        <h4 className="text-md sm:text-xl font-bold text-white">Saldo Kas Tunai</h4>
-                        <h1 className="text-2xl sm:text-4xl font-black text-yellow-300">
+            <div className="grid grid-cols-5 grid-rows-4 gap-4 flex-grow">
+                <div className="bg-lime-200/80 text-green-900 p-3 sm:p-5 rounded-2xl sm:rounded-4xl drop-shadow-xs flex flex-col gap-2 sm:gap-4 items-start justify-between col-span-2 row-span-2">
+                    <div className={`flex flex-col`}>
+                        <h4 className="text-lg">Kas Tunai</h4>
+                        <h1 className="text-2xl sm:text-4xl font-bold text-slate-500">
                             {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(Number(dailyDashboard?.data?.totalCash))}
                         </h1>
                     </div>
-                    <div className="flex gap-2 w-full justify-evenly">
-                        <div>
-                            <h4 className="text-xs text-white">Saldo Bank</h4>
-                            <h1 className="text-sm font-bold text-white">
-                                {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(dailyDashboard?.data?.totalBank)}
+                    <div className={`flex w-full gap-4`}>
+                        <div className={`flex flex-col w-full bg-white/50 p-4 rounded-2xl`}>
+                            <h4 className="text-sm">Bank</h4>
+                            <h1 className="text-2xl sm:text-xl font-bold text-slate-500">
+                                {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(Number(dailyDashboard?.data?.totalBank))}
                             </h1>
                         </div>
-                        <div>
-                            <h4 className="text-xs text-yellow-400">Total Kas & Bank</h4>
-                            <h1 className="text-sm font-bold text-white">
+                        <div className={`flex flex-col w-full bg-white/50 p-4 rounded-2xl`}>
+                            <h4 className="text-sm">Total Uang</h4>
+                            <h1 className="text-2xl sm:text-xl font-bold text-slate-500">
                                 {isLoading ? (
                                     <LoaderIcon className="animate-pulse" />
                                 ) : (
-                                    formatNumber(dailyDashboard?.data?.totalCash + dailyDashboard?.data?.totalBank)
+                                    formatNumber(Number(dailyDashboard?.data?.totalBank + dailyDashboard?.data?.totalCash))
                                 )}
                             </h1>
                         </div>
                     </div>
                 </div>
-                <div
-                    className={`bg-gray-600 w-full h-full p-3 rounded-2xl sm:rounded-3xl flex flex-col gap-2 items-center justify-center col-span-2 row-span-2 ${
-                        isLoading ? "animate-pulse" : ""
-                    } `}
-                >
-                    <div className="flex gap-5 justify-between flex-col items-center">
-                        <div className="flex gap-2 flex-col justify-center items-center">
-                            <h4 className="text-md sm:text-lg font-bold text-white">Voucher & SP</h4>
-                            <h1 className="text-2xl sm:text-3xl font-black text-yellow-300">
-                                {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(dailyDashboard?.data?.totalVoucher)}
+                <div className="bg-teal-200/80 text-green-900 p-3 sm:p-5 rounded-2xl sm:rounded-4xl drop-shadow-xs flex flex-col gap-2 sm:gap-4 items-start justify-between col-span-2 row-span-2 col-start-3">
+                    {" "}
+                    <div className={`flex flex-col`}>
+                        <h4 className="text-lg">Laba (Net Profit)</h4>
+                        <h1 className="text-2xl sm:text-4xl font-bold text-slate-500">
+                            {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(Number(dailyDashboard?.data?.profit))}
+                        </h1>
+                    </div>
+                    <div className={`flex w-full gap-4`}>
+                        <div className={`flex flex-col w-full bg-white/50 p-4 rounded-2xl`}>
+                            <h4 className="text-sm">Tranfer Uang</h4>
+                            <h1 className="text-2xl sm:text-xl font-bold text-slate-500">
+                                {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumberToK(Number(dailyDashboard?.data?.totalTransfer))}
                             </h1>
                         </div>
-                        {dailyDashboard?.data?.totalAccessories > 0 && (
-                            <div className="flex gap-2 flex-col justify-center items-center">
-                                <h4 className="text-md sm:text-lg font-bold text-white">Accessories</h4>
-                                <h1 className="text-2xl sm:text-3xl font-black text-yellow-300">
-                                    {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(dailyDashboard?.data?.totalAccessories)}
-                                </h1>
-                            </div>
-                        )}
+                        <div className={`flex flex-col w-full bg-white/50 p-4 rounded-2xl`}>
+                            <h4 className="text-sm">Tarik Tunai</h4>
+                            <h1 className="text-2xl sm:text-xl font-bold text-slate-500">
+                                {isLoading ? (
+                                    <LoaderIcon className="animate-pulse" />
+                                ) : (
+                                    formatNumberToK(Number(dailyDashboard?.data?.totalBank + dailyDashboard?.data?.totalCashWithdrawal))
+                                )}
+                            </h1>
+                        </div>
                     </div>
                 </div>
-                <div
-                    className={`bg-violet-500 rounded-2xl sm:rounded-3xl w-full h-full p-3 flex flex-col gap-1 items-center justify-center ${
-                        isLoading ? "animate-pulse" : ""
-                    }`}
-                >
-                    <h4 className="text-md sm:text-xl text-white">Total Setoran</h4>
-                    <h1 className="text-2xl font-extrabold text-white">
+                <div className="col-start-5 bg-violet-200 rounded-2xl sm:rounded-4xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-center items-center">
+                    <h1 className="text-xl sm:text-2xl font-bold text-violet-500">
                         {isLoading ? (
                             <LoaderIcon className="animate-pulse" />
                         ) : (
@@ -185,84 +178,54 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                             )
                         )}
                     </h1>
+                    <h1 className="text-slate-500">Total Setoran</h1>
                 </div>
-                <div
-                    className={`bg-orange-500 rounded-2xl sm:rounded-3xl w-full h-full p-3 flex flex-col gap-1 items-center justify-center ${
-                        isLoading ? "animate-pulse" : ""
-                    }`}
-                >
-                    <h4 className="text-md sm:text-xl text-white">Fee (Admin)</h4>
-                    <h1 className="text-2xl font-extrabold text-white">
+                <div className="col-start-5 row-start-2 bg-orange-200 rounded-2xl sm:rounded-4xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-center items-center">
+                    {" "}
+                    <h1 className="text-xl sm:text-2xl font-bold text-orange-500">
                         {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(dailyDashboard?.data?.totalFee)}
                     </h1>
+                    <h1 className="text-slate-500">Fee (Admin)</h1>
                 </div>
-                <div
-                    className={`bg-gray-600 w-full h-full p-3 rounded-2xl sm:rounded-3xl flex flex-col gap-2 sm:gap-6 items-center justify-center col-span-2 row-span-2 ${
-                        isLoading ? "animate-pulse" : ""
-                    }`}
-                >
-                    <div className="flex gap-2 flex-col justify-center items-center">
-                        <h4 className="text-md sm:text-xl font-bold text-white">Laba (Profit)</h4>
-                        <h1 className="text-2xl sm:text-4xl font-black text-yellow-300">
-                            {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(dailyDashboard?.data?.profit)}
-                        </h1>
-                    </div>
-                    <div className="flex gap-2 w-full justify-evenly">
-                        <div>
-                            <h4 className="text-xs text-white">Transfer Uang</h4>
-                            <h1 className="text-sm font-bold text-white">
-                                {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(dailyDashboard?.data?.totalTransfer)}
-                            </h1>
-                        </div>
-                        <div>
-                            <h4 className="text-xs text-white">Tarik Tunai</h4>
-                            <h1 className="text-sm font-bold text-white">
-                                {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(dailyDashboard?.data?.totalCashWithdrawal)}
-                            </h1>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    className={`bg-gray-600 w-full h-full p-3 rounded-2xl sm:rounded-3xl flex flex-col gap-2 items-center justify-center col-span-2 row-span-2 ${
-                        isLoading ? "animate-pulse" : ""
-                    } `}
-                >
-                    <h4 className="text-md sm:text-xl font-bold text-white">Deposit</h4>
-                    <h1 className="text-2xl sm:text-4xl font-black text-yellow-300">
-                        {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(dailyDashboard?.data?.totalCashDeposit)}
-                    </h1>
-                </div>
-                <div
-                    className={`bg-red-500 rounded-2xl sm:rounded-3xl w-full h-full p-3 flex flex-col gap-1 items-center justify-center ${
-                        isLoading ? "animate-pulse" : ""
-                    }`}
-                >
-                    <h4 className="text-md sm:text-xl text-white">Biaya</h4>
-                    <h1 className="text-2xl font-extrabold text-white">
-                        {loading ? (
+                <div className="col-start-5 row-start-3 bg-red-200 rounded-2xl sm:rounded-4xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-center items-center">
+                    {" "}
+                    <h1 className="text-xl sm:text-2xl font-bold text-red-500">
+                        {isLoading ? (
                             <LoaderIcon className="animate-pulse" />
                         ) : (
                             formatNumber(dailyDashboard?.data?.totalExpense < 0 ? dailyDashboard?.data?.totalExpense * -1 : 0)
                         )}
                     </h1>
+                    <h1 className="text-slate-500">Biaya</h1>
                 </div>
-                <div
-                    className={`bg-blue-500 rounded-2xl sm:rounded-3xl w-full h-full p-3 flex flex-col gap-1 items-center justify-center ${
-                        isLoading ? "animate-pulse" : ""
-                    }`}
-                >
-                    <h4 className="text-md sm:text-xl text-white">Transaksi</h4>
-                    <h1 className="text-2xl font-extrabold text-white">
+                <div className="col-start-5 row-start-4 bg-blue-200 rounded-2xl sm:rounded-4xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-center items-center">
+                    {" "}
+                    <h1 className="text-xl sm:text-2xl font-bold text-blue-500">
                         {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(dailyDashboard?.data?.salesCount)}
                     </h1>
+                    <h1 className="text-slate-500">Transaksi</h1>
+                </div>
+                <div className="col-span-4 row-span-2 col-start-1 row-start-3 flex gap-4 items-center justify-between w-full h-full">
+                    <div className="bg-white w-full h-full rounded-2xl sm:rounded-4xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-between">
+                        <h1 className="text-lg text-slate-500">Voucher & SP</h1>
+                        <h1 className="text-2xl sm:text-4xl font-bold text-slate-500">
+                            {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(Number(dailyDashboard?.data?.totalVoucher))}
+                        </h1>
+                    </div>
+                    <div className="bg-white w-full h-full rounded-2xl sm:rounded-4xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-between">
+                        <h1 className="text-lg text-slate-500">Accessories</h1>
+                        <h1 className="text-2xl sm:text-4xl font-bold text-slate-500">
+                            {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(Number(dailyDashboard?.data?.totalAccessories))}
+                        </h1>
+                    </div>
+                    <div className="bg-white w-full h-full rounded-2xl sm:rounded-4xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-between">
+                        <h1 className="text-lg text-slate-500">Deposit (Pulsa, Token, Dll)</h1>
+                        <h1 className="text-2xl sm:text-4xl font-bold text-slate-500">
+                            {isLoading ? <LoaderIcon className="animate-pulse" /> : formatNumber(Number(dailyDashboard?.data?.totalCashDeposit))}
+                        </h1>
+                    </div>
                 </div>
             </div>
-            {/* <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-white/20 backdrop-blur-sm h-full w-full flex items-center justify-center gap-2">
-                    <i className="fa-solid fa-spinner animate-spin text-white text-3xl"></i>
-                    <p className="text-white text-sm font-bold">Loading data, please wait...</p>
-                </div>
-            </div> */}
         </div>
     );
 };

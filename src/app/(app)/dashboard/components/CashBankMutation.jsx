@@ -5,7 +5,6 @@ import formatNumber from "@/libs/formatNumber";
 import formatDateTime from "@/libs/formatDateTime";
 import Modal from "@/components/Modal";
 import CreateMutationFromHq from "./CreateMutationFromHq";
-import Notification from "@/components/notification";
 import Pagination from "@/components/PaginateList";
 import { FilterIcon, LoaderCircleIcon, MessageCircleWarningIcon, MoveRightIcon, PlusCircleIcon, TrashIcon } from "lucide-react";
 import CreateJournal from "./CreateJournal";
@@ -21,7 +20,7 @@ const getCurrentDate = () => {
     const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
 };
-const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
+const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
     const [cashBank, setCashBank] = useState([]);
@@ -30,10 +29,6 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
     const [isModalCreateMutationFromHqOpen, setIsModalCreateMutationFromHqOpen] = useState(false);
     const [isModalCreateJournalOpen, setIsModalCreateJournalOpen] = useState(false);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
-    const [notification, setNotification] = useState({
-        type: "",
-        message: "",
-    });
     const [selectedJournalId, setSelectedJournalId] = useState(null);
     const [isModalDeleteJournalOpen, setIsModalDeleteJournalOpen] = useState(false);
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
@@ -66,7 +61,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
             setJournalsByWarehouse(response.data);
         } catch (error) {
             console.error(error);
-            setNotification(error.response?.data?.message || "Something went wrong.");
+            notification(error.response?.data?.message || "Something went wrong.");
         } finally {
             setLoading(false);
         }
@@ -123,24 +118,24 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
     const handleDeleteJournal = async (id) => {
         try {
             const response = await axios.delete(`/api/journals/${id}`);
-            setNotification(response.data.message);
+            notification(response.data.message);
             fetchJournalsByWarehouse();
         } catch (error) {
-            setNotification(error.response?.data?.message || "Something went wrong.");
+            notification(error.response?.data?.message || "Something went wrong.");
         }
     };
 
     const hqCashBankIds = cashBank?.filter((cashBank) => cashBank.warehouse_id === 1)?.map((cashBank) => cashBank.id);
 
     return (
-        <div className="my-4">
-            {notification.message && (
-                <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
-            )}
-            <div className="mb-4 bg-white shadow-sm sm:rounded-2xl relative">
-                {loading || (isValidating && <LoaderCircleIcon size={20} className="animate-spin absolute top-1 text-slate-400 left-1" />)}
+        <>
+            <div className="mb-4 bg-white drop-shadow-sm sm:rounded-3xl">
+                {loading || (isValidating && <LoaderCircleIcon size={20} className="animate-spin absolute top-2 text-slate-400 left-2" />)}
                 <div className="px-2 sm:px-6 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <h1 className="font-bold text-xl">Mutasi Saldo</h1>
+                    <h1 className="font-bold text-xl text-slate-600">
+                        Mutasi Saldo
+                        <span className="text-xs block font-normal text-nowrap">Periode: {endDate}</span>
+                    </h1>
                     <div className="sm:flex gap-2 w-full sm:col-span-2">
                         {userRole === "Administrator" && (
                             <div className="gap-2 sm:flex grid grid-cols-2 mb-2 sm:mb-0">
@@ -204,7 +199,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                         <CreateMutationFromHq
                             cashBank={cashBank}
                             isModalOpen={setIsModalCreateMutationFromHqOpen}
-                            notification={(type, message) => setNotification({ type, message })}
+                            notification={notification}
                             fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                             warehouses={warehouses?.data}
                         />
@@ -213,14 +208,11 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                         <CreateJournal
                             cashBank={cashBank}
                             isModalOpen={setIsModalCreateJournalOpen}
-                            notification={(type, message) => setNotification({ type, message })}
+                            notification={notification}
                             warehouses={warehouses?.data}
                             fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                         />
                     </Modal>
-                </div>
-                <div className="px-2 sm:px-6">
-                    <h4 className="text-xs text-slate-500">Periode: {endDate}</h4>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="table w-full text-xs">
@@ -266,7 +258,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                             </tr>
                         </tbody>
                         <tfoot>
-                            <tr>
+                            <tr className="">
                                 <th>
                                     Total{" "}
                                     <span className="font-bold text-blue-500 block sm:hidden">
@@ -284,86 +276,89 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                 </div>
             </div>
 
-            <div className="mb-4 bg-white shadow-sm sm:rounded-2xl">
-                <h1 className="px-2 sm:px-6 pt-6 font-bold text-xl text-green-600">History Mutasi Kas</h1>
-                <div className="px-2 sm:px-6 pt-2 flex gap-2">
-                    <select
-                        onChange={(e) => {
-                            setItemsPerPage(Number(e.target.value));
-                            setCurrentPage(1);
-                        }}
-                        value={itemsPerPage}
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-                    >
-                        <option value={5}>5</option>
-                        <option value={10}>10</option>
-                        <option value={25}>25</option>
-                        <option value={50}>50</option>
-                        <option value={100}>100</option>
-                    </select>
-                    <Input
-                        type="search"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                        placeholder="Cari..."
-                    />
-                </div>
-                <div className="overflow-x-auto">
-                    <table className="table w-full text-xs">
-                        <thead>
-                            <tr>
-                                <th>
-                                    Dari <MoveRightIcon className="size-5 inline" /> Ke
-                                </th>
-                                <th className="hidden sm:table-cell">Jumlah</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {loading ? (
-                                <tr className="text-center">
-                                    <td colSpan={2}>Loading ...</td>
-                                </tr>
-                            ) : (
-                                currentItems.map((journal, index) => (
-                                    <tr key={index}>
-                                        <td className="">
-                                            <span className="block font-bold text-slate-500">
-                                                {formatDateTime(journal.created_at)} | {journal.invoice}
-                                            </span>
-                                            {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt.acc_name}
-                                            <span className="block sm:hidden font-bold text-blue-500">{formatNumber(journal.amount)}</span>
-                                        </td>
-                                        <td className="text-end hidden sm:table-cell">{formatNumber(journal.amount)}</td>
-                                        <td>
-                                            <button
-                                                onClick={() => {
-                                                    setSelectedJournalId(journal.id);
-                                                    setIsModalDeleteJournalOpen(true);
-                                                }}
-                                                hidden={userRole !== "Administrator"}
-                                                disabled={!hqCashBankIds.includes(journal.cred_code)}
-                                                className="disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transition-all group-hover:text-white duration-200"
-                                            >
-                                                <TrashIcon className="size-4" />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
-                    {totalPages > 1 && (
-                        <Pagination
-                            className="w-full px-2 sm:px-6 pb-6"
-                            totalItems={totalItems}
-                            itemsPerPage={itemsPerPage}
-                            currentPage={currentPage}
-                            onPageChange={handlePageChange}
+            {currentItems?.length > 0 && (
+                <div className="mb-4 bg-white drop-shadow-sm sm:rounded-3xl">
+                    <h1 className="px-2 sm:px-6 pt-6 font-bold text-xl text-green-600">History Mutasi Kas</h1>
+                    <div className="px-2 sm:px-6 pt-2 flex gap-2">
+                        <select
+                            onChange={(e) => {
+                                setItemsPerPage(Number(e.target.value));
+                                setCurrentPage(1);
+                            }}
+                            value={itemsPerPage}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                        >
+                            <option value={5}>5</option>
+                            <option value={10}>10</option>
+                            <option value={25}>25</option>
+                            <option value={50}>50</option>
+                            <option value={100}>100</option>
+                        </select>
+                        <Input
+                            type="search"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            placeholder="Cari..."
                         />
-                    )}
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="table w-full text-xs">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Dari <MoveRightIcon className="size-5 inline" /> Ke
+                                    </th>
+                                    <th className="hidden sm:table-cell">Jumlah</th>
+                                    <th>Opsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {loading ? (
+                                    <tr className="text-center">
+                                        <td colSpan={2}>Loading ...</td>
+                                    </tr>
+                                ) : (
+                                    currentItems.map((journal, index) => (
+                                        <tr key={index}>
+                                            <td className="">
+                                                <span className="block font-bold text-slate-500">
+                                                    {formatDateTime(journal.created_at)} | {journal.invoice}
+                                                </span>
+                                                {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt.acc_name}
+                                                <span className="block sm:hidden font-bold text-blue-500">{formatNumber(journal.amount)}</span>
+                                            </td>
+                                            <td className="text-end hidden sm:table-cell">{formatNumber(journal.amount)}</td>
+                                            <td className="text-center">
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedJournalId(journal.id);
+                                                        setIsModalDeleteJournalOpen(true);
+                                                    }}
+                                                    hidden={userRole !== "Administrator"}
+                                                    disabled={!hqCashBankIds.includes(journal.cred_code)}
+                                                    className="cursor-pointer disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transition-all group-hover:text-white duration-200"
+                                                >
+                                                    <TrashIcon className="size-4" />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                        {totalPages > 1 && (
+                            <Pagination
+                                className="w-full px-2 sm:px-6 pb-6"
+                                totalItems={totalItems}
+                                itemsPerPage={itemsPerPage}
+                                currentPage={currentPage}
+                                onPageChange={handlePageChange}
+                            />
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
             <Modal isOpen={isModalDeleteJournalOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
                 <div className="flex flex-col items-center justify-center gap-3 mb-4">
                     <MessageCircleWarningIcon size={72} className="text-red-600" />
@@ -387,7 +382,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole }) => {
                     </button>
                 </div>
             </Modal>
-        </div>
+        </>
     );
 };
 

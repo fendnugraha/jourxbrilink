@@ -2,15 +2,15 @@
 import { useState, useEffect } from "react";
 import axios from "@/libs/axios";
 import Label from "@/components/Label";
-import Input from "@/components/Input";
 
 const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, user }) => {
     const [expense, setExpense] = useState([]);
+    const [expenseAmount, setExpenseAmount] = useState(0);
     const [formData, setFormData] = useState({
         debt_code: "",
         cred_code: user.role.warehouse.chart_of_account_id,
         amount: 0,
-        fee_amount: "",
+        fee_amount: -expenseAmount,
         trx_type: "Pengeluaran",
         description: "Biaya Operasional Toko",
     });
@@ -62,7 +62,7 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                     <select
                         onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })}
                         value={formData.debt_code}
-                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-select"
                         required
                     >
                         <option value="">--Pilih Rekening--</option>
@@ -78,11 +78,18 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Jumlah</Label>
                 <div className="col-span-1 sm:col-span-2">
-                    <Input
+                    <input
                         type="number"
+                        className="form-control"
                         placeholder="Rp."
-                        value={formData.fee_amount * -1}
-                        onChange={(e) => setFormData({ ...formData, fee_amount: -e.target.value })}
+                        value={expenseAmount}
+                        onChange={(e) => {
+                            setExpenseAmount(e.target.value);
+                            setFormData({
+                                ...formData,
+                                fee_amount: -e.target.value,
+                            });
+                        }}
                         required
                     />
                     {errors.fee_amount && <span className="text-red-500 text-xs">{errors.fee_amount}</span>}
@@ -92,7 +99,7 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                 <Label>Keterangan</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <textarea
-                        className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-control"
                         type="text"
                         placeholder="(Optional)"
                         value={formData.description}

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
 import formatDateTime from "@/libs/formatDateTime";
-import { ArrowRightIcon, MessageCircleWarningIcon, TrashIcon } from "lucide-react";
+import { ArrowRightIcon, MessageCircleWarningIcon, RefreshCcwIcon, TrashIcon } from "lucide-react";
 import { FilterIcon } from "lucide-react";
 import Modal from "@/components/Modal";
 import Label from "@/components/Label";
@@ -46,7 +46,6 @@ const MutationHistory = ({ account, notification, user }) => {
             setMutation(response.data.data);
         } catch (error) {
             notification(error.response?.data?.message);
-            console.log(error);
         } finally {
             setLoading(false);
         }
@@ -70,7 +69,7 @@ const MutationHistory = ({ account, notification, user }) => {
         }
     };
     return (
-        <div className="bg-white rounded-lg mb-3 relative">
+        <div className="bg-white rounded-3xl mb-3 relative">
             <div className="p-4">
                 <h4 className="mb-4 text-blue-950 text-lg font-bold">
                     Riwayat Mutasi
@@ -79,19 +78,19 @@ const MutationHistory = ({ account, notification, user }) => {
                     </span>
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-3 mb-2">
-                    <div className="bg-sky-700 p-2 sm:px-4 sm:py-2 rounded-xl text-white">
+                    <div className="border border-slate-300 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700">
                         <h5 className="sm:text-xs">Saldo Awal</h5>
                         <span className="sm:text-xl font-bold">{formatNumber(mutation?.initBalance || 0)}</span>
                     </div>
-                    <div className="bg-sky-700 p-2 sm:px-4 sm:py-2 rounded-xl text-white">
+                    <div className="border border-slate-300 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700">
                         <h5 className="sm:text-xs">Debet</h5>
                         <span className="sm:text-xl font-bold">{formatNumber(mutation?.debt_total || 0)}</span>
                     </div>
-                    <div className="bg-sky-700 p-2 sm:px-4 sm:py-2 rounded-xl text-white">
+                    <div className="border border-slate-300 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700">
                         <h5 className="sm:text-xs">Credit</h5>
                         <span className="sm:text-xl font-bold">{formatNumber(mutation?.cred_total || 0)}</span>
                     </div>
-                    <div className="bg-sky-700 p-2 sm:px-4 sm:py-2 rounded-xl text-white">
+                    <div className="border border-slate-300 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700">
                         <h5 className="sm:text-xs">Saldo Akhir</h5>
                         <span className="sm:text-xl font-bold">{formatNumber(mutation?.endBalance || 0)}</span>
                     </div>
@@ -110,6 +109,12 @@ const MutationHistory = ({ account, notification, user }) => {
                         </option>
                     ))}
                 </select>
+                <button
+                    onClick={() => fetchMutation()}
+                    className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed"
+                >
+                    <RefreshCcwIcon className="size-4" />
+                </button>
                 <button
                     onClick={() => setIsModalFilterDataOpen(true)}
                     className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"

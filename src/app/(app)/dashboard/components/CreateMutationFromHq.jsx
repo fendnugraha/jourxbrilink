@@ -49,14 +49,17 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
         }
     };
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             <div className="mb-6 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Pilih Cabang</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <select
-                        onChange={(e) => setSelectedWarehouseId(e.target.value)}
+                        onChange={(e) => {
+                            setSelectedWarehouseId(e.target.value);
+                            setFormData({ ...formData, debt_code: "" });
+                        }}
                         value={selectedWarehouseId}
-                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-select"
                         required
                     >
                         {warehouses?.map((wh) => (
@@ -73,7 +76,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                     <select
                         onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })}
                         value={formData.cred_code}
-                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-select"
                         required
                     >
                         <option value="">--Pilih sumber dana--</option>
@@ -92,7 +95,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                     <select
                         onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })}
                         value={formData.debt_code}
-                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-select"
                         disabled={!selectedWarehouseId}
                         required
                     >
@@ -109,8 +112,8 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Jumlah transfer</Label>
                 <div className="col-span-1">
-                    <Input
-                        className="w-full text-xs sm:text-sm"
+                    <input
+                        className="form-control"
                         type="number"
                         placeholder="Rp."
                         value={formData.amount}
@@ -125,8 +128,8 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Biaya admin bank</Label>
                 <div className="col-span-1">
-                    <Input
-                        className="sm:w-1/2 w-3/4 text-xs sm:text-sm"
+                    <input
+                        className="form-control"
                         type="number"
                         placeholder="Rp."
                         value={formData.admin_fee}
@@ -141,7 +144,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                 <Label>Keterangan</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <textarea
-                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-control"
                         type="text"
                         placeholder="(Optional)"
                         value={formData.description}
@@ -151,7 +154,6 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                 </div>
             </div>
             <button
-                onClick={handleSubmit}
                 className="bg-indigo-500 hover:bg-indigo-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
                 disabled={loading}
             >

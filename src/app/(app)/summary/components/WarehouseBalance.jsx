@@ -44,7 +44,7 @@ const WarehouseBalance = () => {
         fetchWarehouseBalance();
     }, []);
     return (
-        <div className="bg-white rounded-lg mb-3 relative">
+        <div className="bg-white rounded-3xl mb-3 relative">
             <div className="p-4 flex justify-between">
                 <h4 className=" text-blue-950 text-lg font-bold">
                     Saldo Kas & bank
@@ -102,7 +102,7 @@ const WarehouseBalance = () => {
                             </tr>
                         ) : (
                             warehouseBalance.warehouse?.map((w, i) => (
-                                <tr className="hover:bg-gray-100" key={i}>
+                                <tr className="hover:bg-orange-100" key={i}>
                                     <td className="">
                                         <Link className="hover:underline" href={`/summary/warehouse/${w.id}`}>
                                             {w.name}

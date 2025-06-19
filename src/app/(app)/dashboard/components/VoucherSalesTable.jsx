@@ -22,6 +22,7 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
     const [endDate, setEndDate] = useState(getCurrentDate());
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
+    const [isModalCreateVoucherOpen, setIsModalCreateVoucherOpen] = useState(false);
     const [isCopied, setIsCopied] = useState(false);
 
     const closeModal = () => {
@@ -77,74 +78,76 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
     };
     return (
         <>
+            <div className="pt-4 flex justify-end gap-2 w-full sm:w-1/2">
+                {userRole === "Administrator" && (
+                    <select
+                        value={selectedWarehouse}
+                        onChange={(e) => setSelectedWarehouse(e.target.value)}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    >
+                        <option value="all">Semua Cabang</option>
+                        {warehouses?.data?.map((warehouse) => (
+                            <option key={warehouse.id} value={warehouse.id}>
+                                {warehouse.name}
+                            </option>
+                        ))}
+                    </select>
+                )}
+                <button onClick={() => fetchTransaction()} className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400">
+                    <RefreshCcwIcon className="size-4" />
+                </button>
+                <button
+                    onClick={() => copySalesVoucher()}
+                    className={`bg-white ${isCopied ? "text-green-600" : ""} font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400`}
+                >
+                    <CopyIcon className="size-4" />
+                </button>
+                <button
+                    onClick={() => setIsModalFilterDataOpen(true)}
+                    className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
+                >
+                    <FilterIcon className="size-4" />
+                </button>
+                <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
+                    <div className="mb-4">
+                        <Label className="font-bold">Tanggal</Label>
+                        <Input
+                            type="date"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <Label className="font-bold">s/d</Label>
+                        <Input
+                            type="date"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                            className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        />
+                    </div>
+                    <button
+                        onClick={() => {
+                            fetchTransaction();
+                            setIsModalFilterDataOpen(false);
+                        }}
+                        className="btn-primary"
+                    >
+                        Submit
+                    </button>
+                </Modal>
+            </div>
             <div className="my-4 flex gap-4 sm:flex-row flex-col">
-                <div className="bg-white overflow-hidden w-full shadow-sm sm:rounded-2xl sm:w-3/4">
-                    <h1 className="px-2 sm:px-6 pt-4 font-bold text-xl text-blue-600">
-                        Total Penjualan Voucher & SP
-                        <span className="text-xs block font-normal">
-                            Periode: {startDate} - {endDate}
-                        </span>
-                    </h1>
-
-                    <div className="px-2 sm:px-6 pt-4 flex justify-end gap-2">
-                        {userRole === "Administrator" && (
-                            <select
-                                value={selectedWarehouse}
-                                onChange={(e) => setSelectedWarehouse(e.target.value)}
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            >
-                                <option value="all">Semua Cabang</option>
-                                {warehouses?.data?.map((warehouse) => (
-                                    <option key={warehouse.id} value={warehouse.id}>
-                                        {warehouse.name}
-                                    </option>
-                                ))}
-                            </select>
-                        )}
-                        <button onClick={() => fetchTransaction()} className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400">
-                            <RefreshCcwIcon className="size-4" />
-                        </button>
-                        <button
-                            onClick={() => copySalesVoucher()}
-                            className={`bg-white ${isCopied ? "text-green-600" : ""} font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400`}
-                        >
-                            <CopyIcon className="size-4" />
-                        </button>
-                        <button
-                            onClick={() => setIsModalFilterDataOpen(true)}
-                            className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
-                        >
-                            <FilterIcon className="size-4" />
-                        </button>
-                        <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
-                            <div className="mb-4">
-                                <Label className="font-bold">Tanggal</Label>
-                                <Input
-                                    type="date"
-                                    value={startDate}
-                                    onChange={(e) => setStartDate(e.target.value)}
-                                    className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <Label className="font-bold">s/d</Label>
-                                <Input
-                                    type="date"
-                                    value={endDate}
-                                    onChange={(e) => setEndDate(e.target.value)}
-                                    className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                />
-                            </div>
-                            <button
-                                onClick={() => {
-                                    fetchTransaction();
-                                    setIsModalFilterDataOpen(false);
-                                }}
-                                className="btn-primary"
-                            >
-                                Submit
-                            </button>
-                        </Modal>
+                <div className="bg-white overflow-hidden w-full shadow-sm sm:rounded-3xl">
+                    <div className="flex justify-between px-2 sm:px-6 pt-4">
+                        <h1 className="font-bold text-xl text-blue-600">
+                            Total Penjualan Voucher & SP
+                            <span className="text-xs block font-normal">
+                                Periode: {startDate} - {endDate}
+                            </span>
+                        </h1>
+                        <h1 className="text-2xl text-slate-700 font-bold">{formatNumber(totalCostVoucher < 0 ? totalCostVoucher * -1 : 0)}</h1>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="table w-full text-xs">
@@ -185,20 +188,17 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                         </table>
                     </div>
                 </div>
-                <div className="bg-sky-700 py-2 text-white overflow-hidden shadow-sm sm:rounded-2xl flex-1 flex flex-col justify-center items-center">
-                    <h1>Total</h1>
-                    <h1 className="text-4xl font-bold">{formatNumber(totalCostVoucher < 0 ? totalCostVoucher * -1 : 0)}</h1>
-                </div>
-            </div>
-            {filterTrxNonVoucher.length > 0 && (
-                <div className="my-4 flex gap-4 sm:flex-row flex-col">
-                    <div className="bg-white overflow-hidden w-full shadow-sm sm:rounded-2xl sm:w-3/4">
-                        <h1 className="px-2 sm:px-6 pt-4 font-bold text-xl text-green-600">
-                            Total Penjualan Accesories
-                            <span className="text-xs block font-normal">
-                                Periode: {startDate} - {endDate}
-                            </span>
-                        </h1>
+                {filterTrxNonVoucher.length > 0 && (
+                    <div className="bg-white overflow-hidden w-full shadow-sm sm:rounded-2xl">
+                        <div className="flex justify-between px-2 sm:px-6 pt-4">
+                            <h1 className="font-bold text-xl text-green-600">
+                                Total Penjualan Accesories
+                                <span className="text-xs block font-normal">
+                                    Periode: {startDate} - {endDate}
+                                </span>
+                            </h1>
+                            <h1 className="text-2xl text-slate-700 font-bold">{formatNumber(totalCostNonVoucher < 0 ? totalCostNonVoucher * -1 : 0)}</h1>
+                        </div>
                         <div className="overflow-x-auto">
                             <table className="table w-full text-xs">
                                 <thead>
@@ -238,12 +238,8 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                             </table>
                         </div>
                     </div>
-                    <div className="bg-green-700 py-2 text-white overflow-hidden shadow-sm sm:rounded-2xl flex-1 flex flex-col justify-center items-center">
-                        <h1>Total</h1>
-                        <h1 className="text-4xl font-bold">{formatNumber(totalCostNonVoucher < 0 ? totalCostNonVoucher * -1 : 0)}</h1>
-                    </div>
-                </div>
-            )}
+                )}
+            </div>
         </>
     );
 };

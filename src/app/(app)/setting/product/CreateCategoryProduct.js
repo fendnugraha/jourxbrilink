@@ -1,9 +1,8 @@
 import { useState } from "react";
 import axios from "@/libs/axios";
-import Input from "@/components/Input";
 import Button from "@/components/Button";
 
-const CreateCategoryProduct = ({ isModalOpen, notification, fetchProducts }) => {
+const CreateCategoryProduct = ({ isModalOpen, notification, fetchProductCategories }) => {
     const [errors, setErrors] = useState([]);
     const [newCategoryProduct, setNewCategoryProduct] = useState({
         name: "",
@@ -14,7 +13,7 @@ const CreateCategoryProduct = ({ isModalOpen, notification, fetchProducts }) => 
         e.preventDefault();
         try {
             const response = await axios.post("/api/product-categories", newCategoryProduct);
-            notification(response.data.message);
+            notification("success", response.data.message);
             if (response.status === 201) {
                 // Reset form fields and close modal on success
                 setNewCategoryProduct({
@@ -24,7 +23,7 @@ const CreateCategoryProduct = ({ isModalOpen, notification, fetchProducts }) => 
                 isModalOpen(false);
             }
 
-            fetchProducts();
+            fetchProductCategories();
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
         }
@@ -36,7 +35,7 @@ const CreateCategoryProduct = ({ isModalOpen, notification, fetchProducts }) => 
                 <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900">
                     Category Name
                 </label>
-                <Input
+                <input
                     type="text"
                     id="name"
                     value={newCategoryProduct.name}
@@ -46,9 +45,7 @@ const CreateCategoryProduct = ({ isModalOpen, notification, fetchProducts }) => 
                             name: e.target.value,
                         })
                     }
-                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${
-                        errors.name ? "border-red-500" : ""
-                    }`}
+                    className={`form-control ${errors.name ? "border-red-500" : ""}`}
                     placeholder="Enter category name"
                 />
                 {errors.name && <p className="text-red-500 text-xs">{errors.name}</p>}
@@ -58,7 +55,7 @@ const CreateCategoryProduct = ({ isModalOpen, notification, fetchProducts }) => 
                 <label htmlFor="prefix" className="block mb-2 text-sm font-medium text-gray-900">
                     Prefix
                 </label>
-                <Input
+                <input
                     type="text"
                     id="prefix"
                     value={newCategoryProduct.prefix}
@@ -68,9 +65,7 @@ const CreateCategoryProduct = ({ isModalOpen, notification, fetchProducts }) => 
                             prefix: e.target.value,
                         })
                     }
-                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 ${
-                        errors.prefix ? "border-red-500" : ""
-                    }`}
+                    className={`form-control ${errors.prefix ? "border-red-500" : ""}`}
                     placeholder="Enter prefix"
                 />
                 {errors.prefix && <p className="text-red-500 text-xs">{errors.prefix}</p>}

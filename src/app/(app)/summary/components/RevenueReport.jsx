@@ -66,7 +66,7 @@ const RevenueReport = () => {
         { key: "fee", label: "Profit" },
     ];
     return (
-        <div className="bg-white rounded-lg mb-3 relative">
+        <div className="bg-white rounded-3xl mb-3 relative">
             <div className="p-4 flex justify-between">
                 <h4 className=" text-blue-950 text-lg font-bold">
                     Laporan Pendapatan
@@ -148,7 +148,7 @@ const RevenueReport = () => {
                             </tr>
                         ) : (
                             revenue.revenue?.map((item, index) => (
-                                <tr key={index} className="hover:bg-gray-100">
+                                <tr key={index} className="hover:bg-orange-100">
                                     <td className="">
                                         <Link className="hover:underline" href={`/summary/warehouse/${item.warehouseId}`}>
                                             {item.warehouse}

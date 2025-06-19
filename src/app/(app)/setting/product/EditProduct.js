@@ -13,11 +13,11 @@ const EditProduct = ({ isModalOpen, notification, fetchProducts, selectedProduct
         setLoading(true);
         try {
             const response = await axios.put(`/api/products/${product.id}`, formData);
-            notification(response.data.message);
+            notification("success", response.data.message);
             isModalOpen(false);
             fetchProducts();
         } catch (error) {
-            notification(error.response?.data?.message || "Something went wrong.");
+            notification("error", error.response?.data?.message || "Something went wrong.");
         } finally {
             setLoading(false);
         }

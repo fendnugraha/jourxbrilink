@@ -46,13 +46,13 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
     return (
         <>
             <form onSubmit={handleSubmit}>
-                <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+                <div className="mb-2 sm:mb-4">
                     <Label>Ke Rekening</Label>
                     <div className="col-span-1 sm:col-span-2">
                         <select
                             onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })}
                             value={formData.debt_code}
-                            className="w-full text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="form-select"
                             required
                         >
                             <option value="">--Pilih Rekening--</option>
@@ -65,11 +65,11 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                         {errors.debt_code && <span className="text-red-500 text-xs">{errors.debt_code}</span>}
                     </div>
                 </div>
-                <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+                <div className="mb-2 sm:mb-4">
                     <Label>Jumlah Penarikan</Label>
                     <div className="col-span-1">
-                        <Input
-                            className={"w-full text-sm"}
+                        <input
+                            className={"form-control"}
                             type="number"
                             placeholder="Rp."
                             value={formData.amount}
@@ -78,18 +78,19 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                             required
                         />
                         {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
+                        {formData.amount && (
+                            <h1 className="text-sm">
+                                Jml: <span className="font-bold">{formatNumber(formData.amount)}</span>, Adm:{" "}
+                                <span className="font-bold">{formatNumber(formData.fee_amount)}</span>
+                            </h1>
+                        )}
                     </div>
-                    {formData.amount && (
-                        <h1 className="text-sm font-semibold sm:hidden">
-                            Jml: {formatNumber(formData.amount)}, Adm: {formatNumber(formData.fee_amount)}
-                        </h1>
-                    )}
                 </div>
-                <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+                <div className="mb-2 sm:mb-4">
                     <Label>Fee (Admin)</Label>
                     <div className="col-span-1">
-                        <Input
-                            className={"w-full sm:w-3/4 text-sm"}
+                        <input
+                            className={"form-control"}
                             type="number"
                             placeholder="Rp."
                             value={formData.fee_amount}
@@ -101,18 +102,18 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                             <span
                                 type="button"
                                 onClick={(e) => setFormData({ ...formData, fee_amount: calculateFee(formData.amount) })}
-                                className="text-xs cursor-pointer bg-slate-300 hover:bg-slate-200 rounded-lg px-2 py-1 mt-1"
+                                className="text-xs cursor-pointer bg-yellow-300 hover:bg-yellow-200 rounded-lg px-2 py-1 mt-1"
                             >
                                 {formatNumber(calculateFee(formData.amount))}
                             </span>
                         )}
                     </div>
                 </div>
-                <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+                <div className="mb-2 sm:mb-4">
                     <Label>Keterangan</Label>
                     <div className="col-span-1 sm:col-span-2">
                         <textarea
-                            className="w-full text-sm rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="form-control"
                             type="text"
                             placeholder="(Optional)"
                             value={formData.description}
@@ -121,11 +122,6 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                         {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                     </div>
                 </div>
-                {formData.amount && (
-                    <h1 className="text-sm font-semibold hidden sm:block">
-                        Jml: {formatNumber(formData.amount)}, Adm: {formatNumber(formData.fee_amount)}
-                    </h1>
-                )}
 
                 <div className="flex justify-end gap-2">
                     <button

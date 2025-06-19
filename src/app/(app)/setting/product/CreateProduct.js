@@ -1,7 +1,8 @@
 "use client";
 import Input from "@/components/Input";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "@/libs/axios";
+import Button from "@/components/Button";
 
 const CreateProduct = ({ isModalOpen, notification, fetchProducts, productCategories }) => {
     const [errors, setErrors] = useState([]);
@@ -16,7 +17,7 @@ const CreateProduct = ({ isModalOpen, notification, fetchProducts, productCatego
         e.preventDefault();
         try {
             const response = await axios.post("/api/products", newProduct);
-            notification(response.data.message);
+            notification("success", response.data.message);
             if (response.status === 201) {
                 // Reset form fields and close modal on success
                 setNewProduct({
@@ -31,16 +32,16 @@ const CreateProduct = ({ isModalOpen, notification, fetchProducts, productCatego
             fetchProducts();
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
+            notification("error", error.response?.data?.message);
         }
     };
-
     return (
         <form>
             <div className="mb-4">
                 <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900">
                     Product Name
                 </label>
-                <Input
+                <input
                     type="text"
                     id="name"
                     value={newProduct.name}
@@ -50,9 +51,7 @@ const CreateProduct = ({ isModalOpen, notification, fetchProducts, productCatego
                             name: e.target.value,
                         })
                     }
-                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${
-                        errors.name ? "border-red-500" : ""
-                    }`}
+                    className={`form-control ${errors.name ? "border-red-500" : ""}`}
                     placeholder="Enter product name"
                     autoComplete="off"
                 />
@@ -63,9 +62,7 @@ const CreateProduct = ({ isModalOpen, notification, fetchProducts, productCatego
                     Category
                 </label>
                 <select
-                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${
-                        errors.category ? "border-red-500" : ""
-                    }`}
+                    className={`form-select ${errors.category ? "border-red-500" : ""}`}
                     value={newProduct.category}
                     onChange={(e) =>
                         setNewProduct({
@@ -88,7 +85,7 @@ const CreateProduct = ({ isModalOpen, notification, fetchProducts, productCatego
                     <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900">
                         Price
                     </label>
-                    <Input
+                    <input
                         type="number"
                         id="price"
                         value={newProduct.price}
@@ -98,9 +95,7 @@ const CreateProduct = ({ isModalOpen, notification, fetchProducts, productCatego
                                 price: e.target.value,
                             })
                         }
-                        className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${
-                            errors.price ? "border-red-500" : ""
-                        }`}
+                        className={`form-control ${errors.price ? "border-red-500" : ""}`}
                         placeholder="Enter product price"
                     />
                     {errors.price && <p className="text-red-500 text-xs">{errors.price}</p>}
@@ -109,7 +104,7 @@ const CreateProduct = ({ isModalOpen, notification, fetchProducts, productCatego
                     <label htmlFor="cost" className="block mb-2 text-sm font-medium text-gray-900">
                         Cost
                     </label>
-                    <Input
+                    <input
                         type="number"
                         id="cost"
                         value={newProduct.cost}
@@ -119,21 +114,16 @@ const CreateProduct = ({ isModalOpen, notification, fetchProducts, productCatego
                                 cost: e.target.value,
                             })
                         }
-                        className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${
-                            errors.cost ? "border-red-500" : ""
-                        }`}
+                        className={`form-control ${errors.cost ? "border-red-500" : ""}`}
                         placeholder="Enter product cost"
                     />
                     {errors.cost && <p className="text-red-500 text-xs">{errors.cost}</p>}
                 </div>
             </div>
-            <div>
-                <button
-                    onClick={handleCreateProduct}
-                    className="text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                >
+            <div className="flex justify-end">
+                <Button buttonType="primary" onClick={handleCreateProduct}>
                     Create
-                </button>
+                </Button>
             </div>
         </form>
     );

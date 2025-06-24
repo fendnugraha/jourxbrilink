@@ -19,23 +19,23 @@ const Notification = ({ type = "success", notification, title, onClose }) => {
     switch (type) {
         case "success":
             notificationTitle = "Success";
-            notificationStyles = "border-green-300 border";
+            notificationStyles = "";
             notificationIcon = <CheckCircleIcon className="w-8 h-8 text-green-500" />;
             break;
         case "error":
             notificationTitle = "Error !";
-            notificationStyles = "border-red-300 border";
+            notificationStyles = "";
             notificationIcon = <CircleAlertIcon className="w-8 h-8 text-red-500" />;
             break;
         default:
             notificationTitle = "Info";
-            notificationStyles = "border-teal-300 border";
+            notificationStyles = "";
             notificationIcon = <InfoIcon className="w-8 h-8 text-teal-500" />;
     }
 
     return (
         <div
-            className={`${notificationStyles} fixed bg-white backdrop-blur-sm top-4 sm:top-2 right-4 sm:right-2 w-full sm:w-96 z-[1000] rounded-xl -4 py-2 drop-shadow-lg`}
+            className={`${notificationStyles} fixed bg-white backdrop-blur-sm top-4 sm:top-2 right-4 sm:right-2 w-full sm:w-96 z-[1000] rounded-3xl -4 py-2 drop-shadow-lg`}
         >
             <div className="flex items-center gap-4 px-4">
                 <div className="">

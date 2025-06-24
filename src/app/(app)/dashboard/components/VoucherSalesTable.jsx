@@ -6,6 +6,7 @@ import { CopyIcon, FilterIcon, RefreshCcwIcon } from "lucide-react";
 import Modal from "@/components/Modal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
+import Pagination from "@/components/PaginateList";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -17,12 +18,18 @@ const getCurrentDate = () => {
 const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) => {
     const [transactions, setTransactions] = useState([]);
     const [notification, setNotification] = useState("");
+
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
-    const [isModalCreateVoucherOpen, setIsModalCreateVoucherOpen] = useState(false);
+    const [currentPageVoucher, setCurrentPageVoucher] = useState(1);
+    const [itemsPerPageVoucher, setItemsPerPageVoucher] = useState(10);
+
+    const [currentPageNonVoucher, setCurrentPageNonVoucher] = useState(1);
+    const [itemsPerPageNonVoucher, setItemsPerPageNonVoucher] = useState(10);
+
     const [isCopied, setIsCopied] = useState(false);
 
     const closeModal = () => {
@@ -76,9 +83,36 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
         setIsCopied(true);
         setTimeout(() => setIsCopied(false), 3000);
     };
+
+    const paginateData = (data, currentPage = 1, itemsPerPage = 5) => {
+        const totalItems = data?.length || 0;
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const currentItems = data.slice(startIndex, startIndex + itemsPerPage);
+
+        return {
+            totalItems,
+            totalPages,
+            itemsPerPage,
+            currentPage,
+            currentItems,
+        };
+    };
+
+    const handlePageChangeVoucher = (page) => {
+        setCurrentPageVoucher(page);
+    };
+
+    const handlePageChangeNonVoucher = (page) => {
+        setCurrentPageNonVoucher(page);
+    };
+
+    const paginateVoucher = paginateData(filterTrxVoucher, currentPageVoucher, itemsPerPageVoucher);
+    const paginateNonVoucher = paginateData(filterTrxNonVoucher, currentPageNonVoucher, itemsPerPageNonVoucher);
+
     return (
         <>
-            <div className="pt-4 flex justify-end gap-2 w-full sm:w-1/2">
+            <div className="pt-4 flex justify-start gap-1 w-full sm:w-1/2">
                 {userRole === "Administrator" && (
                     <select
                         value={selectedWarehouse}
@@ -174,7 +208,7 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                                         </td>
                                     </tr>
                                 ) : (
-                                    filterTrxVoucher?.map((transaction) => (
+                                    paginateVoucher?.currentItems?.map((transaction) => (
                                         <tr key={transaction.product_id}>
                                             <td>{transaction.product.name}</td>
                                             <td className="text-center">{formatNumber(-transaction.quantity)}</td>
@@ -187,8 +221,19 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                             </tbody>
                         </table>
                     </div>
+                    {paginateVoucher?.totalPages > 1 && (
+                        <div className="px-2 pb-4">
+                            <Pagination
+                                className="w-full px-4"
+                                totalItems={Number(paginateVoucher?.totalItems)}
+                                itemsPerPage={Number(paginateVoucher?.itemsPerPage)}
+                                currentPage={Number(paginateVoucher?.currentPage)}
+                                onPageChange={handlePageChangeVoucher}
+                            />
+                        </div>
+                    )}
                 </div>
-                {filterTrxNonVoucher.length > 0 && (
+                {paginateNonVoucher?.currentItems?.length > 0 && (
                     <div className="bg-white overflow-hidden w-full shadow-sm sm:rounded-2xl">
                         <div className="flex justify-between px-2 sm:px-6 pt-4">
                             <h1 className="font-bold text-xl text-green-600">
@@ -224,7 +269,7 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                                             </td>
                                         </tr>
                                     ) : (
-                                        filterTrxNonVoucher?.map((transaction) => (
+                                        paginateNonVoucher?.currentItems?.map((transaction) => (
                                             <tr key={transaction.product_id}>
                                                 <td>{transaction.product.name}</td>
                                                 <td className="text-center">{formatNumber(-transaction.quantity)}</td>
@@ -237,6 +282,17 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                                 </tbody>
                             </table>
                         </div>
+                        {paginateNonVoucher?.totalPages > 1 && (
+                            <div className="px-2 pb-4">
+                                <Pagination
+                                    className="w-full px-4"
+                                    totalItems={Number(paginateNonVoucher?.totalItems)}
+                                    itemsPerPage={Number(paginateNonVoucher?.itemsPerPage)}
+                                    currentPage={Number(paginateNonVoucher?.currentPage)}
+                                    onPageChange={handlePageChangeNonVoucher}
+                                />
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

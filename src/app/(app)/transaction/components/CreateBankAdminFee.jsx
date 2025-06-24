@@ -77,7 +77,7 @@ const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notifica
                         {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
                     </div>
                 </div>
-                <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+                <div className="mb-4 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Keterangan</Label>
                     <div className="col-span-1 sm:col-span-2">
                         <textarea

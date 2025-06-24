@@ -36,7 +36,9 @@ const Dashboard = () => {
                     userRole={userRole}
                     notification={(type, message) => setNotification({ type, message })}
                 />
+                <hr className="my-4 border border-slate-200" />
                 <VoucherSalesTable warehouse={warehouse} warehouseName={warehouseName} warehouses={warehouses} userRole={userRole} />
+                <hr className="my-4 border border-slate-200" />
                 <ExpenseTable warehouse={warehouse} warehouses={warehouses} userRole={userRole} />
             </div>
         </MainPage>

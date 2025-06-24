@@ -1,3 +1,4 @@
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import React from "react";
 
 const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange, className }) => {
@@ -57,14 +58,14 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange, class
                     disabled={currentPage === 1}
                     className="border border-slate-300 rounded-lg py-1 px-4 disabled:text-slate-300 disabled:border-slate-300"
                 >
-                    Prev
+                    <ChevronLeftIcon size={16} />
                 </button>
                 <button
                     onClick={() => goToPage(currentPage + 1)}
                     disabled={currentPage === totalPages}
                     className="border border-slate-300 rounded-lg py-1 px-4 disabled:text-slate-300 disabled:border-slate-300"
                 >
-                    Next
+                    <ChevronRightIcon size={16} />
                 </button>
             </div>
             <div className={`sm:flex justify-between hidden text-xs items-center mt-3 ${className}`}>
@@ -80,7 +81,7 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange, class
                         disabled={currentPage === 1}
                         className="border border-slate-300 rounded-lg py-1 px-4 disabled:text-slate-300 disabled:border-slate-300"
                     >
-                        Prev
+                        <ChevronLeftIcon size={16} />
                     </button>
 
                     {/* Render page numbers with ellipsis */}
@@ -102,7 +103,7 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange, class
                         disabled={currentPage === totalPages}
                         className="border border-slate-300 rounded-lg py-1 px-4 disabled:text-slate-300 disabled:border-slate-300"
                     >
-                        Next
+                        <ChevronRightIcon size={16} />
                     </button>
                 </div>
             </div>

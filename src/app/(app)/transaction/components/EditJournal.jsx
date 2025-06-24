@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import axios from "@/libs/axios";
 import Label from "@/components/Label";
-import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
 
 const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJournalsByWarehouse }) => {
@@ -39,6 +38,7 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
             isModalOpen(false);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
+            notification("error", error.response?.data?.message || "Something went wrong.");
         } finally {
             setLoading(false);
         }

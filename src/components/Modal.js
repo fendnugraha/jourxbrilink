@@ -4,10 +4,10 @@ export default function Modal({ children, isOpen, modalTitle, onClose, maxWidth,
     return (
         <Dialog open={isOpen} onClose={onClose} className="relative z-[999]">
             {/* Overlay */}
-            <DialogBackdrop transition className="fixed inset-0 bg-black/30 duration-300 ease-out data-closed:opacity-0" />
+            <DialogBackdrop transition className="fixed inset-0 bg-black/50 duration-300 ease-out data-closed:opacity-0" />
 
             {/* Modal Content */}
-            <div className="fixed inset-0 flex items-center justify-center p-4">
+            <div className="fixed inset-0 flex items-center justify-center">
                 <DialogPanel
                     transition
                     className={`${bgColor} ${textColor} w-full ${
@@ -15,7 +15,7 @@ export default function Modal({ children, isOpen, modalTitle, onClose, maxWidth,
                     } rounded-3xl shadow-lg duration-300 ease-out data-closed:scale-95 data-closed:opacity-0`}
                 >
                     {/* Modal Header */}
-                    <div className="flex justify-between items-center p-4">
+                    <div className="flex justify-between items-center p-4 sm:p-6">
                         <DialogTitle className="text-xl font-bold">{modalTitle}</DialogTitle>
                         <button onClick={onClose} aria-label="Close Modal">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
@@ -25,7 +25,7 @@ export default function Modal({ children, isOpen, modalTitle, onClose, maxWidth,
                     </div>
 
                     {/* Modal Body */}
-                    <div className="p-4">{children}</div>
+                    <div className="p-4 sm:p-6">{children}</div>
                 </DialogPanel>
             </div>
         </Dialog>

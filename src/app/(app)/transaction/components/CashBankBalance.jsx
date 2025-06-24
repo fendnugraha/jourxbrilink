@@ -44,9 +44,9 @@ const CashBankBalance = ({ accountBalance, isValidating }) => {
             <button onClick={() => setIsModalSettingInitBalancesOpen(true)} className="absolute top-2 right-4">
                 <SettingsIcon className="w-4 h-4 inline text-white" />
             </button>
-            <Modal isOpen={isModalSettingInitBalancesOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Set Saldo Awal Kas & Bank">
+            <Modal isOpen={isModalSettingInitBalancesOpen} onClose={closeModal} maxWidth={"max-w-lg"} modalTitle="Set Saldo Awal Kas & Bank">
                 {accountBalance?.data?.map((account) => (
-                    <div className="group border-b last:border-none p-2" key={account.account_id}>
+                    <div className="group p-2" key={account.account_id}>
                         <div className="grid grid-cols-2 gap-2">
                             <h1 className="text-xs">{account.account_name}</h1>
                             <input
@@ -71,7 +71,7 @@ const CashBankBalance = ({ accountBalance, isValidating }) => {
             </div>
 
             <div
-                className={`bg-gray-500/75 backdrop-blur-sm px-2 transform ${
+                className={`bg-gray-600/75 backdrop-blur-xs px-2 transform ${
                     showBalances ? "opacity-100 scale-y-100 max-h-[700px]" : "opacity-0 scale-y-0 max-h-0 "
                 } origin-top transition-all duration-300 ease-in-out`}
             >

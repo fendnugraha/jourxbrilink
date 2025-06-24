@@ -5,14 +5,14 @@ import Label from "@/components/Label";
 
 const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, user }) => {
     const [expense, setExpense] = useState([]);
-    const [expenseAmount, setExpenseAmount] = useState(0);
+    const [expenseAmount, setExpenseAmount] = useState("");
     const [formData, setFormData] = useState({
         debt_code: "",
         cred_code: user.role.warehouse.chart_of_account_id,
         amount: 0,
         fee_amount: -expenseAmount,
         trx_type: "Pengeluaran",
-        description: "Biaya Operasional Toko",
+        description: "",
     });
     const [errors, setErrors] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -95,7 +95,7 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                     {errors.fee_amount && <span className="text-red-500 text-xs">{errors.fee_amount}</span>}
                 </div>
             </div>
-            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+            <div className="mb-4 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Keterangan</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <textarea
@@ -104,6 +104,7 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                         placeholder="(Optional)"
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        required
                     />
                     {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                 </div>

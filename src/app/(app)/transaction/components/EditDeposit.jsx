@@ -1,9 +1,9 @@
 import axios from "@/libs/axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Label from "@/components/Label";
 import formatNumber from "@/libs/formatNumber";
 
-const CreateDeposit = ({ isModalOpen, notification, fetchJournalsByWarehouse }) => {
+const EditDeposit = ({ isModalOpen, journal, branchAccount, notification, fetchJournalsByWarehouse }) => {
     const [formData, setFormData] = useState({
         price: "",
         cost: "",
@@ -12,19 +12,28 @@ const CreateDeposit = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
 
+    useEffect(() => {
+        setFormData({
+            price: journal.amount + journal.fee_amount || "",
+            cost: journal.amount || "",
+            description: journal.description || "",
+        });
+    }, [journal]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await axios.post("/api/create-deposit", formData);
+            const response = await axios.put(`/api/journals/${journal.id}`, {
+                debt_code: journal.debt_code,
+                cred_code: journal.cred_code,
+                amount: formData.cost,
+                fee_amount: formData.price - formData.cost,
+                description: formData.description,
+            });
             notification("success", response.data.message);
             fetchJournalsByWarehouse();
-            setFormData({
-                price: "",
-                cost: "",
-                description: "",
-            });
-            setErrors([]);
+            isModalOpen(false);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
             notification("error", error.response?.data?.message || "Something went wrong.");
@@ -61,11 +70,13 @@ const CreateDeposit = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
                     />
                     {errors.cost && <span className="text-red-500 text-xs">{errors.cost}</span>}
 
-                    <div className="mt-1">
-                        <span className="text-sm font-bold">
-                            {formatNumber(formData.price)} - {formatNumber(formData.cost)} = {formatNumber(formData.price - formData.cost)}
-                        </span>
-                    </div>
+                    {formData.price && formData.cost && (
+                        <div className="mt-1">
+                            <span className="text-sm font-bold">
+                                {formatNumber(formData.price)} - {formatNumber(formData.cost)} = {formatNumber(formData.price - formData.cost)}
+                            </span>
+                        </div>
+                    )}
                 </div>
             </div>
             <div className="mb-4 sm:mb-4 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
@@ -91,14 +102,14 @@ const CreateDeposit = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
                 </button>
                 <button
                     type="submit"
-                    className="bg-indigo-500 hover:bg-indigo-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
+                    className="bg-green-500 hover:bg-green-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
                     disabled={loading}
                 >
-                    {loading ? "Loading..." : "Simpan"}
+                    {loading ? "Updating..." : "Update"}
                 </button>
             </div>
         </form>
     );
 };
 
-export default CreateDeposit;
+export default EditDeposit;

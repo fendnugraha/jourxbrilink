@@ -65,9 +65,8 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
     };
     return (
         <form onSubmit={handleSubmit}>
-            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
-                <Label>Product</Label>
-                <div className="col-span-1 sm:col-span-2">
+            <div className="mb-2">
+                <div className="">
                     <select
                         onChange={(e) => setFormData({ ...formData, product_id: e.target.value, qty: 1 })}
                         value={formData.product_id}
@@ -89,7 +88,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                 <Label>Qty</Label>
                 <div className="flex items-center justify-between gap-2 bg-slate-500 p-1 rounded-2xl w-3/4">
                     <button
-                        className="bg-white rounded-full hover:bg-red-300 text-slate-600 active:scale-95 disabled:bg-slate-400 disabled:cursor-not-allowed"
+                        className="bg-white rounded-full hover:bg-red-300 text-slate-600 active:scale-90 disabled:bg-slate-400 disabled:cursor-not-allowed"
                         onClick={decrementQty}
                         disabled={formData.qty <= 1}
                     >
@@ -97,7 +96,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                     </button>
                     <span className="text-md text-center text-white min-w-5">{formData.qty}</span>
                     <button
-                        className="bg-white rounded-full hover:bg-green-300 text-slate-600 active:scale-95 disabled:bg-slate-400 disabled:cursor-not-allowed"
+                        className="bg-white rounded-full hover:bg-green-300 text-slate-600 active:scale-90 disabled:bg-slate-400 disabled:cursor-not-allowed"
                         onClick={incrementQty}
                         disabled={formData.product_id === ""}
                     >

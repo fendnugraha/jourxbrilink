@@ -17,7 +17,10 @@ import CashBankBalance from "./components/CashBankBalance";
 import Loading from "../loading";
 import {
     ArrowDownCircleIcon,
+    ArrowDownIcon,
+    ArrowUp,
     ArrowUpCircleIcon,
+    ArrowUpIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
     CircleAlertIcon,
@@ -220,13 +223,14 @@ const TransactionPage = () => {
                 <div className="py-4 sm:py-8 px-4 sm:px-12">
                     <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                         <div className="bg-white p-4 rounded-3xl col-span-1 sm:col-span-3 order-2 sm:order-1 hover:drop-shadow-sm">
-                            <h1 className="text-2xl font-light mb-4">Transaction List</h1>
+                            <h1 className="text-2xl font-bold mb-4">Transaction List</h1>
                             <div className="flex gap-2 mb-4">
-                                <Button className="mb-4" onClick={() => setIsModalCreateTransferOpen(true)}>
-                                    Transfer Uang
+                                <Button buttonType="secondary" className="mb-4 group" onClick={() => setIsModalCreateTransferOpen(true)}>
+                                    Transfer Uang{" "}
+                                    <ArrowDownIcon size={18} className="inline group-hover:scale-125 delay-300 transition-transform duration-200" />
                                 </Button>
-                                <Button className="mb-4" onClick={() => setIsModalCreateCashWithdrawalOpen(true)}>
-                                    Tarik Tunai
+                                <Button buttonType="secondary" className="mb-4 group" onClick={() => setIsModalCreateCashWithdrawalOpen(true)}>
+                                    Tarik Tunai <ArrowUpIcon size={18} className="inline group-hover:scale-125 delay-300 transition-transform duration-200" />
                                 </Button>
                                 <Dropdown
                                     trigger={

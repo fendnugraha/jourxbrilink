@@ -50,7 +50,7 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
     }, 0);
     return (
         <>
-            <div className="pt-4 flex justify-end gap-2 w-full sm:w-1/2">
+            <div className="pt-4 flex justify-start gap-1 w-full sm:w-1/2">
                 {userRole === "Administrator" && (
                     <select
                         value={selectedWarehouse}

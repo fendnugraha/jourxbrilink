@@ -139,7 +139,7 @@ const StorePage = () => {
                                     <PlusCircleIcon className="w-4 h-4 inline" /> Penjualan
                                 </Link>
                                 {userRole === "Administrator" && (
-                                    <Link href="/store/purchase" className="btn-primary text-sm font-normal">
+                                    <Link href="#" className="btn-primary text-sm font-normal">
                                         <PlusCircleIcon className="w-4 h-4 inline" /> Pembelian
                                     </Link>
                                 )}

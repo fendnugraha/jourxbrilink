@@ -3,11 +3,11 @@ export function formatNumberToK(num) {
     let formatted;
 
     if (absNum >= 1_000_000_000) {
-        formatted = (absNum / 1_000_000_000).toFixed(1).replace(/\.0$/, "") + "B";
+        formatted = (absNum / 1_000_000_000).toFixed(2).replace(/\.0$/, "") + "B";
     } else if (absNum >= 1_000_000) {
-        formatted = (absNum / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
+        formatted = (absNum / 1_000_000).toFixed(2).replace(/\.0$/, "") + "M";
     } else if (absNum >= 1_000) {
-        formatted = (absNum / 1_000).toFixed(1).replace(/\.0$/, "") + "K";
+        formatted = (absNum / 1_000).toFixed(2).replace(/\.0$/, "") + "K";
     } else {
         formatted = absNum.toString(); // Di bawah 1000, tampilkan angka apa adanya
     }

@@ -1,16 +1,23 @@
-import React from "react";
+"use client";
+
+import React, { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
-import { ChevronRightIcon } from "lucide-react";
 
-const Dropdown = ({ align = "right", width = 48, contentClasses = "py-1 bg-white", trigger, children }) => {
-    let alignmentClasses;
-
+export default function Dropdown({ align = "right", width = 48, contentClasses = "py-1 bg-white", trigger, children }) {
+    // Handle width (Tailwind)
+    let widthClass = "";
     switch (width) {
+        case 48:
         case "48":
-            width = "w-48";
+            widthClass = "w-48";
+            break;
+        default:
+            widthClass = "";
             break;
     }
 
+    // Handle alignment
+    let alignmentClasses = "";
     switch (align) {
         case "left":
             alignmentClasses = "origin-top-left left-0";
@@ -25,13 +32,14 @@ const Dropdown = ({ align = "right", width = 48, contentClasses = "py-1 bg-white
     }
 
     return (
-        <Menu as="div" className="relative">
+        <Menu as="div" className="relative inline-block text-left">
             {({ open }) => (
                 <>
-                    <Menu.Button as={React.Fragment}>{trigger}</Menu.Button>
+                    <Menu.Button as={Fragment}>{trigger}</Menu.Button>
 
                     <Transition
                         show={open}
+                        as={Fragment}
                         enter="transition ease-out duration-200"
                         enterFrom="transform opacity-0 scale-95"
                         enterTo="transform opacity-100 scale-100"
@@ -39,16 +47,15 @@ const Dropdown = ({ align = "right", width = 48, contentClasses = "py-1 bg-white
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                     >
-                        <div className={`absolute z-[999] mt-2 ${width} rounded-md shadow-lg ${alignmentClasses}`}>
-                            <Menu.Items className={`rounded-md border border-gray-300 ${contentClasses}`} static>
-                                {children}
-                            </Menu.Items>
-                        </div>
+                        <Menu.Items
+                            static
+                            className={`absolute z-[999] mt-2 ${widthClass} rounded-md shadow-lg ${alignmentClasses} ${contentClasses} border border-gray-300`}
+                        >
+                            {children}
+                        </Menu.Items>
                     </Transition>
                 </>
             )}
         </Menu>
     );
-};
-
-export default Dropdown;
+}

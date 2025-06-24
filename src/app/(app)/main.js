@@ -53,30 +53,13 @@ const MainPage = ({ children, headerTitle }) => {
                     {headerTitle}
                     <span className="text-xs font-normal p-0 block">{getCurrentDate()}</span>
                 </h1>
-                {WarehouseRank > 0 && (
-                    <div className="text-lg sm:text-md drop-shadow-xs bg-white rounded-full px-4 sm:px-6 py-2 flex flex-col justify-end items-end">
-                        {WarehouseRank === 1 ? (
-                            <div className="flex items-center gap-2">
-                                <TrophyIcon size={30} strokeWidth={2} className="text-yellow-400 inline" />{" "}
-                                <h1 className="hidden uppercase text-sm font-bold sm:inline">
-                                    {userWarehouseName}
-                                    <span className="hidden text-end font-light text-xs text-slate-500 sm:block ">
-                                        {" "}
-                                        <GemIcon className="w-3 h-3 inline" /> {formatNumber(WarehouseRankProfit)}
-                                    </span>
-                                </h1>
-                            </div>
-                        ) : (
-                            <>
+                <div className="flex items-center justify-end gap-4">
+                    {WarehouseRank > 0 && (
+                        <div className="text-lg sm:text-md drop-shadow-xs bg-white rounded-full px-4 sm:px-6 py-2 flex flex-col justify-end items-end">
+                            {WarehouseRank === 1 ? (
                                 <div className="flex items-center gap-2">
-                                    <h1 className="font-bold text-3xl text-lime-500">
-                                        #{WarehouseRank}
-                                        <span className="text-sm hidden sm:inline text-slate-400">
-                                            {""}
-                                            <sup>{toOrdinal(WarehouseRank)}</sup>/{profit?.data?.length}
-                                        </span>
-                                    </h1>{" "}
-                                    <h1 className="hidden text-sm uppercase sm:inline">
+                                    <TrophyIcon size={30} strokeWidth={2} className="text-yellow-400 inline" />{" "}
+                                    <h1 className="hidden uppercase text-sm font-bold sm:inline">
                                         {userWarehouseName}
                                         <span className="hidden text-end font-light text-xs text-slate-500 sm:block ">
                                             {" "}
@@ -84,13 +67,32 @@ const MainPage = ({ children, headerTitle }) => {
                                         </span>
                                     </h1>
                                 </div>
-                            </>
-                        )}
-                    </div>
-                )}
-                <button className="sm:hidden">
-                    {!isOpen ? <MenuIcon size={24} onClick={() => setIsOpen(!isOpen)} /> : <XIcon size={24} onClick={() => setIsOpen(!isOpen)} />}
-                </button>
+                            ) : (
+                                <>
+                                    <div className="flex items-center gap-2">
+                                        <h1 className="font-bold text-3xl text-lime-500">
+                                            #{WarehouseRank}
+                                            <span className="text-sm hidden sm:inline text-slate-400">
+                                                {""}
+                                                <sup>{toOrdinal(WarehouseRank)}</sup>/{profit?.data?.length}
+                                            </span>
+                                        </h1>{" "}
+                                        <h1 className="hidden text-sm uppercase sm:inline">
+                                            {userWarehouseName}
+                                            <span className="hidden text-end font-light text-xs text-slate-500 sm:block ">
+                                                {" "}
+                                                <GemIcon className="w-3 h-3 inline" /> {formatNumber(WarehouseRankProfit)}
+                                            </span>
+                                        </h1>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    )}
+                    <button className="sm:hidden">
+                        {!isOpen ? <MenuIcon size={30} onClick={() => setIsOpen(!isOpen)} /> : <XIcon size={30} onClick={() => setIsOpen(!isOpen)} />}
+                    </button>
+                </div>
             </header>
             <div
                 ref={drawerReff}

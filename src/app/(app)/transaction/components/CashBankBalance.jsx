@@ -92,7 +92,7 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
     return (
         <div className="relative hover:drop-shadow-sm">
             {isValidating && (
-                <div className="absolute w-full h-full bg-slate-700/30 backdrop-blur-sm flex justify-center items-center z-10 rounded-3xl">
+                <div className="absolute w-full h-full bg-slate-500/30 backdrop-blur-sm flex justify-center items-center z-10 rounded-3xl">
                     <LoaderCircle size={60} className=" inline text-white animate-spin" />
                 </div>
             )}
@@ -151,9 +151,9 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                 </div>
                 <div hidden={!showCashBankBalance}>
                     {accountBalance?.data?.map((account) => (
-                        <div className="group border-b border-white border-dashed last:border-none p-2" key={account.account_id}>
+                        <div className="group border-b border-white border-dashed last:border-none p-2" key={account.id}>
                             <div className="text-white">
-                                <h1 className="text-xs">{account.account_name}</h1>
+                                <h1 className="text-xs">{account.acc_name}</h1>
 
                                 <div className="flex justify-between items-end">
                                     <h1 className="text-sm sm:text-lg group-hover:scale-105 text-yellow-200 font-bold transition delay-100 duration-150 ease-out">
@@ -161,11 +161,11 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                                     </h1>
                                     <span
                                         className={`text-xs ${
-                                            account.balance - initBalances[account.account_id] > 0 ? "text-green-200" : "text-red-200"
+                                            account.balance - initBalances[account.id] > 0 ? "text-green-200" : "text-red-200"
                                         } group-hover:scale-105 transition delay-100 duration-150 ease-out`}
-                                        hidden={!initBalances[account.account_id]}
+                                        hidden={!initBalances[account.id]}
                                     >
-                                        {formatNumber(account.balance - initBalances[account.account_id])}
+                                        {formatNumber(account.balance - initBalances[account.id])}
                                     </span>
                                 </div>
                             </div>

@@ -103,7 +103,7 @@ const JournalTable = ({
     const totalItems = filteredJournals?.length || 0;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentItems = filteredJournals.slice(startIndex, startIndex + itemsPerPage);
+    const currentItems = filteredJournals?.slice(startIndex, startIndex + itemsPerPage);
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -179,7 +179,7 @@ const JournalTable = ({
                                 value={selectedWarehouse}
                                 className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             >
-                                <option value="">Semua Akun</option>
+                                <option value="Semua">Semua Akun</option>
                                 {warehouses?.data?.map((w) => (
                                     <option key={w.id} value={w.id}>
                                         {w.name}
@@ -272,8 +272,8 @@ const JournalTable = ({
                                                 ) : (
                                                     journal.debt.acc_name
                                                 )}
+                                                . <span className="font-normal text-slate-500 group-hover:text-slate-100">Note: {journal.description}</span>
                                             </span>
-                                            Note: {journal.description}
                                             <span className="text-xs block text-slate-500 group-hover:text-white">
                                                 Last update at <TimeAgo timestamp={journal.updated_at} />
                                             </span>

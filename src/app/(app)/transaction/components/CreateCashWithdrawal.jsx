@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "@/libs/axios";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
@@ -23,7 +23,14 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
         setLoading(true);
         try {
             const response = await axios.post("/api/create-transfer", formData);
-            notification("success", response.data.message);
+            const successMessage =
+                response.data.journal.debt.acc_name +
+                " sebesar " +
+                formatNumber(response.data.journal.amount) +
+                " (Adm: " +
+                formatNumber(response.data.journal.fee_amount) +
+                ")";
+            notification("success", "Penarikan tunai dari " + successMessage);
             setFormData({
                 debt_code: formData.debt_code,
                 cred_code: user.role.warehouse.chart_of_account_id,
@@ -74,7 +81,6 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                             placeholder="Rp."
                             value={formData.amount}
                             onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                            autoFocus={true}
                             required
                         />
                         {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}

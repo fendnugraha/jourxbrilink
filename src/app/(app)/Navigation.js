@@ -23,6 +23,7 @@ const Navigation = ({ user }) => {
                     {/* Logo Text */}
                     <h1 className={`text-xl font-bold transition-all duration-300 origin-left ${isMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}>
                         AgenBRI<span className="text-orange-400">Link</span>
+                        <span className="text-slate-500 block text-xs font-normal text-start">THREE KOMUNIKA</span>
                     </h1>
                 </button>
                 {/* Middle Menu */}
@@ -32,7 +33,7 @@ const Navigation = ({ user }) => {
                             <li>
                                 <NavLink href="/dashboard" active={pathName.startsWith("/dashboard")}>
                                     <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-slate-500">
-                                        <LayoutDashboardIcon size={24} className="" />
+                                        <LayoutDashboardIcon size={20} className="" />
                                     </span>
                                     <span
                                         className={`text-sm transition-all duration-300 origin-left ${
@@ -46,7 +47,7 @@ const Navigation = ({ user }) => {
                             <li>
                                 <NavLink href="/transaction" active={pathName.startsWith("/transaction")}>
                                     <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-slate-500">
-                                        <ArrowLeftRightIcon size={24} className="" />
+                                        <ArrowLeftRightIcon size={20} className="" />
                                     </span>
                                     <span
                                         className={`text-sm transition-all duration-300 origin-left ${
@@ -60,7 +61,7 @@ const Navigation = ({ user }) => {
                             <li>
                                 <NavLink href="/store" active={pathName.startsWith("/store")}>
                                     <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-slate-500">
-                                        <StoreIcon size={24} className="" />
+                                        <StoreIcon size={20} className="" />
                                     </span>
                                     <span
                                         className={`text-sm transition-all duration-300 origin-left ${
@@ -76,7 +77,7 @@ const Navigation = ({ user }) => {
                                     <li>
                                         <NavLink href="/finance" active={pathName.startsWith("/finance")}>
                                             <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-slate-500">
-                                                <DollarSignIcon size={24} className="" />
+                                                <DollarSignIcon size={20} className="" />
                                             </span>
                                             <span
                                                 className={`text-sm transition-all duration-300 origin-left ${
@@ -90,7 +91,7 @@ const Navigation = ({ user }) => {
                                     <li>
                                         <NavLink href="/summary" active={pathName.startsWith("/summary")}>
                                             <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-slate-500">
-                                                <ChartAreaIcon size={24} className="" />
+                                                <ChartAreaIcon size={20} className="" />
                                             </span>
                                             <span
                                                 className={`text-sm transition-all duration-300 origin-left ${
@@ -109,7 +110,7 @@ const Navigation = ({ user }) => {
                                 <li>
                                     <NavLink href="/setting" active={pathName.startsWith("/setting")}>
                                         <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-slate-500">
-                                            <CogIcon size={24} className="" />
+                                            <CogIcon size={20} className="" />
                                         </span>
                                         <span
                                             className={`text-sm transition-all duration-300 origin-left ${
@@ -128,7 +129,7 @@ const Navigation = ({ user }) => {
                 {/* Footer */}
                 {/* <NavLink href="/user/profile" active={pathName.startsWith("/user/profile")}>
                         <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-slate-500">
-                            <UserIcon size={24} className="" />
+                            <UserIcon size={20} className="" />
                         </span>
                         <span
                             className={`text-sm text-nowrap transition-all duration-300 origin-left ${
@@ -138,14 +139,18 @@ const Navigation = ({ user }) => {
                             My Profile
                         </span>
                     </NavLink> */}
-                <button onClick={logout} className="flex items-center cursor-pointer hover:drop-shadow-sm bg-red-500 rounded-3xl">
+                <button onClick={logout} className="flex items-center cursor-pointer">
                     {/* Tombol Toggle */}
-                    <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-white">
-                        <PowerIcon size={24} />
+                    <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-red-500 hover:text-red-400">
+                        <PowerIcon size={24} strokeWidth={3} />
                     </span>
 
                     {/* Logo Text */}
-                    <h1 className={`text-sm transition-all duration-300 text-white origin-left ${isMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}>
+                    <h1
+                        className={`text-sm transition-all duration-300 text-red-500 hover:text-red-400 origin-left ${
+                            isMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                        }`}
+                    >
                         Logout
                     </h1>
                 </button>

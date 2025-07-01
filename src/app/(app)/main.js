@@ -1,19 +1,32 @@
 "use client";
-import { CirclePowerIcon, GemIcon, LayoutDashboardIcon, MenuIcon, TrophyIcon, XIcon } from "lucide-react";
+import {
+    ArrowLeftRightIcon,
+    ChartAreaIcon,
+    CirclePowerIcon,
+    DollarSignIcon,
+    GemIcon,
+    LayoutDashboardIcon,
+    LoaderIcon,
+    MenuIcon,
+    StoreIcon,
+    XIcon,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import ResponsiveNavLink, { ResponsiveNavButton } from "@/components/ResponsiveNavLink";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/libs/auth";
 import useGetProfit from "@/components/RankByProfit";
 import formatNumber from "@/libs/formatNumber";
+import { mutate } from "swr";
 
 const MainPage = ({ children, headerTitle }) => {
     const { user } = useAuth({ middleware: "auth" });
     const [isOpen, setIsOpen] = useState(false);
-    const { profit, loading, error } = useGetProfit();
+    const { profit, loading: profitLoading, error } = useGetProfit();
 
-    const pathname = usePathname();
+    const pathName = usePathname();
     const drawerReff = useRef();
+    const userRole = user?.role?.role;
 
     const userWarehouseId = user?.role?.warehouse_id;
     const userWarehouseName = user?.role?.warehouse?.name;
@@ -49,44 +62,33 @@ const MainPage = ({ children, headerTitle }) => {
     return (
         <>
             <header className="w-full h-20 flex items-center justify-between px-4 sm:px-12 py-2">
-                <h1 className="text-md sm:text-2xl font-bold text-slate-500">
+                <h1 className="text-xl sm:text-2xl font-bold text-slate-700">
                     {headerTitle}
                     <span className="text-xs font-normal p-0 block">{getCurrentDate()}</span>
                 </h1>
-                <div className="flex items-center justify-end gap-4">
+                <div className="flex items-center justify-end sm:gap-4">
                     {WarehouseRank > 0 && (
-                        <div className="text-lg sm:text-md drop-shadow-xs bg-white rounded-full px-4 sm:px-6 py-2 flex flex-col justify-end items-end">
-                            {WarehouseRank === 1 ? (
-                                <div className="flex items-center gap-2">
-                                    <TrophyIcon size={30} strokeWidth={2} className="text-yellow-400 inline" />{" "}
-                                    <h1 className="hidden uppercase text-sm font-bold sm:inline">
-                                        {userWarehouseName}
-                                        <span className="hidden text-end font-light text-xs text-slate-500 sm:block ">
-                                            {" "}
-                                            <GemIcon className="w-3 h-3 inline" /> {formatNumber(WarehouseRankProfit)}
-                                        </span>
-                                    </h1>
-                                </div>
-                            ) : (
-                                <>
-                                    <div className="flex items-center gap-2">
-                                        <h1 className="font-bold text-3xl text-lime-500">
-                                            #{WarehouseRank}
-                                            <span className="text-sm hidden sm:inline text-slate-400">
-                                                {""}
-                                                <sup>{toOrdinal(WarehouseRank)}</sup>/{profit?.data?.length}
-                                            </span>
-                                        </h1>{" "}
-                                        <h1 className="hidden text-sm uppercase sm:inline">
-                                            {userWarehouseName}
-                                            <span className="hidden text-end font-light text-xs text-slate-500 sm:block ">
-                                                {" "}
-                                                <GemIcon className="w-3 h-3 inline" /> {formatNumber(WarehouseRankProfit)}
-                                            </span>
-                                        </h1>
-                                    </div>
-                                </>
-                            )}
+                        <div className="text-lg sm:text-md drop-shadow-xs sm:bg-white rounded-full px-4 sm:ps-1 sm:pe-6 py-1 flex flex-col justify-end items-end">
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => mutate("/api/get-rank-by-profit")}
+                                    className="font-bold cursor-pointer text-2xl text-lime-700 p-2 rounded-full bg-lime-200"
+                                >
+                                    #{WarehouseRank}
+                                    <span className="text-xs scale-50 hidden sm:inline text-slate-400">
+                                        {""}
+                                        <sup>{toOrdinal(WarehouseRank)}</sup>
+                                    </span>
+                                </button>{" "}
+                                <h1 className="hidden text-sm uppercase sm:inline">
+                                    {userWarehouseName}
+                                    <span className="hidden text-end font-light text-xs text-slate-500 sm:block ">
+                                        {" "}
+                                        {profitLoading ? <LoaderIcon className="w-3 h-3 animate-spin inline" /> : <GemIcon className="w-3 h-3 inline" />}{" "}
+                                        {formatNumber(WarehouseRankProfit)}
+                                    </span>
+                                </h1>
+                            </div>
                         </div>
                     )}
                     <button className="sm:hidden">
@@ -107,20 +109,34 @@ const MainPage = ({ children, headerTitle }) => {
                             <span className="text-sm">{user?.role?.role}</span>
                         </li>
                         <li className="">
-                            <ResponsiveNavLink href="/dashboard" active={pathname === "/dashboard"}>
+                            <ResponsiveNavLink href="/dashboard" active={pathName === "/dashboard"}>
                                 <LayoutDashboardIcon size={20} className="mr-2 inline" /> Dashboard
                             </ResponsiveNavLink>
                         </li>
                         <li className="">
-                            <ResponsiveNavLink href="/dashboard" active={pathname === "/dashboard"}>
-                                <LayoutDashboardIcon size={20} className="mr-2 inline" /> Transaction
+                            <ResponsiveNavLink href="/transaction" active={pathName.startsWith("/transaction")}>
+                                <ArrowLeftRightIcon size={20} className="mr-2 inline" /> Transaction
                             </ResponsiveNavLink>
                         </li>
                         <li className="">
-                            <ResponsiveNavLink href="/dashboard" active={pathname === "/dashboard"}>
-                                <LayoutDashboardIcon size={20} className="mr-2 inline" /> Store
+                            <ResponsiveNavLink href="/store" active={pathName.startsWith("/store")}>
+                                <StoreIcon size={20} className="mr-2 inline" /> Store
                             </ResponsiveNavLink>
                         </li>
+                        {userRole === "Administrator" && (
+                            <>
+                                <li className="">
+                                    <ResponsiveNavLink href="/finance" active={pathName.startsWith("/finance")}>
+                                        <DollarSignIcon size={20} className="mr-2 inline" /> Finance
+                                    </ResponsiveNavLink>
+                                </li>
+                                <li className="">
+                                    <ResponsiveNavLink href="/summary" active={pathName.startsWith("/summary")}>
+                                        <ChartAreaIcon size={20} className="mr-2 inline" /> Summary
+                                    </ResponsiveNavLink>
+                                </li>
+                            </>
+                        )}
                         <li className="border-t border-slate-300 pt-2">
                             <ResponsiveNavButton>
                                 <CirclePowerIcon size={20} className="mr-2 inline" /> Logout

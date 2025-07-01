@@ -26,7 +26,9 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
         setLoading(true);
         try {
             const response = await axios.post("/api/create-mutation", formData);
-            notification("success", "Pengembalian saldo berhasil");
+            const successMessage =
+                response.data.journal.cred.acc_name + " ke " + response.data.journal.debt.acc_name + " sebesar " + formatNumber(response.data.journal.amount);
+            notification("success", response.data.message + " " + successMessage);
             setFormData({
                 debt_code: "",
                 cred_code: "",

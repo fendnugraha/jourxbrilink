@@ -23,7 +23,14 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
         setLoading(true);
         try {
             const response = await axios.post("/api/create-transfer", formData);
-            notification("success", response.data.message);
+            const successMessage =
+                response.data.journal.cred.acc_name +
+                " sebesar " +
+                formatNumber(response.data.journal.amount) +
+                " (Adm: " +
+                formatNumber(response.data.journal.fee_amount) +
+                ")";
+            notification("success", "Transfer uang ke " + successMessage);
             setFormData({
                 debt_code: user.role.warehouse.chart_of_account_id,
                 cred_code: formData.cred_code,

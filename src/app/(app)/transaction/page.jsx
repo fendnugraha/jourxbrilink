@@ -1,7 +1,7 @@
 "use client";
 import Modal from "@/components/Modal";
 import CreateTransfer from "./components/CreateTransfer";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "@/libs/axios";
 import Notification from "@/components/Notification";
 import { useAuth } from "@/libs/auth";
@@ -42,6 +42,7 @@ const TransactionPage = () => {
         return <Loading />;
     }
     const warehouse = Number(user?.role?.warehouse_id);
+    const warehouseCashId = Number(user?.role?.warehouse?.chart_of_account_id);
 
     const [journalsByWarehouse, setJournalsByWarehouse] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -64,40 +65,24 @@ const TransactionPage = () => {
     const [isVoucherMenuOpen, setIsVoucherMenuOpen] = useState(false);
     const [isExpenseMenuOpen, setIsExpenseMenuOpen] = useState(false);
     const [isDailyReportOpen, setIsDailyReportOpen] = useState(false);
-    const initCashValue = localStorage.getItem("openingCash") || 0;
-    const [openingCash, setOpeningCash] = useState(initCashValue);
+
+    const [isTransferActive, setIsTransferActive] = useState(false);
+    const [isCashWithdrawalActive, setIsCashWithdrawalActive] = useState(false);
+
+    const [initBalances, setInitBalances] = useState(localStorage.getItem("initBalances") ? JSON.parse(localStorage.getItem("initBalances")) : {});
+
+    const [openingCash, setOpeningCash] = useState(initBalances[warehouseCashId]);
     const [isCopied, setIsCopied] = useState(false);
 
     const menuRef = useRef(null);
     const { dailyDashboard, loading: isLoading, error: dailyDashboardError } = useGetDailyDashboard(warehouse, getCurrentDate(), getCurrentDate());
     const warehouseName = user?.role?.warehouse?.name;
 
-    const drawerRef = useRef();
+    // set init balances to localStorage
     useEffect(() => {
-        function handleClickOutside(event) {
-            if (drawerRef.current && !drawerRef.current.contains(event.target)) {
-                setIsDailyReportOpen(false);
-            }
-        }
-
-        if (isDailyReportOpen) {
-            document.addEventListener("mousedown", handleClickOutside);
-        } else {
-            document.removeEventListener("mousedown", handleClickOutside);
-        }
-
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [isDailyReportOpen]);
-
-    const totalSetoran =
-        dailyDashboard?.data?.totalFee +
-        dailyDashboard?.data?.totalCash +
-        dailyDashboard?.data?.totalCashDeposit +
-        dailyDashboard?.data?.totalAccessories +
-        dailyDashboard?.data?.totalVoucher +
-        dailyDashboard?.data?.totalExpense;
+        localStorage.setItem("initBalances", JSON.stringify(initBalances));
+        setOpeningCash(initBalances[warehouseCashId]);
+    }, [initBalances]);
 
     // Event listener untuk klik di luar menu
     useEffect(() => {
@@ -127,7 +112,7 @@ const TransactionPage = () => {
     const { accountBalance, error: accountBalanceError, loading: isValidating } = useCashBankBalance(selectedWarehouseId, endDate);
 
     const { warehouses, warehousesError } = useGetWarehouses();
-    const fetchJournalsByWarehouse = async (selectedWarehouse = warehouse, startDate = getCurrentDate(), endDate = getCurrentDate()) => {
+    const fetchJournalsByWarehouse = useCallback(async (selectedWarehouse = warehouse, startDate = getCurrentDate(), endDate = getCurrentDate()) => {
         setJournalLoading(true);
         try {
             const response = await axios.get(`/api/get-journal-by-warehouse/${selectedWarehouse}/${startDate}/${endDate}`);
@@ -137,11 +122,11 @@ const TransactionPage = () => {
         } finally {
             setJournalLoading(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         fetchJournalsByWarehouse();
-    }, []); // Include startDate and endDate in the dependency array
+    }, [fetchJournalsByWarehouse]); // Include startDate and endDate in the dependency array
 
     useEffect(() => {
         mutate(`/api/get-cash-bank-balance/${selectedWarehouseId}/${endDate}`);
@@ -169,22 +154,6 @@ const TransactionPage = () => {
         setTimeout(() => setIsCopied(false), 3000);
     };
 
-    const copyDailyReport = () => {
-        const dailyReportData = [
-            { name: "Kas", value: formatNumber(dailyDashboard?.data?.totalCash - openingCash) },
-            { name: "Voucher", value: formatNumber(dailyDashboard?.data?.totalVoucher) },
-            { name: "Deposit", value: formatNumber(dailyDashboard?.data?.totalCashDeposit) },
-            { name: "Acc", value: formatNumber(dailyDashboard?.data?.totalAccessories) },
-            { name: "Laba", value: formatNumber(dailyDashboard?.data?.profit) },
-        ];
-
-        const lines = dailyReportData.map(({ name, value }) => `${name}: ${value}`);
-
-        return `Report ${warehouseName}:\n\n${lines.join("\n")}\n\nTotal Setoran: ${formatNumber(
-            dailyDashboard?.data?.totalCash > openingCash ? totalSetoran - openingCash : totalSetoran
-        )}`;
-    };
-
     const calculateFee = (amount) => {
         if (amount < 100000) {
             return 3000;
@@ -205,14 +174,30 @@ const TransactionPage = () => {
             <MainPage headerTitle="Transaction">
                 <div className="py-4 sm:py-8 px-4 sm:px-12 mb-28 sm:mb-0">
                     <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                        <div className="bg-white p-4 rounded-3xl col-span-1 sm:col-span-3 order-2 sm:order-1 hover:drop-shadow-sm">
+                        <div className="bg-white p-4 rounded-3xl col-span-1 sm:col-span-3 order-2 sm:order-1 drop-shadow-sm">
                             <h1 className="text-2xl font-bold mb-4">Transaction List</h1>
                             <div className="hidden sm:flex gap-2 mb-4">
-                                <Button buttonType="secondary" className="mb-4 group" onClick={() => setIsModalCreateTransferOpen(true)}>
+                                <Button
+                                    buttonType="secondary"
+                                    className="mb-4 group"
+                                    onClick={() => {
+                                        setIsModalCreateTransferOpen(true);
+                                        setIsTransferActive(true);
+                                        setIsCashWithdrawalActive(false);
+                                    }}
+                                >
                                     Transfer Uang{" "}
                                     <ArrowDownIcon size={18} className="inline group-hover:scale-125 delay-300 transition-transform duration-200" />
                                 </Button>
-                                <Button buttonType="secondary" className="mb-4 group" onClick={() => setIsModalCreateCashWithdrawalOpen(true)}>
+                                <Button
+                                    buttonType="secondary"
+                                    className="mb-4 group"
+                                    onClick={() => {
+                                        setIsModalCreateCashWithdrawalOpen(true);
+                                        setIsTransferActive(false);
+                                        setIsCashWithdrawalActive(true);
+                                    }}
+                                >
                                     Tarik Tunai <ArrowUpIcon size={18} className="inline group-hover:scale-125 delay-300 transition-transform duration-200" />
                                 </Button>
                                 <Dropdown
@@ -283,26 +268,108 @@ const TransactionPage = () => {
                         </div>
                     </div>
                     {/* Modals */}
-                    <Modal isOpen={isModalCreateTransferOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Transfer Uang">
-                        <CreateTransfer
-                            filteredCashBankByWarehouse={filteredCashBankByWarehouse}
-                            isModalOpen={setIsModalCreateTransferOpen}
-                            notification={(type, message) => setNotification({ type, message })}
-                            fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                            user={user}
-                            calculateFee={calculateFee}
-                        />
+                    <Modal
+                        isOpen={isModalCreateTransferOpen}
+                        onClose={closeModal}
+                        maxWidth={"max-w-xl"}
+                        modalTitle={isTransferActive ? "Transfer Uang" : "Penarikan Tunai"}
+                    >
+                        <div className="flex mb-4 justify-evenly w-full">
+                            <button
+                                onClick={() => {
+                                    setIsTransferActive(true);
+                                    setIsCashWithdrawalActive(false);
+                                }}
+                                className={`${
+                                    isTransferActive ? "bg-slate-600 text-white text-sm" : "bg-slate-500 text-slate-300 text-xs"
+                                } w-full py-1 cursor-pointer`}
+                            >
+                                Transfer Uang
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setIsTransferActive(false);
+                                    setIsCashWithdrawalActive(true);
+                                }}
+                                className={`${
+                                    isCashWithdrawalActive ? "bg-slate-600 text-white text-sm" : "bg-slate-500 text-slate-300 text-xs"
+                                } w-full py-1 cursor-pointer`}
+                            >
+                                Tarik Tunai
+                            </button>
+                        </div>
+                        {isTransferActive && (
+                            <CreateTransfer
+                                filteredCashBankByWarehouse={filteredCashBankByWarehouse}
+                                isModalOpen={setIsModalCreateTransferOpen}
+                                notification={(type, message) => setNotification({ type, message })}
+                                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                                user={user}
+                                calculateFee={calculateFee}
+                            />
+                        )}
+                        {isCashWithdrawalActive && (
+                            <CreateCashWithdrawal
+                                filteredCashBankByWarehouse={filteredCashBankByWarehouse}
+                                isModalOpen={setIsModalCreateCashWithdrawalOpen}
+                                notification={(type, message) => setNotification({ type, message })}
+                                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                                user={user}
+                                calculateFee={calculateFee}
+                            />
+                        )}
                     </Modal>
 
-                    <Modal isOpen={isModalCreateCashWithdrawalOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Tarik Tunai">
-                        <CreateCashWithdrawal
-                            filteredCashBankByWarehouse={filteredCashBankByWarehouse}
-                            isModalOpen={setIsModalCreateCashWithdrawalOpen}
-                            notification={(type, message) => setNotification({ type, message })}
-                            fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                            user={user}
-                            calculateFee={calculateFee}
-                        />
+                    <Modal
+                        isOpen={isModalCreateCashWithdrawalOpen}
+                        onClose={closeModal}
+                        maxWidth={"max-w-xl"}
+                        modalTitle={isTransferActive ? "Transfer Uang" : "Penarikan Tunai"}
+                    >
+                        <div className="flex mb-4 justify-evenly w-full">
+                            <button
+                                onClick={() => {
+                                    setIsTransferActive(true);
+                                    setIsCashWithdrawalActive(false);
+                                }}
+                                className={`${
+                                    isTransferActive ? "bg-slate-600 text-white text-sm" : "bg-slate-500 text-slate-300 text-xs"
+                                } w-full py-1 cursor-pointer`}
+                            >
+                                Transfer Uang
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setIsTransferActive(false);
+                                    setIsCashWithdrawalActive(true);
+                                }}
+                                className={`${
+                                    isCashWithdrawalActive ? "bg-slate-600 text-white text-sm" : "bg-slate-500 text-slate-300 text-xs"
+                                } w-full py-1 cursor-pointer`}
+                            >
+                                Tarik Tunai
+                            </button>
+                        </div>
+                        {isTransferActive && (
+                            <CreateTransfer
+                                filteredCashBankByWarehouse={filteredCashBankByWarehouse}
+                                isModalOpen={setIsModalCreateTransferOpen}
+                                notification={(type, message) => setNotification({ type, message })}
+                                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                                user={user}
+                                calculateFee={calculateFee}
+                            />
+                        )}
+                        {isCashWithdrawalActive && (
+                            <CreateCashWithdrawal
+                                filteredCashBankByWarehouse={filteredCashBankByWarehouse}
+                                isModalOpen={setIsModalCreateCashWithdrawalOpen}
+                                notification={(type, message) => setNotification({ type, message })}
+                                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                                user={user}
+                                calculateFee={calculateFee}
+                            />
+                        )}
                     </Modal>
                     <Modal isOpen={isModalCreateVoucherOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Penjualan Voucher & Kartu">
                         <CreateVoucher
@@ -385,14 +452,14 @@ const TransactionPage = () => {
                             </button>
                         </div>
                     </div>
-                    <div className="h-20 p-2">
-                        <div className="flex bg-gray-600 shadow-xl border border-slate-300 justify-between items-center rounded-2xl text-white">
+                    <div className="h-fit p-2">
+                        <div className="flex bg-gray-600 shadow-xl border border-slate-300 justify-between items-center rounded-2xl h-full text-white">
                             <button
                                 onClick={() => {
                                     setIsVoucherMenuOpen(!isVoucherMenuOpen);
                                     setIsExpenseMenuOpen(false);
                                 }}
-                                className="w-full flex flex-col items-center justify-center py-2 text-xs gap-1"
+                                className="w-full flex flex-col items-center justify-center py-4 text-xs gap-1"
                             >
                                 <ShoppingBagIcon className="w-7 h-7" /> Voucher
                             </button>
@@ -401,7 +468,7 @@ const TransactionPage = () => {
                                     setIsExpenseMenuOpen(!isExpenseMenuOpen);
                                     setIsVoucherMenuOpen(false);
                                 }}
-                                className="w-full flex flex-col items-center justify-center py-2 text-xs gap-1"
+                                className="w-full flex flex-col items-center justify-center py-4 text-xs gap-1"
                             >
                                 <HandCoinsIcon className="w-7 h-7" /> Biaya
                             </button>
@@ -410,8 +477,10 @@ const TransactionPage = () => {
                                     setIsModalCreateTransferOpen(true);
                                     setIsExpenseMenuOpen(false);
                                     setIsVoucherMenuOpen(false);
+                                    setIsTransferActive(true);
+                                    setIsCashWithdrawalActive(false);
                                 }}
-                                className="w-full flex flex-col items-center justify-center py-2 text-xs gap-1"
+                                className="w-full flex flex-col items-center justify-center py-4 text-xs gap-1"
                             >
                                 <ArrowUpIcon className="w-7 h-7" /> Transfer
                             </button>
@@ -420,8 +489,10 @@ const TransactionPage = () => {
                                     setIsModalCreateCashWithdrawalOpen(true);
                                     setIsExpenseMenuOpen(false);
                                     setIsVoucherMenuOpen(false);
+                                    setIsTransferActive(false);
+                                    setIsCashWithdrawalActive(true);
                                 }}
-                                className="w-full flex flex-col items-center justify-center py-2 text-xs gap-1"
+                                className="w-full flex flex-col items-center justify-center py-4 text-xs gap-1"
                             >
                                 <ArrowDownIcon className="w-7 h-7" /> Tarik Tunai
                             </button>
@@ -435,7 +506,7 @@ const TransactionPage = () => {
                                 setIsExpenseMenuOpen(!isExpenseMenuOpen);
                                 setIsVoucherMenuOpen(false);
                             }}
-                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-2 text-xs gap-1 focus:bg-amber-500"
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-xs gap-1 focus:bg-amber-500"
                         >
                             <HandCoinsIcon className="w-7 h-7" /> Biaya
                         </button>
@@ -445,7 +516,7 @@ const TransactionPage = () => {
                                 setIsVoucherMenuOpen(false);
                                 setIsExpenseMenuOpen(false);
                             }}
-                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-2 text-xs gap-1 focus:bg-amber-500"
+                            className="bg-indigo-600 hover:bg-indigo-500 w-full flex flex-col items-center justify-center py-4 text-xs gap-1 focus:bg-amber-500"
                         >
                             <LayoutDashboardIcon className="w-7 h-7" /> Report
                         </button>

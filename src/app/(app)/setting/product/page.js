@@ -131,7 +131,7 @@ const Product = () => {
                         <PlusIcon size={20} /> Add Category
                     </Button>
 
-                    <Modal isOpen={isModalCreateProductOpen} onClose={closeModal} modalTitle="Create account">
+                    <Modal isOpen={isModalCreateProductOpen} onClose={closeModal} maxWidth={"max-w-md"} modalTitle="Create account">
                         <CreateProduct
                             isModalOpen={setIsModalCreateProductOpen}
                             notification={(type, message) => setNotification({ type, message })}
@@ -139,7 +139,7 @@ const Product = () => {
                             productCategories={productCategories}
                         />
                     </Modal>
-                    <Modal isOpen={isModalCreateCategoryProductOpen} onClose={closeModal} modalTitle="Create account">
+                    <Modal isOpen={isModalCreateCategoryProductOpen} onClose={closeModal} maxWidth={"max-w-md"} modalTitle="Create account">
                         <CreateCategoryProduct
                             isModalOpen={setIsModalCreateCategoryProductOpen}
                             notification={(type, message) => setNotification({ type, message })}

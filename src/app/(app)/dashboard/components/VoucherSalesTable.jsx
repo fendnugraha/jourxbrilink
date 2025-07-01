@@ -112,7 +112,7 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
 
     return (
         <>
-            <div className="pt-4 flex justify-start gap-1 w-full sm:w-1/2">
+            <div className="pt-4 flex justify-start gap-1 sm:w-1/2">
                 {userRole === "Administrator" && (
                     <select
                         value={selectedWarehouse}
@@ -172,9 +172,9 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                     </button>
                 </Modal>
             </div>
-            <div className="my-4 flex gap-4 sm:flex-row flex-col">
-                <div className="bg-white overflow-hidden w-full shadow-sm sm:rounded-3xl">
-                    <div className="flex justify-between px-2 sm:px-6 pt-4">
+            <div className="my-4 gap-4 flex flex-col sm:flex-row">
+                <div className="bg-white overflow-hidden w-full shadow-sm rounded-3xl">
+                    <div className="flex justify-between px-4 sm:px-6 pt-4">
                         <h1 className="font-bold text-xl text-blue-600">
                             Total Penjualan Voucher & SP
                             <span className="text-xs block font-normal">
@@ -234,8 +234,8 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                     )}
                 </div>
                 {paginateNonVoucher?.currentItems?.length > 0 && (
-                    <div className="bg-white overflow-hidden w-full shadow-sm sm:rounded-2xl">
-                        <div className="flex justify-between px-2 sm:px-6 pt-4">
+                    <div className="bg-white overflow-hidden w-full shadow-sm rounded-3xl">
+                        <div className="flex justify-between px-4 sm:px-6 pt-4">
                             <h1 className="font-bold text-xl text-green-600">
                                 Total Penjualan Accesories
                                 <span className="text-xs block font-normal">

@@ -8,12 +8,12 @@ const LoginLinks = () => {
     return (
         <div className="">
             {user ? (
-                <Link href="/dashboard" className="bg-indigo-500 py-2 px-10 text-xl text-white">
+                <Link href="/dashboard" className="bg-slate-600/70 hover:bg-slate-600 backdrop-blur-sm py-2 px-10 text-xl text-white">
                     Dashboard
                 </Link>
             ) : (
                 <>
-                    <Link href="/login" className="bg-indigo-500 py-2 px-10 text-xl text-white">
+                    <Link href="/login" className="bg-slate-600/70 hover:bg-slate-600 backdrop-blur-sm py-2 px-10 text-xl text-white">
                         Login
                     </Link>
                 </>

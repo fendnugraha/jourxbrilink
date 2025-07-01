@@ -49,7 +49,7 @@ export default function Dropdown({ align = "right", width = 48, contentClasses =
                     >
                         <Menu.Items
                             static
-                            className={`absolute z-[999] mt-2 ${widthClass} rounded-md shadow-lg ${alignmentClasses} ${contentClasses} border border-gray-300`}
+                            className={`absolute z-[999] mt-2 rounded-md shadow-lg ${alignmentClasses} ${contentClasses} border border-gray-300`}
                         >
                             {children}
                         </Menu.Items>

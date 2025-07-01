@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
 import { DownloadIcon, FilterIcon, RefreshCcwIcon } from "lucide-react";
@@ -28,7 +28,7 @@ const WarehouseBalance = () => {
         setIsModalFilterDataOpen(false);
     };
 
-    const fetchWarehouseBalance = async () => {
+    const fetchWarehouseBalance = useCallback(async () => {
         setLoading(true);
         try {
             const response = await axios.get(`/api/get-warehouse-balance/${endDate}`);
@@ -38,11 +38,11 @@ const WarehouseBalance = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [endDate]);
 
     useEffect(() => {
         fetchWarehouseBalance();
-    }, []);
+    }, [fetchWarehouseBalance]);
     return (
         <div className="bg-white rounded-3xl mb-3 relative">
             <div className="p-4 flex justify-between">

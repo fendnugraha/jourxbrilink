@@ -28,7 +28,9 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
         setLoading(true);
         try {
             const response = await axios.post("/api/create-mutation", formData);
-            notification("success", response.data.message);
+            const successMessage =
+                response.data.journal.cred.acc_name + " ke " + response.data.journal.debt.acc_name + " sebesar " + formatNumber(response.data.journal.amount);
+            notification("success", response.data.message + " " + successMessage);
             fetchJournalsByWarehouse();
             isModalOpen(true);
             setFormData({
@@ -86,7 +88,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                             </option>
                         ))}
                     </select>
-                    {errors.cred_code && <span className="text-red-500 text-xs">{errors.cred_code}</span>}
+                    {errors?.cred_code && <span className="text-red-500 text-xs">{errors?.cred_code}</span>}
                 </div>
             </div>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
@@ -106,7 +108,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                             </option>
                         ))}
                     </select>
-                    {errors.debt_code && <span className="text-red-500 text-xs">{errors.debt_code}</span>}
+                    {errors?.debt_code && <span className="text-red-500 text-xs">{errors?.debt_code}</span>}
                 </div>
             </div>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
@@ -120,7 +122,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                         onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                         required
                     />
-                    {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
+                    {errors?.amount && <span className="text-red-500 text-xs">{errors?.amount}</span>}
                 </div>
 
                 {formData.amount > 0 && <h1 className="text-sm sm:text-lg font-bold">{formatNumber(formData.amount)}</h1>}
@@ -135,7 +137,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                         value={formData.admin_fee}
                         onChange={(e) => setFormData({ ...formData, admin_fee: e.target.value })}
                     />
-                    {errors.admin_fee && <span className="text-red-500 text-xs">{errors.admin_fee}</span>}
+                    {errors?.admin_fee && <span className="text-red-500 text-xs">{errors?.admin_fee}</span>}
                 </div>
 
                 {formData.admin_fee > 0 && <h1 className="text-sm sm:text-lg font-bold">{formatNumber(formData.admin_fee)}</h1>}
@@ -150,7 +152,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     />
-                    {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
+                    {errors?.description && <span className="text-red-500 text-xs">{errors?.description}</span>}
                 </div>
             </div>
             <button

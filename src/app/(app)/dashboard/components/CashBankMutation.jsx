@@ -82,15 +82,15 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
 
     useEffect(() => {
         fetchJournalsByWarehouse();
-    }, [selectedWarehouse]);
+    }, [selectedWarehouse, endDate]);
 
     useEffect(() => {
         mutate(`/api/get-cash-bank-balance/${selectedWarehouse}/${endDate}`);
-    }, [journalsByWarehouse]);
+    }, [journalsByWarehouse, endDate]);
 
-    const mutationInSum = accountBalance?.data?.reduce((sum, acc) => sum + mutationInSumById(acc.account_id), 0);
+    const mutationInSum = accountBalance?.data?.reduce((sum, acc) => sum + mutationInSumById(acc.id), 0);
 
-    const mutationOutSum = accountBalance?.data?.reduce((sum, acc) => sum + mutationOutSumById(acc.account_id), 0);
+    const mutationOutSum = accountBalance?.data?.reduce((sum, acc) => sum + mutationOutSumById(acc.id), 0);
 
     const [searchTerm, setSearchTerm] = useState("");
     const [checkedAccounts, setCheckedAccounts] = useState(null);
@@ -126,12 +126,11 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
     };
 
     const hqCashBankIds = cashBank?.filter((cashBank) => cashBank.warehouse_id === 1)?.map((cashBank) => cashBank.id);
-
     return (
         <>
-            <div className="mb-4 bg-white drop-shadow-sm sm:rounded-3xl">
+            <div className="mb-4 bg-white drop-shadow-sm rounded-3xl">
                 {loading || (isValidating && <LoaderCircleIcon size={20} className="animate-spin absolute top-2 text-slate-400 left-2" />)}
-                <div className="px-2 sm:px-6 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="px-4 sm:px-6 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <h1 className="font-bold text-xl text-slate-600">
                         Mutasi Saldo
                         <span className="text-xs block font-normal text-nowrap">Periode: {endDate}</span>
@@ -228,12 +227,12 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                             {accountBalance?.data?.map((account, index) => (
                                 <tr key={index}>
                                     <td>
-                                        {account.account_name}
+                                        {account.acc_name}
                                         <span className="text-xs text-blue-600 font-bold block sm:hidden">{formatNumber(account.balance)}</span>
                                     </td>
                                     <td className="text-end font-bold hidden sm:table-cell">{formatNumber(account.balance ?? 0)}</td>
-                                    <td className="text-end">{formatNumber(mutationInSumById(account.account_id) ?? 0)}</td>
-                                    <td className="text-end">{formatNumber(mutationOutSumById(account.account_id) ?? 0)}</td>
+                                    <td className="text-end">{formatNumber(mutationInSumById(account.id) ?? 0)}</td>
+                                    <td className="text-end">{formatNumber(mutationOutSumById(account.id) ?? 0)}</td>
                                 </tr>
                             ))}
                             <tr>

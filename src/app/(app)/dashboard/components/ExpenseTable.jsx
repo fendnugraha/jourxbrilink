@@ -105,8 +105,8 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
                 </Modal>
             </div>
             <div className="my-4 flex gap-4 sm:flex-row flex-col">
-                <div className="bg-white overflow-hidden shadow-sm sm:rounded-3xl wfull sm:w-3/4">
-                    <h1 className="px-2 sm:px-6 pt-4 font-bold text-xl text-red-600">
+                <div className="bg-white overflow-hidden drop-shadow-sm rounded-3xl wfull sm:w-3/4">
+                    <h1 className="px-4 sm:px-6 pt-4 font-bold text-xl text-red-600">
                         Pengeluaran (Biaya Operasional)
                         <span className="text-xs block font-normal">
                             Periode: {startDate} - {endDate}
@@ -151,7 +151,7 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
                         </table>
                     </div>
                 </div>
-                <div className="bg-red-500 text-white py-2 overflow-hidden shadow-sm sm:rounded-3xl flex-1 flex flex-col justify-center items-center">
+                <div className="bg-red-500 text-white py-2 overflow-hidden drop-shadow-sm rounded-3xl flex-1 flex flex-col justify-center items-center">
                     <h1>Total Biaya</h1>
                     <h1 className="text-4xl font-bold">{formatNumber(totalExpense < 0 ? totalExpense * -1 : 0)}</h1>
                 </div>

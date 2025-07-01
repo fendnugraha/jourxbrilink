@@ -24,7 +24,7 @@ const CreateUser = ({ isModalOpen, notification, fetchUsers }) => {
         } catch (error) {
             notification(error.response?.data?.message || "Something went wrong.");
         }
-    }, []);
+    }, [notification]);
 
     useEffect(() => {
         fetchWarehouses();
@@ -116,7 +116,7 @@ const CreateUser = ({ isModalOpen, notification, fetchUsers }) => {
                     <select name="role" required value={formData.role} onChange={handleChange} className="form-select">
                         <option value="">Select role</option>
                         <option value="Administrator">Administrator</option>
-                        <option value="Staff">Staff</option>
+                        <option value="Kasir">Kasir</option>
                     </select>
                     {errors.role && <p className="text-xs text-red-500">{errors.role}</p>}
                 </div>

@@ -20,22 +20,22 @@ const Notification = ({ type = "success", notification, title, onClose }) => {
         case "success":
             notificationTitle = "Success";
             notificationStyles = "";
-            notificationIcon = <CheckCircleIcon className="w-8 h-8 text-green-500" />;
+            notificationIcon = <CheckCircleIcon size={48} className="text-green-500" />;
             break;
         case "error":
             notificationTitle = "Error !";
             notificationStyles = "";
-            notificationIcon = <CircleAlertIcon className="w-8 h-8 text-red-500" />;
+            notificationIcon = <CircleAlertIcon size={48} className="text-red-500" />;
             break;
         default:
             notificationTitle = "Info";
             notificationStyles = "";
-            notificationIcon = <InfoIcon className="w-8 h-8 text-teal-500" />;
+            notificationIcon = <InfoIcon size={48} className="text-teal-500" />;
     }
 
     return (
         <div
-            className={`${notificationStyles} fixed bg-white backdrop-blur-sm top-4 sm:top-2 right-4 sm:right-2 w-full sm:w-96 z-[1000] rounded-3xl -4 py-2 drop-shadow-lg`}
+            className={`${notificationStyles} fixed bg-white top-4 sm:top-2 right-0 left-0 sm:left-auto sm:right-2 sm:w-96 z-[1000] border border-slate-500/50 rounded-2xl py-4 drop-shadow-lg`}
         >
             <div className="flex items-center gap-4 px-4">
                 <div className="">

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/libs/auth";
 import Image from "next/image";
 import Loading from "./loading";
+import { SatelliteDishIcon } from "lucide-react";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -13,10 +14,16 @@ const LoginPage = () => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
     const router = useRouter();
-    const { login } = useAuth({
+    const { login, error: authError } = useAuth({
         middleware: "guest",
         redirectIfAuthenticated: "/transaction",
     });
+
+    useEffect(() => {
+        if (authError?.code === "ERR_NETWORK") {
+            setStatus("Error Network: Unable to reach the server. Retrying connection...");
+        }
+    }, [authError]);
 
     useEffect(() => {
         if (router.reset?.length > 0 && errors.length === 0) {
@@ -34,6 +41,12 @@ const LoginPage = () => {
         <>
             <div className="bg-white p-8 rounded-2xl drop-shadow-xl shadow-orange-500 w-full sm:w-[500px] md:1/3">
                 <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Login to Your Account</h2>
+                {authError?.code === "ERR_NETWORK" && (
+                    <div className="flex flex-col justify-center items-center mb-4">
+                        <SatelliteDishIcon size={50} className="animate-pulse text-red-500" />
+                        <p className="text-sm font-light text-red-500 animate-pulse mt-4">{status}</p>
+                    </div>
+                )}
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="mb-4">
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
@@ -47,6 +60,7 @@ const LoginPage = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             autoComplete="off"
+                            disabled={loading || message === "Login successful!" || authError?.code === "ERR_NETWORK"}
                             required
                         />
                         {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
@@ -63,17 +77,17 @@ const LoginPage = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             autoComplete="off"
+                            disabled={loading || message === "Login successful!" || authError?.code === "ERR_NETWORK"}
                             required
                         />
                         {errors.password && <p className="text-red-500 text-xs">{errors.password}</p>}
                     </div>
                     <button
+                        disabled={loading || message === "Login successful!" || authError?.code === "ERR_NETWORK"}
+                        className="px-6 py-3 mt-2 w-full bg-blue-700 text-white rounded-2xl hover:bg-blue-600 cursor-pointer disabled:bg-slate-300 disabled:cursor-not-allowed"
                         type="submit"
-                        disabled={loading || message === "Login successful!"}
-                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                        style={{ transition: "all 0.3s ease-in-out" }}
                     >
-                        {loading || message === "Login successful!" ? "Loging in ..." : "Login"}
+                        {authError?.code === "ERR_NETWORK" ? "Unable to login" : loading || message === "Login successful!" ? "Loging in ..." : "Login"}
                     </button>
                 </form>
                 <p className="text-center mt-6 text-xs">

@@ -38,9 +38,6 @@ const getCurrentDate = () => {
 
 const TransactionPage = () => {
     const { user } = useAuth({ middleware: "auth" });
-    if (!user) {
-        return <Loading />;
-    }
     const warehouse = Number(user?.role?.warehouse_id);
     const warehouseCashId = Number(user?.role?.warehouse?.chart_of_account_id);
 
@@ -69,20 +66,16 @@ const TransactionPage = () => {
     const [isTransferActive, setIsTransferActive] = useState(false);
     const [isCashWithdrawalActive, setIsCashWithdrawalActive] = useState(false);
 
-    const [initBalances, setInitBalances] = useState(localStorage.getItem("initBalances") ? JSON.parse(localStorage.getItem("initBalances")) : {});
-
-    const [openingCash, setOpeningCash] = useState(initBalances[warehouseCashId]);
+    const [openingCash, setOpeningCash] = useState(0);
+    useEffect(() => {
+        const initBalances = JSON.parse(localStorage.getItem("initBalances"));
+        if (initBalances) {
+            setOpeningCash(initBalances[warehouseCashId]);
+        }
+    });
     const [isCopied, setIsCopied] = useState(false);
 
     const menuRef = useRef(null);
-    const { dailyDashboard, loading: isLoading, error: dailyDashboardError } = useGetDailyDashboard(warehouse, getCurrentDate(), getCurrentDate());
-    const warehouseName = user?.role?.warehouse?.name;
-
-    // set init balances to localStorage
-    useEffect(() => {
-        localStorage.setItem("initBalances", JSON.stringify(initBalances));
-        setOpeningCash(initBalances[warehouseCashId]);
-    }, [initBalances]);
 
     // Event listener untuk klik di luar menu
     useEffect(() => {

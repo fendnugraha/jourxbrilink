@@ -3,7 +3,7 @@ import formatNumber from "@/libs/formatNumber";
 import axios from "@/libs/axios";
 import useSWR, { mutate } from "swr";
 import { useState, useEffect } from "react";
-import { FilterIcon, LoaderIcon, RefreshCcwIcon } from "lucide-react";
+import { CableIcon, FilterIcon, GemIcon, LoaderIcon, RefreshCcwIcon, SmartphoneIcon, TicketIcon } from "lucide-react";
 import Modal from "@/components/Modal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
@@ -44,7 +44,6 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
     useEffect(() => {
         mutate(["/api/daily-dashboard", { warehouse, startDate, endDate }]);
     }, [selectedWarehouse, startDate, endDate]);
-
     return (
         <div className="h-auto sm:h-[calc(100vh-80px-64px)] mb-12 flex flex-col bg-white p-4 sm:p-6 rounded-4xl">
             <div className="flex items-start justify-between mb-2">
@@ -140,7 +139,9 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                 <div className="bg-teal-200/80 text-green-900 p-3 sm:p-5 rounded-2xl sm:rounded-4xl drop-shadow-xs flex flex-col gap-2 sm:gap-4 items-start justify-between col-span-1 sm:col-span-2 row-span-auto sm:row-span-2 col-start-1 sm:col-start-3">
                     {" "}
                     <div className={`flex flex-col`}>
-                        <h4 className="text-lg">Laba (Net Profit)</h4>
+                        <h4 className="text-lg">
+                            <GemIcon size={20} className="inline" /> Laba (Net Profit)
+                        </h4>
                         <h1 className="text-2xl sm:text-5xl font-bold text-slate-500">
                             {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumber(Number(dailyDashboard?.data?.profit))}
                         </h1>
@@ -155,11 +156,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                         <div className={`flex flex-col w-full bg-white/50 p-4 rounded-2xl`}>
                             <h4 className="text-sm">Tarik Tunai</h4>
                             <h1 className="text-lg sm:text-xl font-bold text-slate-500">
-                                {isLoading ? (
-                                    <LoaderIcon className="animate-spin" />
-                                ) : (
-                                    formatNumberToK(Number(dailyDashboard?.data?.totalBank + dailyDashboard?.data?.totalCashWithdrawal))
-                                )}
+                                {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumberToK(Number(dailyDashboard?.data?.totalCashWithdrawal))}
                             </h1>
                         </div>
                     </div>
@@ -207,19 +204,29 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                 </div>
                 <div className="col-span-1 sm:col-span-4 row-span-1 sm:row-span-2 col-start-1 row-start-auto sm:row-start-3 flex flex-col sm:flex-row gap-4 items-center justify-between w-full h-full">
                     <div className="bg-slate-200 w-full h-full rounded-2xl sm:rounded-4xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-between">
-                        <h1 className="text-lg text-slate-500">Voucher & SP</h1>
+                        <div>
+                            <h1 className="text-lg text-slate-500">Voucher & SP</h1>
+                            <TicketIcon size={50} strokeWidth={1.5} className="text-slate-500" />
+                        </div>
                         <h1 className="text-2xl sm:text-4xl font-bold text-slate-500">
                             {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumber(Number(dailyDashboard?.data?.totalVoucher))}
                         </h1>
                     </div>
                     <div className="bg-slate-200 w-full h-full rounded-2xl sm:rounded-4xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-between">
-                        <h1 className="text-lg text-slate-500">Accessories</h1>
+                        <div>
+                            <h1 className="text-lg text-slate-500">Accessories</h1>
+                            <CableIcon size={50} strokeWidth={1.5} className="text-slate-500" />
+                        </div>
                         <h1 className="text-2xl sm:text-4xl font-bold text-slate-500">
                             {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumber(Number(dailyDashboard?.data?.totalAccessories))}
                         </h1>
                     </div>
                     <div className="bg-slate-200 w-full h-full rounded-2xl sm:rounded-4xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-between">
-                        <h1 className="text-lg text-slate-500">Deposit (Pulsa, Token, Dll)</h1>
+                        <div>
+                            {" "}
+                            <h1 className="text-lg text-slate-500">Deposit (Pulsa, Token, Dll)</h1>
+                            <SmartphoneIcon size={50} strokeWidth={1.5} className="text-slate-500" />
+                        </div>
                         <h1 className="text-2xl sm:text-4xl font-bold text-slate-500">
                             {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumber(Number(dailyDashboard?.data?.totalCashDeposit))}
                         </h1>

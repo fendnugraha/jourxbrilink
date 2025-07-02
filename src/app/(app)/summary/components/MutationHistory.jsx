@@ -68,6 +68,8 @@ const MutationHistory = ({ account, notification, user }) => {
             notification(error.response?.data?.message || "Something went wrong.");
         }
     };
+
+    console.log(mutation);
     return (
         <div className="bg-white rounded-3xl mb-3 relative">
             <div className="p-4">

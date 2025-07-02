@@ -17,27 +17,16 @@ const getCurrentDate = () => {
 };
 
 const CashBankBalance = ({ accountBalance, isValidating, user }) => {
-    const summarizeBalance = accountBalance?.data?.reduce((total, account) => total + account.balance, 0);
+    const summarizeBalance = accountBalance?.data?.chartOfAccounts?.reduce((total, account) => total + account.balance, 0);
     const [showBalanceReport, setShowBalanceReport] = useState(true);
     const [showCashBankBalance, setShowCashBankBalance] = useState(true);
     const [showDailyReport, setShowDailyReport] = useState(false);
     const [isModalSettingInitBalancesOpen, setIsModalSettingInitBalancesOpen] = useState(false);
     const [initBalances, setInitBalances] = useState(localStorage.getItem("initBalances") ? JSON.parse(localStorage.getItem("initBalances")) : {});
-    const warehouse = Number(user?.role?.warehouse_id);
-    const warehouseName = user?.role?.warehouse?.name;
-    const warehouseCashId = Number(user?.role?.warehouse?.chart_of_account_id);
-    const [isCopied, setIsCopied] = useState(false);
-    const [openingCash, setOpeningCash] = useState(initBalances[warehouseCashId]);
-
-    const [startDate, setStartDate] = useState(getCurrentDate());
-    const [endDate, setEndDate] = useState(getCurrentDate());
-
-    const { dailyDashboard, loading: isLoading, error: dailyDashboardError } = useGetDailyDashboard(warehouse, getCurrentDate(), getCurrentDate());
 
     // set init balances to localStorage
     useEffect(() => {
         localStorage.setItem("initBalances", JSON.stringify(initBalances));
-        setOpeningCash(initBalances[warehouseCashId]);
     }, [initBalances]);
 
     const addToInitBalances = (id, balance) => {
@@ -54,6 +43,17 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
             setInitBalances(initBalances);
         }
     }, []);
+
+    const warehouse = Number(user?.role?.warehouse_id);
+    const warehouseName = user?.role?.warehouse?.name;
+    const warehouseCashId = Number(user?.role?.warehouse?.chart_of_account_id);
+    const [isCopied, setIsCopied] = useState(false);
+    const [openingCash, setOpeningCash] = useState(initBalances[warehouseCashId]);
+
+    const [startDate, setStartDate] = useState(getCurrentDate());
+    const [endDate, setEndDate] = useState(getCurrentDate());
+
+    const { dailyDashboard, loading: isLoading, error: dailyDashboardError } = useGetDailyDashboard(warehouse, getCurrentDate(), getCurrentDate());
 
     const closeModal = () => {
         setIsModalSettingInitBalancesOpen(false);
@@ -100,22 +100,22 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                 <SettingsIcon className="w-4 h-4 inline text-white" />
             </button>
             <Modal isOpen={isModalSettingInitBalancesOpen} onClose={closeModal} maxWidth={"max-w-lg"} modalTitle="Set Saldo Awal Kas & Bank">
-                {accountBalance?.data?.map((account) => (
-                    <div className="group p-2" key={account.account_id}>
+                {accountBalance?.data?.chartOfAccounts?.map((account) => (
+                    <div className="group p-2" key={account.id}>
                         <div className="grid grid-cols-2 gap-2">
-                            <h1 className="text-xs">{account.account_name}</h1>
+                            <h1 className="text-xs">{account.acc_name}</h1>
                             <input
                                 type="number"
                                 className="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                value={initBalances[account.account_id] || ""}
-                                onChange={(e) => addToInitBalances(account.account_id, Number(e.target.value))}
+                                value={initBalances[account.id] || ""}
+                                onChange={(e) => addToInitBalances(account.id, Number(e.target.value))}
                             />
                         </div>
                     </div>
                 ))}
             </Modal>
             <div className="flex justify-center items-center flex-col bg-gray-600 hover:bg-gray-500 py-4 rounded-t-3xl text-white shadow-lg">
-                {accountBalance?.data?.length > 0 ? (
+                {accountBalance?.data?.chartOfAccounts?.length > 0 ? (
                     <>
                         <h1 className="text-xs">Total Saldo Kas & Bank</h1>
                         <h1 className="text-2xl text-yellow-200 font-black">{formatNumber(summarizeBalance ?? 0)}</h1>
@@ -150,7 +150,7 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                     </button>
                 </div>
                 <div hidden={!showCashBankBalance}>
-                    {accountBalance?.data?.map((account) => (
+                    {accountBalance?.data?.chartOfAccounts?.map((account) => (
                         <div className="group border-b border-white border-dashed last:border-none p-2" key={account.id}>
                             <div className="text-white">
                                 <h1 className="text-xs">{account.acc_name}</h1>

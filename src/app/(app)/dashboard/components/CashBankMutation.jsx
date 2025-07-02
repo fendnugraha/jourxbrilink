@@ -88,9 +88,9 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
         mutate(`/api/get-cash-bank-balance/${selectedWarehouse}/${endDate}`);
     }, [journalsByWarehouse, endDate]);
 
-    const mutationInSum = accountBalance?.data?.reduce((sum, acc) => sum + mutationInSumById(acc.id), 0);
+    const mutationInSum = accountBalance?.data?.chartOfAccounts?.reduce((sum, acc) => sum + mutationInSumById(acc.id), 0);
 
-    const mutationOutSum = accountBalance?.data?.reduce((sum, acc) => sum + mutationOutSumById(acc.id), 0);
+    const mutationOutSum = accountBalance?.data?.chartOfAccounts?.reduce((sum, acc) => sum + mutationOutSumById(acc.id), 0);
 
     const [searchTerm, setSearchTerm] = useState("");
     const [checkedAccounts, setCheckedAccounts] = useState(null);
@@ -126,6 +126,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
     };
 
     const hqCashBankIds = cashBank?.filter((cashBank) => cashBank.warehouse_id === 1)?.map((cashBank) => cashBank.id);
+
     return (
         <>
             <div className="mb-4 bg-white drop-shadow-sm rounded-3xl">
@@ -224,7 +225,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                             </tr>
                         </thead>
                         <tbody>
-                            {accountBalance?.data?.map((account, index) => (
+                            {accountBalance?.data?.chartOfAccounts?.map((account, index) => (
                                 <tr key={index}>
                                     <td>
                                         {account.acc_name}
@@ -261,11 +262,14 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                 <th>
                                     Total{" "}
                                     <span className="font-bold text-blue-500 block sm:hidden">
-                                        {loading || (isValidating && formatNumber(accountBalance?.data?.reduce((sum, acc) => sum + acc.balance, 0)))}
+                                        {loading ||
+                                            (isValidating && formatNumber(accountBalance?.data?.chartOfAccounts?.reduce((sum, acc) => sum + acc.balance, 0)))}
                                     </span>
                                 </th>
                                 <th className="text-end font-bold hidden sm:table-cell">
-                                    {loading || isValidating ? "..." : formatNumber(accountBalance?.data?.reduce((sum, acc) => sum + acc.balance, 0))}
+                                    {loading || isValidating
+                                        ? "..."
+                                        : formatNumber(accountBalance?.data?.chartOfAccounts?.reduce((sum, acc) => sum + acc.balance, 0))}
                                 </th>
                                 <th className="text-end">{loading || isValidating ? "..." : formatNumber(mutationInSum)}</th>
                                 <th className="text-end">{loading || isValidating ? "..." : formatNumber(mutationOutSum)}</th>

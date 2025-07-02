@@ -164,12 +164,12 @@ const Warehouse = () => {
                                         </td>
                                         <td className="text-center">
                                             <span className="flex gap-2 justify-center">
-                                                {/* <Link
+                                                <Link
                                                     className="cursor-pointer hover:scale-125 transition transform ease-in"
                                                     href={`/setting/warehouse/detail/${warehouse.id}`}
                                                 >
                                                     <EyeIcon size={24} />
-                                                </Link> */}
+                                                </Link>
                                                 <button
                                                     onClick={() => {
                                                         setIsModalUpdateWarehouseOpen(true);

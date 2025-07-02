@@ -50,7 +50,7 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
     }, 0);
     return (
         <>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-start flex-col sm:flex-row gap-2">
                 <h1 className="font-bold text-xl text-red-600">
                     Pengeluaran (Biaya Operasional)
                     <span className="text-xs block font-normal">
@@ -112,7 +112,7 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
                     </Modal>
                 </div>
             </div>
-            <div className="my-4 flex gap-4 sm:flex-row flex-col">
+            <div className="flex gap-4 sm:flex-row flex-col">
                 <div className="bg-white overflow-hidden drop-shadow-sm rounded-3xl wfull sm:w-3/4">
                     <div className="overflow-x-auto">
                         <table className="table w-full text-xs">

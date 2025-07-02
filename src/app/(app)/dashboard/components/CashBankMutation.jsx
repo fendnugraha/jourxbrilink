@@ -141,13 +141,13 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                             <div className="gap-2 sm:flex grid grid-cols-2 mb-2 sm:mb-0">
                                 <button
                                     onClick={() => setIsModalCreateJournalOpen(true)}
-                                    className="bg-indigo-500 text-sm sm:text-xs min-w-36 hover:bg-indigo-600 text-white py-4 sm:py-2 px-2 sm:px-6 rounded-lg"
+                                    className="bg-indigo-500 text-sm sm:text-xs min-w-36 hover:bg-indigo-600 text-white py-4 sm:py-1 px-2 sm:px-6 rounded-lg"
                                 >
                                     Jurnal Umum <PlusCircleIcon className="size-4 inline" />
                                 </button>
                                 <button
                                     onClick={() => setIsModalCreateMutationFromHqOpen(true)}
-                                    className="bg-indigo-500 text-sm sm:text-xs min-w-36 hover:bg-indigo-600 text-white py-4 sm:py-2 px-2 sm:px-6 rounded-lg"
+                                    className="bg-indigo-500 text-sm sm:text-xs min-w-36 hover:bg-indigo-600 text-white py-4 sm:py-1 px-2 sm:px-6 rounded-lg"
                                 >
                                     Mutasi Saldo <PlusCircleIcon className="size-4 inline" />
                                 </button>
@@ -214,8 +214,8 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                         />
                     </Modal>
                 </div>
-                <div className="overflow-x-auto">
-                    <table className="table w-full text-xs">
+                <div className="overflow-x-auto w-full">
+                    <table className="table min-w-max text-xs">
                         <thead>
                             <tr>
                                 <th>Nama akun</th>

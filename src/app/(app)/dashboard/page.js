@@ -25,21 +25,21 @@ const Dashboard = () => {
 
     return (
         <MainPage headerTitle="Dashboard">
-            <div className="py-4 sm:py-8 px-4 sm:px-12">
+            <div className="py-4 sm:py-8 px-4 sm:px-12 overflow-x-auto">
                 {notification.message && (
                     <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
                 )}
-                <DailyDashboard warehouse={warehouse} warehouses={warehouses} userRole={userRole} />
-                <CashBankMutation
-                    warehouse={warehouse}
-                    warehouses={warehouses}
-                    userRole={userRole}
-                    notification={(type, message) => setNotification({ type, message })}
-                />
-                <hr className="my-4 border border-slate-200" />
-                <VoucherSalesTable warehouse={warehouse} warehouseName={warehouseName} warehouses={warehouses} userRole={userRole} />
-                <hr className="my-4 border border-slate-200" />
-                <ExpenseTable warehouse={warehouse} warehouses={warehouses} userRole={userRole} />
+                <div className="grid grid-cols-1 gap-4">
+                    <DailyDashboard warehouse={warehouse} warehouses={warehouses} userRole={userRole} />
+                    <CashBankMutation
+                        warehouse={warehouse}
+                        warehouses={warehouses}
+                        userRole={userRole}
+                        notification={(type, message) => setNotification({ type, message })}
+                    />
+                    <VoucherSalesTable warehouse={warehouse} warehouseName={warehouseName} warehouses={warehouses} userRole={userRole} />
+                    <ExpenseTable warehouse={warehouse} warehouses={warehouses} userRole={userRole} />
+                </div>
             </div>
         </MainPage>
     );

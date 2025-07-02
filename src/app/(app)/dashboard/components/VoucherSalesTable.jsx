@@ -112,14 +112,14 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
 
     return (
         <>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-start flex-col sm:flex-row gap-2">
                 <h1 className="font-bold text-xl text-slate-600">
                     Total Penjualan Barang
                     <span className="text-xs block font-normal">
                         Periode: {startDate} - {endDate}
                     </span>
                 </h1>
-                <div className="flex justify-end gap-1 sm:w-1/2">
+                <div className="flex justify-end gap-1">
                     {userRole === "Administrator" && (
                         <select
                             value={selectedWarehouse}

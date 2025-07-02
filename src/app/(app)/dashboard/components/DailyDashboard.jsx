@@ -45,8 +45,8 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
         mutate(["/api/daily-dashboard", { warehouse, startDate, endDate }]);
     }, [selectedWarehouse, startDate, endDate]);
     return (
-        <div className="h-auto sm:h-[calc(100vh-80px-64px)] mb-12 flex flex-col bg-white p-4 sm:p-6 rounded-4xl">
-            <div className="flex items-start justify-between mb-2">
+        <div className="h-auto sm:h-[calc(100vh-80px-64px)] mb-12 flex flex-col bg-white p-4 sm:p-6 rounded-4xl overflow-y-hidden">
+            <div className="flex items-start justify-between flex-col sm:flex-row gap-2 mb-2">
                 <h1 className="font-bold text-xl text-slate-600">
                     {selectedWarehouse === "all"
                         ? "Semua Cabang"
@@ -109,7 +109,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                     </button>
                 </Modal>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-5 grid-row-1 sm:grid-rows-4 gap-4 flex-grow">
+            <div className="grid grid-cols-1 sm:grid-cols-5 grid-row-1 sm:grid-rows-4 gap-4 flex-grow h-full">
                 <div className="bg-lime-200/80 text-green-900 p-3 sm:p-5 rounded-2xl sm:rounded-4xl drop-shadow-xs flex flex-col gap-2 sm:gap-4 items-start justify-between col-span-1 sm:col-span-2 row-span-1 sm:row-span-2">
                     <div className={`flex flex-col`}>
                         <h4 className="text-lg">Kas Tunai</h4>

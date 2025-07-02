@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import axios from "@/libs/axios";
 import Label from "@/components/Label";
-import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
 
 const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJournalsByWarehouse }) => {
@@ -39,6 +38,7 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
             isModalOpen(false);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
+            notification("error", error.response?.data?.message || "Something went wrong.");
         } finally {
             setLoading(false);
         }
@@ -62,7 +62,7 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                                 }
                             }}
                             value={journal.trx_type === "Tarik Tunai" ? formData.debt_code : formData.cred_code}
-                            className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="form-control"
                         >
                             <option value="">--Pilih rekening--</option>
                             {branchAccount.map((br) => (
@@ -78,9 +78,9 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                 <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Jumlah</Label>
                     <div className="col-span-1">
-                        <Input
+                        <input
                             type="number"
-                            className={"w-full"}
+                            className={"form-control"}
                             placeholder="Rp."
                             value={formData.amount}
                             onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
@@ -92,9 +92,9 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                 <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Fee</Label>
                     <div className="col-span-1">
-                        <Input
+                        <input
                             type="number"
-                            className={"w-1/2"}
+                            className={"form-control"}
                             placeholder="Rp."
                             value={formData.fee_amount}
                             onChange={(e) => setFormData({ ...formData, fee_amount: e.target.value })}
@@ -107,7 +107,7 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                     <Label>Keterangan</Label>
                     <div className="col-span-1 sm:col-span-2">
                         <textarea
-                            className="w-full rounded-md border p-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="form-control"
                             type="text"
                             placeholder="(Optional)"
                             value={formData.description}
@@ -116,7 +116,7 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                         {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                     </div>
                 </div>
-                <div className="flex justify-end">
+                <div className="flex justify-end mt-4">
                     <button className="rounded-xl px-8 py-3 text-red-300 hover:border-red-300 hover:border mr-1" onClick={() => isModalOpen(false)}>
                         Cancel
                     </button>

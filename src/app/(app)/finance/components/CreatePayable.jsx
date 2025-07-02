@@ -75,20 +75,16 @@ const CreatePayable = ({ isModalOpen, fetchFinance, notification }) => {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mb-2 items-center">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mb-2 sm:mb-2.5 items-center">
                     <Label htmlFor="date_issued">Tanggal</Label>
                     <div className="col-span-2">
-                        <Input type="datetime-local" className="w-1/2 border rounded-lg p-2" />
+                        <Input type="datetime-local" className="form-control" />
                     </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mb-2 items-center">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mb-2 sm:mb-2.5 items-center">
                     <Label htmlFor="debt_code">Rekening</Label>
                     <div className="col-span-2">
-                        <select
-                            value={formData.debt_code}
-                            onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })}
-                            className="w-full border rounded-lg p-2"
-                        >
+                        <select value={formData.debt_code} onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })} className="form-select">
                             <option value="">--Pilih Rekening--</option>
                             {filterCashAccounts.map((account) => (
                                 <option key={account.id} value={account.id}>
@@ -98,14 +94,10 @@ const CreatePayable = ({ isModalOpen, fetchFinance, notification }) => {
                         </select>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mb-2 items-center">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mb-2 sm:mb-2.5 items-center">
                     <Label htmlFor="cred_code">Akun Hutang</Label>
                     <div className="col-span-2">
-                        <select
-                            value={formData.cred_code}
-                            onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })}
-                            className="w-full border rounded-lg p-2"
-                        >
+                        <select value={formData.cred_code} onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })} className="form-select">
                             <option value="">--Pilih Akun--</option>
                             {filterPayableAccounts.map((account) => (
                                 <option key={account.id} value={account.id}>
@@ -115,13 +107,13 @@ const CreatePayable = ({ isModalOpen, fetchFinance, notification }) => {
                         </select>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mb-2 items-center">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mb-2 sm:mb-2.5 items-center">
                     <Label htmlFor="contact">Contact</Label>
                     <div className="col-span-2">
                         <select
                             value={formData.contact_id}
                             onChange={(e) => setFormData({ ...formData, contact_id: e.target.value })}
-                            className={`w-full border rounded-lg p-2 ${errors.contact_id ? "border-red-500" : ""}`}
+                            className={`form-select ${errors.contact_id ? "border-red-500" : ""}`}
                         >
                             <option value="">--Pilih Contact--</option>
                             {contacts.map((contact) => (
@@ -132,7 +124,7 @@ const CreatePayable = ({ isModalOpen, fetchFinance, notification }) => {
                         </select>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2 items-center">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2 sm:mb-2.5 items-center">
                     <Label htmlFor="amount">Jumlah</Label>
                     <div className="col-span-1">
                         <Input
@@ -140,19 +132,19 @@ const CreatePayable = ({ isModalOpen, fetchFinance, notification }) => {
                             onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                             min="0"
                             type="number"
-                            className="w-full border rounded-lg p-2"
+                            className="form-control"
                             placeholder="Rp"
                         />
                     </div>
                     <h1 className="font-bold text-end">{formatNumber(formData.amount)}</h1>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mb-2 items-center">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mb-4 items-center">
                     <Label htmlFor="description">Catatan</Label>
                     <div className="col-span-2">
                         <textarea
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                            className="w-full border rounded-lg p-2"
+                            className="form-control"
                             placeholder="Catatan (Optional)"
                         />
                     </div>

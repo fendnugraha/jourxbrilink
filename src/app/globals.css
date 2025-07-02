@@ -1,31 +1,56 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-    body {
-        @apply bg-white;
-    }
+:root {
+    --background: #f3f4f6;
+    --foreground: #171717;
 }
 
-@layer components {
-    .btn-primary {
-        @apply py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75;
-    }
+* {
+    box-sizing: border-box;
+}
 
-    .table {
-        @apply divide-y divide-gray-200;
-    }
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+}
 
-    .table td {
-        @apply px-6 py-2 whitespace-nowrap;
-    }
+body {
+    background: var(--background);
+    color: var(--foreground);
+    /* font-family: Arial, Helvetica, sans-serif; */
+}
 
-    .table tbody tr {
-        @apply border-b border-gray-200 last:border-0;
-    }
+.btn-primary {
+    @apply px-6 py-3 min-w-40 bg-blue-500 hover:bg-blue-400 text-white rounded-xl text-sm cursor-pointer;
+}
 
-    .table th {
-        @apply py-4 text-gray-700 border-b-2 border-gray-200;
-    }
+.table {
+    @apply divide-y divide-gray-200;
+}
+
+.table thead th {
+    @apply py-4 text-gray-700 border-b-2 border-blue-200;
+}
+
+.table tfoot th {
+    @apply py-4 text-gray-700 border-t-2 border-b-0 border-orange-200;
+}
+
+.table th,
+.table td {
+    @apply px-6 py-2 whitespace-nowrap;
+}
+
+.table tr {
+    @apply border-b border-slate-200 last:border-0;
+}
+
+.form-control {
+    @apply block border border-slate-200 w-full px-4 py-2 sm:py-2.5 bg-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500/30 disabled:text-slate-500 disabled:bg-gray-300 disabled:cursor-not-allowed;
+}
+
+.form-select {
+    @apply block border border-slate-200 w-full px-4 py-2 sm:py-2.5 bg-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500/30 disabled:text-slate-500 disabled:bg-gray-300 disabled:cursor-not-allowed;
 }

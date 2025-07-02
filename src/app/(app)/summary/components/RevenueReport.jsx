@@ -66,7 +66,7 @@ const RevenueReport = () => {
         { key: "fee", label: "Profit" },
     ];
     return (
-        <div className="bg-white rounded-lg mb-3 relative">
+        <div className="bg-white rounded-3xl mb-3 relative">
             <div className="p-4 flex justify-between">
                 <h4 className=" text-blue-950 text-lg font-bold">
                     Laporan Pendapatan
@@ -148,7 +148,7 @@ const RevenueReport = () => {
                             </tr>
                         ) : (
                             revenue.revenue?.map((item, index) => (
-                                <tr key={index} className="hover:bg-gray-100">
+                                <tr key={index} className="hover:bg-orange-100">
                                     <td className="">
                                         <Link className="hover:underline" href={`/summary/warehouse/${item.warehouseId}`}>
                                             {item.warehouse}
@@ -171,20 +171,24 @@ const RevenueReport = () => {
                             <tr>
                                 <td colSpan={9}>Loading...</td>
                             </tr>
+                        ) : revenue?.revenue?.length > 0 ? (
+                            <tr>
+                                <th className="font-bold">Total</th>
+                                <th className="font-bold">{formatNumber(sumByTrxType("transfer"))}</th>
+                                <th className="font-bold">{formatNumber(sumByTrxType("tarikTunai"))}</th>
+                                <th className="font-bold">{formatNumber(sumByTrxType("voucher"))}</th>
+                                <th className="font-bold">{formatNumber(sumByTrxType("accessories"))}</th>
+                                <th className="font-bold">{formatNumber(sumByTrxType("deposit"))}</th>
+                                <th className="font-bold">{formatNumber(sumByTrxType("trx"))}</th>
+                                <th className="font-bold text-red-500">{formatNumber(sumByTrxType("expense"))}</th>
+                                <th className="font-bold text-green-500">{formatNumber(sumByTrxType("fee"))}</th>
+                            </tr>
                         ) : (
-                            revenue?.revenue?.length > 0 && (
-                                <tr>
-                                    <th className="font-bold">Total</th>
-                                    <th className="font-bold">{formatNumber(sumByTrxType("transfer"))}</th>
-                                    <th className="font-bold">{formatNumber(sumByTrxType("tarikTunai"))}</th>
-                                    <th className="font-bold">{formatNumber(sumByTrxType("voucher"))}</th>
-                                    <th className="font-bold">{formatNumber(sumByTrxType("accessories"))}</th>
-                                    <th className="font-bold">{formatNumber(sumByTrxType("deposit"))}</th>
-                                    <th className="font-bold">{formatNumber(sumByTrxType("trx"))}</th>
-                                    <th className="font-bold text-red-500">{formatNumber(sumByTrxType("expense"))}</th>
-                                    <th className="font-bold text-green-500">{formatNumber(sumByTrxType("fee"))}</th>
-                                </tr>
-                            )
+                            <tr>
+                                <td colSpan={9} className="text-center p-4">
+                                    No data found
+                                </td>
+                            </tr>
                         )}
                     </tfoot>
                 </table>

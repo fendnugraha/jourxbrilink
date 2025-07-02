@@ -40,7 +40,7 @@ export default function Paginator({ links, handleChangePage }) {
                                       className={
                                           link.active
                                               ? "z-10 bg-indigo-500 text-white border-indigo-500 scale-110 relative inline-flex items-center px-2 py-1 rounded-sm border text-sm font-bold"
-                                              : "border-gray-300 bg-white text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-2 py-1 border text-xs font-medium"
+                                              : "border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-2 py-1 border text-xs font-medium"
                                       }
                                   >
                                       {link.label === "&laquo; Previous" ? (

@@ -48,16 +48,12 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
             });
     };
 
-    const logout = async ({ setMessage } = {}) => {
-        try {
-            if (!error) {
-                await axios.post("/logout");
-                mutate(null);
-                setMessage("Logout successful!");
-            }
-        } finally {
-            router.push("/");
+    const logout = async () => {
+        if (!error) {
+            await axios.post("/logout").then(() => mutate());
         }
+
+        window.location.href = "/";
     };
 
     useEffect(() => {

@@ -49,15 +49,15 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
         return total + Number(expense.fee_amount);
     }, 0);
     return (
-        <div className="my-4 flex gap-4 sm:flex-row flex-col">
-            <div className="bg-white overflow-hidden shadow-sm sm:rounded-2xl wfull sm:w-3/4">
-                <h1 className="px-2 sm:px-6 pt-4 font-bold text-xl text-red-600">
+        <>
+            <div className="flex justify-between items-center">
+                <h1 className="font-bold text-xl text-red-600">
                     Pengeluaran (Biaya Operasional)
                     <span className="text-xs block font-normal">
                         Periode: {startDate} - {endDate}
                     </span>
                 </h1>
-                <div className="px-2 sm:px-6 pt-4 flex justify-end gap-2">
+                <div className="flex justify-start gap-1">
                     {userRole === "Administrator" && (
                         <select
                             value={selectedWarehouse}
@@ -111,50 +111,54 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
                         </button>
                     </Modal>
                 </div>
-                <div className="overflow-x-auto">
-                    <table className="table w-full text-xs">
-                        <thead>
-                            <tr>
-                                <th>Description</th>
-                                <th>Category</th>
-                                <th>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {loading ? (
+            </div>
+            <div className="my-4 flex gap-4 sm:flex-row flex-col">
+                <div className="bg-white overflow-hidden drop-shadow-sm rounded-3xl wfull sm:w-3/4">
+                    <div className="overflow-x-auto">
+                        <table className="table w-full text-xs">
+                            <thead>
                                 <tr>
-                                    <td colSpan="3" className="text-center">
-                                        Loading...
-                                    </td>
+                                    <th>Description</th>
+                                    <th>Category</th>
+                                    <th>Amount</th>
                                 </tr>
-                            ) : expenses.length === 0 ? (
-                                <tr>
-                                    <td colSpan="3" className="text-center">
-                                        Tidak ada pengeluaran
-                                    </td>
-                                </tr>
-                            ) : (
-                                expenses.map((expense) => (
-                                    <tr key={expense.id}>
-                                        <td>
-                                            <span className="text-xs text-slate-500">{formatDateTime(expense.created_at)}</span>
-                                            <br />
-                                            {expense.description}
+                            </thead>
+                            <tbody>
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan="3" className="text-center">
+                                            Loading...
                                         </td>
-                                        <td>{expense.debt.acc_name}</td>
-                                        <td className="text-right">{formatNumber(-expense.fee_amount)}</td>
                                     </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
+                                ) : expenses.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="3" className="text-center">
+                                            Tidak ada pengeluaran
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    expenses.map((expense) => (
+                                        <tr key={expense.id}>
+                                            <td>
+                                                <span className="text-xs text-slate-500">{formatDateTime(expense.created_at)}</span>
+                                                <br />
+                                                {expense.description}
+                                            </td>
+                                            <td>{expense.debt.acc_name}</td>
+                                            <td className="text-right">{formatNumber(-expense.fee_amount)}</td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div className="bg-red-500 text-white py-2 overflow-hidden drop-shadow-sm rounded-3xl flex-1 flex flex-col justify-center items-center">
+                    <h1>Total Biaya</h1>
+                    <h1 className="text-4xl font-bold">{formatNumber(totalExpense < 0 ? totalExpense * -1 : 0)}</h1>
                 </div>
             </div>
-            <div className="bg-red-500 text-white py-2 overflow-hidden shadow-sm sm:rounded-2xl flex-1 flex flex-col justify-center items-center">
-                <h1>Expense Total</h1>
-                <h1 className="text-4xl font-bold">{formatNumber(totalExpense < 0 ? totalExpense * -1 : 0)}</h1>
-            </div>
-        </div>
+        </>
     );
 };
 

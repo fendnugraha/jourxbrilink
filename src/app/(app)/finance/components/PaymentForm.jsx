@@ -82,7 +82,7 @@ const PaymentForm = ({ contactId, notification, fetchFinance, isModalOpen }) => 
                             setFormData({ ...formData, invoice: e.target.value });
                         }}
                         value={selectedInvoice}
-                        className="w-full border rounded-lg p-2"
+                        className="form-select"
                     >
                         <option value="">Select Invoice</option>
                         {financeData.map((finance, index) => (
@@ -95,11 +95,7 @@ const PaymentForm = ({ contactId, notification, fetchFinance, isModalOpen }) => 
                 </div>
                 <div className="mb-4">
                     <Label>Rekening</Label>
-                    <select
-                        onChange={(e) => setFormData({ ...formData, account_id: e.target.value })}
-                        value={formData.account_id}
-                        className="w-full border rounded-lg p-2"
-                    >
+                    <select onChange={(e) => setFormData({ ...formData, account_id: e.target.value })} value={formData.account_id} className="form-select">
                         <option value="">Select account</option>
                         {accounts.map((account) => (
                             <option key={account.id} value={account.id}>
@@ -117,7 +113,8 @@ const PaymentForm = ({ contactId, notification, fetchFinance, isModalOpen }) => 
                                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                                 value={formData.amount}
                                 type="number"
-                                className="w-full border rounded-lg p-2"
+                                className="form-control"
+                                required
                             />
                             <h1 className="text-xs">Sisa Tagihan: {selectedInvoice && formatNumber(filterDataByInvoice[0]?.sisa - formData.amount)}</h1>
                         </div>
@@ -131,7 +128,8 @@ const PaymentForm = ({ contactId, notification, fetchFinance, isModalOpen }) => 
                             onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                             value={formData.notes}
                             rows="2"
-                            className="w-full border rounded-lg p-2"
+                            className="form-control"
+                            required
                         />
                     </div>
                     {errors.notes && <span className="text-red-500 text-sm">{errors.notes}</span>}

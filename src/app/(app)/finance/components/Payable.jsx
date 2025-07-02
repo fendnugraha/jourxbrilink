@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import Modal from "@/components/Modal";
 import CreateContact from "../../setting/contact/CreateContact";
-import Notification from "@/components/notification";
 import CreatePayable from "./CreatePayable";
 import formatNumber from "@/libs/formatNumber";
 import formatDateTime from "@/libs/formatDateTime";
@@ -94,7 +93,7 @@ const Payable = ({ notification }) => {
     return (
         <>
             <div className="overflow-hidden">
-                <div className="bg-white shadow-sm sm:rounded-2xl mb-4">
+                <div className="bg-white drop-shadow-sm sm:rounded-3xl mb-4">
                     <div className="p-4 flex justify-between flex-col sm:flex-row">
                         <div className="bg-slate-400 rounded-xl mb-4 p-1">
                             <div className="flex">
@@ -233,7 +232,7 @@ const Payable = ({ notification }) => {
                         />
                     )}
                 </div>
-                <div className="bg-white shadow-sm sm:rounded-2xl">
+                <div className="bg-white drop-shadow-sm sm:rounded-3xl">
                     <div className="p-4 flex justify-between">
                         <h1 className="text-2xl font-bold mb-4">Riwayat Transaksi</h1>
                     </div>
@@ -316,7 +315,7 @@ const Payable = ({ notification }) => {
                         </button>
                         <button
                             onClick={() => setIsModalDeleteFinanceOpen(false)}
-                            className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 drop-shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >
                             Tidak
                         </button>

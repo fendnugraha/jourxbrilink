@@ -50,8 +50,9 @@ const LogActivity = ({ warehouses }) => {
     const handleChangePage = (url) => {
         fetchLogActivity(url);
     };
+
     return (
-        <div className="bg-white rounded-lg mb-3 relative">
+        <div className="bg-white rounded-3xl mb-3 relative">
             <div className="p-4 flex justify-between">
                 <h4 className=" text-blue-950 text-lg font-bold">
                     Log Activity
@@ -116,7 +117,7 @@ const LogActivity = ({ warehouses }) => {
                 </div>
             </div>
             <div className="overflow-x-auto">
-                <table className="table-auto w-full text-xs mb-2">
+                <table className="table table-auto w-full text-xs mb-2">
                     {/* <thead className="">
                         <tr>
                             <th className="border-y px-2 py-1">Description</th>
@@ -125,12 +126,12 @@ const LogActivity = ({ warehouses }) => {
                     <tbody>
                         {logActivity?.data?.length === 0 ? (
                             <tr className="text-center">
-                                <td className="p-6">No log activity found.</td>
+                                <td className="p-6">No activity found.</td>
                             </tr>
                         ) : (
                             logActivity?.data?.map((item, index) => (
                                 <tr key={index}>
-                                    <td className="border-y px-2 py-1 whitespace-normal break-words max-w-xs">
+                                    <td className="whitespace-normal break-words max-w-xs">
                                         <span className="text-xs block text-slate-500 font-bold">
                                             {item.user.name} {item.activity} at {item.warehouse.name}. Log ID: {item.id}
                                         </span>
@@ -145,7 +146,7 @@ const LogActivity = ({ warehouses }) => {
                     </tbody>
                 </table>
             </div>
-            <div className="px-4">{logActivity?.total > 0 && <Paginator links={logActivity} handleChangePage={handleChangePage} />}</div>
+            <div className="px-4">{logActivity?.last_page > 1 && <Paginator links={logActivity} handleChangePage={handleChangePage} />}</div>
         </div>
     );
 };

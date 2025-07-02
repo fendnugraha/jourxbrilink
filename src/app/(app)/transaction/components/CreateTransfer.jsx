@@ -23,7 +23,14 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
         setLoading(true);
         try {
             const response = await axios.post("/api/create-transfer", formData);
-            notification("success", response.data.message);
+            const successMessage =
+                response.data.journal.cred.acc_name +
+                " sebesar " +
+                formatNumber(response.data.journal.amount) +
+                " (Adm: " +
+                formatNumber(response.data.journal.fee_amount) +
+                ")";
+            notification("success", "Transfer uang ke " + successMessage);
             setFormData({
                 debt_code: user.role.warehouse.chart_of_account_id,
                 cred_code: formData.cred_code,
@@ -46,13 +53,13 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
     return (
         <>
             <form onSubmit={handleSubmit}>
-                <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+                <div className="mb-2 sm:mb-4">
                     <Label>Dari Rekening</Label>
                     <div className="col-span-1 sm:col-span-2">
                         <select
                             onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })}
                             value={formData.cred_code}
-                            className="w-full text-sm rounded-md shadow-sm p-2 border border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="form-select"
                             required
                         >
                             <option value="">--Pilih Rekening--</option>
@@ -65,52 +72,55 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                         {errors.cred_code && <span className="text-red-500 text-xs">{errors.cred_code}</span>}
                     </div>
                 </div>
-                <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
-                    <Label>Jumlah transfer</Label>
-                    <div>
-                        <Input
-                            className="w-full text-sm"
-                            type="number"
-                            placeholder="Rp."
-                            value={formData.amount}
-                            onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                            required
-                        />
-                        {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
+                <div className="mb-2 sm:mb-4 grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
+                    <div className=" col-span-1 sm:col-span-2">
+                        <Label>Jumlah transfer</Label>
+                        <div>
+                            <input
+                                className="form-control"
+                                type="number"
+                                placeholder="Rp."
+                                value={formData.amount}
+                                onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                                required
+                            />
+                            {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
+                            {formData.amount && (
+                                <h1 className="text-sm">
+                                    Jml: <span className="font-bold">{formatNumber(formData.amount)}</span>, Adm:{" "}
+                                    <span className="font-bold">{formatNumber(formData.fee_amount)}</span>
+                                </h1>
+                            )}
+                        </div>
                     </div>
-                    {formData.amount && (
-                        <h1 className="text-sm font-semibold">
-                            Jml: {formatNumber(formData.amount)}, Adm: {formatNumber(formData.fee_amount)}
-                        </h1>
-                    )}
-                </div>
-                <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
-                    <Label>Fee (Admin)</Label>
                     <div className="">
-                        <Input
-                            className={"w-full sm:w-3/4 text-sm"}
-                            type="number"
-                            placeholder="Rp."
-                            value={formData.fee_amount}
-                            onChange={(e) => setFormData({ ...formData, fee_amount: e.target.value })}
-                            required
-                        />
-                        {errors.fee_amount && <span className="text-red-500 text-xs">{errors.fee_amount}</span>}
-                        {formData.amount && (
-                            <span
-                                onClick={(e) => setFormData({ ...formData, fee_amount: calculateFee(formData.amount) })}
-                                className=" text-xs cursor-pointer bg-slate-300 hover:bg-slate-200 rounded-lg px-2 py-1 mt-1"
-                            >
-                                {formatNumber(calculateFee(formData.amount))}
-                            </span>
-                        )}
+                        <Label>Fee (Admin)</Label>
+                        <div className="">
+                            <input
+                                className={"form-control"}
+                                type="number"
+                                placeholder="Rp."
+                                value={formData.fee_amount}
+                                onChange={(e) => setFormData({ ...formData, fee_amount: e.target.value })}
+                                required
+                            />
+                            {errors.fee_amount && <span className="text-red-500 text-xs">{errors.fee_amount}</span>}
+                            {formData.amount && (
+                                <span
+                                    onClick={(e) => setFormData({ ...formData, fee_amount: calculateFee(formData.amount) })}
+                                    className=" text-xs cursor-pointer bg-yellow-300 hover:bg-yellow-200 rounded-lg px-2 py-1 mt-1"
+                                >
+                                    {formatNumber(calculateFee(formData.amount))}
+                                </span>
+                            )}
+                        </div>
                     </div>
                 </div>
-                <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+                <div className="mb-2 sm:mb-4">
                     <Label>Nama Rek. Customer</Label>
                     <div className="col-span-1 sm:col-span-2">
-                        <Input
-                            className={"w-full text-sm"}
+                        <input
+                            className={"form-control"}
                             type="text"
                             placeholder="Atasnama"
                             value={formData.custName}
@@ -120,11 +130,11 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                         {errors.custName && <span className="text-red-500 text-xs">{errors.custName}</span>}
                     </div>
                 </div>
-                <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+                <div className="mb-2 sm:mb-4">
                     <Label>Keterangan</Label>
                     <div className="col-span-1 sm:col-span-2">
                         <textarea
-                            className="w-full text-sm rounded-md shadow-sm p-2 border border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="form-control"
                             type="text"
                             placeholder="(Optional)"
                             value={formData.description}
@@ -139,7 +149,7 @@ const CreateTransfer = ({ isModalOpen, filteredCashBankByWarehouse, notification
                         type="button"
                         className="bg-white border border-red-300 hover:bg-red-200 rounded-xl px-8 py-3 text-red-600 disabled:bg-slate-300 disabled:cursor-not-allowed"
                     >
-                        Cancel
+                        Tutup
                     </button>
                     <button
                         type="submit"

@@ -26,7 +26,9 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
         setLoading(true);
         try {
             const response = await axios.post("/api/create-mutation", formData);
-            notification("success", "Pengembalian saldo berhasil");
+            const successMessage =
+                response.data.journal.cred.acc_name + " ke " + response.data.journal.debt.acc_name + " sebesar " + formatNumber(response.data.journal.amount);
+            notification("success", response.data.message + " " + successMessage);
             setFormData({
                 debt_code: "",
                 cred_code: "",
@@ -46,9 +48,11 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
     };
 
     const initBalances = JSON.parse(localStorage.getItem("initBalances")) ?? {};
-    const selectedBranchAccount = accountBalance.data?.find((account) => Number(account.account_id) === Number(formData.cred_code));
+    const selectedBranchAccount = accountBalance?.data?.chartOfAccounts?.find((account) => Number(account.id) === Number(formData.cred_code));
 
-    const cashAccountBalance = accountBalance?.data?.find((account) => Number(account.account_id) === Number(user?.role?.warehouse?.chart_of_account_id));
+    const cashAccountBalance = accountBalance?.data?.chartOfAccounts?.find(
+        (account) => Number(account.id) === Number(user?.role?.warehouse?.chart_of_account_id)
+    );
     const calculateDepositCash = cashAccountBalance?.balance - openingCash;
 
     return (
@@ -60,7 +64,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                         onChange={(e) => {
                             const selectedCredCode = Number(e.target.value);
 
-                            const selectedAccount = accountBalance?.data?.find((acc) => Number(acc.account_id) === selectedCredCode);
+                            const selectedAccount = accountBalance?.data?.chartOfAccounts?.find((acc) => Number(acc.id) === selectedCredCode);
                             const initBalance = initBalances[selectedCredCode] ?? 0;
                             const balanceDifference = (selectedAccount?.balance ?? 0) - initBalance;
                             setFormData({
@@ -76,7 +80,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                             });
                         }}
                         value={formData.cred_code}
-                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-control"
                         required
                     >
                         <option value="">--Pilih sumber dana--</option>
@@ -100,7 +104,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                             })
                         }
                         value={formData.debt_code}
-                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-control"
                         required
                     >
                         <option value="">--Pilih tujuan mutasi--</option>
@@ -116,9 +120,9 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Jumlah transfer</Label>
                 <div className="col-span-1">
-                    <Input
+                    <input
                         type="number"
-                        className={"w-full text-xs sm:text-sm"}
+                        className={"form-control"}
                         placeholder="Rp."
                         value={formData.amount}
                         onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
@@ -141,11 +145,11 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                     </h1>
                 </div>
             </div>
-            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+            <div className="mb-4 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Keterangan</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <textarea
-                        className="w-full rounded-md border p-2 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="form-control"
                         type="text"
                         placeholder="(Optional)"
                         value={formData.description}

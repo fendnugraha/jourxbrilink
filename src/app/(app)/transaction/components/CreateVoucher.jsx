@@ -86,7 +86,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
             </div>
             <div className="my-4 grid grid-cols-3 gap-4 items-center">
                 <Label>Qty</Label>
-                <div className="flex items-center justify-between gap-2 bg-slate-300 p-1 rounded-2xl w-3/4">
+                <div className="flex items-center justify-between gap-2 bg-slate-300 p-1 rounded-2xl w-full sm:w-fit">
                     <button
                         className="bg-white rounded-full hover:bg-red-300 text-slate-600 active:scale-90 disabled:bg-slate-400 disabled:cursor-not-allowed"
                         onClick={decrementQty}

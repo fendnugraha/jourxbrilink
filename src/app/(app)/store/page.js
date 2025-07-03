@@ -125,8 +125,8 @@ const StorePage = () => {
                 {notification.message && (
                     <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
                 )}
-                <div className="overflow-hidden">
-                    <div className="bg-white shadow-sm sm:rounded-3xl ">
+                <div className="grid grid-cols-1 gap-4">
+                    <div className="bg-white shadow-sm rounded-3xl ">
                         <div className="p-4 flex justify-between sm:flex-row flex-col items-start">
                             <h1 className="text-2xl font-bold mb-4">
                                 Transaksi Barang
@@ -134,24 +134,26 @@ const StorePage = () => {
                                     {warehouses.find((w) => w.id === Number(selectedWarehouse))?.name}, Periode: {startDate} - {endDate}
                                 </span>
                             </h1>
-                            <div className="flex items-center gap-2">
-                                <Link href="/store/sales" className="btn-primary text-sm font-normal">
-                                    <PlusCircleIcon className="w-4 h-4 inline" /> Penjualan
-                                </Link>
-                                {userRole === "Administrator" && (
-                                    <Link href="#" className="btn-primary text-sm font-normal">
-                                        <PlusCircleIcon className="w-4 h-4 inline" /> Pembelian
+                            <div className="flex items-start flex-col sm:flex-row gap-2">
+                                <div className="flex items-center gap-2">
+                                    <Link href="/store/sales" className="btn-primary text-sm font-normal">
+                                        <PlusCircleIcon className="w-4 h-4 inline" /> Penjualan
                                     </Link>
-                                )}
+                                    {userRole === "Administrator" && (
+                                        <Link href="#" className="btn-primary text-sm font-normal">
+                                            <PlusCircleIcon className="w-4 h-4 inline" /> Pembelian
+                                        </Link>
+                                    )}
 
-                                {/* <button className="btn-primary text-xs disabled:bg-slate-400 disabled:cursor-not-allowed" disabled={true}>
+                                    {/* <button className="btn-primary text-xs disabled:bg-slate-400 disabled:cursor-not-allowed" disabled={true}>
                                             <PlusCircleIcon className="w-4 h-4 inline" /> Pembelian
                                         </button> */}
+                                </div>
                                 <button
                                     onClick={() => setIsModalFilterJournalOpen(true)}
                                     className="bg-white font-bold p-2 rounded-lg border border-gray-300 hover:border-gray-400"
                                 >
-                                    <FilterIcon className="size-5" />
+                                    <FilterIcon size={24} />
                                 </button>
                                 <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                                     {userRole === "Administrator" && (
@@ -242,7 +244,7 @@ const StorePage = () => {
                                         </tr>
                                     ) : transactions.data?.length === 0 ? (
                                         <tr>
-                                            <td colSpan={7} className="text-center">
+                                            <td colSpan={7} className="p-6 text-center">
                                                 Tidak ada transaksi
                                             </td>
                                         </tr>

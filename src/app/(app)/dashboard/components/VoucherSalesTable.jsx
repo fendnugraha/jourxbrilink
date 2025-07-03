@@ -135,12 +135,17 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                         </select>
                     )}
                     <div>
-                        <button onClick={() => fetchTransaction()} className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400">
+                        <button
+                            onClick={() => fetchTransaction()}
+                            className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 mr-1"
+                        >
                             <RefreshCcwIcon className="size-4" />
                         </button>
                         <button
                             onClick={() => copySalesVoucher()}
-                            className={`bg-white ${isCopied ? "text-green-600" : ""} font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400`}
+                            className={`bg-white ${
+                                isCopied ? "text-green-600" : ""
+                            } font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 mr-1`}
                         >
                             <CopyIcon className="size-4" />
                         </button>

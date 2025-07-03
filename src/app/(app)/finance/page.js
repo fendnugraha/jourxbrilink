@@ -15,12 +15,12 @@ const Finance = () => {
     const warehouse = user?.role?.warehouse_id;
 
     return (
-        <MainPage headerTitle="Summary">
+        <MainPage headerTitle="Finance">
             <div className="py-4 sm:py-8 px-4 sm:px-12">
                 {notification.message && (
                     <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
                 )}
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div className="grid grid-cols-1 gap-4">
                     <Payable notification={(message) => setNotification(message)} />
                 </div>
             </div>

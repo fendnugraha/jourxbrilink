@@ -93,7 +93,7 @@ const Payable = ({ notification }) => {
     return (
         <>
             <div className="overflow-hidden">
-                <div className="bg-white drop-shadow-sm sm:rounded-3xl mb-4">
+                <div className="bg-white drop-shadow-sm rounded-3xl mb-4">
                     <div className="p-4 flex justify-between flex-col sm:flex-row">
                         <div className="bg-slate-400 rounded-xl mb-4 p-1">
                             <div className="flex">
@@ -115,7 +115,7 @@ const Payable = ({ notification }) => {
                                 </button>
                             </div>
                         </div>
-                        <div>
+                        <div className="flex items-center gap-1 overflow-auto">
                             <button onClick={() => setIsModalCreatePayableOpen(true)} className="btn-primary text-xs mr-2">
                                 <PlusCircleIcon className="w-4 h-4 mr-2 inline" /> Hutang
                             </button>
@@ -232,7 +232,7 @@ const Payable = ({ notification }) => {
                         />
                     )}
                 </div>
-                <div className="bg-white drop-shadow-sm sm:rounded-3xl">
+                <div className="bg-white drop-shadow-sm rounded-3xl">
                     <div className="p-4 flex justify-between">
                         <h1 className="text-2xl font-bold mb-4">Riwayat Transaksi</h1>
                     </div>

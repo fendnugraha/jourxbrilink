@@ -73,7 +73,7 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
                         </select>
                     )}
                     <div>
-                        <button onClick={fetchExpenses} className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400">
+                        <button onClick={fetchExpenses} className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 mr-1">
                             <RefreshCcwIcon className="size-4" />
                         </button>
                         <button

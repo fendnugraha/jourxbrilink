@@ -50,19 +50,19 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
     }, 0);
     return (
         <>
-            <div className="flex justify-between items-start flex-col sm:flex-row gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <h1 className="font-bold text-xl text-red-600">
                     Pengeluaran (Biaya Operasional)
                     <span className="text-xs block font-normal">
                         Periode: {startDate} - {endDate}
                     </span>
                 </h1>
-                <div className="flex justify-start gap-1">
+                <div className="flex justify-start gap-1 flex-col sm:flex-row">
                     {userRole === "Administrator" && (
                         <select
                             value={selectedWarehouse}
                             onChange={(e) => setSelectedWarehouse(e.target.value)}
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                            className="bg-gray-50 flex-1 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
                         >
                             <option value="all">Semua Cabang</option>
                             {warehouses?.data?.map((warehouse) => (
@@ -72,15 +72,17 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
                             ))}
                         </select>
                     )}
-                    <button onClick={fetchExpenses} className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400">
-                        <RefreshCcwIcon className="size-4" />
-                    </button>
-                    <button
-                        onClick={() => setIsModalFilterDataOpen(true)}
-                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
-                    >
-                        <FilterIcon className="size-4" />
-                    </button>
+                    <div>
+                        <button onClick={fetchExpenses} className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400">
+                            <RefreshCcwIcon className="size-4" />
+                        </button>
+                        <button
+                            onClick={() => setIsModalFilterDataOpen(true)}
+                            className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
+                        >
+                            <FilterIcon className="size-4" />
+                        </button>
+                    </div>
                     <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                         <div className="mb-4">
                             <Label className="font-bold">Tanggal</Label>

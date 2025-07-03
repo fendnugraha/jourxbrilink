@@ -279,89 +279,91 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                 </div>
             </div>
 
-            {currentItems?.length > 0 && (
-                <div className="mb-4 bg-white drop-shadow-sm sm:rounded-3xl">
-                    <h1 className="px-2 sm:px-6 pt-6 font-bold text-xl text-green-600">History Mutasi Kas</h1>
-                    <div className="px-2 sm:px-6 pt-2 flex gap-2">
-                        <select
-                            onChange={(e) => {
-                                setItemsPerPage(Number(e.target.value));
-                                setCurrentPage(1);
-                            }}
-                            value={itemsPerPage}
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-                        >
-                            <option value={5}>5</option>
-                            <option value={10}>10</option>
-                            <option value={25}>25</option>
-                            <option value={50}>50</option>
-                            <option value={100}>100</option>
-                        </select>
-                        <Input
-                            type="search"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            placeholder="Cari..."
-                        />
-                    </div>
-                    <div className="overflow-x-auto">
-                        <table className="table w-full text-xs">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        Dari <MoveRightIcon className="size-5 inline" /> Ke
-                                    </th>
-                                    <th className="hidden sm:table-cell">Jumlah</th>
-                                    <th>Opsi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {loading ? (
-                                    <tr className="text-center">
-                                        <td colSpan={2}>Loading ...</td>
-                                    </tr>
-                                ) : (
-                                    currentItems.map((journal, index) => (
-                                        <tr key={index}>
-                                            <td className="">
-                                                <span className="block font-bold text-slate-500">
-                                                    {formatDateTime(journal.created_at)} | {journal.invoice}
-                                                </span>
-                                                {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt.acc_name}
-                                                <span className="block sm:hidden font-bold text-blue-500">{formatNumber(journal.amount)}</span>
-                                            </td>
-                                            <td className="text-end hidden sm:table-cell">{formatNumber(journal.amount)}</td>
-                                            <td className="text-center">
-                                                <button
-                                                    onClick={() => {
-                                                        setSelectedJournalId(journal.id);
-                                                        setIsModalDeleteJournalOpen(true);
-                                                    }}
-                                                    hidden={userRole !== "Administrator"}
-                                                    disabled={!hqCashBankIds.includes(journal.cred_code)}
-                                                    className="cursor-pointer disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transition-all group-hover:text-white duration-200"
-                                                >
-                                                    <TrashIcon className="size-4" />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                        {totalPages > 1 && (
-                            <Pagination
-                                className="w-full px-2 sm:px-6 pb-6"
-                                totalItems={totalItems}
-                                itemsPerPage={itemsPerPage}
-                                currentPage={currentPage}
-                                onPageChange={handlePageChange}
-                            />
-                        )}
-                    </div>
+            <div className="mb-4 bg-white drop-shadow-sm sm:rounded-3xl">
+                <h1 className="px-2 sm:px-6 pt-6 font-bold text-xl text-green-600">History Mutasi Kas</h1>
+                <div className="px-2 sm:px-6 pt-2 flex gap-2">
+                    <select
+                        onChange={(e) => {
+                            setItemsPerPage(Number(e.target.value));
+                            setCurrentPage(1);
+                        }}
+                        value={itemsPerPage}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                    >
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                    </select>
+                    <Input
+                        type="search"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        placeholder="Cari..."
+                    />
                 </div>
-            )}
+                <div className="overflow-x-auto">
+                    <table className="table w-full text-xs">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Dari <MoveRightIcon className="size-5 inline" /> Ke
+                                </th>
+                                <th className="hidden sm:table-cell">Jumlah</th>
+                                <th>Opsi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {loading ? (
+                                <tr className="text-center">
+                                    <td colSpan={2}>Loading ...</td>
+                                </tr>
+                            ) : currentItems?.length === 0 ? (
+                                <tr className="text-center">
+                                    <td colSpan={3}>Tidak ada data</td>
+                                </tr>
+                            ) : (
+                                currentItems.map((journal, index) => (
+                                    <tr key={index}>
+                                        <td className="">
+                                            <span className="block font-bold text-slate-500">
+                                                {formatDateTime(journal.created_at)} | {journal.invoice}
+                                            </span>
+                                            {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt.acc_name}
+                                            <span className="block sm:hidden font-bold text-blue-500">{formatNumber(journal.amount)}</span>
+                                        </td>
+                                        <td className="text-end hidden sm:table-cell">{formatNumber(journal.amount)}</td>
+                                        <td className="text-center">
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedJournalId(journal.id);
+                                                    setIsModalDeleteJournalOpen(true);
+                                                }}
+                                                hidden={userRole !== "Administrator"}
+                                                disabled={!hqCashBankIds.includes(journal.cred_code)}
+                                                className="cursor-pointer disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transition-all group-hover:text-white duration-200"
+                                            >
+                                                <TrashIcon className="size-4" />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                    {totalPages > 1 && (
+                        <Pagination
+                            className="w-full px-2 sm:px-6 pb-6"
+                            totalItems={totalItems}
+                            itemsPerPage={itemsPerPage}
+                            currentPage={currentPage}
+                            onPageChange={handlePageChange}
+                        />
+                    )}
+                </div>
+            </div>
             <Modal isOpen={isModalDeleteJournalOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
                 <div className="flex flex-col items-center justify-center gap-3 mb-4">
                     <MessageCircleWarningIcon size={72} className="text-red-600" />

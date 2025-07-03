@@ -14,7 +14,10 @@ const SummaryPage = () => {
     const { user } = useAuth({ middleware: "auth" });
 
     const [account, setAccount] = useState(null);
-    const [notification, setNotification] = useState("");
+    const [notification, setNotification] = useState({
+        type: "",
+        message: "",
+    });
     const [errors, setErrors] = useState([]);
     const { warehouses, warehousesError } = useGetWarehouses();
 
@@ -36,10 +39,12 @@ const SummaryPage = () => {
                 {notification.message && (
                     <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
                 )}
-                <WarehouseBalance />
-                <RevenueReport />
-                <MutationHistory account={account} notification={(message) => setNotification(message)} user={user} />
-                <LogActivity warehouses={warehouses} />
+                <div className="grid grid-cols-1 gap-4">
+                    <WarehouseBalance />
+                    <RevenueReport />
+                    <MutationHistory account={account} notification={(type, message) => setNotification({ type, message })} user={user} />
+                    <LogActivity warehouses={warehouses} />
+                </div>
             </div>
         </MainPage>
     );

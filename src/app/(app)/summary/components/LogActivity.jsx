@@ -53,7 +53,7 @@ const LogActivity = ({ warehouses }) => {
 
     return (
         <div className="bg-white rounded-3xl mb-3 relative">
-            <div className="p-4 flex justify-between">
+            <div className="p-4 flex justify-between gap-2">
                 <h4 className=" text-blue-950 text-lg font-bold">
                     Log Activity
                     <span className="text-xs block text-slate-500 font-normal">

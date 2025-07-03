@@ -45,7 +45,7 @@ const WarehouseBalance = () => {
     }, [fetchWarehouseBalance]);
     return (
         <div className="bg-white rounded-3xl mb-3 relative">
-            <div className="p-4 flex justify-between">
+            <div className="p-4 flex justify-between gap-2">
                 <h4 className=" text-blue-950 text-lg font-bold">
                     Saldo Kas & bank
                     <span className="text-xs text-slate-500 block font-normal">Periode: {endDate}</span>

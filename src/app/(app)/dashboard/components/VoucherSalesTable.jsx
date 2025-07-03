@@ -112,19 +112,19 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
 
     return (
         <>
-            <div className="flex justify-between items-start flex-col sm:flex-row gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <h1 className="font-bold text-xl text-slate-600">
                     Total Penjualan Barang
                     <span className="text-xs block font-normal">
                         Periode: {startDate} - {endDate}
                     </span>
                 </h1>
-                <div className="flex justify-end gap-1">
+                <div className="flex justify-end gap-1 flex-col sm:flex-row">
                     {userRole === "Administrator" && (
                         <select
                             value={selectedWarehouse}
                             onChange={(e) => setSelectedWarehouse(e.target.value)}
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                            className="bg-gray-50 flex-1 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
                         >
                             <option value="all">Semua Cabang</option>
                             {warehouses?.data?.map((warehouse) => (
@@ -134,21 +134,23 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                             ))}
                         </select>
                     )}
-                    <button onClick={() => fetchTransaction()} className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400">
-                        <RefreshCcwIcon className="size-4" />
-                    </button>
-                    <button
-                        onClick={() => copySalesVoucher()}
-                        className={`bg-white ${isCopied ? "text-green-600" : ""} font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400`}
-                    >
-                        <CopyIcon className="size-4" />
-                    </button>
-                    <button
-                        onClick={() => setIsModalFilterDataOpen(true)}
-                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
-                    >
-                        <FilterIcon className="size-4" />
-                    </button>
+                    <div>
+                        <button onClick={() => fetchTransaction()} className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400">
+                            <RefreshCcwIcon className="size-4" />
+                        </button>
+                        <button
+                            onClick={() => copySalesVoucher()}
+                            className={`bg-white ${isCopied ? "text-green-600" : ""} font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400`}
+                        >
+                            <CopyIcon className="size-4" />
+                        </button>
+                        <button
+                            onClick={() => setIsModalFilterDataOpen(true)}
+                            className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
+                        >
+                            <FilterIcon className="size-4" />
+                        </button>
+                    </div>
                     <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                         <div className="mb-4">
                             <Label className="font-bold">Tanggal</Label>
@@ -180,7 +182,7 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                     </Modal>
                 </div>
             </div>
-            <div className="my-4 gap-4 flex flex-col sm:flex-row">
+            <div className="gap-4 flex flex-col sm:flex-row">
                 <div className="bg-white overflow-hidden w-full shadow-sm rounded-3xl">
                     <div className="flex justify-between px-4 sm:px-6 pt-4">
                         <h1 className="font-bold text-xl text-blue-600">Voucher & SP</h1>
@@ -236,63 +238,61 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                         </div>
                     )}
                 </div>
-                {paginateNonVoucher?.currentItems?.length > 0 && (
-                    <div className="bg-white overflow-hidden w-full shadow-sm rounded-3xl">
-                        <div className="flex justify-between px-4 sm:px-6 pt-4">
-                            <h1 className="font-bold text-xl text-green-600">Accesories</h1>
-                            <h1 className="text-2xl text-slate-700 font-bold">{formatNumber(totalCostNonVoucher < 0 ? totalCostNonVoucher * -1 : 0)}</h1>
-                        </div>
-                        <div className="overflow-x-auto">
-                            <table className="table w-full text-xs">
-                                <thead>
-                                    <tr>
-                                        <th>Product</th>
-                                        <th>Qty</th>
-                                        <th>Jual</th>
-                                        <th>Modal</th>
-                                        <th>Laba</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {loading ? (
-                                        <tr>
-                                            <td colSpan="5" className="text-center">
-                                                Loading...
-                                            </td>
-                                        </tr>
-                                    ) : transactions.length === 0 ? (
-                                        <tr>
-                                            <td colSpan="5" className="text-center">
-                                                Tidak ada data
-                                            </td>
-                                        </tr>
-                                    ) : (
-                                        paginateNonVoucher?.currentItems?.map((transaction) => (
-                                            <tr key={transaction.product_id}>
-                                                <td>{transaction.product.name}</td>
-                                                <td className="text-center">{formatNumber(-transaction.quantity)}</td>
-                                                <td className="text-end">{formatNumber(-transaction.total_price)}</td>
-                                                <td className="text-end">{formatNumber(-transaction.total_cost)}</td>
-                                                <td className="text-end">{formatNumber(-Number(transaction.total_price - transaction.total_cost))}</td>
-                                            </tr>
-                                        ))
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-                        {paginateNonVoucher?.totalPages > 1 && (
-                            <div className="px-2 pb-4">
-                                <Pagination
-                                    className="w-full px-4"
-                                    totalItems={Number(paginateNonVoucher?.totalItems)}
-                                    itemsPerPage={Number(paginateNonVoucher?.itemsPerPage)}
-                                    currentPage={Number(paginateNonVoucher?.currentPage)}
-                                    onPageChange={handlePageChangeNonVoucher}
-                                />
-                            </div>
-                        )}
+                <div className="bg-white overflow-hidden w-full shadow-sm rounded-3xl">
+                    <div className="flex justify-between px-4 sm:px-6 pt-4">
+                        <h1 className="font-bold text-xl text-green-600">Accesories</h1>
+                        <h1 className="text-2xl text-slate-700 font-bold">{formatNumber(totalCostNonVoucher < 0 ? totalCostNonVoucher * -1 : 0)}</h1>
                     </div>
-                )}
+                    <div className="overflow-x-auto">
+                        <table className="table w-full text-xs">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Qty</th>
+                                    <th>Jual</th>
+                                    <th>Modal</th>
+                                    <th>Laba</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan="5" className="text-center">
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                ) : transactions.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="5" className="text-center">
+                                            Tidak ada data
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    paginateNonVoucher?.currentItems?.map((transaction) => (
+                                        <tr key={transaction.product_id}>
+                                            <td>{transaction.product.name}</td>
+                                            <td className="text-center">{formatNumber(-transaction.quantity)}</td>
+                                            <td className="text-end">{formatNumber(-transaction.total_price)}</td>
+                                            <td className="text-end">{formatNumber(-transaction.total_cost)}</td>
+                                            <td className="text-end">{formatNumber(-Number(transaction.total_price - transaction.total_cost))}</td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                    {paginateNonVoucher?.totalPages > 1 && (
+                        <div className="px-2 pb-4">
+                            <Pagination
+                                className="w-full px-4"
+                                totalItems={Number(paginateNonVoucher?.totalItems)}
+                                itemsPerPage={Number(paginateNonVoucher?.itemsPerPage)}
+                                currentPage={Number(paginateNonVoucher?.currentPage)}
+                                onPageChange={handlePageChangeNonVoucher}
+                            />
+                        </div>
+                    )}
+                </div>
             </div>
         </>
     );

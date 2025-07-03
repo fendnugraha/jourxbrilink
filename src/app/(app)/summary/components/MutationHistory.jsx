@@ -71,7 +71,7 @@ const MutationHistory = ({ account, notification, user }) => {
 
     return (
         <div className="bg-white rounded-3xl mb-3 relative">
-            <div className="p-4">
+            <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <h4 className="mb-4 text-blue-950 text-lg font-bold">
                     Riwayat Mutasi
                     <span className="text-xs block font-normal text-slate-500">

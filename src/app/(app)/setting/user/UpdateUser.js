@@ -23,7 +23,7 @@ const UpdateUser = ({ isModalOpen, notification, fetchUsers, findSelectedAccount
         } catch (error) {
             notification("error", error.response?.data?.message || "Something went wrong.");
         }
-    }, []);
+    }, [notification]);
 
     useEffect(() => {
         fetchWarehouses();

@@ -13,17 +13,20 @@ const UpdateWarehouse = ({ isModalOpen, notification, findSelectedWarehouseId, f
         chart_of_account_id: findSelectedWarehouseId?.chart_of_account_id,
     });
 
-    const fetchAccountByIds = useCallback(async ({ account_ids }) => {
-        setLoading(true);
-        try {
-            const response = await axios.get(`/api/get-account-by-account-id`, { params: { account_ids } });
-            setAccounts(response.data.data);
-        } catch (error) {
-            notification(error.response?.data?.message || "Something went wrong.");
-        } finally {
-            setLoading(false);
-        }
-    }, []);
+    const fetchAccountByIds = useCallback(
+        async ({ account_ids }) => {
+            setLoading(true);
+            try {
+                const response = await axios.get(`/api/get-account-by-account-id`, { params: { account_ids } });
+                setAccounts(response.data.data);
+            } catch (error) {
+                notification(error.response?.data?.message || "Something went wrong.");
+            } finally {
+                setLoading(false);
+            }
+        },
+        [notification]
+    );
 
     useEffect(() => {
         fetchAccountByIds({ account_ids: [1, 2] });

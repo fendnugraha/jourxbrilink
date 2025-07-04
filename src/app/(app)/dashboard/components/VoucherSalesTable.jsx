@@ -189,9 +189,21 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
             </div>
             <div className="gap-4 flex flex-col sm:flex-row">
                 <div className="bg-white overflow-hidden w-full shadow-sm rounded-3xl">
-                    <div className="flex justify-between px-4 sm:px-6 pt-4">
-                        <h1 className="font-bold text-xl text-blue-600">Voucher & SP</h1>
-                        <h1 className="text-2xl text-slate-700 font-bold">{formatNumber(totalCostVoucher < 0 ? totalCostVoucher * -1 : 0)}</h1>
+                    <div className="flex justify-between items-start px-4 sm:px-6 pt-4">
+                        <h1 className="font-bold text-xl text-blue-600">
+                            Voucher & SP{" "}
+                            <span className="text-sm block font-normal">Total: {formatNumber(totalCostVoucher < 0 ? totalCostVoucher * -1 : 0)}</span>
+                        </h1>
+                        <select
+                            value={itemsPerPageVoucher}
+                            onChange={(e) => setItemsPerPageVoucher(e.target.value)}
+                            className="bg-gray-50 w-16 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-1"
+                        >
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="table w-full text-xs">
@@ -244,9 +256,21 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                     )}
                 </div>
                 <div className="bg-white overflow-hidden w-full shadow-sm rounded-3xl">
-                    <div className="flex justify-between px-4 sm:px-6 pt-4">
-                        <h1 className="font-bold text-xl text-green-600">Accesories</h1>
-                        <h1 className="text-2xl text-slate-700 font-bold">{formatNumber(totalCostNonVoucher < 0 ? totalCostNonVoucher * -1 : 0)}</h1>
+                    <div className="flex justify-between items-start px-4 sm:px-6 pt-4">
+                        <h1 className="font-bold text-xl text-green-600">
+                            Accesories{" "}
+                            <span className="text-sm block font-normal">Total: {formatNumber(totalCostNonVoucher < 0 ? totalCostNonVoucher * -1 : 0)}</span>
+                        </h1>
+                        <select
+                            value={itemsPerPageNonVoucher}
+                            onChange={(e) => setItemsPerPageNonVoucher(e.target.value)}
+                            className="bg-gray-50 w-16 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-1"
+                        >
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="table w-full text-xs">

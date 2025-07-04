@@ -98,7 +98,7 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
     return (
         <div className="relative hover:drop-shadow-sm">
             {isValidating && (
-                <div className="absolute w-full h-full bg-slate-500/30 backdrop-blur-sm flex justify-center items-center z-10 rounded-3xl">
+                <div className="absolute w-full h-full bg-white/10 backdrop-blur-[3px] flex justify-center items-center z-10 rounded-3xl">
                     <LoaderCircle size={60} className=" inline text-white animate-spin" />
                 </div>
             )}

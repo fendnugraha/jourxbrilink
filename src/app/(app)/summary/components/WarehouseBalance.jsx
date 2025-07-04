@@ -105,7 +105,7 @@ const WarehouseBalance = () => {
                                 <tr className="hover:bg-orange-100" key={i}>
                                     <td className="">
                                         <Link className="hover:underline" href={`/summary/warehouse/${w.id}`}>
-                                            {w.name}
+                                            {i + 1}. {w.name}
                                         </Link>
                                     </td>
                                     <td className="text-end">{formatNumber(w.cash)}</td>

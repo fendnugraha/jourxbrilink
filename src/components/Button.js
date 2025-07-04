@@ -7,7 +7,7 @@ const Button = ({ children, buttonType = "primary", className, ...props }) => {
         success: "bg-green-500 hover:bg-green-400 text-white",
     };
     return (
-        <button {...props} className={`px-6 py-3 min-w-40 ${buttonTypes[buttonType]} ${className} rounded-xl text-sm cursor-pointer`}>
+        <button {...props} className={`px-6 py-2 min-w-40 ${buttonTypes[buttonType]} ${className} rounded-xl text-sm cursor-pointer`}>
             {children}
         </button>
     );

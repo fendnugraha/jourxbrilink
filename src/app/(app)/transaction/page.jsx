@@ -165,7 +165,7 @@ const TransactionPage = () => {
                 <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
             )}
             <MainPage headerTitle="Transaction">
-                <div className="py-4 sm:py-8 px-4 sm:px-12 mb-28 sm:mb-0">
+                <div className="py-4 sm:py-8 px-4 sm:px-12 lg:px-24 mb-28 sm:mb-0">
                     <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                         <div className="bg-white p-4 rounded-3xl col-span-1 sm:col-span-3 order-2 sm:order-1 drop-shadow-sm">
                             <h1 className="text-2xl font-bold mb-4">Transaction List</h1>
@@ -274,8 +274,8 @@ const TransactionPage = () => {
                                     setIsCashWithdrawalActive(false);
                                 }}
                                 className={`${
-                                    isTransferActive ? "bg-slate-600 text-white text-sm" : "bg-slate-500 text-slate-300 text-xs"
-                                } w-full py-1 cursor-pointer`}
+                                    isTransferActive ? "bg-lime-500 text-white scale-105 text-sm" : "bg-slate-400 text-slate-300 text-xs"
+                                } w-full py-1 cursor-pointer hover:text-sm transition-all duration-100 ease-in`}
                             >
                                 Transfer Uang
                             </button>
@@ -285,8 +285,8 @@ const TransactionPage = () => {
                                     setIsCashWithdrawalActive(true);
                                 }}
                                 className={`${
-                                    isCashWithdrawalActive ? "bg-slate-600 text-white text-sm" : "bg-slate-500 text-slate-300 text-xs"
-                                } w-full py-1 cursor-pointer`}
+                                    isCashWithdrawalActive ? "bg-lime-500 text-white scale-105 text-sm" : "bg-slate-400 text-slate-300 text-xs"
+                                } w-full py-1 cursor-pointer hover:text-sm transition-all duration-100 ease-in`}
                             >
                                 Tarik Tunai
                             </button>
@@ -326,8 +326,8 @@ const TransactionPage = () => {
                                     setIsCashWithdrawalActive(false);
                                 }}
                                 className={`${
-                                    isTransferActive ? "bg-slate-600 text-white text-sm" : "bg-slate-500 text-slate-300 text-xs"
-                                } w-full py-1 cursor-pointer`}
+                                    isTransferActive ? "bg-lime-500 text-white scale-105 text-sm" : "bg-slate-400 text-slate-300 text-xs"
+                                } w-full py-1 cursor-pointer hover:text-sm transition-all duration-100 ease-in`}
                             >
                                 Transfer Uang
                             </button>
@@ -337,8 +337,8 @@ const TransactionPage = () => {
                                     setIsCashWithdrawalActive(true);
                                 }}
                                 className={`${
-                                    isCashWithdrawalActive ? "bg-slate-600 text-white text-sm" : "bg-slate-500 text-slate-300 text-xs"
-                                } w-full py-1 cursor-pointer`}
+                                    isCashWithdrawalActive ? "bg-lime-500 text-white scale-105 text-sm" : "bg-slate-400 text-slate-300 text-xs"
+                                } w-full py-1 cursor-pointer hover:text-sm transition-all duration-100 ease-in`}
                             >
                                 Tarik Tunai
                             </button>

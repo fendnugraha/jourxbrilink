@@ -137,7 +137,7 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                         type="button"
                         className="bg-white border border-red-300 hover:bg-red-200 rounded-xl px-8 py-3 text-red-600 disabled:bg-slate-300 disabled:cursor-not-allowed"
                     >
-                        Cancel
+                        Tutup
                     </button>
                     <button
                         type="submit"

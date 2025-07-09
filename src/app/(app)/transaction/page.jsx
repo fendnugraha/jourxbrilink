@@ -14,19 +14,12 @@ import CreateMutationToHq from "./components/CreateMutationToHq";
 import CreateBankAdminFee from "./components/CreateBankAdminFee";
 import CreateExpense from "./components/CreateExpense";
 import CashBankBalance from "./components/CashBankBalance";
-import Loading from "../loading";
 import { ArrowDownIcon, ArrowUpIcon, ChevronRightIcon, HandCoinsIcon, ShoppingBagIcon } from "lucide-react";
 import useCashBankBalance from "@/libs/cashBankBalance";
 import { mutate } from "swr";
 import useGetWarehouses from "@/libs/getAllWarehouse";
-import { useGetDailyDashboard } from "@/libs/getDailyDashboard";
-import formatNumber from "@/libs/formatNumber";
-import Label from "@/components/Label";
-import Input from "@/components/Input";
-import { QRCodeSVG } from "qrcode.react";
 import MainPage from "../main";
 import Button from "@/components/Button";
-import { DropdownButton } from "@/components/DropdownLink";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -56,12 +49,10 @@ const TransactionPage = () => {
         type: "",
         message: "",
     });
-    const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
 
     const [isVoucherMenuOpen, setIsVoucherMenuOpen] = useState(false);
     const [isExpenseMenuOpen, setIsExpenseMenuOpen] = useState(false);
-    const [isDailyReportOpen, setIsDailyReportOpen] = useState(false);
 
     const [isTransferActive, setIsTransferActive] = useState(false);
     const [isCashWithdrawalActive, setIsCashWithdrawalActive] = useState(false);
@@ -73,8 +64,6 @@ const TransactionPage = () => {
             setOpeningCash(initBalances[warehouseCashId]);
         }
     });
-    const [isCopied, setIsCopied] = useState(false);
-
     const menuRef = useRef(null);
 
     // Event listener untuk klik di luar menu
@@ -141,12 +130,6 @@ const TransactionPage = () => {
     const filteredCashBankByWarehouse = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === warehouse);
     const hqCashBank = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === 1);
 
-    const copyData = async () => {
-        await navigator.clipboard.writeText(copyDailyReport());
-        setIsCopied(true);
-        setTimeout(() => setIsCopied(false), 3000);
-    };
-
     const calculateFee = (amount) => {
         if (amount < 100000) {
             return 3000;
@@ -159,6 +142,24 @@ const TransactionPage = () => {
         return chunkCount * feePerChunk;
     };
 
+    const [personalSetting, setPersonalSetting] = useState({
+        feeAdminAuto: false,
+    });
+    const [loaded, setLoaded] = useState(false);
+
+    useEffect(() => {
+        const storedSetting = localStorage.getItem("personalSetting");
+        if (storedSetting) {
+            setPersonalSetting(JSON.parse(storedSetting));
+        }
+        setLoaded(true);
+    }, []);
+
+    useEffect(() => {
+        if (loaded) {
+            localStorage.setItem("personalSetting", JSON.stringify(personalSetting));
+        }
+    }, [personalSetting, loaded]);
     return (
         <>
             {notification.message && (
@@ -299,6 +300,8 @@ const TransactionPage = () => {
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
                                 calculateFee={calculateFee}
+                                setPersonalSetting={setPersonalSetting}
+                                feeAdminAuto={personalSetting.feeAdminAuto}
                             />
                         )}
                         {isCashWithdrawalActive && (
@@ -309,6 +312,8 @@ const TransactionPage = () => {
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
                                 calculateFee={calculateFee}
+                                setPersonalSetting={setPersonalSetting}
+                                feeAdminAuto={personalSetting.feeAdminAuto}
                             />
                         )}
                     </Modal>
@@ -351,6 +356,8 @@ const TransactionPage = () => {
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
                                 calculateFee={calculateFee}
+                                setPersonalSetting={setPersonalSetting}
+                                feeAdminAuto={personalSetting.feeAdminAuto}
                             />
                         )}
                         {isCashWithdrawalActive && (
@@ -361,6 +368,8 @@ const TransactionPage = () => {
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 user={user}
                                 calculateFee={calculateFee}
+                                setPersonalSetting={setPersonalSetting}
+                                feeAdminAuto={personalSetting.feeAdminAuto}
                             />
                         )}
                     </Modal>

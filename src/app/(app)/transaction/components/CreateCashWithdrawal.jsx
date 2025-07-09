@@ -5,7 +5,16 @@ import Label from "@/components/Label";
 import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
 
-const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notification, fetchJournalsByWarehouse, user, calculateFee }) => {
+const CreateCashWithdrawal = ({
+    isModalOpen,
+    filteredCashBankByWarehouse,
+    notification,
+    fetchJournalsByWarehouse,
+    user,
+    calculateFee,
+    setPersonalSetting,
+    feeAdminAuto,
+}) => {
     const [formData, setFormData] = useState({
         debt_code: "",
         cred_code: user.role.warehouse.chart_of_account_id,
@@ -80,7 +89,13 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                             type="number"
                             placeholder="Rp."
                             value={formData.amount}
-                            onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    amount: e.target.value,
+                                    fee_amount: feeAdminAuto ? calculateFee(e.target.value) : formData.fee_amount,
+                                })
+                            }
                             required
                         />
                         {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
@@ -94,12 +109,14 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                 </div>
                 <div className="mb-2 sm:mb-4 grid grid-cols-1 sm:grid-cols-2">
                     <div>
-                        <Label>Fee (Admin)</Label>
+                        <Label>
+                            Fee (Admin) <span className="text-green-500 font-bold">{feeAdminAuto ? "(Auto)" : ""}</span>
+                        </Label>
                         <div className="">
                             <input
-                                className={"form-control"}
+                                className={`form-control ${feeAdminAuto ? "text-green-700" : ""}`}
                                 type="number"
-                                placeholder="Rp."
+                                placeholder={feeAdminAuto ? "Rp. (Autofilled)" : "Rp."}
                                 value={formData.fee_amount}
                                 onChange={(e) => setFormData({ ...formData, fee_amount: e.target.value })}
                                 required
@@ -129,6 +146,16 @@ const CreateCashWithdrawal = ({ isModalOpen, filteredCashBankByWarehouse, notifi
                         />
                         {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                     </div>
+                    <input
+                        type="checkbox"
+                        id="feeAdminAuto"
+                        className="mt-2 mr-2"
+                        checked={feeAdminAuto}
+                        onChange={(e) => setPersonalSetting((prev) => ({ ...prev, feeAdminAuto: e.target.checked }))}
+                    />
+                    <label htmlFor="feeAdminAuto" className={`text-sm ${feeAdminAuto ? "text-green-600" : ""}`}>
+                        Fee Admin Auto
+                    </label>
                 </div>
 
                 <div className="flex justify-end gap-2">

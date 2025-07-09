@@ -18,11 +18,14 @@ import { useAuth } from "@/libs/auth";
 import useGetProfit from "@/components/RankByProfit";
 import formatNumber from "@/libs/formatNumber";
 import { mutate } from "swr";
+import useLiveClock from "@/components/useLiveClock";
 
 const MainPage = ({ children, headerTitle }) => {
     const { user } = useAuth({ middleware: "auth" });
     const [isOpen, setIsOpen] = useState(false);
     const { profit, loading: profitLoading, error } = useGetProfit();
+
+    const { dayName, date, time, raw } = useLiveClock();
 
     const pathName = usePathname();
     const drawerReff = useRef();
@@ -36,14 +39,6 @@ const MainPage = ({ children, headerTitle }) => {
         const suffixes = ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"];
         const mod = number % 100;
         return suffixes[mod - 10] || suffixes[mod] || suffixes[0];
-    };
-    const getCurrentDate = () => {
-        const today = new Date();
-        const year = today.getFullYear();
-        const longMonthName = today.toLocaleDateString("id-ID", { month: "long" });
-        const day = String(today.getDate()).padStart(2, "0");
-        const dayName = today.toLocaleDateString("id-ID", { weekday: "long" });
-        return `${dayName}, ${day} ${longMonthName} ${year}`;
     };
 
     useEffect(() => {
@@ -59,13 +54,14 @@ const MainPage = ({ children, headerTitle }) => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [isOpen]);
-
     return (
         <>
             <header className="w-full h-20 flex items-center justify-between px-4 sm:px-12 py-2">
                 <h1 className="text-xl sm:text-2xl font-bold text-slate-700">
                     {headerTitle}
-                    <span className="text-xs font-normal p-0 block">{getCurrentDate()}</span>
+                    <span className="text-xs font-normal p-0 block">
+                        {userWarehouseName} | {dayName}, {date} {time}
+                    </span>
                 </h1>
                 <div className="flex items-center justify-end sm:gap-4">
                     {WarehouseRank > 0 && (

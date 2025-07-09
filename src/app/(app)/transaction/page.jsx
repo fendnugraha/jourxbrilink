@@ -165,7 +165,7 @@ const TransactionPage = () => {
                 <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
             )}
             <MainPage headerTitle="Transaction">
-                <div className="py-4 sm:py-8 px-4 sm:px-12 lg:px-24 mb-28 sm:mb-0">
+                <div className="py-4 sm:py-8 px-4 sm:px-12 mb-28 sm:mb-0">
                     <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                         <div className="bg-white p-4 rounded-3xl col-span-1 sm:col-span-3 order-2 sm:order-1 drop-shadow-sm">
                             <h1 className="text-2xl font-bold mb-4">Transaction List</h1>

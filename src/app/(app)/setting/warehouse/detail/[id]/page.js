@@ -12,6 +12,7 @@ const WarehouseDetail = ({ params }) => {
     const [warehouse, setWarehouse] = useState({});
     const [accounts, setAccounts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState("");
     const [notification, setNotification] = useState({ type: "", message: "" });
 
     const [formData, setFormData] = useState({
@@ -66,20 +67,32 @@ const WarehouseDetail = ({ params }) => {
     }, [fetchAccountByIds]);
 
     const availableAccounts = accounts.filter((item) => item.warehouse_id === null || Number(item.warehouse_id) === Number(id));
+    const accountWithSearch = accounts.filter((item) => item?.acc_name?.toLowerCase().includes(search.toLowerCase()));
+
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10; // Number of items per page
 
     // Calculate the total number of pages
-    const totalItems = accounts.length;
+    const totalItems = accountWithSearch.length;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     // Get the items for the current page
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentItems = accounts.slice(startIndex, startIndex + itemsPerPage);
+    const currentItems = accountWithSearch.slice(startIndex, startIndex + itemsPerPage);
 
     // Handle page change from the Pagination component
     const handlePageChange = (page) => {
         setCurrentPage(page);
+    };
+
+    const handleAddCashBank = async (coa_id) => {
+        try {
+            await axios.put(`/api/warehouse/${id}/add-cash-bank/${coa_id}`, formData);
+            setNotification({ type: "success", message: "Cash & Bank added successfully." });
+            fetchAccountByIds({ account_ids: [1, 2] });
+        } catch (error) {
+            setNotification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
+        }
     };
     return (
         <MainPage headerTitle={`${warehouse.name}`}>
@@ -91,6 +104,13 @@ const WarehouseDetail = ({ params }) => {
                     <h1 className="text-xl font-bold mb-4">Cash & Bank List</h1>
                     <div className="grid grid-cols-2 gap-2">
                         <div>
+                            <input
+                                type="text"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                placeholder="Search..."
+                                className="w-full border border-gray-300 rounded-md p-2 mb-2"
+                            />
                             <table className="table w-full text-xs">
                                 <tbody>
                                     {currentItems.map((item) => (

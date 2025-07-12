@@ -114,7 +114,7 @@ const CreateTransfer = ({
                         </Label>
                         <div className="">
                             <input
-                                className={`form-control ${feeAdminAuto ? "text-green-700" : ""}`}
+                                className={`form-control ${feeAdminAuto ? "!bg-green-200 text-green-700 font-bold" : ""}`}
                                 type="number"
                                 placeholder={feeAdminAuto ? "Rp. (Autofilled)" : "Rp."}
                                 value={formData.fee_amount}

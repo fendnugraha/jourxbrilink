@@ -135,44 +135,50 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                     showBalanceReport ? "opacity-100 scale-y-100 max-h-[700px]" : "opacity-0 scale-y-0 max-h-0 "
                 } origin-top transition-all duration-300 ease-in-out`}
             >
-                <div className="flex justify-between items-center pt-2 text-white">
-                    <button
-                        onClick={() => {
-                            setShowCashBankBalance(true);
-                            setShowDailyReport(false);
-                        }}
-                        className={`cursor-pointer hover:font-semibold text-center w-full rounded-xl p-0.5 text-sm ${showCashBankBalance ? "bg-gray-400" : ""}`}
-                    >
-                        Kas & Bank
-                    </button>
-                    <button
-                        onClick={() => {
-                            setShowDailyReport(true);
-                            setShowCashBankBalance(false);
-                        }}
-                        className={`cursor-pointer hover:font-semibold text-center w-full rounded-xl p-0.5 text-sm ${showDailyReport ? "bg-gray-400" : ""}`}
-                    >
-                        Report
-                    </button>
+                <div className="pt-2">
+                    <div className="flex justify-between items-center text-white bg-slate-300 p-0.5 rounded-3xl">
+                        <button
+                            onClick={() => {
+                                setShowCashBankBalance(true);
+                                setShowDailyReport(false);
+                            }}
+                            className={`cursor-pointer hover:font-semibold text-center w-full rounded-xl p-0.5 text-sm ${
+                                showCashBankBalance ? "bg-gray-600/70" : "text-slate-600"
+                            }`}
+                        >
+                            Kas & Bank
+                        </button>
+                        <button
+                            onClick={() => {
+                                setShowDailyReport(true);
+                                setShowCashBankBalance(false);
+                            }}
+                            className={`cursor-pointer hover:font-semibold text-center w-full rounded-xl p-0.5 text-sm ${
+                                showDailyReport ? "bg-gray-600/70" : "text-slate-600"
+                            }`}
+                        >
+                            Report
+                        </button>
+                    </div>
                 </div>
                 <div hidden={!showCashBankBalance}>
                     {accountBalance?.data?.chartOfAccounts?.map((account) => (
-                        <div className="group border-b border-white border-dashed last:border-none p-2" key={account.id}>
+                        <div className="group border-b border-slate-300 border-dashed last:border-none pt-2 pb-1" key={account.id}>
                             <div className="text-white">
                                 <h1 className="text-xs">{account.acc_name}</h1>
 
-                                <div className="flex justify-between items-end">
+                                <div className="flex justify-between items-center">
                                     <h1 className="text-sm sm:text-lg group-hover:scale-105 text-yellow-200 font-bold transition delay-100 duration-150 ease-out">
                                         {formatNumber(account.balance)}
                                     </h1>
-                                    <span
+                                    <h2
                                         className={`text-xs ${
                                             account.balance - initBalances[account.id] > 0 ? "text-green-200" : "text-red-200"
                                         } group-hover:scale-105 transition delay-100 duration-150 ease-out`}
                                         hidden={!initBalances[account.id]}
                                     >
                                         {formatNumber(account.balance - initBalances[account.id])}
-                                    </span>
+                                    </h2>
                                 </div>
                             </div>
                         </div>

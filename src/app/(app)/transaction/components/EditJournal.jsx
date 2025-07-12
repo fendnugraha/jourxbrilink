@@ -117,7 +117,11 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                     </div>
                 </div>
                 <div className="flex justify-end mt-4">
-                    <button className="rounded-xl px-8 py-3 text-red-300 hover:border-red-300 hover:border mr-1" onClick={() => isModalOpen(false)}>
+                    <button
+                        type="button"
+                        className="rounded-xl px-8 py-3 text-red-300 hover:border-red-300 hover:border mr-1"
+                        onClick={() => isModalOpen(false)}
+                    >
                         Cancel
                     </button>
                     <button

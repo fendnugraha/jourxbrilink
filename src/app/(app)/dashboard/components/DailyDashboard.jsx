@@ -45,7 +45,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
         mutate(["/api/daily-dashboard", { warehouse, startDate, endDate }]);
     }, [selectedWarehouse, startDate, endDate]);
     return (
-        <div className="h-auto sm:h-[calc(100vh-80px-64px)] mb-12 flex flex-col bg-white p-4 sm:p-6 rounded-4xl overflow-y-hidden">
+        <div className="h-auto sm:h-[calc(100vh-80px-64px)] mb-12 flex flex-col bg-white p-4 sm:p-6 rounded-4xl overflow-y-auto">
             <div className="flex items-start justify-between flex-col sm:flex-row gap-2 mb-2">
                 <h1 className="font-bold text-xl text-slate-600">
                     {selectedWarehouse === "all"

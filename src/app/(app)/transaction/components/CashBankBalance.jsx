@@ -68,9 +68,9 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
     const totalSetoran =
         dailyDashboard?.data?.totalFee +
         dailyDashboard?.data?.totalCash +
-        dailyDashboard?.data?.totalCashDeposit +
-        dailyDashboard?.data?.totalAccessories +
-        dailyDashboard?.data?.totalVoucher +
+        dailyDashboard?.data?.totalCashDeposit?.total +
+        dailyDashboard?.data?.totalAccessories?.total +
+        dailyDashboard?.data?.totalVoucher?.total +
         dailyDashboard?.data?.totalExpense;
 
     const copyData = async () => {

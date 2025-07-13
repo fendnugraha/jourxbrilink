@@ -82,9 +82,9 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
     const copyDailyReport = () => {
         const dailyReportData = [
             { name: "Kas", value: formatNumber(dailyDashboard?.data?.totalCash - openingCash) },
-            { name: "Voucher", value: formatNumber(dailyDashboard?.data?.totalVoucher) },
-            { name: "Deposit", value: formatNumber(dailyDashboard?.data?.totalCashDeposit) },
-            { name: "Acc", value: formatNumber(dailyDashboard?.data?.totalAccessories) },
+            { name: "Voucher", value: formatNumber(dailyDashboard?.data?.totalVoucher?.total) },
+            { name: "Deposit", value: formatNumber(dailyDashboard?.data?.totalCashDeposit?.total) },
+            { name: "Acc", value: formatNumber(dailyDashboard?.data?.totalAccessories?.total) },
             { name: "Laba", value: formatNumber(dailyDashboard?.data?.profit) },
         ];
 

@@ -219,15 +219,15 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                     </div>
                     <div className="flex justify-between mb-1">
                         <h1 className="text-xs">Voucher</h1>
-                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard?.data?.totalVoucher)}</h1>
+                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard?.data?.totalVoucher?.total)}</h1>
                     </div>
                     <div className="flex justify-between mb-1">
                         <h1 className="text-xs">Accessories</h1>
-                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard?.data?.totalAccessories)}</h1>
+                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard?.data?.totalAccessories?.total)}</h1>
                     </div>
                     <div className="flex justify-between mb-1">
                         <h1 className="text-xs">Deposit</h1>
-                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard?.data?.totalCashDeposit)}</h1>
+                        <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard?.data?.totalCashDeposit?.total)}</h1>
                     </div>
                     <hr className="border border-slate-300/50 border-dashed" />
                     <div className="flex justify-between mt-1 mb-4">
@@ -235,9 +235,9 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                         <h1 className="text-xs font-bold text-end text-teal-300">
                             {formatNumber(
                                 dailyDashboard?.data?.totalCash +
-                                    dailyDashboard?.data?.totalCashDeposit +
-                                    dailyDashboard?.data?.totalAccessories +
-                                    dailyDashboard?.data?.totalVoucher
+                                    dailyDashboard?.data?.totalCashDeposit?.total +
+                                    dailyDashboard?.data?.totalAccessories?.total +
+                                    dailyDashboard?.data?.totalVoucher?.total
                             )}
                         </h1>
                     </div>
@@ -260,9 +260,9 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                             {formatNumber(
                                 dailyDashboard?.data?.totalFee +
                                     dailyDashboard?.data?.totalCash +
-                                    dailyDashboard?.data?.totalCashDeposit +
-                                    dailyDashboard?.data?.totalAccessories +
-                                    dailyDashboard?.data?.totalVoucher +
+                                    dailyDashboard?.data?.totalCashDeposit?.total +
+                                    dailyDashboard?.data?.totalAccessories?.total +
+                                    dailyDashboard?.data?.totalVoucher?.total +
                                     dailyDashboard?.data?.totalExpense
                             )}
                         </h1>

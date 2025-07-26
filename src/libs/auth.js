@@ -21,7 +21,10 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
             })
     );
 
-    const csrf = () => axios.get("/sanctum/csrf-cookie");
+    const csrf = async () => {
+        await axios.get("/sanctum/csrf-cookie");
+        return new Promise((resolve) => setTimeout(resolve, 50)); // 💡 Tambahan delay 50ms
+    };
 
     const login = async ({ setErrors, setStatus, setMessage, setLoading, ...props }) => {
         setLoading(true); // Set loading state to true before login starts

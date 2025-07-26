@@ -8,7 +8,6 @@ const axios = Axios.create({
         "Content-Type": "application/json",
     },
     withCredentials: true,
-    withXSRFToken: true,
 });
 
 export default axios;

@@ -45,7 +45,7 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
                 trx_type: "Pengeluaran",
                 description: "Biaya Operasional Toko",
             });
-            isModalOpen(false);
+            isModalOpen(true);
             setErrors([]);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);

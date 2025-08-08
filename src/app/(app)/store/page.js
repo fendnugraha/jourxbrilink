@@ -136,11 +136,11 @@ const StorePage = () => {
                             </h1>
                             <div className="flex items-start flex-col sm:flex-row gap-2">
                                 <div className="flex items-center gap-2">
-                                    <Link href="/store/sales" className="btn-primary text-sm font-normal">
+                                    <Link href="/store/sales" className="btn-primary text-sm font-normal text-center">
                                         <PlusCircleIcon className="w-4 h-4 inline" /> Penjualan
                                     </Link>
                                     {userRole === "Administrator" && (
-                                        <Link href="#" className="btn-primary text-sm font-normal">
+                                        <Link href="#" className="btn-primary text-sm font-normal text-center">
                                             <PlusCircleIcon className="w-4 h-4 inline" /> Pembelian
                                         </Link>
                                     )}

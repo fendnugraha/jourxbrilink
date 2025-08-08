@@ -114,7 +114,7 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
         <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <h1 className="font-bold text-xl text-slate-600">
-                    Total Penjualan Barang
+                    Penjualan Barang
                     <span className="text-xs block font-normal">
                         Periode: {startDate} - {endDate}
                     </span>

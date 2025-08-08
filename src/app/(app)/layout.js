@@ -1,12 +1,12 @@
 "use client";
 import { useAuth } from "@/libs/auth";
 import Navigation from "./Navigation";
-import AppLoading from "./loading";
+import Loading from "@/components/Loading";
 
 const AppLayout = ({ children }) => {
-    const { user } = useAuth({ middleware: "auth" });
-    if (!user) {
-        <AppLoading />;
+    const { user, authLoading } = useAuth({ middleware: "auth" });
+    if (authLoading || !user) {
+        return <Loading />;
     }
     return (
         <div className="flex h-screen overflow-hidden">

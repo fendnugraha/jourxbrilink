@@ -102,8 +102,8 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                     <LoaderCircle size={60} className=" inline text-white animate-spin" />
                 </div>
             )}
-            <button onClick={() => setIsModalSettingInitBalancesOpen(true)} className="absolute top-2 right-4">
-                <SettingsIcon className="w-4 h-4 inline text-white" />
+            <button onClick={() => setIsModalSettingInitBalancesOpen(true)} className="absolute top-2 right-4 cursor-pointer">
+                <SettingsIcon className="w-4 h-4 inline text-white hover:rotate-90 transition-transform delay-150 duration-300" />
             </button>
             <Modal isOpen={isModalSettingInitBalancesOpen} onClose={closeModal} maxWidth={"max-w-lg"} modalTitle="Set Saldo Awal Kas & Bank">
                 {accountBalance?.data?.chartOfAccounts?.map((account) => (

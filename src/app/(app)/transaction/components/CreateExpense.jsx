@@ -35,7 +35,7 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
         setLoading(true);
         try {
             const response = await axios.post("/api/create-mutation", formData);
-            notification("success", "Pengeluaran biaya operasional berhasil");
+            notification({ type: "success", message: "Pengeluaran operasional berhasil" });
             fetchJournalsByWarehouse();
             setFormData({
                 debt_code: "",
@@ -49,7 +49,7 @@ const CreateExpense = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
             setErrors([]);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
-            notification("error", error.response?.data?.message || "Something went wrong.");
+            console.log(error);
         } finally {
             setLoading(false);
         }

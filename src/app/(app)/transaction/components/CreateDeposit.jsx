@@ -17,7 +17,7 @@ const CreateDeposit = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
         setLoading(true);
         try {
             const response = await axios.post("/api/create-deposit", formData);
-            notification("success", response.data.message);
+            notification({ type: "success", message: response.data.message });
             fetchJournalsByWarehouse();
             setFormData({
                 price: "",
@@ -27,7 +27,6 @@ const CreateDeposit = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
             setErrors([]);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
-            notification("error", error.response?.data?.message || "Something went wrong.");
         } finally {
             setLoading(false);
         }

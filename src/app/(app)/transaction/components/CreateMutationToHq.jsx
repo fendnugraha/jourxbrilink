@@ -28,7 +28,10 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
             const response = await axios.post("/api/create-mutation", formData);
             const successMessage =
                 response.data.journal.cred.acc_name + " ke " + response.data.journal.debt.acc_name + " sebesar " + formatNumber(response.data.journal.amount);
-            notification("success", response.data.message + " " + successMessage);
+            notification({
+                type: "success",
+                message: response.data.message + " " + successMessage,
+            });
             setFormData({
                 debt_code: "",
                 cred_code: "",
@@ -40,8 +43,8 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
             fetchJournalsByWarehouse();
             setErrors([]);
         } catch (error) {
-            notification("error", error.response?.data?.message || "Something went wrong.");
             setErrors(error.response?.data?.errors);
+            console.log(error);
         } finally {
             setLoading(false);
         }

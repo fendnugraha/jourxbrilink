@@ -47,7 +47,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
         setLoading(true);
         try {
             const response = await axios.post("/api/create-voucher", formData);
-            notification("success", response.data.message);
+            notification({ type: "success", message: response.data.message });
             fetchJournalsByWarehouse();
             setFormData({
                 product_id: "",
@@ -57,7 +57,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
             });
             setErrors([]);
         } catch (error) {
-            notification("error", error.response?.data?.message || "Something went wrong.");
+            console.log(error);
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
         } finally {
             setLoading(false);

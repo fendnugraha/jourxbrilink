@@ -4,11 +4,12 @@ import axios from "@/libs/axios";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
+import { set } from "date-fns";
 
 const CreateCashWithdrawal = ({
     isModalOpen,
     filteredCashBankByWarehouse,
-    notification,
+    setNotification,
     fetchJournalsByWarehouse,
     user,
     calculateFee,
@@ -39,7 +40,10 @@ const CreateCashWithdrawal = ({
                 " (Adm: " +
                 formatNumber(response.data.journal.fee_amount) +
                 ")";
-            notification("success", "Penarikan tunai dari " + successMessage);
+            setNotification({
+                type: "success",
+                message: "Penarikan uang ke " + successMessage,
+            });
             setFormData({
                 debt_code: formData.debt_code,
                 cred_code: user.role.warehouse.chart_of_account_id,
@@ -54,7 +58,10 @@ const CreateCashWithdrawal = ({
             setErrors([]);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
-            notification("error", error.response?.data?.message || "Something went wrong.");
+            setNotification({
+                type: "error",
+                message: error.response?.data?.message || "Something went wrong.",
+            });
         } finally {
             setLoading(false);
         }

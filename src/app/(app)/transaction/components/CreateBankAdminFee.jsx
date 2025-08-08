@@ -22,7 +22,7 @@ const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notifica
         setLoading(true);
         try {
             const response = await axios.post("/api/create-mutation", formData);
-            notification("success", "Pengeluaran biaya administrasi bank berhasil");
+            notification({ type: "success", message: "Pengeluaran operasional berhasil" });
             setFormData({
                 debt_code: user?.role?.warehouse?.chart_of_account_id,
                 cred_code: "",
@@ -36,7 +36,7 @@ const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notifica
             setErrors([]);
         } catch (error) {
             setErrors(error.response.data.errors || ["Something went wrong."]);
-            notification("error", error.response?.data?.message || "Something went wrong.");
+            console.log(error);
         } finally {
             setLoading(false);
         }

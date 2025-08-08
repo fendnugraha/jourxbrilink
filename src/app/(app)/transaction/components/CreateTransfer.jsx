@@ -39,7 +39,10 @@ const CreateTransfer = ({
                 " (Adm: " +
                 formatNumber(response.data.journal.fee_amount) +
                 ")";
-            notification("success", "Transfer uang ke " + successMessage);
+            notification({
+                type: "success",
+                message: "Transfer uang ke " + successMessage,
+            });
             setFormData({
                 debt_code: user.role.warehouse.chart_of_account_id,
                 cred_code: formData.cred_code,
@@ -54,7 +57,7 @@ const CreateTransfer = ({
             setErrors([]);
         } catch (error) {
             setErrors(error.response.data.errors || ["Something went wrong."]);
-            notification("error", error.response?.data?.message || "Something went wrong.");
+            console.log(error);
         } finally {
             setLoading(false);
         }

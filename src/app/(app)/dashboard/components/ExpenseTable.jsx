@@ -50,7 +50,7 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
     }, 0);
     return (
         <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-6">
                 <h1 className="font-bold text-xl text-red-600">
                     Pengeluaran (Biaya Operasional)
                     <span className="text-xs block font-normal">

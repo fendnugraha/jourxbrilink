@@ -34,11 +34,12 @@ const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse
         setLoading(true);
         try {
             const response = await axios.put(`/api/journals/${journal.id}`, formData);
-            notification("success", response.data.message);
+            notification({ type: "success", message: response.data.message });
             fetchJournalsByWarehouse();
             isModalOpen(false);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
+            console.log(error);
         } finally {
             setLoading(false);
         }

@@ -31,12 +31,12 @@ const EditDeposit = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                 fee_amount: formData.price - formData.cost,
                 description: formData.description,
             });
-            notification("success", response.data.message);
+            notification({ type: "success", message: response.data.message });
             fetchJournalsByWarehouse();
             isModalOpen(false);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
-            notification("error", error.response?.data?.message || "Something went wrong.");
+            console.log(error);
         } finally {
             setLoading(false);
         }

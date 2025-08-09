@@ -3,10 +3,14 @@ import MainPage from "../main";
 import TransactionContent from "./components/TransactionContent";
 
 const getCurrentDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0"); // Month is 0-indexed
-    const day = String(today.getDate()).padStart(2, "0");
+    const nowUTC = new Date();
+    const jakartaOffset = 7 * 60; // WIB = UTC+7 (dalam menit)
+    const local = new Date(nowUTC.getTime() + jakartaOffset * 60 * 1000);
+
+    const year = local.getUTCFullYear();
+    const month = String(local.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(local.getUTCDate()).padStart(2, "0");
+
     return `${year}-${month}-${day}`;
 };
 

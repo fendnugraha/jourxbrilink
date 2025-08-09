@@ -66,19 +66,16 @@ const RevenueReport = () => {
         { key: "fee", label: "Profit" },
     ];
     return (
-        <div className="bg-white rounded-3xl mb-3 relative">
+        <div className="card relative">
             <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <h4 className=" text-blue-950 text-lg font-bold">
+                <h4 className=" card-title">
                     Laporan Pendapatan
-                    <span className="text-xs block text-slate-500 font-normal">
+                    <span className="card-subtitle">
                         Periode: {startDate} - {endDate}
                     </span>
                 </h4>
                 <div className="flex gap-1 justify-end">
-                    <button
-                        onClick={() => fetchRevenueReport()}
-                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed"
-                    >
+                    <button onClick={() => fetchRevenueReport()} className="small-button">
                         <RefreshCcwIcon className="size-4" />
                     </button>
                     <button
@@ -90,15 +87,12 @@ const RevenueReport = () => {
                                 `Summary Report by Warehouse ${startDate} s/d ${endDate}`
                             )
                         }
-                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed"
+                        className="small-button"
                         disabled={revenue?.revenue?.length === 0}
                     >
                         <DownloadIcon className="size-4" />
                     </button>
-                    <button
-                        onClick={() => setIsModalFilterDataOpen(true)}
-                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
-                    >
+                    <button onClick={() => setIsModalFilterDataOpen(true)} className="small-button">
                         <FilterIcon className="size-4" />
                     </button>
                     <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
@@ -148,7 +142,7 @@ const RevenueReport = () => {
                             </tr>
                         ) : (
                             revenue.revenue?.map((item, index) => (
-                                <tr key={index} className="hover:bg-orange-100">
+                                <tr key={index} className="hover:bg-orange-100 dark:hover:bg-slate-700">
                                     <td className="">
                                         <Link className="hover:underline" href={`/summary/warehouse/${item.warehouseId}`}>
                                             {item.warehouse}

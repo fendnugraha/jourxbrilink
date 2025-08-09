@@ -129,12 +129,12 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
 
     return (
         <>
-            <div className="mb-4 bg-white drop-shadow-sm rounded-3xl">
+            <div className="mb-4 card">
                 {loading || (isValidating && <LoaderCircleIcon size={20} className="animate-spin absolute top-2 text-slate-400 left-2" />)}
                 <div className="px-4 sm:px-6 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <h1 className="font-bold text-xl text-slate-600">
+                    <h1 className="card-title">
                         Mutasi Saldo
-                        <span className="text-xs block font-normal text-nowrap">Periode: {endDate}</span>
+                        <span className="card-subtitle text-nowrap">Periode: {endDate}</span>
                     </h1>
                     <div className="sm:flex gap-2 w-full sm:col-span-2">
                         {userRole === "Administrator" && (
@@ -279,7 +279,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                 </div>
             </div>
 
-            <div className="mb-4 bg-white drop-shadow-sm sm:rounded-3xl">
+            <div className="mb-4 card">
                 <h1 className="px-2 sm:px-6 pt-6 font-bold text-xl text-green-600">History Mutasi Kas</h1>
                 <div className="px-2 sm:px-6 pt-2 flex gap-2">
                     <select

@@ -46,9 +46,9 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
     }, [selectedWarehouse, startDate, endDate]);
 
     return (
-        <div className="h-auto sm:h-[calc(100vh-80px-64px)] mb-12 flex flex-col bg-white p-4 sm:p-6 rounded-4xl overflow-y-auto">
+        <div className="h-auto sm:h-[calc(100vh-80px-64px)] mb-12 flex flex-col bg-white dark:bg-slate-800 p-4 sm:p-6 rounded-4xl overflow-y-auto">
             <div className="flex items-start justify-between flex-col sm:flex-row gap-2 mb-2">
-                <h1 className="font-bold text-xl text-slate-600">
+                <h1 className="font-bold text-xl text-slate-600 dark:text-white">
                     {selectedWarehouse === "all"
                         ? "Semua Cabang"
                         : warehouses?.data?.find((warehouse) => Number(warehouse.id) === Number(selectedWarehouse))?.name}
@@ -72,10 +72,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                         </select>
                     )}
 
-                    <button
-                        onClick={() => setIsModalFilterDataOpen(true)}
-                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
-                    >
+                    <button onClick={() => setIsModalFilterDataOpen(true)} className="small-button">
                         <FilterIcon className="size-4" />
                     </button>
                 </div>
@@ -111,23 +108,23 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                 </Modal>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-5 grid-row-1 sm:grid-rows-4 gap-4 flex-grow h-full">
-                <div className="bg-lime-200/80 text-green-900 p-3 sm:p-5 rounded-2xl sm:rounded-4xl drop-shadow-xs flex flex-col gap-2 sm:gap-4 items-start justify-between col-span-1 sm:col-span-2 row-span-1 sm:row-span-2">
+                <div className="bg-lime-200/80 dark:bg-slate-700 text-green-900 dark:text-slate-50 p-3 sm:p-5 rounded-2xl sm:rounded-4xl drop-shadow-xs flex flex-col gap-2 sm:gap-4 items-start justify-between col-span-1 sm:col-span-2 row-span-1 sm:row-span-2">
                     <div className={`flex flex-col`}>
                         <h4 className="text-lg">Kas Tunai</h4>
-                        <h1 className="text-2xl sm:text-4xl font-bold text-slate-500">
+                        <h1 className="text-2xl sm:text-4xl font-bold text-slate-500 dark:text-white">
                             {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumber(Number(dailyDashboard?.data?.totalCash))}
                         </h1>
                     </div>
                     <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 w-full`}>
                         <div className={`flex flex-col justify-between w-full bg-white/50 p-2 rounded-2xl`}>
                             <h4 className="text-sm">Bank</h4>
-                            <h1 className="text-lg sm:text-xl font-semibold text-slate-500">
+                            <h1 className="text-lg sm:text-xl font-semibold text-slate-500 dark:text-white">
                                 {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumber(Number(dailyDashboard?.data?.totalBank))}
                             </h1>
                         </div>
                         <div className={`flex flex-col justify-between w-full bg-white/50 p-2 rounded-2xl`}>
                             <h4 className="text-sm">Total Uang</h4>
-                            <h1 className="text-lg sm:text-xl font-semibold text-slate-500">
+                            <h1 className="text-lg sm:text-xl font-semibold text-slate-500 dark:text-white">
                                 {isLoading ? (
                                     <LoaderIcon className="animate-spin" />
                                 ) : (
@@ -137,13 +134,13 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                         </div>
                     </div>
                 </div>
-                <div className="bg-teal-200/80 text-green-900 p-3 sm:p-5 rounded-2xl sm:rounded-4xl drop-shadow-xs flex flex-col gap-2 sm:gap-4 items-start justify-between col-span-1 sm:col-span-2 row-span-auto sm:row-span-2 col-start-1 sm:col-start-3">
+                <div className="bg-teal-200/80 dark:bg-slate-700 text-green-900 dark:text-slate-50 p-3 sm:p-5 rounded-2xl sm:rounded-4xl drop-shadow-xs flex flex-col gap-2 sm:gap-4 items-start justify-between col-span-1 sm:col-span-2 row-span-auto sm:row-span-2 col-start-1 sm:col-start-3">
                     {" "}
                     <div className={`flex flex-col`}>
                         <h4 className="text-lg">
                             <GemIcon size={20} className="inline" /> Laba (Net Profit)
                         </h4>
-                        <h1 className="text-2xl sm:text-4xl font-bold text-slate-500">
+                        <h1 className="text-2xl sm:text-4xl font-bold text-slate-500 dark:text-yellow-300">
                             {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumber(Number(dailyDashboard?.data?.profit))}
                         </h1>
                     </div>
@@ -155,7 +152,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                                     {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumber(Number(dailyDashboard?.data?.totalTransfer?.count))}
                                 </h4>
                             </div>
-                            <h1 className="text-lg sm:text-xl font-bold text-slate-500">
+                            <h1 className="text-lg sm:text-xl font-bold text-slate-500 dark:text-white">
                                 {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumberToK(Number(dailyDashboard?.data?.totalTransfer?.total))}
                             </h1>
                         </div>
@@ -170,7 +167,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                                     )}
                                 </h4>
                             </div>
-                            <h1 className="text-lg sm:text-xl font-bold text-slate-500">
+                            <h1 className="text-lg sm:text-xl font-bold text-slate-500 dark:text-white">
                                 {isLoading ? (
                                     <LoaderIcon className="animate-spin" />
                                 ) : (

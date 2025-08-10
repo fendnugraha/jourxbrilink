@@ -50,7 +50,7 @@ const TransactionContent = ({ currentDate }) => {
         message: "",
     });
     const [journalsByWarehouse, setJournalsByWarehouse] = useState([]);
-
+    console.log(new Date());
     const [endDate, setEndDate] = useState(getCurrentDate());
     const [selectedWarehouseId, setSelectedWarehouseId] = useState(warehouse);
     const { accountBalance, error: accountBalanceError, loading: isValidating } = useCashBankBalance(selectedWarehouseId, endDate);

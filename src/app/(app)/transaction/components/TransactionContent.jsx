@@ -11,6 +11,18 @@ import useGetWarehouses from "@/libs/getAllWarehouse";
 import Notification from "@/components/Notification";
 import TransactionMenuMobile from "./TransactionMenuMobile";
 
+const getCurrentDate = () => {
+    const nowUTC = new Date();
+    const jakartaOffset = 7 * 60; // WIB = UTC+7 (dalam menit)
+    const local = new Date(nowUTC.getTime() + jakartaOffset * 60 * 1000);
+
+    const year = local.getUTCFullYear();
+    const month = String(local.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(local.getUTCDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+};
+
 const TransactionContent = ({ currentDate }) => {
     const { user } = useAuth({ middleware: "auth" });
     const warehouse = Number(user?.role?.warehouse_id);
@@ -39,10 +51,10 @@ const TransactionContent = ({ currentDate }) => {
     });
     const [journalsByWarehouse, setJournalsByWarehouse] = useState([]);
 
-    const [endDate, setEndDate] = useState(currentDate);
+    const [endDate, setEndDate] = useState(getCurrentDate());
     const [selectedWarehouseId, setSelectedWarehouseId] = useState(warehouse);
     const { accountBalance, error: accountBalanceError, loading: isValidating } = useCashBankBalance(selectedWarehouseId, endDate);
-    const fetchJournalsByWarehouse = useCallback(async (selectedWarehouse = warehouse, startDate = currentDate, endDate = currentDate) => {
+    const fetchJournalsByWarehouse = useCallback(async (selectedWarehouse = warehouse, startDate = getCurrentDate(), endDate = getCurrentDate()) => {
         setLoading(true);
         try {
             const response = await axios.get(`/api/get-journal-by-warehouse/${selectedWarehouse}/${startDate}/${endDate}`);

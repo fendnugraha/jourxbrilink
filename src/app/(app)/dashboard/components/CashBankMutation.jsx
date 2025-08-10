@@ -158,7 +158,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                 <select
                                     value={selectedWarehouse}
                                     onChange={(e) => setSelectedWarehouse(e.target.value)}
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    className="form-select block w-full p-2.5"
                                 >
                                     {warehouses?.data?.map((warehouse) => (
                                         <option key={warehouse.id} value={warehouse.id}>
@@ -167,21 +167,13 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                     ))}
                                 </select>
                             )}
-                            <button
-                                onClick={() => setIsModalFilterDataOpen(true)}
-                                className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
-                            >
+                            <button onClick={() => setIsModalFilterDataOpen(true)} className="small-button">
                                 <FilterIcon className="size-4" />
                             </button>
                             <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                                 <div className="mb-4">
                                     <Label className="font-bold">Tanggal</Label>
-                                    <Input
-                                        type="date"
-                                        value={endDate}
-                                        onChange={(e) => setEndDate(e.target.value)}
-                                        className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                    />
+                                    <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="form-control" />
                                 </div>
                                 <button
                                     onClick={() => {
@@ -252,7 +244,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                             return "...";
                                         }
 
-                                        return <span className="text-red-600">{formatNumber(remaining)}</span>;
+                                        return <span className="text-red-600 dark:text-red-400">{formatNumber(remaining)}</span>;
                                     })()}
                                 </td>
                             </tr>
@@ -288,7 +280,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                             setCurrentPage(1);
                         }}
                         value={itemsPerPage}
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                        className="form-select !w-20 block p-2.5"
                     >
                         <option value={5}>5</option>
                         <option value={10}>10</option>
@@ -296,13 +288,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                         <option value={50}>50</option>
                         <option value={100}>100</option>
                     </select>
-                    <Input
-                        type="search"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                        placeholder="Cari..."
-                    />
+                    <Input type="search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="form-control" placeholder="Cari..." />
                 </div>
                 <div className="overflow-x-auto">
                     <table className="table w-full text-xs">
@@ -328,7 +314,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                 currentItems.map((journal, index) => (
                                     <tr key={index}>
                                         <td className="">
-                                            <span className="block font-bold text-slate-500">
+                                            <span className="block font-bold text-slate-500 dark:text-yellow-200">
                                                 {formatDateTime(journal.created_at)} | {journal.invoice}
                                             </span>
                                             {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt.acc_name}

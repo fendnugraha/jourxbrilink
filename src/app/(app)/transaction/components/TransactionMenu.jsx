@@ -79,7 +79,6 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
     }, [personalSetting, loaded]);
     return (
         <>
-            <h1 className="text-2xl font-bold mb-4">Transaction List</h1>
             <div className="hidden sm:flex gap-2 mb-4">
                 <Button
                     buttonType="secondary"
@@ -113,12 +112,12 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
                     align="left"
                 >
                     <ul className="min-w-max">
-                        <li className="border-b border-slate-200 hover:bg-slate-100 ">
+                        <li className="border-b border-slate-200 hover:bg-slate-100 dark:border-slate-500 dark:hover:bg-slate-500 ">
                             <button className="w-full text-sm text-left py-2 px-4 " onClick={() => setIsModalCreateVoucherOpen(true)}>
                                 Voucher & SP
                             </button>
                         </li>
-                        <li className="hover:bg-slate-100 ">
+                        <li className="hover:bg-slate-100 dark:hover:bg-slate-500">
                             <button className="w-full text-sm text-left py-2 px-4" onClick={() => setIsModalCreateDepositOpen(true)}>
                                 Penjualan Pulsa dll.
                             </button>
@@ -135,17 +134,17 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
                     align="left"
                 >
                     <ul className="min-w-max">
-                        <li className="border-b border-slate-200 hover:bg-slate-100 ">
+                        <li className="border-b border-slate-200 hover:bg-slate-100 dark:border-slate-500 dark:hover:bg-slate-500 ">
                             <button className="w-full text-sm text-left py-2 px-4 " onClick={() => setIsModalCreateMutationToHqOpen(true)}>
                                 Pengembalian Saldo Kas & Bank
                             </button>
                         </li>
-                        <li className="border-b border-slate-200 hover:bg-slate-100 ">
+                        <li className="border-b border-slate-200 hover:bg-slate-100 dark:border-slate-500 dark:hover:bg-slate-500 ">
                             <button className="w-full text-sm text-left py-2 px-4" onClick={() => setIsModalCreateExpenseOpen(true)}>
                                 Biaya Operasional
                             </button>
                         </li>
-                        <li className="hover:bg-slate-100 ">
+                        <li className="hover:bg-slate-100 dark:hover:bg-slate-500">
                             <button className="w-full text-sm text-left py-2 px-4" onClick={() => setIsModalCreateBankAdminFeeOpen(true)}>
                                 Biaya Admin Bank
                             </button>

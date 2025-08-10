@@ -127,7 +127,7 @@ const JournalTable = ({
                 <div className="w-full sm:max-w-sm">
                     <input
                         type="search"
-                        className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        className="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder="Search..."
@@ -139,7 +139,7 @@ const JournalTable = ({
                         setCurrentPage(1);
                     }}
                     value={selectedAccount}
-                    className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    className="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 >
                     <option value="">Semua Akun</option>
                     {branchAccount.map((account, index) => (
@@ -153,7 +153,7 @@ const JournalTable = ({
                         setItemsPerPage(Number(e.target.value));
                         setCurrentPage(1);
                     }}
-                    className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                    className="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
                 >
                     <option value={5}>5</option>
                     <option value={10}>10</option>
@@ -161,10 +161,7 @@ const JournalTable = ({
                     <option value={50}>50</option>
                     <option value={100}>100</option>
                 </select>
-                <button
-                    onClick={() => setIsModalFilterJournalOpen(true)}
-                    className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
-                >
+                <button onClick={() => setIsModalFilterJournalOpen(true)} className="small-button">
                     <FilterIcon className="size-4" />
                 </button>
                 <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
@@ -177,7 +174,7 @@ const JournalTable = ({
                                     setCurrentPage(1);
                                 }}
                                 value={selectedWarehouse}
-                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                className="form-control"
                             >
                                 <option value="Semua">Semua Akun</option>
                                 {warehouses?.data?.map((w) => (
@@ -191,23 +188,12 @@ const JournalTable = ({
 
                     <div className="grid grid-cols-2 gap-2 mb-4">
                         <div>
-                            <Label>Tanggal</Label>
-                            <Input
-                                type="date"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            />
+                            <Label>Dari</Label>
+                            <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="form-control" />
                         </div>
                         <div>
-                            <Label>s/d</Label>
-                            <Input
-                                type="date"
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                disabled={!startDate}
-                            />
+                            <Label>Sampai</Label>
+                            <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="form-control" disabled={!startDate} />
                         </div>
                     </div>
                     <button
@@ -231,7 +217,7 @@ const JournalTable = ({
                     {startDate === endDate ? formatLongDate(endDate) : `${formatLongDate(startDate)} s/d ${formatLongDate(endDate)}`}
                 </h4>
             </div>
-            <div className="bg-white pb-4 rounded-2xl mt-2">
+            <div className="pb-4 mt-2">
                 <div className="overflow-x-auto">
                     <table className="table w-full text-xs">
                         <thead>
@@ -252,11 +238,11 @@ const JournalTable = ({
                                 currentItems.map((journal, index) => (
                                     <tr key={index} className="group hover:bg-slate-500 hover:text-white">
                                         <td>
-                                            <span className="text-xs text-blue-700 group-hover:text-blue-200 block">
+                                            <span className="text-xs text-blue-700 dark:text-blue-300 group-hover:text-blue-200 block">
                                                 #{journal.id} <span className="font-bold hidden sm:inline">{journal.invoice}</span>{" "}
                                                 {formatDateTime(journal.created_at)}
                                             </span>
-                                            <span className="font-bold text-xs block text-lime-600 group-hover:text-lime-300">
+                                            <span className="font-bold text-xs block text-lime-600 dark:text-lime-300 group-hover:text-lime-300">
                                                 {journal.trx_type === "Voucher & SP" || journal.trx_type === "Accessories" ? (
                                                     <ul className="list-disc font-normal scale-95">
                                                         {journal.transaction.map((trx) => (
@@ -272,13 +258,16 @@ const JournalTable = ({
                                                 ) : (
                                                     journal.debt.acc_name
                                                 )}
-                                                . <span className="font-normal text-slate-500 group-hover:text-slate-100">Note: {journal.description}</span>
+                                                .{" "}
+                                                <span className="font-normal text-slate-500 dark:text-slate-300 group-hover:text-slate-100">
+                                                    Note: {journal.description}
+                                                </span>
                                             </span>
                                             <span className="text-xs block text-slate-500 group-hover:text-white">
                                                 Last update at <TimeAgo timestamp={journal.updated_at} />
                                             </span>
                                         </td>
-                                        <td className="font-bold text-end text-slate-600 ">
+                                        <td className="font-bold text-end text-slate-600 dark:text-slate-300 ">
                                             <span
                                                 className={`${Number(journal.debt_code) === Number(selectedAccount) ? "text-green-500" : ""}
                                     ${Number(journal.cred_code) === Number(selectedAccount) ? "text-red-500" : ""}
@@ -300,7 +289,7 @@ const JournalTable = ({
                                                         setIsModalEditDepositOpen(true);
                                                     }}
                                                 >
-                                                    <PencilIcon className="size-4 text-indigo-700 group-hover:text-white" />
+                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:text-white" />
                                                 </button>
                                                 <button
                                                     className=" hover:scale-125 transtition-all duration-200"
@@ -310,7 +299,7 @@ const JournalTable = ({
                                                         setIsModalEditJournalOpen(true);
                                                     }}
                                                 >
-                                                    <PencilIcon className="size-4 text-indigo-700 group-hover:text-white" />
+                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:text-white" />
                                                 </button>
                                                 <button
                                                     className=" hover:scale-125 transtition-all duration-200"
@@ -320,7 +309,7 @@ const JournalTable = ({
                                                         setIsModalEditMutationJournalOpen(true);
                                                     }}
                                                 >
-                                                    <PencilIcon className="size-4 text-indigo-700 group-hover:text-white" />
+                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:text-white" />
                                                 </button>
                                                 <button
                                                     onClick={() => {
@@ -331,7 +320,7 @@ const JournalTable = ({
                                                         ["Voucher & SP", "Accessories", null].includes(journal.trx_type) ||
                                                         (userRole !== "Administrator" && hqCashBankIds.includes(journal.cred_code))
                                                     }
-                                                    className="disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transition-all group-hover:text-white duration-200"
+                                                    className="disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 dark:text-red-400 hover:scale-125 transition-all group-hover:text-white duration-200"
                                                 >
                                                     <TrashIcon className="size-4" />
                                                 </button>
@@ -353,7 +342,7 @@ const JournalTable = ({
                         onPageChange={handlePageChange}
                     />
                 )}
-                <Modal isOpen={isModalDeleteJournalOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md" bgColor="bg-white">
+                <Modal isOpen={isModalDeleteJournalOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
                     <div className="flex flex-col items-center justify-center gap-3 mb-4">
                         <MessageCircleWarningIcon size={100} className="text-red-600" />
                         <h1 className="text-2xl font-bold text-slate-500 text-center">Apakah anda yakin ??</h1>
@@ -362,7 +351,7 @@ const JournalTable = ({
                     <div className="flex justify-center gap-3">
                         <button
                             onClick={() => setIsModalDeleteJournalOpen(false)}
-                            className="w-full rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-red-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            className="w-full rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm hover:bg-red-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >
                             Tidak
                         </button>

@@ -70,39 +70,35 @@ const MutationHistory = ({ account, notification, user }) => {
     };
 
     return (
-        <div className="bg-white rounded-3xl mb-3 relative">
-            <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <h4 className="mb-4 text-blue-950 text-lg font-bold">
+        <div className="card relative">
+            <div className="p-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <h4 className="mb-4 card-title">
                     Riwayat Mutasi
                     <span className="text-xs block font-normal text-slate-500">
                         Periode: {startDate} - {endDate}
                     </span>
                 </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-3 mb-2">
-                    <div className="border border-slate-300 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700">
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-3 mb-2 sm:col-span-2">
+                    <div className="border border-slate-300 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700 dark:text-slate-100 dark:border-slate-600">
                         <h5 className="sm:text-xs">Saldo Awal</h5>
                         <span className="sm:text-xl font-bold">{formatNumber(mutation?.initBalance || 0)}</span>
                     </div>
-                    <div className="border border-slate-300 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700">
+                    <div className="border border-slate-300 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700 dark:text-slate-100 dark:border-slate-600">
                         <h5 className="sm:text-xs">Debet</h5>
                         <span className="sm:text-xl font-bold">{formatNumber(mutation?.debt_total || 0)}</span>
                     </div>
-                    <div className="border border-slate-300 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700">
+                    <div className="border border-slate-300 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700 dark:text-slate-100 dark:border-slate-600">
                         <h5 className="sm:text-xs">Credit</h5>
                         <span className="sm:text-xl font-bold">{formatNumber(mutation?.cred_total || 0)}</span>
                     </div>
-                    <div className="border border-slate-300 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700">
+                    <div className="border border-slate-300 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700 dark:text-slate-100 dark:border-slate-600">
                         <h5 className="sm:text-xs">Saldo Akhir</h5>
                         <span className="sm:text-xl font-bold">{formatNumber(mutation?.endBalance || 0)}</span>
                     </div>
                 </div>
             </div>
             <div className="mb-2 px-4 flex gap-2">
-                <select
-                    onChange={(e) => setSelectedAccount(e.target.value)}
-                    value={selectedAccount}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                >
+                <select onChange={(e) => setSelectedAccount(e.target.value)} value={selectedAccount} className="form-select">
                     <option value="0">Pilih Akun</option>
                     {account?.map((item) => (
                         <option key={item.id} value={item.id}>
@@ -110,16 +106,10 @@ const MutationHistory = ({ account, notification, user }) => {
                         </option>
                     ))}
                 </select>
-                <button
-                    onClick={() => fetchMutation()}
-                    className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed"
-                >
+                <button onClick={() => fetchMutation()} className="small-button">
                     <RefreshCcwIcon className="size-4" />
                 </button>
-                <button
-                    onClick={() => setIsModalFilterDataOpen(true)}
-                    className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
-                >
+                <button onClick={() => setIsModalFilterDataOpen(true)} className="small-button">
                     <FilterIcon className="size-4" />
                 </button>
                 <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">

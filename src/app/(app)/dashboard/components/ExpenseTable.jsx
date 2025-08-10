@@ -51,19 +51,15 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
     return (
         <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-6">
-                <h1 className="font-bold text-xl text-red-600">
+                <h1 className="font-bold text-xl text-red-600 dark:text-red-400">
                     Pengeluaran (Biaya Operasional)
                     <span className="text-xs block font-normal">
                         Periode: {startDate} - {endDate}
                     </span>
                 </h1>
-                <div className="flex justify-start gap-1 flex-col sm:flex-row">
+                <div className="flex justify-between gap-1 flex-col sm:flex-row flex-nowrap">
                     {userRole === "Administrator" && (
-                        <select
-                            value={selectedWarehouse}
-                            onChange={(e) => setSelectedWarehouse(e.target.value)}
-                            className="bg-gray-50 flex-1 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
-                        >
+                        <select value={selectedWarehouse} onChange={(e) => setSelectedWarehouse(e.target.value)} className="form-select p-2.5">
                             <option value="all">Semua Cabang</option>
                             {warehouses?.data?.map((warehouse) => (
                                 <option key={warehouse.id} value={warehouse.id}>
@@ -72,35 +68,22 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
                             ))}
                         </select>
                     )}
-                    <div>
-                        <button onClick={fetchExpenses} className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 mr-1">
+                    <div className="flex gap-1">
+                        <button onClick={fetchExpenses} className="small-button">
                             <RefreshCcwIcon className="size-4" />
                         </button>
-                        <button
-                            onClick={() => setIsModalFilterDataOpen(true)}
-                            className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
-                        >
+                        <button onClick={() => setIsModalFilterDataOpen(true)} className="small-button">
                             <FilterIcon className="size-4" />
                         </button>
                     </div>
                     <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                         <div className="mb-4">
                             <Label className="font-bold">Tanggal</Label>
-                            <Input
-                                type="date"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            />
+                            <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="form-control" />
                         </div>
                         <div className="mb-4">
                             <Label className="font-bold">s/d</Label>
-                            <Input
-                                type="date"
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            />
+                            <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="form-control" />
                         </div>
                         <button
                             onClick={() => {
@@ -115,7 +98,7 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
                 </div>
             </div>
             <div className="flex gap-4 sm:flex-row flex-col">
-                <div className="bg-white overflow-hidden drop-shadow-sm rounded-3xl wfull sm:w-3/4">
+                <div className="card overflow-hidden drop-shadow-sm wfull sm:w-3/4">
                     <div className="overflow-x-auto">
                         <table className="table w-full text-xs">
                             <thead>
@@ -142,7 +125,7 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
                                     expenses.map((expense) => (
                                         <tr key={expense.id}>
                                             <td>
-                                                <span className="text-xs text-slate-500">{formatDateTime(expense.created_at)}</span>
+                                                <span className="text-xs text-slate-500 dark:text-yellow-100">{formatDateTime(expense.created_at)}</span>
                                                 <br />
                                                 {expense.description}
                                             </td>

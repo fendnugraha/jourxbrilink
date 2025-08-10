@@ -3,7 +3,7 @@
 import React, { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 
-export default function Dropdown({ align = "right", width = 48, contentClasses = "py-1 bg-white", trigger, children }) {
+export default function Dropdown({ align = "right", width = 48, contentClasses = "py-1 bg-white dark:bg-slate-600", trigger, children }) {
     // Handle width (Tailwind)
     let widthClass = "";
     switch (width) {
@@ -49,7 +49,7 @@ export default function Dropdown({ align = "right", width = 48, contentClasses =
                     >
                         <Menu.Items
                             static
-                            className={`absolute z-[999] mt-2 rounded-md shadow-lg ${alignmentClasses} ${contentClasses} border border-gray-300`}
+                            className={`absolute z-[999] mt-2 rounded-md shadow-lg ${alignmentClasses} ${contentClasses} border border-gray-300 dark:border-gray-600`}
                         >
                             {children}
                         </Menu.Items>

@@ -90,7 +90,9 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange, class
                             <button
                                 key={index}
                                 onClick={() => (typeof page === "number" ? goToPage(page) : null)}
-                                className={`border border-slate-300 rounded-lg py-1 px-3 ${currentPage === page ? "bg-slate-600 text-white scale-110" : ""}`}
+                                className={`border border-slate-300 dark:border-slate-700 rounded-lg py-1 px-3 ${
+                                    currentPage === page ? "bg-slate-600 dark:bg-indigo-500 text-white scale-125" : ""
+                                }`}
                                 disabled={page === "..."}
                             >
                                 {page}

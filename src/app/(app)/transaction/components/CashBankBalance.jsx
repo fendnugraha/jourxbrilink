@@ -105,14 +105,14 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
             <button onClick={() => setIsModalSettingInitBalancesOpen(true)} className="absolute top-2 right-4 cursor-pointer">
                 <SettingsIcon className="w-4 h-4 inline text-white hover:rotate-90 transition-transform delay-150 duration-300" />
             </button>
-            <Modal isOpen={isModalSettingInitBalancesOpen} onClose={closeModal} maxWidth={"max-w-lg"} modalTitle="Set Saldo Awal Kas & Bank">
+            <Modal isOpen={isModalSettingInitBalancesOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Set Saldo Awal Kas & Bank">
                 {accountBalance?.data?.chartOfAccounts?.map((account) => (
                     <div className="group p-2" key={account.id}>
                         <div className="grid grid-cols-2 gap-2">
                             <h1 className="text-xs">{account.acc_name}</h1>
                             <input
                                 type="number"
-                                className="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                className="form-control block w-full p-2.5"
                                 value={initBalances[account.id] || ""}
                                 onChange={(e) => addToInitBalances(account.id, Number(e.target.value))}
                             />
@@ -120,7 +120,7 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                     </div>
                 ))}
             </Modal>
-            <div className="flex justify-center items-center flex-col bg-gray-600 hover:bg-gray-500 py-4 rounded-t-3xl text-white shadow-lg">
+            <div className="flex justify-center items-center flex-col bg-gray-600 dark:bg-slate-800 hover:bg-gray-500 py-4 rounded-t-3xl text-white shadow-lg">
                 {accountBalance?.data?.chartOfAccounts?.length > 0 ? (
                     <>
                         <h1 className="text-xs">Total Saldo Kas & Bank</h1>
@@ -136,14 +136,14 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                 } origin-top transition-all duration-300 ease-in-out`}
             >
                 <div className="pt-2">
-                    <div className="flex justify-between items-center text-white bg-slate-300 p-0.5 rounded-3xl">
+                    <div className="flex justify-between items-center text-white bg-slate-300 dark:bg-lime-400 p-0.5 rounded-3xl">
                         <button
                             onClick={() => {
                                 setShowCashBankBalance(true);
                                 setShowDailyReport(false);
                             }}
                             className={`cursor-pointer hover:font-semibold text-center w-full rounded-xl p-0.5 text-sm ${
-                                showCashBankBalance ? "bg-gray-600/70" : "text-slate-600"
+                                showCashBankBalance ? "bg-gray-600/70 dark:bg-orange-400" : "text-slate-600"
                             }`}
                         >
                             Kas & Bank
@@ -154,7 +154,7 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                                 setShowCashBankBalance(false);
                             }}
                             className={`cursor-pointer hover:font-semibold text-center w-full rounded-xl p-0.5 text-sm ${
-                                showDailyReport ? "bg-gray-600/70" : "text-slate-600"
+                                showDailyReport ? "bg-gray-600/70 dark:bg-orange-400" : "text-slate-600"
                             }`}
                         >
                             Report
@@ -163,12 +163,12 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                 </div>
                 <div hidden={!showCashBankBalance}>
                     {accountBalance?.data?.chartOfAccounts?.map((account) => (
-                        <div className="group border-b border-slate-300 border-dashed last:border-none pt-2 pb-1" key={account.id}>
+                        <div className="group border-b border-slate-300 dark:border-slate-500 border-dashed last:border-none pt-2 pb-1" key={account.id}>
                             <div className="text-white">
                                 <h1 className="text-xs">{account.acc_name}</h1>
 
                                 <div className="flex justify-between items-center">
-                                    <h1 className="text-sm sm:text-lg group-hover:scale-105 text-yellow-200 font-bold transition delay-100 duration-150 ease-out">
+                                    <h1 className="text-sm sm:text-lg group-hover:scale-105 text-yellow-200 dark:text-lime-300 font-bold transition delay-100 duration-150 ease-out">
                                         {formatNumber(account.balance)}
                                     </h1>
                                     <h2
@@ -290,7 +290,7 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
             </div>
             <button
                 onClick={() => setShowBalanceReport(!showBalanceReport)}
-                className="bg-gray-400 hover:bg-gray-500 w-full pb-1 rounded-b-3xl shadow-md text-white disabled:bg-gray-100"
+                className="bg-gray-400 dark:bg-slate-700 hover:bg-gray-500 w-full pb-1 rounded-b-3xl shadow-md text-white disabled:bg-gray-100"
                 disabled={accountBalance?.data?.length === 0}
             >
                 <ChevronDown className={`w-4 h-4 inline ${showBalanceReport ? "rotate-180" : ""} transition delay-500 ease-in-out`} />

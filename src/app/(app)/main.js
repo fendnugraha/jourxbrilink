@@ -57,7 +57,7 @@ const MainPage = ({ children, headerTitle }) => {
     return (
         <>
             <header className="w-full h-20 flex items-center justify-between px-4 sm:px-12 py-2">
-                <h1 className="text-xl sm:text-2xl font-bold text-slate-700">
+                <h1 className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-white">
                     {headerTitle}
                     <span className="text-xs font-normal p-0 block">
                         {userWarehouseName} | {dayName}, {date} {time}
@@ -65,7 +65,7 @@ const MainPage = ({ children, headerTitle }) => {
                 </h1>
                 <div className="flex items-center justify-end sm:gap-4">
                     {WarehouseRank > 0 && (
-                        <div className="text-lg sm:text-md drop-shadow-xs sm:bg-white rounded-full px-4 sm:ps-1 sm:pe-6 py-1 flex flex-col justify-end items-end">
+                        <div className="text-lg sm:text-md drop-shadow-xs bg-white dark:bg-slate-800 dark:border border-slate-500 rounded-full px-4 sm:ps-1 sm:pe-6 py-1 flex flex-col justify-end items-end">
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => mutate("/api/get-rank-by-profit")}
@@ -79,7 +79,7 @@ const MainPage = ({ children, headerTitle }) => {
                                 </button>{" "}
                                 <h1 className="hidden text-sm uppercase sm:inline">
                                     {userWarehouseName}
-                                    <span className="hidden text-end font-light text-xs text-slate-500 sm:block ">
+                                    <span className="hidden text-end font-light text-xs text-slate-500 dark:text-yellow-400 sm:block ">
                                         {" "}
                                         {profitLoading ? <LoaderIcon className="w-3 h-3 animate-spin inline" /> : <GemIcon className="w-3 h-3 inline" />}{" "}
                                         {formatNumber(WarehouseRankProfit)}

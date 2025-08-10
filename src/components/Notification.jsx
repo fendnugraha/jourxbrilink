@@ -35,7 +35,7 @@ const Notification = ({ type = "success", notification, title, onClose }) => {
 
     return (
         <div
-            className={`${notificationStyles} fixed bg-white top-4 sm:top-2 right-0 left-0 sm:left-auto sm:right-2 sm:w-96 z-[100000] border border-slate-500/50 rounded-2xl py-4 drop-shadow-lg`}
+            className={`${notificationStyles} fixed bg-white dark:bg-slate-600/70 dark:backdrop-blur-sm top-4 sm:top-2 right-0 left-0 sm:left-auto sm:right-2 sm:w-96 z-[100000] border border-slate-500/50 rounded-4xl py-2 drop-shadow-lg`}
         >
             <div className="flex items-center gap-4 px-4">
                 <div className="">

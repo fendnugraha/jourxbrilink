@@ -69,7 +69,7 @@ const TransactionContent = ({ currentDate }) => {
                     {notification.message && (
                         <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
                     )}
-                    <div className="bg-white p-4 rounded-3xl col-span-1 sm:col-span-3 order-2 sm:order-1 drop-shadow-sm">
+                    <div className="bg-white dark:bg-slate-800 p-4 rounded-3xl col-span-1 sm:col-span-3 order-2 sm:order-1 drop-shadow-sm">
                         <TransactionMenu
                             user={user}
                             fetchJournalsByWarehouse={fetchJournalsByWarehouse}

@@ -126,7 +126,7 @@ const StorePage = () => {
                     <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
                 )}
                 <div className="grid grid-cols-1 gap-4">
-                    <div className="bg-white shadow-sm rounded-3xl ">
+                    <div className="card">
                         <div className="p-4 flex justify-between sm:flex-row flex-col items-start">
                             <h1 className="text-2xl font-bold mb-4">
                                 Transaksi Barang
@@ -149,11 +149,8 @@ const StorePage = () => {
                                             <PlusCircleIcon className="w-4 h-4 inline" /> Pembelian
                                         </button> */}
                                 </div>
-                                <button
-                                    onClick={() => setIsModalFilterJournalOpen(true)}
-                                    className="bg-white font-bold p-2 rounded-lg border border-gray-300 hover:border-gray-400"
-                                >
-                                    <FilterIcon size={24} />
+                                <button onClick={() => setIsModalFilterJournalOpen(true)} className="small-button">
+                                    <FilterIcon size={20} />
                                 </button>
                                 <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                                     {userRole === "Administrator" && (
@@ -164,7 +161,7 @@ const StorePage = () => {
                                                     setSelectedWarehouse(e.target.value);
                                                 }}
                                                 value={selectedWarehouse}
-                                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                                className="form-control"
                                             >
                                                 <option value="all">Semua Akun</option>
                                                 {warehouses.map((w) => (
@@ -178,12 +175,7 @@ const StorePage = () => {
                                     <div className="grid grid-cols-2 gap-2 mb-4">
                                         <div>
                                             <Label>Tanggal</Label>
-                                            <Input
-                                                type="date"
-                                                value={startDate}
-                                                onChange={(e) => setStartDate(e.target.value)}
-                                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                            />
+                                            <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="form-control" />
                                         </div>
                                         <div>
                                             <Label>s/d</Label>
@@ -191,7 +183,7 @@ const StorePage = () => {
                                                 type="date"
                                                 value={endDate}
                                                 onChange={(e) => setEndDate(e.target.value)}
-                                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                                className="form-control"
                                                 disabled={!startDate}
                                             />
                                         </div>
@@ -260,7 +252,7 @@ const StorePage = () => {
                                                     <span className="">{transaction.transaction_type}</span>
                                                 </td>
                                                 <td className="font-bold">
-                                                    <span className="text-xs font-normal block text-slate-500">
+                                                    <span className="text-xs font-normal block text-slate-500 dark:text-yellow-100">
                                                         {formatDateTime(transaction.created_at)} {transaction.invoice}
                                                     </span>
 

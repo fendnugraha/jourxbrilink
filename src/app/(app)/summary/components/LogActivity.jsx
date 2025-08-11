@@ -73,11 +73,7 @@ const LogActivity = ({ warehouses }) => {
                     <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                         <div className="mb-4">
                             <Label className="font-bold">Cabang</Label>
-                            <select
-                                value={selectedWarehouse}
-                                onChange={(e) => setSelectedWarehouse(e.target.value)}
-                                className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            >
+                            <select value={selectedWarehouse} onChange={(e) => setSelectedWarehouse(e.target.value)} className="form-select">
                                 <option value="all">Semua Cabang</option>
                                 {warehouses?.data?.map((warehouse) => (
                                     <option key={warehouse.id} value={warehouse.id}>
@@ -88,21 +84,11 @@ const LogActivity = ({ warehouses }) => {
                         </div>
                         <div className="mb-4">
                             <Label className="font-bold">Tanggal</Label>
-                            <Input
-                                type="date"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            />
+                            <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="form-control" />
                         </div>
                         <div className="mb-4">
                             <Label className="font-bold">s/d</Label>
-                            <Input
-                                type="date"
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            />
+                            <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="form-control" />
                         </div>
                         <button onClick={() => fetchLogActivity()} className="btn-primary">
                             Submit

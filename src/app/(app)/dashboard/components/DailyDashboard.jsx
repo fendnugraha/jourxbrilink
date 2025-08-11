@@ -46,7 +46,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
     }, [selectedWarehouse, startDate, endDate]);
 
     return (
-        <div className="h-auto sm:h-[calc(100vh-80px-64px)] mb-12 flex flex-col bg-white dark:bg-slate-800 p-4 sm:p-6 rounded-4xl overflow-y-auto">
+        <div className="h-auto sm:h-[calc(100vh-80px-64px)] mb-12 flex flex-col bg-white dark:bg-slate-700 p-4 sm:p-6 rounded-4xl overflow-y-auto">
             <div className="flex items-start justify-between flex-col sm:flex-row gap-2 mb-2">
                 <h1 className="font-bold text-xl text-slate-600 dark:text-white">
                     {selectedWarehouse === "all"

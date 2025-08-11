@@ -108,7 +108,7 @@ const User = () => {
                         autoComplete="off"
                     />
                 </div>
-                <div className="overflow-x-auto bg-white rounded-2xl w-3/4">
+                <div className="overflow-x-auto card w-3/4">
                     <table className="table w-full text-xs">
                         <thead>
                             <tr>
@@ -133,7 +133,7 @@ const User = () => {
                                             <span className="block">
                                                 <MailIcon className="h-4 w-4 inline" /> {user.email}
                                             </span>
-                                            <span className="block text-slate-500">
+                                            <span className="block text-slate-500 dark:text-slate-400">
                                                 Last update at <TimeAgo timestamp={user.updated_at} />
                                             </span>
                                         </td>

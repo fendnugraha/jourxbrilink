@@ -1,5 +1,6 @@
 "use client";
 import Button from "@/components/Button";
+import Label from "@/components/Label";
 import axios from "@/libs/axios";
 import { useState } from "react";
 
@@ -39,9 +40,7 @@ const CreateAccount = ({ isModalOpen, notification, fetchAccount, categoryAccoun
     return (
         <form onSubmit={handleCreateAccount}>
             <div className="mb-4">
-                <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900">
-                    Account Name
-                </label>
+                <Label htmlFor="name">Account Name</Label>
                 <input
                     type="text"
                     id="name"
@@ -58,9 +57,7 @@ const CreateAccount = ({ isModalOpen, notification, fetchAccount, categoryAccoun
                 {errors.name && <p className="text-red-500 text-xs">{errors.name}</p>}
             </div>
             <div className="mb-4">
-                <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-900">
-                    Category
-                </label>
+                <Label htmlFor="category">Category</Label>
                 <select
                     id="category"
                     value={formData.category_id}
@@ -82,9 +79,7 @@ const CreateAccount = ({ isModalOpen, notification, fetchAccount, categoryAccoun
                 {errors.category_id && <p className="text-red-500 text-xs">{errors.category_id}</p>}
             </div>
             <div className="mb-4">
-                <label htmlFor="st_balance" className="block mb-2 text-sm font-medium text-gray-900">
-                    Starting Balance
-                </label>
+                <Label htmlFor="st_balance">Starting Balance</Label>
                 <input
                     type="number"
                     id="st_balance"

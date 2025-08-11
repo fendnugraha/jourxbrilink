@@ -1,5 +1,6 @@
 "use client";
 import Button from "@/components/Button";
+import Label from "@/components/Label";
 import axios from "@/libs/axios";
 import { useState } from "react";
 
@@ -25,9 +26,7 @@ const UpdateAccount = ({ isModalOpen, findSelectedAccountId, notification, fetch
     return (
         <form onSubmit={handleUpdateAccount}>
             <div className="mb-4">
-                <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900">
-                    Account Name
-                </label>
+                <Label htmlFor="name">Account Name</Label>
                 <input
                     type="text"
                     value={formData.acc_name}
@@ -37,9 +36,7 @@ const UpdateAccount = ({ isModalOpen, findSelectedAccountId, notification, fetch
                 />
             </div>
             <div className="mb-4">
-                <label htmlFor="st_balance" className="block mb-2 text-sm font-medium text-gray-900">
-                    Starting Balance
-                </label>
+                <Label htmlFor="st_balance">Starting Balance</Label>
                 <input
                     type="number"
                     value={formData.st_balance}

@@ -11,10 +11,12 @@ import CreateDeposit from "./CreateDeposit";
 import CreateMutationToHq from "./CreateMutationToHq";
 import CreateBankAdminFee from "./CreateBankAdminFee";
 import CreateExpense from "./CreateExpense";
+import VoucherSalesTable from "../../dashboard/components/VoucherSalesTable";
 
 const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNotification, cashBank }) => {
     const warehouse = Number(user?.role?.warehouse_id);
     const warehouseCashId = Number(user?.role?.warehouse?.chart_of_account_id);
+    const warehouseName = user?.role?.warehouse?.name;
 
     const [isModalCreateTransferOpen, setIsModalCreateTransferOpen] = useState(false);
     const [isModalCreateCashWithdrawalOpen, setIsModalCreateCashWithdrawalOpen] = useState(false);
@@ -81,7 +83,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
         <>
             <div className="hidden sm:flex gap-2 mb-4">
                 <Button
-                    buttonType="secondary"
+                    buttonType="primary"
                     className="mb-4 group text-nowrap"
                     onClick={() => {
                         setIsModalCreateTransferOpen(true);
@@ -92,7 +94,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
                     Transfer Uang <ArrowDownIcon size={18} className="inline group-hover:scale-125 delay-300 transition-transform duration-200" />
                 </Button>
                 <Button
-                    buttonType="secondary"
+                    buttonType="primary"
                     className="mb-4 group"
                     onClick={() => {
                         setIsModalCreateCashWithdrawalOpen(true);

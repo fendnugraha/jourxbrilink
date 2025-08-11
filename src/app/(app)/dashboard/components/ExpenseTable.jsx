@@ -104,7 +104,6 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
                             <thead>
                                 <tr>
                                     <th>Description</th>
-                                    <th>Category</th>
                                     <th>Amount</th>
                                 </tr>
                             </thead>
@@ -127,9 +126,8 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
                                             <td>
                                                 <span className="text-xs text-slate-500 dark:text-yellow-100">{formatDateTime(expense.created_at)}</span>
                                                 <br />
-                                                {expense.description}
+                                                {expense.debt.acc_name}: {expense.description}
                                             </td>
-                                            <td>{expense.debt.acc_name}</td>
                                             <td className="text-right">{formatNumber(-expense.fee_amount)}</td>
                                         </tr>
                                     ))

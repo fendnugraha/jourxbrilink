@@ -1,6 +1,7 @@
 "use client";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
+import Label from "@/components/Label";
 import axios from "@/libs/axios";
 import { useCallback, useEffect, useState } from "react";
 
@@ -50,12 +51,12 @@ const UpdateWarehouse = ({ isModalOpen, notification, findSelectedWarehouseId, f
     };
     return (
         <form onSubmit={handleUpdateWarehouse}>
-            <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700">Name</label>
+            <div>
+                <Label>Name</Label>
                 <Input type="text" className={"form-control"} value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
             </div>
             <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700">Chart of Account</label>
+                <Label>Chart of Account</Label>
                 <select
                     className="form-select"
                     value={formData.chart_of_account_id}
@@ -70,7 +71,7 @@ const UpdateWarehouse = ({ isModalOpen, notification, findSelectedWarehouseId, f
                 </select>
             </div>
             <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700">Address</label>
+                <Label>Address</Label>
                 <textarea className="form-control" value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} />
             </div>
             <div className="mt-4">

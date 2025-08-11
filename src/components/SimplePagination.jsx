@@ -1,7 +1,7 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import React from "react";
 
-const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange, className }) => {
+const SimplePagination = ({ totalItems, itemsPerPage, currentPage, onPageChange, className }) => {
     // Calculate the total number of pages
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -52,7 +52,7 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange, class
 
     return (
         <>
-            <div className={`flex sm:hidden justify-between text-xs items-center mt-3 ${className}`}>
+            <div className={`flex justify-between text-xs items-center mt-3 ${className}`}>
                 <button
                     onClick={() => goToPage(currentPage - 1)}
                     disabled={currentPage === 1}
@@ -68,49 +68,8 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange, class
                     <ChevronRightIcon size={16} />
                 </button>
             </div>
-            <div className={`sm:flex justify-between hidden text-xs items-center mt-3 ${className}`}>
-                <div className="w-1/2 text-slate-500 dark:text-slate-400">
-                    <span>
-                        {currentPage} of {totalPages}
-                    </span>
-                </div>
-
-                <div className="flex justify-end items-center gap-1 w-1/2">
-                    <button
-                        onClick={() => goToPage(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        className="border border-slate-300 dark:border-slate-500 rounded-lg py-1 px-4 disabled:text-slate-300 disabled:border-slate-300 dark:disabled:border-slate-500"
-                    >
-                        <ChevronLeftIcon size={16} />
-                    </button>
-
-                    {/* Render page numbers with ellipsis */}
-                    <div className="flex gap-1">
-                        {generatePageNumbers().map((page, index) => (
-                            <button
-                                key={index}
-                                onClick={() => (typeof page === "number" ? goToPage(page) : null)}
-                                className={`border border-slate-300 dark:border-slate-500 rounded-lg py-1 px-3 ${
-                                    currentPage === page ? "bg-slate-600 dark:bg-indigo-500 text-white scale-125" : ""
-                                }`}
-                                disabled={page === "..."}
-                            >
-                                {page}
-                            </button>
-                        ))}
-                    </div>
-
-                    <button
-                        onClick={() => goToPage(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                        className="border border-slate-300 dark:border-slate-500 rounded-lg py-1 px-4 disabled:text-slate-300 disabled:border-slate-300 dark:disabled:border-slate-500"
-                    >
-                        <ChevronRightIcon size={16} />
-                    </button>
-                </div>
-            </div>
         </>
     );
 };
 
-export default Pagination;
+export default SimplePagination;

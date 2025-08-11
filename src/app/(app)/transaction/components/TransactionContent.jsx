@@ -10,11 +10,13 @@ import JournalTable from "./JournalTable";
 import useGetWarehouses from "@/libs/getAllWarehouse";
 import Notification from "@/components/Notification";
 import TransactionMenuMobile from "./TransactionMenuMobile";
+import VoucherSalesTable from "../../dashboard/components/VoucherSalesTable";
 
 const TransactionContent = ({ currentDate }) => {
     const { user } = useAuth({ middleware: "auth" });
     const warehouse = Number(user?.role?.warehouse_id);
     const warehouseCashId = Number(user?.role?.warehouse?.chart_of_account_id);
+    const warehouseName = user?.role?.warehouse?.name;
     const { warehouses, warehousesError } = useGetWarehouses();
     const [cashBank, setCashBank] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -69,7 +71,7 @@ const TransactionContent = ({ currentDate }) => {
                     {notification.message && (
                         <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
                     )}
-                    <div className="bg-white dark:bg-slate-800 p-4 rounded-3xl col-span-1 sm:col-span-3 order-2 sm:order-1 drop-shadow-sm">
+                    <div className="bg-white dark:bg-slate-700 p-4 rounded-3xl col-span-1 sm:col-span-3 order-2 sm:order-1 drop-shadow-sm h-fit">
                         <TransactionMenu
                             user={user}
                             fetchJournalsByWarehouse={fetchJournalsByWarehouse}
@@ -92,6 +94,16 @@ const TransactionContent = ({ currentDate }) => {
                     </div>
                     <div className="order-1 sm:order-2">
                         <CashBankBalance warehouse={warehouse} accountBalance={accountBalance} isValidating={isValidating} user={user} />
+                        <div className="mt-4 hidden sm:block">
+                            <VoucherSalesTable
+                                warehouse={warehouse}
+                                warehouseName={warehouseName}
+                                warehouses={warehouses}
+                                userRole={"Kasir"}
+                                showOnlyQty={true}
+                                showOnlyVoucher={true}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

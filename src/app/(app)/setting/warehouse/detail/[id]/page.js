@@ -100,16 +100,19 @@ const WarehouseDetail = ({ params }) => {
                 {notification.message && (
                     <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
                 )}
-                <div className="shadow-sm rounded-3xl p-6 bg-white mb-2">
+                <div className="card p-6 mb-2">
                     <h1 className="text-xl font-bold mb-4">Cash & Bank List</h1>
                     <div className="grid grid-cols-2 gap-2">
                         <div>
                             <input
-                                type="text"
+                                type="search"
                                 value={search}
-                                onChange={(e) => setSearch(e.target.value)}
+                                onChange={(e) => {
+                                    setSearch(e.target.value);
+                                    setCurrentPage(1);
+                                }}
                                 placeholder="Search..."
-                                className="w-full border border-gray-300 rounded-md p-2 mb-2"
+                                className="form-control"
                             />
                             <table className="table w-full text-xs">
                                 <tbody>
@@ -123,7 +126,7 @@ const WarehouseDetail = ({ params }) => {
                                                 <span className="text-xs flex justify-center items-center">
                                                     {warehouse.chart_of_account_id == item.id ? (
                                                         <button>
-                                                            <KeyRoundIcon className="size-6 text-red-600" />
+                                                            <KeyRoundIcon className="size-6 text-red-600 dark:text-red-400" />
                                                         </button>
                                                     ) : (
                                                         <button
@@ -132,7 +135,7 @@ const WarehouseDetail = ({ params }) => {
                                                             className="disabled:cursor-not-allowed"
                                                         >
                                                             {item.warehouse_id !== warehouse.id && item.warehouse_id !== null ? (
-                                                                <LockIcon className="size-5 text-slate-600" />
+                                                                <LockIcon className="size-5 text-slate-600 dark:text-slate-300" />
                                                             ) : (
                                                                 <div
                                                                     className={`p-1 w-12 rounded-full flex ${

@@ -20,13 +20,11 @@ export default function Paginator({ links, handleChangePage }) {
             <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between my-4">
                 <div>
                     <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 p-1">
-                        Showing
                         <span className="font-medium mx-1">{links?.from}</span>
                         to
                         <span className="font-medium mx-1">{links?.to}</span>
                         of
                         <span className="font-medium mx-1">{links?.total}</span>
-                        results
                     </p>
                 </div>
                 <div>

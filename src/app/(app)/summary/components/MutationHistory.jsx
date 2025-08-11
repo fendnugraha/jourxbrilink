@@ -33,6 +33,7 @@ const MutationHistory = ({ account, notification, user }) => {
 
     const closeModal = () => {
         setIsModalFilterDataOpen(false);
+        setIsModalDeleteJournalOpen(false);
     };
 
     const fetchMutation = async (url = `/api/mutation-history/${selectedAccount}/${startDate}/${endDate}`) => {
@@ -79,19 +80,19 @@ const MutationHistory = ({ account, notification, user }) => {
                     </span>
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-3 mb-2 sm:col-span-2">
-                    <div className="border border-slate-300 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700 dark:text-slate-100 dark:border-slate-600">
+                    <div className="border border-slate-300 dark:bg-slate-600 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700 dark:text-slate-100 dark:border-slate-600">
                         <h5 className="sm:text-xs">Saldo Awal</h5>
                         <span className="sm:text-xl font-bold">{formatNumber(mutation?.initBalance || 0)}</span>
                     </div>
-                    <div className="border border-slate-300 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700 dark:text-slate-100 dark:border-slate-600">
+                    <div className="border border-slate-300 dark:bg-slate-600 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700 dark:text-slate-100 dark:border-slate-600">
                         <h5 className="sm:text-xs">Debet</h5>
                         <span className="sm:text-xl font-bold">{formatNumber(mutation?.debt_total || 0)}</span>
                     </div>
-                    <div className="border border-slate-300 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700 dark:text-slate-100 dark:border-slate-600">
+                    <div className="border border-slate-300 dark:bg-slate-600 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700 dark:text-slate-100 dark:border-slate-600">
                         <h5 className="sm:text-xs">Credit</h5>
                         <span className="sm:text-xl font-bold">{formatNumber(mutation?.cred_total || 0)}</span>
                     </div>
-                    <div className="border border-slate-300 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700 dark:text-slate-100 dark:border-slate-600">
+                    <div className="border border-slate-300 dark:bg-slate-600 p-2 sm:px-4 sm:py-2 rounded-xl text-slate-700 dark:text-slate-100 dark:border-slate-600">
                         <h5 className="sm:text-xs">Saldo Akhir</h5>
                         <span className="sm:text-xl font-bold">{formatNumber(mutation?.endBalance || 0)}</span>
                     </div>
@@ -115,21 +116,11 @@ const MutationHistory = ({ account, notification, user }) => {
                 <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                     <div className="mb-4">
                         <Label className="font-bold">Tanggal</Label>
-                        <Input
-                            type="date"
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                            className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                        />
+                        <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="form-control" />
                     </div>
                     <div className="mb-4">
                         <Label className="font-bold">s/d</Label>
-                        <Input
-                            type="date"
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
-                            className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                        />
+                        <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="form-control" />
                     </div>
                     <button onClick={() => fetchMutation()} className="btn-primary">
                         Submit
@@ -216,7 +207,7 @@ const MutationHistory = ({ account, notification, user }) => {
                         </button>
                         <button
                             onClick={() => setIsModalDeleteJournalOpen(false)}
-                            className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >
                             Tidak
                         </button>

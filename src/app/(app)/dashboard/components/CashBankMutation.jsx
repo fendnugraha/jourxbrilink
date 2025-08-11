@@ -221,7 +221,9 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                 <tr key={index}>
                                     <td>
                                         {account.acc_name}
-                                        <span className="text-xs text-blue-600 font-bold block sm:hidden">{formatNumber(account.balance)}</span>
+                                        <span className="text-xs text-blue-600 dark:text-blue-400 font-bold block sm:hidden">
+                                            {formatNumber(account.balance)}
+                                        </span>
                                     </td>
                                     <td className="text-end font-bold hidden sm:table-cell">{formatNumber(account.balance ?? 0)}</td>
                                     <td className="text-end">{formatNumber(mutationInSumById(account.id) ?? 0)}</td>

@@ -7,6 +7,7 @@ import Modal from "@/components/Modal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
 import Pagination from "@/components/PaginateList";
+import SimplePagination from "@/components/SimplePagination";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -15,7 +16,7 @@ const getCurrentDate = () => {
     const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
 };
-const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) => {
+const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole, showOnlyQty = false, showOnlyVoucher = false }) => {
     const [transactions, setTransactions] = useState([]);
     const [notification, setNotification] = useState("");
 
@@ -112,16 +113,16 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
 
     return (
         <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                <h1 className="font-bold text-xl text-slate-600 dark:text-white">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
+                <h1 className="font-bold text-xl text-slate-600 dark:text-white" hidden={showOnlyVoucher}>
                     Penjualan Barang
                     <span className="text-xs block font-normal">
                         Periode: {startDate} - {endDate}
                     </span>
                 </h1>
-                <div className="flex justify-end gap-1 flex-col sm:flex-row">
+                <div className="flex justify-between gap-1 flex-col sm:flex-row">
                     {userRole === "Administrator" && (
-                        <select value={selectedWarehouse} onChange={(e) => setSelectedWarehouse(e.target.value)} className="form-select !w-96 p-2.5">
+                        <select value={selectedWarehouse} onChange={(e) => setSelectedWarehouse(e.target.value)} className="form-select flex-1 p-2.5">
                             <option value="all">Semua Cabang</option>
                             {warehouses?.data?.map((warehouse) => (
                                 <option key={warehouse.id} value={warehouse.id}>
@@ -186,9 +187,9 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                                 <tr>
                                     <th>Product</th>
                                     <th>Qty</th>
-                                    <th>Jual</th>
-                                    <th>Modal</th>
-                                    <th>Laba</th>
+                                    <th className={`${showOnlyQty ? "hidden" : "hidden sm:table-cell"}`}>Jual</th>
+                                    <th className={`${showOnlyQty ? "hidden" : "hidden sm:table-cell"}`}>Modal</th>
+                                    <th className={`${showOnlyQty ? "hidden" : "hidden sm:table-cell"}`}>Laba</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -209,9 +210,15 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                                         <tr key={transaction.product_id}>
                                             <td>{transaction.product.name}</td>
                                             <td className="text-center">{formatNumber(-transaction.quantity)}</td>
-                                            <td className="text-end">{formatNumber(-transaction.total_price)}</td>
-                                            <td className="text-end">{formatNumber(-transaction.total_cost)}</td>
-                                            <td className="text-end">{formatNumber(-Number(transaction.total_price - transaction.total_cost))}</td>
+                                            <td className={`text-end ${showOnlyQty ? "hidden" : "hidden sm:table-cell"}`}>
+                                                {formatNumber(-transaction.total_price)}
+                                            </td>
+                                            <td className={`text-end ${showOnlyQty ? "hidden" : "hidden sm:table-cell"}`}>
+                                                {formatNumber(-transaction.total_cost)}
+                                            </td>
+                                            <td className={`text-end ${showOnlyQty ? "hidden" : "hidden sm:table-cell"}`}>
+                                                {formatNumber(-Number(transaction.total_price - transaction.total_cost))}
+                                            </td>
                                         </tr>
                                     ))
                                 )}
@@ -220,7 +227,7 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                     </div>
                     {paginateVoucher?.totalPages > 1 && (
                         <div className="px-2 pb-4">
-                            <Pagination
+                            <SimplePagination
                                 className="w-full px-4"
                                 totalItems={Number(paginateVoucher?.totalItems)}
                                 itemsPerPage={Number(paginateVoucher?.itemsPerPage)}
@@ -230,7 +237,7 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                         </div>
                     )}
                 </div>
-                <div className="card overflow-hidden w-full">
+                <div className="card overflow-hidden w-full" hidden={showOnlyVoucher}>
                     <div className="flex justify-between items-start px-4 sm:px-6 pt-4">
                         <h1 className="font-bold text-xl text-green-600 dark:text-green-300">
                             Accesories{" "}
@@ -253,9 +260,9 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                                 <tr>
                                     <th>Product</th>
                                     <th>Qty</th>
-                                    <th>Jual</th>
-                                    <th>Modal</th>
-                                    <th>Laba</th>
+                                    <th className="hidden sm:table-cell">Jual</th>
+                                    <th className="hidden sm:table-cell">Modal</th>
+                                    <th className="hidden sm:table-cell">Laba</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -276,9 +283,11 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole }) =
                                         <tr key={transaction.product_id}>
                                             <td>{transaction.product.name}</td>
                                             <td className="text-center">{formatNumber(-transaction.quantity)}</td>
-                                            <td className="text-end">{formatNumber(-transaction.total_price)}</td>
-                                            <td className="text-end">{formatNumber(-transaction.total_cost)}</td>
-                                            <td className="text-end">{formatNumber(-Number(transaction.total_price - transaction.total_cost))}</td>
+                                            <td className="text-end hidden sm:table-cell">{formatNumber(-transaction.total_price)}</td>
+                                            <td className="text-end hidden sm:table-cell">{formatNumber(-transaction.total_cost)}</td>
+                                            <td className="text-end hidden sm:table-cell">
+                                                {formatNumber(-Number(transaction.total_price - transaction.total_cost))}
+                                            </td>
                                         </tr>
                                     ))
                                 )}

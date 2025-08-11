@@ -6,14 +6,19 @@ import Modal from "@/components/Modal";
 import CreateContact from "../../setting/contact/CreateContact";
 import CreatePayable from "./CreatePayable";
 import formatNumber from "@/libs/formatNumber";
+import Notification from "@/components/Notification";
 import formatDateTime from "@/libs/formatDateTime";
 import PaymentForm from "./PaymentForm";
 import Paginator from "@/components/Paginator";
 import CreateReceivable from "./CreateReceivable";
 import Pagination from "@/components/PaginateList";
 import Input from "@/components/Input";
-const Payable = ({ notification }) => {
+const Payable = () => {
     const [isModalCreateContactOpen, setIsModalCreateContactOpen] = useState(false);
+    const [notification, setNotification] = useState({
+        type: "",
+        message: "",
+    });
     const [isModalCreatePayableOpen, setIsModalCreatePayableOpen] = useState(false);
     const [isModalCreateReceivableOpen, setIsModalCreateReceivableOpen] = useState(false);
     const [isModalDeleteFinanceOpen, setIsModalDeleteFinanceOpen] = useState(false);
@@ -92,38 +97,30 @@ const Payable = ({ notification }) => {
     };
     return (
         <>
+            {notification.message && (
+                <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
+            )}
             <div className="overflow-hidden">
-                <div className="bg-white drop-shadow-sm rounded-3xl mb-4">
+                <div className="card mb-4">
                     <div className="p-4 flex justify-between flex-col sm:flex-row">
-                        <div className="bg-slate-400 rounded-xl mb-4 p-1">
-                            <div className="flex">
-                                <button
-                                    onClick={() => setFinanceType("Payable")}
-                                    className={`px-4 text-xl ${
-                                        financeType === "Payable" ? "bg-white text-slate-600 font-semibold rounded-lg" : "text-white"
-                                    } transition duration-300 ease-out`}
-                                >
-                                    Hutang
-                                </button>
-                                <button
-                                    onClick={() => setFinanceType("Receivable")}
-                                    className={`px-4 text-xl ${
-                                        financeType === "Receivable" ? "bg-white text-slate-600 font-semibold rounded-lg" : "text-white"
-                                    } transition duration-300 ease-out`}
-                                >
-                                    Piutang
-                                </button>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-1 overflow-auto">
-                            <button onClick={() => setIsModalCreatePayableOpen(true)} className="btn-primary text-xs mr-2">
-                                <PlusCircleIcon className="w-4 h-4 mr-2 inline" /> Hutang
+                        <select
+                            onChange={(e) => {
+                                setFinanceType(e.target.value);
+                            }}
+                            className="form-select !w-40"
+                        >
+                            <option value="Payable">Hutang</option>
+                            <option value="Receivable">Piutang</option>
+                        </select>
+                        <div className="flex items-center gap-2 overflow-auto">
+                            <button onClick={() => setIsModalCreatePayableOpen(true)} className="btn-primary text-xs">
+                                <PlusCircleIcon className="w-4 h-4 mr-1 inline" /> Hutang
                             </button>
                             <button
                                 onClick={() => setIsModalCreateReceivableOpen(true)}
-                                className="btn-primary text-xs mr-2 disabled:bg-slate-400 disabled:cursor-not-allowed"
+                                className="btn-primary text-xs disabled:bg-slate-400 disabled:cursor-not-allowed"
                             >
-                                <PlusCircleIcon className="w-4 h-4 mr-2 inline" /> Piutang
+                                <PlusCircleIcon className="w-4 h-4 mr-1 inline" /> Piutang
                             </button>
                             <Modal isOpen={isModalCreatePayableOpen} onClose={closeModal} modalTitle="Create Payable">
                                 <CreatePayable
@@ -140,7 +137,7 @@ const Payable = ({ notification }) => {
                                 />
                             </Modal>
                             <button onClick={() => setIsModalCreateContactOpen(true)} className="btn-primary text-xs">
-                                <PlusCircleIcon className="w-4 h-4 mr-2 inline" /> Contact
+                                <PlusCircleIcon className="w-4 h-4 mr-1 inline" /> Contact
                             </button>
                             <Modal isOpen={isModalCreateContactOpen} onClose={closeModal} modalTitle="Create Contact">
                                 <CreateContact isModalOpen={setIsModalCreateContactOpen} notification={(message) => notification(message)} />
@@ -148,14 +145,12 @@ const Payable = ({ notification }) => {
                         </div>
                     </div>
                     <div className="p-4 w-full sm:w-1/2 flex justify-between gap-2">
-                        <Input
-                            type="search"
-                            className="border border-slate-300 rounded-lg p-2 w-full"
-                            value={searchTerm}
-                            placeholder="Search"
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                        <select className="border border-slate-300 rounded-lg p-2" value={paymentStatus} onChange={(e) => setPaymentStatus(e.target.value)}>
+                        <Input type="search" className="form-control" value={searchTerm} placeholder="Search" onChange={(e) => setSearchTerm(e.target.value)} />
+                        <select
+                            className="border border-slate-300 dark:border-slate-500 rounded-lg p-2"
+                            value={paymentStatus}
+                            onChange={(e) => setPaymentStatus(e.target.value)}
+                        >
                             <option value="All">Semua</option>
                             <option value="Paid">Lunas</option>
                             <option value="Unpaid">Belum lunas</option>
@@ -164,7 +159,7 @@ const Payable = ({ notification }) => {
                             onChange={(e) => {
                                 setItemsPerPage(e.target.value), setCurrentPage(1);
                             }}
-                            className="border border-slate-300 rounded-lg p-2"
+                            className="border border-slate-300 dark:border-slate-500 rounded-lg p-2"
                         >
                             <option value="5">5</option>
                             <option value="10">10</option>
@@ -211,13 +206,9 @@ const Payable = ({ notification }) => {
                             </tbody>
                             <tfoot>
                                 <tr className="text-lg">
-                                    <td colSpan={3} className="font-bold">
-                                        Total {financeType === "Payable" ? "Hutang" : "Piutang"}
-                                    </td>
-                                    <td className="font-bold text-end">
-                                        {formatNumber(filteredFinance.reduce((total, item) => total + Number(item.sisa), 0))}
-                                    </td>
-                                    <td className="font-bold text-end"></td>
+                                    <th colSpan={3}>Total {financeType === "Payable" ? "Hutang" : "Piutang"}</th>
+                                    <th>{formatNumber(filteredFinance.reduce((total, item) => total + Number(item.sisa), 0))}</th>
+                                    <th></th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -232,7 +223,7 @@ const Payable = ({ notification }) => {
                         />
                     )}
                 </div>
-                <div className="bg-white drop-shadow-sm rounded-3xl">
+                <div className="card">
                     <div className="p-4 flex justify-between">
                         <h1 className="text-2xl font-bold mb-4">Riwayat Transaksi</h1>
                     </div>
@@ -260,12 +251,16 @@ const Payable = ({ notification }) => {
                                         <tr key={index} className="hover:bg-slate-700 hover:text-white">
                                             <td className="text-center whitespace-nowrap">
                                                 {item.bill_amount > 0 ? (
-                                                    <ArrowBigDown className="inline text-green-600" />
+                                                    <ArrowBigDown className="inline text-green-600 dark:text-green-400" />
                                                 ) : (
-                                                    <ArrowBigUp className="inline text-red-600" />
+                                                    <ArrowBigUp className="inline text-red-600 dark:text-red-400" />
                                                 )}
                                             </td>
-                                            <td className={`text-end font-bold ${item.bill_amount > 0 ? "text-green-600" : "text-red-600"}`}>
+                                            <td
+                                                className={`text-end font-bold ${
+                                                    item.bill_amount > 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
+                                                }`}
+                                            >
                                                 {formatNumber(item.bill_amount > 0 ? item.bill_amount : item.payment_amount)}
                                             </td>
                                             <td className="">{item.account.acc_name}</td>
@@ -285,7 +280,7 @@ const Payable = ({ notification }) => {
                                                     type="button"
                                                     className=""
                                                 >
-                                                    <XCircleIcon className="w-4 h-4 mr-2 inline text-red-600" />
+                                                    <XCircleIcon className="w-4 h-4 mr-2 inline text-red-600 dark:text-red-400" />
                                                 </button>
                                             </td>
                                         </tr>
@@ -315,7 +310,7 @@ const Payable = ({ notification }) => {
                         </button>
                         <button
                             onClick={() => setIsModalDeleteFinanceOpen(false)}
-                            className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 drop-shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-400 drop-shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >
                             Tidak
                         </button>

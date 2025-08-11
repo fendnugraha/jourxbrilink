@@ -13,6 +13,7 @@ import EditJournal from "./EditJournal";
 import TimeAgo from "@/libs/formatDateDistance";
 import EditMutationJournal from "./EditMutationJournal";
 import EditDeposit from "./EditDeposit";
+import Dropdown from "@/components/Dropdown";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -62,10 +63,11 @@ const JournalTable = ({
     const handleDeleteJournal = async (id) => {
         try {
             const response = await axios.delete(`/api/journals/${id}`);
-            notification("success", response.data.message);
+            notification({ type: "success", message: response.data.message });
             fetchJournalsByWarehouse();
         } catch (error) {
-            notification("error", error.response?.data?.message || "Something went wrong.");
+            notification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
+            console.log(error);
         }
     };
 
@@ -124,22 +126,29 @@ const JournalTable = ({
     return (
         <>
             <div className="flex gap-1">
-                <div className="w-full sm:max-w-sm">
+                <Dropdown
+                    trigger={
+                        <button className="small-button">
+                            <SearchIcon size={20} />
+                        </button>
+                    }
+                    align="left"
+                >
                     <input
                         type="search"
-                        className="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        className="px-2 outline-none w-60 sm:w-96"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder="Search..."
                     />
-                </div>
+                </Dropdown>
                 <select
                     onChange={(e) => {
                         setSelectedAccount(e.target.value);
                         setCurrentPage(1);
                     }}
                     value={selectedAccount}
-                    className="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    className="form-select block w-full p-2.5"
                 >
                     <option value="">Semua Akun</option>
                     {branchAccount.map((account, index) => (
@@ -153,7 +162,7 @@ const JournalTable = ({
                         setItemsPerPage(Number(e.target.value));
                         setCurrentPage(1);
                     }}
-                    className="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                    className="form-select !w-16 block p-2.5"
                 >
                     <option value={5}>5</option>
                     <option value={10}>10</option>
@@ -212,7 +221,7 @@ const JournalTable = ({
                 </Modal>
             </div>
             <div className="pt-1">
-                <h4 className="text-xs text-slate-500">
+                <h4 className="text-xs text-slate-500 dark:text-slate-200">
                     {warehouses?.data?.find((w) => w.id === Number(selectedWarehouse))?.name},{" "}
                     {startDate === endDate ? formatLongDate(endDate) : `${formatLongDate(startDate)} s/d ${formatLongDate(endDate)}`}
                 </h4>
@@ -259,18 +268,63 @@ const JournalTable = ({
                                                     journal.debt.acc_name
                                                 )}
                                                 .{" "}
-                                                <span className="font-normal text-slate-500 dark:text-slate-300 group-hover:text-slate-100">
+                                                <span className="font-normal hidden sm:inline text-slate-500 dark:text-slate-300 group-hover:text-slate-100">
                                                     Note: {journal.description}
                                                 </span>
                                             </span>
-                                            <span className="text-xs block text-slate-500 group-hover:text-white">
+                                            <span className="text-xs hidden sm:block text-slate-500 dark:text-slate-400 group-hover:text-white">
                                                 Last update at <TimeAgo timestamp={journal.updated_at} />
                                             </span>
+                                            <div className="flex mt-1 gap-3 sm:hidden">
+                                                <button
+                                                    className=" hover:scale-125 transtition-all duration-200"
+                                                    hidden={!["Deposit"].includes(journal.trx_type)}
+                                                    onClick={() => {
+                                                        setSelectedJournalId(journal.id);
+                                                        setIsModalEditDepositOpen(true);
+                                                    }}
+                                                >
+                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:text-white" />
+                                                </button>
+                                                <button
+                                                    className=" hover:scale-125 transtition-all duration-200"
+                                                    hidden={!["Transfer Uang", "Tarik Tunai"].includes(journal.trx_type)}
+                                                    onClick={() => {
+                                                        setSelectedJournalId(journal.id);
+                                                        setIsModalEditJournalOpen(true);
+                                                    }}
+                                                >
+                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:text-white" />
+                                                </button>
+                                                <button
+                                                    className=" hover:scale-125 transtition-all duration-200"
+                                                    hidden={!["Mutasi Kas"].includes(journal.trx_type) || hqCashBankIds.includes(journal.cred_code)}
+                                                    onClick={() => {
+                                                        setSelectedJournalId(journal.id);
+                                                        setIsModalEditMutationJournalOpen(true);
+                                                    }}
+                                                >
+                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:text-white" />
+                                                </button>
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedJournalId(journal.id);
+                                                        setIsModalDeleteJournalOpen(true);
+                                                    }}
+                                                    disabled={
+                                                        ["Voucher & SP", "Accessories", null].includes(journal.trx_type) ||
+                                                        (userRole !== "Administrator" && hqCashBankIds.includes(journal.cred_code))
+                                                    }
+                                                    className="disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 dark:text-red-400 hover:scale-125 transition-all group-hover:text-white duration-200"
+                                                >
+                                                    <TrashIcon className="size-4" />
+                                                </button>
+                                            </div>
                                         </td>
                                         <td className="font-bold text-end text-slate-600 dark:text-slate-300 ">
                                             <span
-                                                className={`${Number(journal.debt_code) === Number(selectedAccount) ? "text-green-500" : ""}
-                                    ${Number(journal.cred_code) === Number(selectedAccount) ? "text-red-500" : ""}
+                                                className={`${Number(journal.debt_code) === Number(selectedAccount) ? "text-green-500 dark:text-green-400" : ""}
+                                    ${Number(journal.cred_code) === Number(selectedAccount) ? "text-red-500 dark:text-red-400" : ""}
                                         text-sm group-hover:text-yellow-400 sm:text-base xl:text-lg`}
                                             >
                                                 {formatNumber(journal.amount)}
@@ -279,7 +333,7 @@ const JournalTable = ({
                                                 <span className="text-xs text-yellow-600 group-hover:text-white block">{formatNumber(journal.fee_amount)}</span>
                                             )}
                                         </td>
-                                        <td className="">
+                                        <td className="hidden sm:table-cell">
                                             <div className="flex justify-center gap-3">
                                                 <button
                                                     className=" hover:scale-125 transtition-all duration-200"
@@ -342,59 +396,59 @@ const JournalTable = ({
                         onPageChange={handlePageChange}
                     />
                 )}
-                <Modal isOpen={isModalDeleteJournalOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
-                    <div className="flex flex-col items-center justify-center gap-3 mb-4">
-                        <MessageCircleWarningIcon size={100} className="text-red-600" />
-                        <h1 className="text-2xl font-bold text-slate-500 text-center">Apakah anda yakin ??</h1>
-                        <p className="text-sm text-center">(ID: {selectedJournalId})</p>
-                    </div>
-                    <div className="flex justify-center gap-3">
-                        <button
-                            onClick={() => setIsModalDeleteJournalOpen(false)}
-                            className="w-full rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm hover:bg-red-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        >
-                            Tidak
-                        </button>
-                        <button
-                            onClick={() => {
-                                handleDeleteJournal(selectedJournalId);
-                                setIsModalDeleteJournalOpen(false);
-                            }}
-                            className="btn-primary w-full"
-                        >
-                            Ya
-                        </button>
-                    </div>
-                </Modal>
-                <Modal isOpen={isModalEditJournalOpen} onClose={closeModal} modalTitle="Edit Journal" maxWidth="max-w-2xl">
-                    <EditJournal
-                        isModalOpen={setIsModalEditJournalOpen}
-                        journal={filterSelectedJournalId}
-                        branchAccount={branchAccount}
-                        notification={notification}
-                        fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                    />
-                </Modal>
-                <Modal isOpen={isModalEditDepositOpen} onClose={closeModal} modalTitle="Edit Penjualan Deposit" maxWidth="max-w-2xl">
-                    <EditDeposit
-                        isModalOpen={setIsModalEditDepositOpen}
-                        journal={filterSelectedJournalId}
-                        branchAccount={branchAccount}
-                        notification={notification}
-                        fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                    />
-                </Modal>
-                <Modal isOpen={isModalEditMutationJournalOpen} onClose={closeModal} modalTitle="Edit Mutasi Journal" maxWidth="max-w-2xl">
-                    <EditMutationJournal
-                        isModalOpen={setIsModalEditMutationJournalOpen}
-                        selectedWarehouse={selectedWarehouse}
-                        journal={filterSelectedJournalId}
-                        cashBank={cashBank}
-                        notification={notification}
-                        fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                    />
-                </Modal>
             </div>
+            <Modal isOpen={isModalDeleteJournalOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
+                <div className="flex flex-col items-center justify-center gap-3 mb-4">
+                    <MessageCircleWarningIcon size={100} className="text-red-600" />
+                    <h1 className="text-2xl font-bold text-slate-500 text-center">Apakah anda yakin ??</h1>
+                    <p className="text-sm text-center">(ID: {selectedJournalId})</p>
+                </div>
+                <div className="flex justify-center gap-3">
+                    <button
+                        onClick={() => setIsModalDeleteJournalOpen(false)}
+                        className="w-full rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm hover:bg-red-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    >
+                        Tidak
+                    </button>
+                    <button
+                        onClick={() => {
+                            handleDeleteJournal(selectedJournalId);
+                            setIsModalDeleteJournalOpen(false);
+                        }}
+                        className="btn-primary w-full"
+                    >
+                        Ya
+                    </button>
+                </div>
+            </Modal>
+            <Modal isOpen={isModalEditJournalOpen} onClose={closeModal} modalTitle="Edit Journal" maxWidth="max-w-2xl">
+                <EditJournal
+                    isModalOpen={setIsModalEditJournalOpen}
+                    journal={filterSelectedJournalId}
+                    branchAccount={branchAccount}
+                    notification={notification}
+                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                />
+            </Modal>
+            <Modal isOpen={isModalEditDepositOpen} onClose={closeModal} modalTitle="Edit Penjualan Deposit" maxWidth="max-w-2xl">
+                <EditDeposit
+                    isModalOpen={setIsModalEditDepositOpen}
+                    journal={filterSelectedJournalId}
+                    branchAccount={branchAccount}
+                    notification={notification}
+                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                />
+            </Modal>
+            <Modal isOpen={isModalEditMutationJournalOpen} onClose={closeModal} modalTitle="Edit Mutasi Journal" maxWidth="max-w-2xl">
+                <EditMutationJournal
+                    isModalOpen={setIsModalEditMutationJournalOpen}
+                    selectedWarehouse={selectedWarehouse}
+                    journal={filterSelectedJournalId}
+                    cashBank={cashBank}
+                    notification={notification}
+                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                />
+            </Modal>
         </>
     );
 };

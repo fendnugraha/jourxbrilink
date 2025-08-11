@@ -139,7 +139,7 @@ const Account = () => {
                         autoComplete="off"
                     />
                 </div>
-                <div className="overflow-x-auto bg-white rounded-2xl w-full sm:w-3/4 drop-shadow-sm">
+                <div className="overflow-x-auto card w-full sm:w-3/4 drop-shadow-sm">
                     <table className="table w-full text-xs">
                         <thead>
                             <tr>
@@ -157,11 +157,11 @@ const Account = () => {
                                 account?.data?.map((coa) => (
                                     <tr key={coa.id}>
                                         <td>
-                                            <span className="font-bold text-blue-800">
+                                            <span className="font-bold text-blue-800 dark:text-blue-400">
                                                 ID: {coa.id}. {coa.acc_name} {coa.is_locked === 1 && <LockIcon size={16} className="inline" />}
                                             </span>
                                             <br />
-                                            <span className="text-slate-600">
+                                            <span className="text-slate-600 dark:text-slate-400">
                                                 {coa.acc_code} # {coa.account?.name} # {coa?.warehouse?.name ?? "NotAssociated"}
                                             </span>
                                             <span className="font-bold block text-sm sm:hidden">{formatNumber(coa.st_balance)}</span>

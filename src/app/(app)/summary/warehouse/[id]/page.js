@@ -103,11 +103,7 @@ const WarehouseReport = ({ params }) => {
                     <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
                 )}
                 <div className="flex justify-between items-center mb-4 gap-2 w-full sm:w-1/2">
-                    <select
-                        onChange={(e) => setSelectedWarehouse(e.target.value)}
-                        value={selectedWarehouse}
-                        className="border-gray-300 bg-white focus:border-indigo-500 focus:ring-indigo-500 p-2 rounded-md border w-full"
-                    >
+                    <select onChange={(e) => setSelectedWarehouse(e.target.value)} value={selectedWarehouse} className="form-select">
                         <option value="">Select Warehouse</option>
                         {warehouses?.data?.map((warehouse) => (
                             <option key={warehouse.id} value={warehouse.id}>
@@ -115,10 +111,7 @@ const WarehouseReport = ({ params }) => {
                             </option>
                         ))}
                     </select>
-                    <button
-                        onClick={() => setIsModalFilterDataOpen(true)}
-                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
-                    >
+                    <button onClick={() => setIsModalFilterDataOpen(true)} className="small-button">
                         <FilterIcon className="size-4" />
                     </button>
                     <button
@@ -130,7 +123,7 @@ const WarehouseReport = ({ params }) => {
                                 `Summary Report by Warehouse ${filterWarehouse?.name} ${getMonthName(month)} ${year}`
                             )
                         }
-                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed"
+                        className="small-button"
                         disabled={revenue?.revenue?.length === 0}
                     >
                         <DownloadIcon className="size-4" />
@@ -138,11 +131,7 @@ const WarehouseReport = ({ params }) => {
                     <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                         <div className="mb-4">
                             <Label htmlFor="month">Bulan</Label>
-                            <select
-                                className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 p-2 rounded-md border w-full"
-                                onChange={(e) => setMonth(e.target.value)}
-                                value={month}
-                            >
+                            <select className="form-select" onChange={(e) => setMonth(e.target.value)} value={month}>
                                 <option value="">Pilih Bulan</option>
                                 <option value="01">Januari</option>
                                 <option value="02">Februari</option>
@@ -160,11 +149,7 @@ const WarehouseReport = ({ params }) => {
                         </div>
                         <div className="mb-4">
                             <Label htmlFor="year">Tahun</Label>
-                            <select
-                                className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 p-2 rounded-md border w-full"
-                                onChange={(e) => setYear(e.target.value)}
-                                value={year}
-                            >
+                            <select className="form-select" onChange={(e) => setYear(e.target.value)} value={year}>
                                 <option value="">Pilih Tahun</option>
                                 <option value="2024">2024</option>
                                 <option value="2025">2025</option>
@@ -175,89 +160,87 @@ const WarehouseReport = ({ params }) => {
                         </button>
                     </Modal>
                 </div>
-                <div className="bg-white overflow-hidden shadow-sm sm:rounded-3xl">
-                    <div className="p-6 bg-white border-b border-gray-200">
-                        <div>
-                            <h1 className="text-2xl font-bold">Warehouse Report ({filterWarehouse?.name || "Loading..."})</h1>
-                            <span className="text-gray-600 text-xs">
-                                Periode: {getMonthName(month)} {year}
-                            </span>
-                            <div className="flex justify-end items-center gap-5">
-                                <div>
-                                    <span className="text-gray-600 text-xs">Transfer</span>
-                                    <h1 className="text-2xl font-bold">
-                                        {formatNumberToK(revenue?.totals?.totalTransfer || 0)}{" "}
-                                        <span className="text-gray-500 text-xs">{calculateTransferPercentage} %</span>
-                                    </h1>
-                                </div>
-                                <div>
-                                    <span className="text-gray-600 text-xs">Tarik Tunai</span>
-                                    <h1 className="text-2xl font-bold">
-                                        {formatNumberToK(revenue?.totals?.totalTarikTunai || 0)}{" "}
-                                        <span className="text-gray-500 text-xs">{calculateWithdrawalPercentage} %</span>
-                                    </h1>
-                                </div>
-                                <div>
-                                    <span className="text-gray-600 text-xs">Transaksi</span>
-                                    <h1 className="text-2xl font-bold">{formatNumber(revenue?.totals?.totalTrx || 0)}</h1>
-                                </div>
-                                <div>
-                                    <span className="text-gray-600 text-xs">Profit Rata2</span>
-                                    <h1 className="text-2xl font-bold">{formatNumberToK(calculateAverageDailyProfit || 0)}</h1>
-                                </div>
-                                <div>
-                                    <span className="text-gray-600 text-xs">Net Profit</span>
-                                    <h1 className="text-2xl font-bold">{formatNumber(revenue?.totals?.totalFee || 0)}</h1>
-                                </div>
+                <div className="card">
+                    <div className="p-4">
+                        <h1 className="card-title">Warehouse Report ({filterWarehouse?.name || "Loading..."})</h1>
+                        <span className="card-subtitle text-xs">
+                            Periode: {getMonthName(month)} {year}
+                        </span>
+                        <div className="flex justify-end items-center gap-5">
+                            <div>
+                                <span className="text-gray-600 dark:text-gray-300 text-xs">Transfer</span>
+                                <h1 className="text-2xl font-bold">
+                                    {formatNumberToK(revenue?.totals?.totalTransfer || 0)}{" "}
+                                    <span className="text-gray-500 dark:text-gray-400 text-xs">{calculateTransferPercentage} %</span>
+                                </h1>
                             </div>
-                            <div className="overflow-x-auto relative">
-                                {loading && (
-                                    <div className="flex justify-center items-center font-medium bg-white/50 h-full w-full backdrop-blur-sm absolute z-10">
-                                        Loading data, please wait ...
-                                    </div>
-                                )}
-                                <table className="table w-full text-xs mb-2">
-                                    <thead className="">
-                                        <tr>
-                                            <th className="">Tanggal</th>
-                                            <th className="">Transfer</th>
-                                            <th className="">Tarik Tunai</th>
-                                            <th className="">Voucher</th>
-                                            <th className="">Deposit</th>
-                                            <th className="">Trx</th>
-                                            <th className="">Biaya</th>
-                                            <th className="">Laba Bersih</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {revenue?.revenue?.map((item, index) => (
-                                            <tr key={index}>
-                                                <td className="text-center">{item.date}</td>
-                                                <td className="text-end">{formatNumber(item.transfer)}</td>
-                                                <td className="text-end">{formatNumber(item.tarikTunai)}</td>
-                                                <td className="text-end">{formatNumber(item.voucher)}</td>
-                                                <td className="text-end">{formatNumber(item.deposit)}</td>
-                                                <td className="text-end">{formatNumber(item.trx)}</td>
-                                                <td className="text-end font-bold text-red-500">{formatNumber(item.expense)}</td>
-                                                <td className="text-end font-bold text-green-500">{formatNumber(item.fee)}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th className="text-center font-bold">Total</th>
-                                            <th className="text-end font-bold">{formatNumber(revenue?.totals?.totalTransfer)}</th>
-                                            <th className="text-end font-bold">{formatNumber(revenue?.totals?.totalTarikTunai)}</th>
-                                            <th className="text-end font-bold">{formatNumber(revenue?.totals?.totalVoucher)}</th>
-                                            <th className="text-end font-bold">{formatNumber(revenue?.totals?.totalDeposit)}</th>
-                                            <th className="text-end font-bold">{formatNumber(revenue?.totals?.totalTrx)}</th>
-                                            <th className="text-end font-bold">{formatNumber(revenue?.totals?.totalExpense)}</th>
-                                            <th className="text-end font-bold">{formatNumber(revenue?.totals?.totalFee)}</th>
-                                        </tr>
-                                    </tfoot>
-                                </table>
+                            <div>
+                                <span className="text-gray-600 dark:text-gray-300 text-xs">Tarik Tunai</span>
+                                <h1 className="text-2xl font-bold">
+                                    {formatNumberToK(revenue?.totals?.totalTarikTunai || 0)}{" "}
+                                    <span className="text-gray-500 dark:text-gray-400 text-xs">{calculateWithdrawalPercentage} %</span>
+                                </h1>
+                            </div>
+                            <div>
+                                <span className="text-gray-600 dark:text-gray-300 text-xs">Transaksi</span>
+                                <h1 className="text-2xl font-bold">{formatNumber(revenue?.totals?.totalTrx || 0)}</h1>
+                            </div>
+                            <div>
+                                <span className="text-gray-600 dark:text-gray-300 text-xs">Profit Rata2</span>
+                                <h1 className="text-2xl font-bold">{formatNumberToK(calculateAverageDailyProfit || 0)}</h1>
+                            </div>
+                            <div>
+                                <span className="text-gray-600 dark:text-gray-300 text-xs">Net Profit</span>
+                                <h1 className="text-2xl font-bold">{formatNumber(revenue?.totals?.totalFee || 0)}</h1>
                             </div>
                         </div>
+                    </div>
+                    <div className="overflow-x-auto relative">
+                        {loading && (
+                            <div className="flex justify-center items-center font-medium bg-white/50 h-full w-full backdrop-blur-sm absolute z-10">
+                                Loading data, please wait ...
+                            </div>
+                        )}
+                        <table className="table w-full text-xs mb-2">
+                            <thead className="">
+                                <tr>
+                                    <th className="">Tanggal</th>
+                                    <th className="">Transfer</th>
+                                    <th className="">Tarik Tunai</th>
+                                    <th className="">Voucher</th>
+                                    <th className="">Deposit</th>
+                                    <th className="">Trx</th>
+                                    <th className="">Biaya</th>
+                                    <th className="">Laba Bersih</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {revenue?.revenue?.map((item, index) => (
+                                    <tr key={index}>
+                                        <td className="text-center">{item.date}</td>
+                                        <td className="text-end">{formatNumber(item.transfer)}</td>
+                                        <td className="text-end">{formatNumber(item.tarikTunai)}</td>
+                                        <td className="text-end">{formatNumber(item.voucher)}</td>
+                                        <td className="text-end">{formatNumber(item.deposit)}</td>
+                                        <td className="text-end">{formatNumber(item.trx)}</td>
+                                        <td className="text-end font-bold text-red-500 dark:text-red-400">{formatNumber(item.expense)}</td>
+                                        <td className="text-end font-bold text-green-500 dark:text-green-400">{formatNumber(item.fee)}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th className="text-center font-bold">Total</th>
+                                    <th className="text-end font-bold">{formatNumber(revenue?.totals?.totalTransfer)}</th>
+                                    <th className="text-end font-bold">{formatNumber(revenue?.totals?.totalTarikTunai)}</th>
+                                    <th className="text-end font-bold">{formatNumber(revenue?.totals?.totalVoucher)}</th>
+                                    <th className="text-end font-bold">{formatNumber(revenue?.totals?.totalDeposit)}</th>
+                                    <th className="text-end font-bold">{formatNumber(revenue?.totals?.totalTrx)}</th>
+                                    <th className="text-end font-bold">{formatNumber(revenue?.totals?.totalExpense)}</th>
+                                    <th className="text-end font-bold">{formatNumber(revenue?.totals?.totalFee)}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
                 </div>
             </div>

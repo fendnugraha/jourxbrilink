@@ -120,7 +120,7 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                     </div>
                 ))}
             </Modal>
-            <div className="flex justify-center items-center flex-col bg-gray-600 dark:bg-slate-800 hover:bg-gray-500 py-4 rounded-t-3xl text-white shadow-lg">
+            <div className="flex justify-center items-center flex-col bg-gray-600 dark:bg-slate-700 hover:bg-gray-500 py-4 rounded-t-3xl text-white shadow-lg">
                 {accountBalance?.data?.chartOfAccounts?.length > 0 ? (
                     <>
                         <h1 className="text-xs">Total Saldo Kas & Bank</h1>
@@ -131,7 +131,7 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                 )}
             </div>
             <div
-                className={`bg-gray-600/75 backdrop-blur-xs px-2 transform ${
+                className={`bg-gray-600/75 dark:bg-slate-600/75 backdrop-blur-xs px-2 transform ${
                     showBalanceReport ? "opacity-100 scale-y-100 max-h-[700px]" : "opacity-0 scale-y-0 max-h-0 "
                 } origin-top transition-all duration-300 ease-in-out`}
             >
@@ -161,11 +161,11 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                         </button>
                     </div>
                 </div>
-                <div hidden={!showCashBankBalance}>
+                <div hidden={!showCashBankBalance} className="max-h-[calc(57px*7)] overflow-y-scroll">
                     {accountBalance?.data?.chartOfAccounts?.map((account) => (
                         <div className="group border-b border-slate-300 dark:border-slate-500 border-dashed last:border-none pt-2 pb-1" key={account.id}>
                             <div className="text-white">
-                                <h1 className="text-xs">{account.acc_name}</h1>
+                                <h1 className="text-xs text-nowrap">{account.acc_name}</h1>
 
                                 <div className="flex justify-between items-center">
                                     <h1 className="text-sm sm:text-lg group-hover:scale-105 text-yellow-200 dark:text-lime-300 font-bold transition delay-100 duration-150 ease-out">

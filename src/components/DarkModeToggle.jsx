@@ -12,7 +12,7 @@ export default function DarkModeToggle() {
             onClick={() => setDarkMode(!darkMode)}
             className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-600 text-black dark:text-white"
         >
-            {darkMode ? <MoonIcon className="w-6 h-6" /> : <SunIcon className="w-6 h-6" />}
+            {darkMode ? <SunIcon className="w-6 h-6" /> : <MoonIcon className="w-6 h-6" />}
         </span>
     );
 }

@@ -150,7 +150,7 @@ const StorePage = () => {
                                         </button> */}
                                 </div>
                                 <button onClick={() => setIsModalFilterJournalOpen(true)} className="small-button">
-                                    <FilterIcon size={20} />
+                                    <FilterIcon size={12} />
                                 </button>
                                 <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                                     {userRole === "Administrator" && (
@@ -281,9 +281,9 @@ const StorePage = () => {
                         </div>
                         <div className="px-4">{transactions.last_page > 1 && <Paginator links={transactions} handleChangePage={handleChangePage} />}</div>
                     </div>
-                    <Modal isOpen={isModalDeleteTrxOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
+                    <Modal isOpen={isModalDeleteTrxOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-lg">
                         <div className="flex flex-col items-center justify-center gap-3 mb-4">
-                            <MessageCircleWarningIcon size={72} className="text-red-600" />
+                            <MessageCircleWarningIcon size={96} className="text-red-600" />
                             <p className="text-sm">Apakah anda yakin ingin menghapus transaksi ini (ID: {selectedTrxId})?</p>
                         </div>
                         <div className="flex justify-center gap-3">
@@ -298,7 +298,7 @@ const StorePage = () => {
                             </button>
                             <button
                                 onClick={() => setIsModalDeleteTrxOpen(false)}
-                                className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-slate-50 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                             >
                                 Tidak
                             </button>

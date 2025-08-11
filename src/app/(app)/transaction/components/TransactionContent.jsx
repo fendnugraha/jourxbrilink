@@ -12,7 +12,15 @@ import Notification from "@/components/Notification";
 import TransactionMenuMobile from "./TransactionMenuMobile";
 import VoucherSalesTable from "../../dashboard/components/VoucherSalesTable";
 
-const TransactionContent = ({ currentDate }) => {
+const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // Month is 0-indexed
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+};
+
+const TransactionContent = () => {
     const { user } = useAuth({ middleware: "auth" });
     const warehouse = Number(user?.role?.warehouse_id);
     const warehouseCashId = Number(user?.role?.warehouse?.chart_of_account_id);
@@ -41,10 +49,10 @@ const TransactionContent = ({ currentDate }) => {
     });
     const [journalsByWarehouse, setJournalsByWarehouse] = useState([]);
 
-    const [endDate, setEndDate] = useState(currentDate);
+    const [endDate, setEndDate] = useState(getCurrentDate());
     const [selectedWarehouseId, setSelectedWarehouseId] = useState(warehouse);
     const { accountBalance, error: accountBalanceError, loading: isValidating } = useCashBankBalance(selectedWarehouseId, endDate);
-    const fetchJournalsByWarehouse = useCallback(async (selectedWarehouse = warehouse, startDate = currentDate, endDate = currentDate) => {
+    const fetchJournalsByWarehouse = useCallback(async (selectedWarehouse = warehouse, startDate = getCurrentDate(), endDate = getCurrentDate()) => {
         setLoading(true);
         try {
             const response = await axios.get(`/api/get-journal-by-warehouse/${selectedWarehouse}/${startDate}/${endDate}`);

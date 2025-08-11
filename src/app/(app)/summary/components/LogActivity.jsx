@@ -52,38 +52,28 @@ const LogActivity = ({ warehouses }) => {
     };
 
     return (
-        <div className="bg-white rounded-3xl mb-3 relative">
+        <div className="card relative">
             <div className="p-4 flex justify-between gap-2">
-                <h4 className=" text-blue-950 text-lg font-bold">
+                <h4 className=" card-title">
                     Log Activity
                     <span className="text-xs block text-slate-500 font-normal">
                         Periode: {startDate} - {endDate}
                     </span>
                 </h4>
                 <div className="flex gap-1">
-                    <button
-                        onClick={() => fetchLogActivity()}
-                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed"
-                    >
+                    <button onClick={() => fetchLogActivity()} className="small-button">
                         <RefreshCcwIcon className="size-4" />
                     </button>
                     {/* <button className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed">
                         <DownloadIcon className="size-4" />
                     </button> */}
-                    <button
-                        onClick={() => setIsModalFilterDataOpen(true)}
-                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
-                    >
+                    <button onClick={() => setIsModalFilterDataOpen(true)} className="small-button">
                         <FilterIcon className="size-4" />
                     </button>
                     <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                         <div className="mb-4">
                             <Label className="font-bold">Cabang</Label>
-                            <select
-                                value={selectedWarehouse}
-                                onChange={(e) => setSelectedWarehouse(e.target.value)}
-                                className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            >
+                            <select value={selectedWarehouse} onChange={(e) => setSelectedWarehouse(e.target.value)} className="form-select">
                                 <option value="all">Semua Cabang</option>
                                 {warehouses?.data?.map((warehouse) => (
                                     <option key={warehouse.id} value={warehouse.id}>
@@ -94,21 +84,11 @@ const LogActivity = ({ warehouses }) => {
                         </div>
                         <div className="mb-4">
                             <Label className="font-bold">Tanggal</Label>
-                            <Input
-                                type="date"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            />
+                            <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="form-control" />
                         </div>
                         <div className="mb-4">
                             <Label className="font-bold">s/d</Label>
-                            <Input
-                                type="date"
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                                className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            />
+                            <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="form-control" />
                         </div>
                         <button onClick={() => fetchLogActivity()} className="btn-primary">
                             Submit
@@ -132,8 +112,8 @@ const LogActivity = ({ warehouses }) => {
                             logActivity?.data?.map((item, index) => (
                                 <tr key={index}>
                                     <td className="whitespace-normal break-words max-w-xs">
-                                        <span className="text-xs block text-slate-500 font-bold">
-                                            {item.user.name} {item.activity} at {item.warehouse.name}. Log ID: {item.id}
+                                        <span className="text-xs block text-slate-500 dark:text-slate-400 font-bold">
+                                            {item.user.name} {item.activity} at {item.warehouse.name}. #{item.id}
                                         </span>
                                         {item.description}
                                         <span className="text-xs block text-slate-500 font-normal">

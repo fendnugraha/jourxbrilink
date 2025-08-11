@@ -199,7 +199,7 @@ const Sales = () => {
                 <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
             )}
             <div className="px-6 py-4 h-[60px]">
-                <h1 className="text-2xl font-bold">Penjualan Barang</h1>
+                <h1 className="text-2xl font-bold dark:text-amber-200">Penjualan Barang</h1>
                 <span className="text-sm text-slate-500">Penjualan barang online melalui AgenBRI Link</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 h-[calc(100vh-140px)] p-4">
@@ -208,7 +208,7 @@ const Sales = () => {
                         <div className="flex items-center">
                             <input
                                 type="search"
-                                className="bg-gray-50 text-gray-900 text-sm rounded-full outline-1 outline-gray-300 focus:outline-orange-500/50 focus:outline-2 block w-full px-4 py-2.5"
+                                className="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-300 text-sm rounded-full outline-1 outline-gray-300 dark:outline-gray-600 focus:outline-orange-500/50 dark:focus:outline-orange-400 focus:outline-2 block w-full px-4 py-2.5"
                                 placeholder="Cari Barang"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
@@ -223,7 +223,7 @@ const Sales = () => {
                         </div>
                     </div>
                 </div>
-                <div className="bg-white rounded-3xl px-6 py-4 hidden sm:flex flex-col justify-between">
+                <div className="bg-white dark:bg-slate-700 rounded-3xl px-6 py-4 hidden sm:flex flex-col justify-between">
                     <div>
                         <h1 className="text-2xl font-bold mb-4">Detail Order</h1>
                         <div className="max-h-[calc(49px*7)] overflow-y-scroll">
@@ -231,16 +231,16 @@ const Sales = () => {
                                 cart.map((item) => (
                                     <div
                                         key={item.id}
-                                        className="flex justify-between items-center py-2 border-b border-slate-200 border-dashed hover:bg-slate-50"
+                                        className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-500 border-dashed hover:bg-slate-50 dark:hover:bg-slate-600 hover:cursor-pointer"
                                     >
                                         <div className="flex gap-2 items-center">
-                                            <div className="w-[30px] bg-slate-400 rounded-lg h-[30px] flex justify-center items-center">
+                                            <div className="w-[40px] bg-slate-400 rounded-lg h-[40px] flex justify-center items-center">
                                                 <BoxesIcon size={18} className="text-slate-50" />
                                             </div>
                                             <div>
                                                 <h1 className="text-xs mb-1">{item.name.toUpperCase()}</h1>
                                                 <div className="flex gap-4 items-center">
-                                                    <div className="flex gap-2 items-center bg-slate-300 rounded-full px-0.5 w-fit">
+                                                    <div className="flex gap-2 items-center bg-slate-300 dark:bg-amber-400 rounded-full px-0.5 w-fit">
                                                         <button
                                                             onClick={() => handleDecrementQuantity(item)}
                                                             className="text-slate-500 bg-white hover:text-slate-500 cursor-pointer rounded-full"
@@ -259,7 +259,7 @@ const Sales = () => {
                                                         type="number"
                                                         value={item.price}
                                                         onChange={(e) => handleUpdatePrice(item, e.target.value)}
-                                                        className="text-xs p-0.5 rounded-sm text-right outline-1 outline-gray-200 focus:outline-orange-500/50 focus:outline-2 bg-transparent"
+                                                        className="text-xs p-0.5 rounded-sm text-right outline-1 outline-gray-200 dark:outline-gray-400 focus:outline-orange-500/50 focus:outline-2 bg-transparent"
                                                     />
                                                 </div>
                                             </div>
@@ -309,7 +309,7 @@ const Sales = () => {
                             </button>
                         </div>
                     </div>
-                    <Modal isOpen={isModalCheckOutOpen} onClose={closeModal} maxWidth={"max-w-sm"} modalTitle="Checkout" bgColor="bg-white">
+                    <Modal isOpen={isModalCheckOutOpen} onClose={closeModal} maxWidth={"max-w-sm"} modalTitle="Checkout">
                         <div className="flex justify-center flex-col items-center gap-2 border-b border-gray-300 border-dashed py-2">
                             <h1 className="text-7xl text-green-500 font-bold">{calculateTotalQuantity()}</h1>
                             <span className="text-sm font-light">{calculateTotalQuantity() > 1 ? "Items" : "Item"}</span>
@@ -331,7 +331,7 @@ const Sales = () => {
 
             {/* Checkout session mobile */}
             {cart.length > 0 && (
-                <div ref={cartMobileRef} className="fixed sm:hidden bottom-0 w-full bg-white p-4">
+                <div ref={cartMobileRef} className="fixed sm:hidden bottom-0 w-full bg-white dark:bg-slate-700 p-4">
                     <div className="flex justify-between items-center">
                         <button onClick={() => setShowCartMobile(!showCartMobile)} className="group font-bold">
                             <ChevronUpIcon
@@ -346,7 +346,7 @@ const Sales = () => {
                         </button>
                     </div>
                     <div className={`overflow-y-auto ${showCartMobile ? "max-h-[399px] my-4" : "max-h-0 my-2"} transition-all duration-300 ease-in-out`}>
-                        <div className="bg-slate-200 rounded-2xl p-2">
+                        <div className="bg-slate-200 dark:bg-slate-600 rounded-2xl p-2">
                             {cart.length === 0 ? (
                                 <div>Cart is empty</div>
                             ) : (

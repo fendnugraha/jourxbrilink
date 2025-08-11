@@ -113,7 +113,7 @@ const Contact = () => {
                         autoComplete="off"
                     />
                 </div>
-                <div className="overflow-x-auto bg-white rounded-2xl w-full sm:w-3/4 drop-shadow-sm">
+                <div className="overflow-x-auto card w-full sm:w-3/4 drop-shadow-sm">
                     <table className="table w-full text-sm">
                         <thead>
                             <tr>

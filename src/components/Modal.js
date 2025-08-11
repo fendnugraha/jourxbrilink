@@ -1,6 +1,14 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 
-export default function Modal({ children, isOpen, modalTitle, onClose, maxWidth, bgColor = "bg-white", textColor }) {
+export default function Modal({
+    children,
+    isOpen,
+    modalTitle,
+    onClose,
+    maxWidth,
+    bgColor = "bg-white dark:bg-slate-700/80 dark:backdrop-blur-sm",
+    textColor = "text-black dark:text-white",
+}) {
     return (
         <Dialog open={isOpen} onClose={onClose} className="relative z-[999]">
             {/* Overlay */}
@@ -15,7 +23,7 @@ export default function Modal({ children, isOpen, modalTitle, onClose, maxWidth,
                     } rounded-2xl shadow-lg duration-300 ease-out data-closed:scale-95 data-closed:opacity-0`}
                 >
                     {/* Modal Header */}
-                    <div className="flex justify-between items-center py-4 px-6 border-b border-slate-200">
+                    <div className="flex justify-between items-center py-4 px-6 border-b border-slate-200 dark:border-slate-600">
                         <DialogTitle className="text-xl font-bold">{modalTitle}</DialogTitle>
                         <button onClick={onClose} aria-label="Close Modal">
                             <svg

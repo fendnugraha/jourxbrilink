@@ -24,19 +24,14 @@ const EditProduct = ({ isModalOpen, notification, fetchProducts, selectedProduct
     };
     return (
         <div>
-            <h1 className="text-xl font-bold mb-4">#{product.id}</h1>
             <form onSubmit={handleUpdateProduct}>
                 <div className="mb-4">
-                    <Label htmlFor="name">Name:</Label>
-                    <Input className={"w-full"} type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+                    <Label htmlFor="name">#{product.id} Name:</Label>
+                    <Input className={"form-control"} type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
                 </div>
                 <div className="mb-4">
                     <Label htmlFor="category">Category:</Label>
-                    <select
-                        value={formData.category}
-                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                        className="border border-gray-300 rounded-md p-2 w-full"
-                    >
+                    <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} className="form-select">
                         {productCategories.map((category) => (
                             <option key={category.id} value={category.name}>
                                 {category.name}
@@ -49,14 +44,19 @@ const EditProduct = ({ isModalOpen, notification, fetchProducts, selectedProduct
                         <Label htmlFor="price">Price (Harga Jual):</Label>
                         <Input
                             type="number"
-                            className={"w-full"}
+                            className={"form-control"}
                             value={formData.price}
                             onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                         />
                     </div>
                     <div className="">
                         <Label htmlFor="stock">Cost (Harga Beli):</Label>
-                        <Input type="number" className={"w-full"} value={formData.cost} onChange={(e) => setFormData({ ...formData, cost: e.target.value })} />
+                        <Input
+                            type="number"
+                            className={"form-control"}
+                            value={formData.cost}
+                            onChange={(e) => setFormData({ ...formData, cost: e.target.value })}
+                        />
                     </div>
                 </div>
 

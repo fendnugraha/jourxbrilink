@@ -137,7 +137,7 @@ const Warehouse = () => {
                         autoComplete="off"
                     />
                 </div>
-                <div className="overflow-y-auto bg-white rounded-2xl w-full sm:w-3/4">
+                <div className="overflow-y-auto card w-full sm:w-3/4">
                     <table className="table w-full text-xs">
                         <thead>
                             <tr>

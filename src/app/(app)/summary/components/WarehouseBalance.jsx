@@ -44,41 +44,27 @@ const WarehouseBalance = () => {
         fetchWarehouseBalance();
     }, [fetchWarehouseBalance]);
     return (
-        <div className="bg-white rounded-3xl mb-3 relative">
+        <div className="card relative">
             <div className="p-4 flex justify-between gap-2">
-                <h4 className=" text-blue-950 text-lg font-bold">
+                <h4 className="card-title">
                     Saldo Kas & bank
-                    <span className="text-xs text-slate-500 block font-normal">Periode: {endDate}</span>
+                    <span className="card-subtitle">Periode: {endDate}</span>
                 </h4>
                 <div className="flex gap-1">
-                    <button
-                        onClick={fetchWarehouseBalance}
-                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed"
-                    >
+                    <button onClick={fetchWarehouseBalance} className="small-button">
                         <RefreshCcwIcon className="size-4" />
                     </button>
-                    <button
-                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed"
-                        disabled={true}
-                    >
+                    <button className="small-button" disabled={true}>
                         <DownloadIcon className="size-4" />
                     </button>
-                    <button
-                        onClick={() => setIsModalFilterDataOpen(true)}
-                        className="bg-white font-bold p-3 rounded-lg border border-gray-300 hover:border-gray-400"
-                    >
+                    <button onClick={() => setIsModalFilterDataOpen(true)} className="small-button">
                         <FilterIcon className="size-4" />
                     </button>
                 </div>
                 <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                     <div className="mb-4">
                         <Label className="font-bold">Tanggal</Label>
-                        <Input
-                            type="date"
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
-                            className="w-full rounded-md border p-2 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                        />
+                        <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="form-control" />
                     </div>
                     <button onClick={fetchWarehouseBalance} className="btn-primary">
                         Submit
@@ -102,7 +88,7 @@ const WarehouseBalance = () => {
                             </tr>
                         ) : (
                             warehouseBalance.warehouse?.map((w, i) => (
-                                <tr className="hover:bg-orange-100" key={i}>
+                                <tr className="hover:bg-orange-100 dark:hover:bg-slate-600" key={i}>
                                     <td className="">
                                         <Link className="hover:underline" href={`/summary/warehouse/${w.id}`}>
                                             {i + 1}. {w.name}

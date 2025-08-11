@@ -4,6 +4,7 @@ import { useState } from "react";
 import NavLink from "@/components/NavLink";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/libs/auth";
+import DarkModeToggle from "@/components/DarkModeToggle";
 
 const Navigation = ({ user }) => {
     const { logout } = useAuth();
@@ -14,25 +15,35 @@ const Navigation = ({ user }) => {
         <>
             <nav className={`hidden sm:flex sm:flex-col ${isMenuOpen ? "w-64" : "w-16"} h-screen justify-between transition-all duration-200 ease-in`}>
                 {/* Header */}
-                <button className="flex items-center cursor-pointer text-blue-800" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                <button className="flex items-center cursor-pointer text-blue-800 dark:text-white">
                     {/* Tombol Toggle */}
-                    <span className="w-16 h-20 flex items-center justify-center flex-shrink-0 text-slate-700">
+                    <span
+                        className="w-16 h-20 flex items-center justify-center flex-shrink-0 text-slate-700 dark:text-white"
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    >
                         <Menu size={32} />
                     </span>
 
                     {/* Logo Text */}
-                    <h1 className={`text-xl font-bold transition-all duration-300 origin-left ${isMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}>
-                        AgenBRI<span className="text-orange-400">Link</span>
-                        <span className="text-slate-500 block text-xs font-normal text-start">THREE KOMUNIKA</span>
-                    </h1>
+                    <div
+                        className={`flex w-full justify-between items-center transition-all duration-300 origin-left ${
+                            isMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                        }`}
+                    >
+                        <h1 className={`text-xl font-bold `}>
+                            AgenBRI<span className="text-orange-400">Link</span>
+                            <span className="text-slate-500 dark:text-white block text-xs font-normal text-start">THREE KOMUNIKA</span>
+                        </h1>
+                        <DarkModeToggle />
+                    </div>
                 </button>
                 {/* Middle Menu */}
                 <div className="">
-                    <div className="bg-white border border-slate-200 rounded-3xl drop-shadow-xs">
+                    <div className="dark:bg-slate-900">
                         <ul className="space-y-2 py-4">
                             <li>
                                 <NavLink href="/dashboard" active={pathName.startsWith("/dashboard")}>
-                                    <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-slate-500">
+                                    <span className="w-16 h-14 flex items-center justify-center flex-shrink-0">
                                         <LayoutDashboardIcon size={20} className="" />
                                     </span>
                                     <span
@@ -46,7 +57,7 @@ const Navigation = ({ user }) => {
                             </li>
                             <li>
                                 <NavLink href="/transaction" active={pathName.startsWith("/transaction")}>
-                                    <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-slate-500">
+                                    <span className="w-16 h-14 flex items-center justify-center flex-shrink-0">
                                         <ArrowLeftRightIcon size={20} className="" />
                                     </span>
                                     <span
@@ -60,7 +71,7 @@ const Navigation = ({ user }) => {
                             </li>
                             <li>
                                 <NavLink href="/store" active={pathName.startsWith("/store")}>
-                                    <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-slate-500">
+                                    <span className="w-16 h-14 flex items-center justify-center flex-shrink-0">
                                         <StoreIcon size={20} className="" />
                                     </span>
                                     <span
@@ -76,7 +87,7 @@ const Navigation = ({ user }) => {
                                 <>
                                     <li>
                                         <NavLink href="/finance" active={pathName.startsWith("/finance")}>
-                                            <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-slate-500">
+                                            <span className="w-16 h-14 flex items-center justify-center flex-shrink-0">
                                                 <DollarSignIcon size={20} className="" />
                                             </span>
                                             <span
@@ -90,7 +101,7 @@ const Navigation = ({ user }) => {
                                     </li>
                                     <li>
                                         <NavLink href="/summary" active={pathName.startsWith("/summary")}>
-                                            <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-slate-500">
+                                            <span className="w-16 h-14 flex items-center justify-center flex-shrink-0">
                                                 <ChartAreaIcon size={20} className="" />
                                             </span>
                                             <span
@@ -106,10 +117,10 @@ const Navigation = ({ user }) => {
                             )}
                         </ul>
                         {userRole === "Administrator" && (
-                            <ul className="mt-4 border-t border-slate-300 py-4">
+                            <ul className="mt-4 border-t border-slate-300 dark:border-slate-600 py-4">
                                 <li>
                                     <NavLink href="/setting" active={pathName.startsWith("/setting")}>
-                                        <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-slate-500">
+                                        <span className="w-16 h-14 flex items-center justify-center flex-shrink-0">
                                             <CogIcon size={20} className="" />
                                         </span>
                                         <span
@@ -128,7 +139,7 @@ const Navigation = ({ user }) => {
 
                 {/* Footer */}
                 {/* <NavLink href="/user/profile" active={pathName.startsWith("/user/profile")}>
-                        <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-slate-500">
+                        <span className="w-16 h-14 flex items-center justify-center flex-shrink-0">
                             <UserIcon size={20} className="" />
                         </span>
                         <span

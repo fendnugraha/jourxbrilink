@@ -41,6 +41,7 @@ const JournalTable = ({
 }) => {
     const [selectedAccount, setSelectedAccount] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
+    const [showSearch, setShowSearch] = useState(false);
     const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
     const [currentPage, setCurrentPage] = useState(1);
@@ -130,22 +131,9 @@ const JournalTable = ({
     return (
         <>
             <div className="flex gap-1">
-                <Dropdown
-                    trigger={
-                        <button className="small-button">
-                            <SearchIcon size={20} />
-                        </button>
-                    }
-                    align="left"
-                >
-                    <input
-                        type="search"
-                        className="px-2 outline-none w-60 sm:w-96"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder="Search..."
-                    />
-                </Dropdown>
+                <button className="small-button" onClick={() => setShowSearch(!showSearch)}>
+                    <SearchIcon size={20} />
+                </button>
                 <select
                     onChange={(e) => {
                         setSelectedAccount(e.target.value);
@@ -166,7 +154,7 @@ const JournalTable = ({
                         setItemsPerPage(Number(e.target.value));
                         setCurrentPage(1);
                     }}
-                    className="form-select !w-16 block p-2.5"
+                    className="form-select !w-fit block p-2.5"
                 >
                     <option value={5}>5</option>
                     <option value={10}>10</option>
@@ -224,6 +212,16 @@ const JournalTable = ({
                     </button>
                 </Modal>
             </div>
+            <input
+                type="search"
+                className={`transform transition-all duration-500 ease-in-out origin-top-left 
+                            ${showSearch ? "form-control !w-1/2 !py-1 opacity-100 scale-100 mt-1 drop-shadow-sm" : "opacity-0 scale-0 h-0 p-0"}
+                        `}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search..."
+            />
+
             <div className="pt-1">
                 <h4 className="text-xs text-slate-500 dark:text-slate-200">
                     {warehouses?.data?.find((w) => w.id === Number(selectedWarehouse))?.name},{" "}

@@ -130,7 +130,7 @@ const JournalTable = ({
     };
     return (
         <>
-            <div className="flex gap-1">
+            <div className="flex gap-2 px-4">
                 <button className="small-button" onClick={() => setShowSearch(!showSearch)}>
                     <SearchIcon size={20} />
                 </button>
@@ -222,7 +222,7 @@ const JournalTable = ({
                 placeholder="Search..."
             />
 
-            <div className="pt-1">
+            <div className="pt-1 px-4">
                 <h4 className="text-xs text-slate-500 dark:text-slate-200">
                     {warehouses?.data?.find((w) => w.id === Number(selectedWarehouse))?.name},{" "}
                     {startDate === endDate ? formatLongDate(endDate) : `${formatLongDate(startDate)} s/d ${formatLongDate(endDate)}`}

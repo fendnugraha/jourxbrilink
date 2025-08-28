@@ -143,7 +143,7 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                                 setShowDailyReport(false);
                             }}
                             className={`cursor-pointer hover:font-semibold text-center w-full rounded-xl p-0.5 text-sm ${
-                                showCashBankBalance ? "bg-gray-600/70 dark:bg-orange-400" : "text-slate-600"
+                                showCashBankBalance ? "bg-gray-600/70 dark:bg-lime-600" : "text-slate-600"
                             }`}
                         >
                             Kas & Bank
@@ -154,7 +154,7 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                                 setShowCashBankBalance(false);
                             }}
                             className={`cursor-pointer hover:font-semibold text-center w-full rounded-xl p-0.5 text-sm ${
-                                showDailyReport ? "bg-gray-600/70 dark:bg-orange-400" : "text-slate-600"
+                                showDailyReport ? "bg-gray-600/70 dark:bg-lime-600" : "text-slate-600"
                             }`}
                         >
                             Report

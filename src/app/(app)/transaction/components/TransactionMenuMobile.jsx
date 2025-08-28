@@ -128,7 +128,7 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                 </div>
             </div>
             <div className="h-fit p-2">
-                <div className="flex bg-gray-600 shadow-xl border border-slate-300 justify-between items-center rounded-2xl h-full text-white">
+                <div className="flex bg-gray-600/50 backdrop-blur-sm shadow-xl border border-slate-300 justify-between items-center rounded-2xl h-full text-white">
                     <button
                         onClick={() => {
                             setIsVoucherMenuOpen(!isVoucherMenuOpen);

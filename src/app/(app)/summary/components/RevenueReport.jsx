@@ -144,8 +144,8 @@ const RevenueReport = () => {
                                     <td className="text-end">{formatNumber(item.accessories)}</td>
                                     <td className="text-end">{formatNumber(item.deposit)}</td>
                                     <td className="text-end">{formatNumber(item.trx)}</td>
-                                    <td className="text-end font-bold text-red-500">{formatNumber(item.expense)}</td>
-                                    <td className="text-end font-bold text-green-500">{formatNumber(item.fee)}</td>
+                                    <td className="text-end font-bold text-red-500 dark:text-red-400">{formatNumber(item.expense)}</td>
+                                    <td className="text-end font-bold text-green-500 dark:text-green-400">{formatNumber(item.fee)}</td>
                                 </tr>
                             ))
                         )}

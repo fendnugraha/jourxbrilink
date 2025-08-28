@@ -81,7 +81,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
     }, [personalSetting, loaded]);
     return (
         <>
-            <div className="hidden sm:flex gap-2 mb-4">
+            <div className="hidden sm:flex gap-2 mb-4 px-4">
                 <Button
                     buttonType="primary"
                     className="mb-4 group text-nowrap"

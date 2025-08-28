@@ -39,7 +39,7 @@ const Navigation = ({ user }) => {
                 </button>
                 {/* Middle Menu */}
                 <div className="">
-                    <div className="dark:bg-slate-900">
+                    <div className="">
                         <ul className="space-y-2 py-4">
                             <li>
                                 <NavLink href="/dashboard" active={pathName.startsWith("/dashboard")}>

@@ -41,7 +41,7 @@ const PaymentForm = ({ contactId, notification, fetchFinance, isModalOpen }) => 
             const response = await axios.get(`/api/get-account-by-account-id`, { params: { account_ids } });
             setAccounts(response.data.data);
         } catch (error) {
-            notification(error.response?.data?.message || "Something went wrong.");
+            console.error("Error fetching accounts:", error);
         } finally {
             setLoading(false);
         }
@@ -56,7 +56,7 @@ const PaymentForm = ({ contactId, notification, fetchFinance, isModalOpen }) => 
         setLoading(true);
         try {
             const response = await axios.post("/api/store-payment", formData);
-            notification(response.data.message);
+            notification({ type: "success", message: response.data.message });
             fetchFinance();
             fetchFinanceData();
             isModalOpen(false);

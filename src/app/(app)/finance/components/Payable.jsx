@@ -13,6 +13,7 @@ import Paginator from "@/components/Paginator";
 import CreateReceivable from "./CreateReceivable";
 import Pagination from "@/components/PaginateList";
 import Input from "@/components/Input";
+import { set } from "date-fns";
 const Payable = () => {
     const [isModalCreateContactOpen, setIsModalCreateContactOpen] = useState(false);
     const [notification, setNotification] = useState({
@@ -86,10 +87,10 @@ const Payable = () => {
     const handleDeleteFinance = async (id) => {
         try {
             const response = await axios.delete(`/api/finance/${id}`);
-            notification(response.data.message);
+            setNotification({ type: "success", message: response.data.message });
             fetchFinance();
         } catch (error) {
-            notification(error.response?.data?.message || "Something went wrong.");
+            console.log(error);
         }
     };
     const handleChangePage = (url) => {
@@ -123,11 +124,7 @@ const Payable = () => {
                                 <PlusCircleIcon className="w-4 h-4 mr-1 inline" /> Piutang
                             </button>
                             <Modal isOpen={isModalCreatePayableOpen} onClose={closeModal} modalTitle="Create Payable">
-                                <CreatePayable
-                                    isModalOpen={setIsModalCreatePayableOpen}
-                                    notification={(message) => notification(message)}
-                                    fetchFinance={fetchFinance}
-                                />
+                                <CreatePayable isModalOpen={setIsModalCreatePayableOpen} notification={setNotification} fetchFinance={fetchFinance} />
                             </Modal>
                             <Modal isOpen={isModalCreateReceivableOpen} onClose={closeModal} modalTitle="Create Receivable">
                                 <CreateReceivable
@@ -319,7 +316,7 @@ const Payable = () => {
                 <Modal isOpen={isModalPaymentOpen} onClose={closeModal} modalTitle="Form Pembayaran" maxWidth="max-w-2xl">
                     <PaymentForm
                         contactId={selectedContactIdPayment}
-                        notification={(message) => notification(message)}
+                        notification={setNotification}
                         isModalOpen={setIsModalPaymentOpen}
                         fetchFinance={fetchFinance}
                         onClose={closeModal}

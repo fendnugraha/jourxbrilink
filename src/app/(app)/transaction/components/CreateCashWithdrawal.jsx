@@ -27,6 +27,7 @@ const CreateCashWithdrawal = ({
     });
     const [errors, setErrors] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [isFee, setIsFee] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -66,6 +67,14 @@ const CreateCashWithdrawal = ({
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        setFormData((prev) => ({
+            ...prev,
+            fee_amount: isFee ? prev.amount : prev.fee_amount,
+            trx_type: isFee ? "Bank Fee" : "Tarik Tunai",
+        }));
+    }, [isFee, formData.amount]);
     return (
         <>
             <form onSubmit={handleSubmit}>
@@ -92,26 +101,45 @@ const CreateCashWithdrawal = ({
                     <Label>Jumlah Penarikan</Label>
                     <div className="col-span-1">
                         <input
-                            className={"form-control"}
+                            className="form-control"
                             type="number"
                             placeholder="Rp."
                             value={formData.amount}
-                            onChange={(e) =>
+                            onChange={(e) => {
+                                const value = Number(e.target.value); // pastikan number
                                 setFormData({
                                     ...formData,
-                                    amount: e.target.value,
-                                    fee_amount: feeAdminAuto ? calculateFee(e.target.value) : formData.fee_amount,
-                                })
-                            }
+                                    amount: value,
+                                    fee_amount: feeAdminAuto && !isFee ? calculateFee(value) : formData.fee_amount,
+                                });
+                            }}
                             required
                         />
+
                         {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
-                        {formData.amount && (
-                            <h1 className="text-sm">
-                                Jml: <span className="font-bold">{formatNumber(formData.amount)}</span>, Adm:{" "}
-                                <span className="font-bold">{formatNumber(formData.fee_amount)}</span>
-                            </h1>
-                        )}
+                        <div className="flex justify-between">
+                            <div>
+                                <input
+                                    type="checkbox"
+                                    id="feeAdminAuto"
+                                    className="mt-2 mr-2"
+                                    checked={isFee}
+                                    onChange={(e) => {
+                                        setIsFee(e.target.checked);
+                                    }}
+                                />
+                                <label htmlFor="feeAdminAuto" className={`text-sm `}>
+                                    Fee/Bunga Bank
+                                </label>
+                            </div>
+
+                            {formData.amount && (
+                                <h1 className="text-sm">
+                                    Jml: <span className="font-bold">{formatNumber(formData.amount)}</span>, Adm:{" "}
+                                    <span className="font-bold">{formatNumber(formData.fee_amount)}</span>
+                                </h1>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <div className="mb-2 sm:mb-4 grid grid-cols-1 sm:grid-cols-2">
@@ -126,6 +154,7 @@ const CreateCashWithdrawal = ({
                                 placeholder={feeAdminAuto ? "Rp. (Autofilled)" : "Rp."}
                                 value={formData.fee_amount}
                                 onChange={(e) => setFormData({ ...formData, fee_amount: e.target.value })}
+                                disabled={isFee}
                                 required
                             />
                             {errors.fee_amount && <span className="text-red-500 text-xs">{errors.fee_amount}</span>}

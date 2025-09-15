@@ -5,12 +5,15 @@ import NavLink from "@/components/NavLink";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/libs/auth";
 import DarkModeToggle from "@/components/DarkModeToggle";
+import { navMenu } from "../constants/NavMenu";
 
 const Navigation = ({ user }) => {
     const { logout } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const pathName = usePathname();
     const userRole = user?.role?.role;
+
+    console.log(navMenu);
     return (
         <>
             <nav className={`hidden sm:flex sm:flex-col ${isMenuOpen ? "w-64" : "w-16"} h-screen justify-between transition-all duration-200 ease-in`}>
@@ -41,99 +44,25 @@ const Navigation = ({ user }) => {
                 <div className="">
                     <div className="">
                         <ul className="space-y-2 py-4">
-                            <li>
-                                <NavLink href="/dashboard" active={pathName.startsWith("/dashboard")}>
-                                    <span className="w-16 h-14 flex items-center justify-center flex-shrink-0">
-                                        <LayoutDashboardIcon size={20} className="" />
-                                    </span>
-                                    <span
-                                        className={`text-sm transition-all duration-300 origin-left ${
-                                            isMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
-                                        }`}
-                                    >
-                                        Dashboard
-                                    </span>
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink href="/transaction" active={pathName.startsWith("/transaction")}>
-                                    <span className="w-16 h-14 flex items-center justify-center flex-shrink-0">
-                                        <ArrowLeftRightIcon size={20} className="" />
-                                    </span>
-                                    <span
-                                        className={`text-sm transition-all duration-300 origin-left ${
-                                            isMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
-                                        }`}
-                                    >
-                                        Transaction
-                                    </span>
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink href="/store" active={pathName.startsWith("/store")}>
-                                    <span className="w-16 h-14 flex items-center justify-center flex-shrink-0">
-                                        <StoreIcon size={20} className="" />
-                                    </span>
-                                    <span
-                                        className={`text-sm transition-all duration-300 origin-left ${
-                                            isMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
-                                        }`}
-                                    >
-                                        Store
-                                    </span>
-                                </NavLink>
-                            </li>
-                            {userRole === "Administrator" && (
-                                <>
-                                    <li>
-                                        <NavLink href="/finance" active={pathName.startsWith("/finance")}>
+                            {navMenu.mainMenu
+                                .filter((item) => item.role.includes(userRole))
+                                .map((item, index) => (
+                                    <li key={index}>
+                                        <NavLink href={item.href} active={pathName.startsWith(item.path)}>
                                             <span className="w-16 h-14 flex items-center justify-center flex-shrink-0">
-                                                <DollarSignIcon size={20} className="" />
+                                                <item.icon size={20} className="" />
                                             </span>
                                             <span
                                                 className={`text-sm transition-all duration-300 origin-left ${
                                                     isMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
                                                 }`}
                                             >
-                                                Finance
+                                                {item.name}
                                             </span>
                                         </NavLink>
                                     </li>
-                                    <li>
-                                        <NavLink href="/summary" active={pathName.startsWith("/summary")}>
-                                            <span className="w-16 h-14 flex items-center justify-center flex-shrink-0">
-                                                <ChartAreaIcon size={20} className="" />
-                                            </span>
-                                            <span
-                                                className={`text-sm transition-all duration-300 origin-left ${
-                                                    isMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
-                                                }`}
-                                            >
-                                                Summary
-                                            </span>
-                                        </NavLink>
-                                    </li>
-                                </>
-                            )}
+                                ))}
                         </ul>
-                        {userRole === "Administrator" && (
-                            <ul className="mt-4 border-t border-slate-300 dark:border-slate-600 py-4">
-                                <li>
-                                    <NavLink href="/setting" active={pathName.startsWith("/setting")}>
-                                        <span className="w-16 h-14 flex items-center justify-center flex-shrink-0">
-                                            <CogIcon size={20} className="" />
-                                        </span>
-                                        <span
-                                            className={`text-sm transition-all duration-300 origin-left ${
-                                                isMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
-                                            }`}
-                                        >
-                                            Setting
-                                        </span>
-                                    </NavLink>
-                                </li>
-                            </ul>
-                        )}
                     </div>
                 </div>
 

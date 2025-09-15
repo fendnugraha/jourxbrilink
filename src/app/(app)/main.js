@@ -20,6 +20,7 @@ import formatNumber from "@/libs/formatNumber";
 import { mutate } from "swr";
 import useLiveClock from "@/components/useLiveClock";
 import DarkModeToggle from "@/components/DarkModeToggle";
+import { navMenu } from "../constants/NavMenu";
 
 const MainPage = ({ children, headerTitle }) => {
     const { user, logout } = useAuth({ middleware: "auth" });
@@ -66,7 +67,7 @@ const MainPage = ({ children, headerTitle }) => {
                 </h1>
                 <div className="flex items-center justify-end sm:gap-4">
                     {WarehouseRank > 0 && (
-                        <div className="text-lg sm:text-md drop-shadow-xs sm:bg-white dark:sm:bg-slate-800 dark:sm:border border-slate-500 rounded-full px-4 sm:ps-1 sm:pe-6 py-1 flex flex-col justify-end items-end">
+                        <div className="text-lg sm:text-md drop-shadow-xs sm:bg-white dark:sm:bg-slate-800 shadow rounded-full px-4 sm:ps-1 sm:pe-6 py-1 flex flex-col justify-end items-end">
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => mutate("/api/get-rank-by-profit")}
@@ -109,35 +110,15 @@ const MainPage = ({ children, headerTitle }) => {
                             </div>
                             <span className="text-sm">{user?.role?.role}</span>
                         </li>
-                        <li className="">
-                            <ResponsiveNavLink href="/dashboard" active={pathName === "/dashboard"}>
-                                <LayoutDashboardIcon size={20} className="mr-2 inline" /> Dashboard
-                            </ResponsiveNavLink>
-                        </li>
-                        <li className="">
-                            <ResponsiveNavLink href="/transaction" active={pathName.startsWith("/transaction")}>
-                                <ArrowLeftRightIcon size={20} className="mr-2 inline" /> Transaction
-                            </ResponsiveNavLink>
-                        </li>
-                        <li className="">
-                            <ResponsiveNavLink href="/store" active={pathName.startsWith("/store")}>
-                                <StoreIcon size={20} className="mr-2 inline" /> Store
-                            </ResponsiveNavLink>
-                        </li>
-                        {userRole === "Administrator" && (
-                            <>
-                                <li className="">
-                                    <ResponsiveNavLink href="/finance" active={pathName.startsWith("/finance")}>
-                                        <DollarSignIcon size={20} className="mr-2 inline" /> Finance
+                        {navMenu.mainMenu
+                            .filter((item) => item.role.includes(userRole))
+                            .map((item, index) => (
+                                <li className="" key={index}>
+                                    <ResponsiveNavLink href={item.href} active={pathName === item.path}>
+                                        <item.icon size={20} className="mr-2 inline" /> {item.name}
                                     </ResponsiveNavLink>
                                 </li>
-                                <li className="">
-                                    <ResponsiveNavLink href="/summary" active={pathName.startsWith("/summary")}>
-                                        <ChartAreaIcon size={20} className="mr-2 inline" /> Summary
-                                    </ResponsiveNavLink>
-                                </li>
-                            </>
-                        )}
+                            ))}
                         <li className="border-t border-slate-300 pt-2" onClick={logout}>
                             <ResponsiveNavButton>
                                 <CirclePowerIcon size={20} className="mr-2 inline" /> Logout

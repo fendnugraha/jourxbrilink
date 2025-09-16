@@ -55,7 +55,7 @@ body {
 }
 
 .table tbody tr {
-    @apply hover:bg-orange-100 dark:hover:bg-slate-600;
+    @apply hover:bg-slate-50 dark:hover:bg-slate-600;
 }
 
 .table tfoot th {

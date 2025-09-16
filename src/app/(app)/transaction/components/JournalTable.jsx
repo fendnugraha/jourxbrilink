@@ -249,7 +249,7 @@ const JournalTable = ({
                                 currentItems.map((journal, index) => (
                                     <tr key={index} className="group hover:bg-slate-500 hover:text-white">
                                         <td>
-                                            <span className="text-xs text-blue-700 dark:text-blue-300 group-hover:text-blue-200 block">
+                                            <span className="text-xs text-blue-700 dark:text-blue-300 group-hover:text-blue-500 block">
                                                 #{journal.id} <span className="font-bold hidden sm:inline">{journal.invoice}</span>{" "}
                                                 {formatDateTime(journal.created_at)}
                                             </span>
@@ -270,11 +270,11 @@ const JournalTable = ({
                                                     journal.debt.acc_name
                                                 )}
                                                 .{" "}
-                                                <span className="font-normal hidden sm:inline text-slate-500 dark:text-slate-300 group-hover:text-slate-100">
+                                                <span className="font-normal hidden sm:inline text-slate-500 dark:text-slate-300 group-hover:text-slate-500">
                                                     Note: {journal.description}
                                                 </span>
                                             </span>
-                                            <span className="text-xs hidden sm:block text-slate-500 dark:text-slate-400 group-hover:text-white">
+                                            <span className="text-xs hidden sm:block text-slate-500 dark:text-slate-400 group-hover:text-slate-500">
                                                 Last update at <TimeAgo timestamp={journal.updated_at} />
                                             </span>
                                             <div className="flex mt-1 gap-3 sm:hidden">

@@ -249,11 +249,11 @@ const JournalTable = ({
                                 currentItems.map((journal, index) => (
                                     <tr key={index} className="group hover:bg-slate-500 hover:text-white">
                                         <td>
-                                            <span className="text-xs text-blue-700 dark:text-blue-300 group-hover:text-blue-500 block">
+                                            <span className="text-xs text-blue-700 dark:text-blue-300 group-hover:dark:text-blue-200 group-hover:text-blue-400 block">
                                                 #{journal.id} <span className="font-bold hidden sm:inline">{journal.invoice}</span>{" "}
                                                 {formatDateTime(journal.created_at)}
                                             </span>
-                                            <span className="font-bold text-xs block text-lime-600 dark:text-lime-300 group-hover:text-lime-300">
+                                            <span className="font-bold text-xs block text-lime-600 dark:text-lime-300 group-hover:text-lime-700 group-hover:dark:text-lime-400">
                                                 {journal.trx_type === "Voucher & SP" || journal.trx_type === "Accessories" ? (
                                                     <ul className="list-disc font-normal scale-95">
                                                         {journal.transaction.map((trx) => (
@@ -270,11 +270,11 @@ const JournalTable = ({
                                                     journal.debt.acc_name
                                                 )}
                                                 .{" "}
-                                                <span className="font-normal hidden sm:inline text-slate-500 dark:text-slate-300 group-hover:text-slate-500">
+                                                <span className="font-normal hidden sm:inline text-slate-500 dark:text-slate-300">
                                                     Note: {journal.description}
                                                 </span>
                                             </span>
-                                            <span className="text-xs hidden sm:block text-slate-500 dark:text-slate-400 group-hover:text-slate-500">
+                                            <span className="text-xs hidden sm:block text-slate-500 dark:text-slate-400">
                                                 Last update at <TimeAgo timestamp={journal.updated_at} />
                                             </span>
                                             <div className="flex mt-1 gap-3 sm:hidden">
@@ -286,7 +286,7 @@ const JournalTable = ({
                                                         setIsModalEditDepositOpen(true);
                                                     }}
                                                 >
-                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:text-white" />
+                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:dark:text-white group-hover:text-slate-600" />
                                                 </button>
                                                 <button
                                                     className=" hover:scale-125 transtition-all duration-200"
@@ -296,7 +296,7 @@ const JournalTable = ({
                                                         setIsModalEditJournalOpen(true);
                                                     }}
                                                 >
-                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:text-white" />
+                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:dark:text-white group-hover:text-slate-600" />
                                                 </button>
                                                 <button
                                                     className=" hover:scale-125 transtition-all duration-200"
@@ -306,7 +306,7 @@ const JournalTable = ({
                                                         setIsModalEditMutationJournalOpen(true);
                                                     }}
                                                 >
-                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:text-white" />
+                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:dark:text-white group-hover:text-slate-600" />
                                                 </button>
                                                 <button
                                                     onClick={() => {
@@ -317,7 +317,7 @@ const JournalTable = ({
                                                         ["Voucher & SP", "Accessories", null].includes(journal.trx_type) ||
                                                         (userRole !== "Administrator" && hqCashBankIds.includes(journal.cred_code))
                                                     }
-                                                    className="disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 dark:text-red-400 hover:scale-125 transition-all group-hover:text-white duration-200"
+                                                    className="disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 dark:text-red-400 hover:scale-125 transition-all group-hover:dark:text-white group-hover:text-slate-600 duration-200"
                                                 >
                                                     <TrashIcon className="size-4" />
                                                 </button>
@@ -327,12 +327,14 @@ const JournalTable = ({
                                             <span
                                                 className={`${Number(journal.debt_code) === Number(selectedAccount) ? "text-green-500 dark:text-green-400" : ""}
                                     ${Number(journal.cred_code) === Number(selectedAccount) ? "text-red-500 dark:text-red-400" : ""}
-                                        text-sm group-hover:text-yellow-400 sm:text-base xl:text-lg`}
+                                        text-sm group-hover:text-sky-400 group-hover:dark:text-yellow-400 sm:text-base xl:text-lg`}
                                             >
                                                 {formatNumber(journal.amount)}
                                             </span>
                                             {journal.fee_amount !== 0 && (
-                                                <span className="text-xs text-yellow-600 group-hover:text-white block">{formatNumber(journal.fee_amount)}</span>
+                                                <span className="text-xs text-yellow-600 group-hover:text-slate-600 group-hover:dark:text-white block">
+                                                    {formatNumber(journal.fee_amount)}
+                                                </span>
                                             )}
                                         </td>
                                         <td className="hidden sm:table-cell">
@@ -345,7 +347,7 @@ const JournalTable = ({
                                                         setIsModalEditDepositOpen(true);
                                                     }}
                                                 >
-                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:text-white" />
+                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:dark:text-white group-hover:text-slate-600" />
                                                 </button>
                                                 <button
                                                     className=" hover:scale-125 transtition-all duration-200"
@@ -355,7 +357,7 @@ const JournalTable = ({
                                                         setIsModalEditJournalOpen(true);
                                                     }}
                                                 >
-                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:text-white" />
+                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:dark:text-white group-hover:text-slate-600" />
                                                 </button>
                                                 <button
                                                     className=" hover:scale-125 transtition-all duration-200"
@@ -365,7 +367,7 @@ const JournalTable = ({
                                                         setIsModalEditMutationJournalOpen(true);
                                                     }}
                                                 >
-                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:text-white" />
+                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:dark:text-white group-hover:text-slate-600" />
                                                 </button>
                                                 <button
                                                     onClick={() => {
@@ -376,7 +378,7 @@ const JournalTable = ({
                                                         ["Voucher & SP", "Accessories", null].includes(journal.trx_type) ||
                                                         (userRole !== "Administrator" && hqCashBankIds.includes(journal.cred_code))
                                                     }
-                                                    className="disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 dark:text-red-400 hover:scale-125 transition-all group-hover:text-white duration-200"
+                                                    className="disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 dark:text-red-400 hover:scale-125 transition-all group-hover:dark:text-white group-hover:text-slate-600 duration-200"
                                                 >
                                                     <TrashIcon className="size-4" />
                                                 </button>

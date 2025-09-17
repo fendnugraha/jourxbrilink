@@ -71,7 +71,7 @@ const CreateCashWithdrawal = ({
     useEffect(() => {
         setFormData((prev) => ({
             ...prev,
-            fee_amount: isFee ? prev.amount : calculateFee(prev.amount),
+            fee_amount: isFee ? prev.amount : feeAdminAuto ? calculateFee(prev.amount) : prev.fee_amount,
             trx_type: isFee ? "Bank Fee" : "Tarik Tunai",
         }));
     }, [isFee, formData.amount]);

@@ -13,7 +13,6 @@ const Navigation = ({ user }) => {
     const pathName = usePathname();
     const userRole = user?.role?.role;
 
-    console.log(navMenu);
     return (
         <>
             <nav className={`hidden sm:flex sm:flex-col ${isMenuOpen ? "w-64" : "w-16"} h-screen justify-between transition-all duration-200 ease-in`}>

@@ -20,7 +20,7 @@ const CreatePayable = ({ isModalOpen, fetchFinance, notification }) => {
     const [accounts, setAccounts] = useState([]);
     const [errors, setErrors] = useState([]);
 
-    const fetchContacts = async (url = "/api/get-all-contacts") => {
+    const fetchContacts = async (url = "/api/get-all-contacts/all") => {
         setLoading(true);
         try {
             const response = await axios.get(url);

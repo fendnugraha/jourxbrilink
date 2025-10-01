@@ -5,11 +5,12 @@ import { useCallback, useEffect, useState } from "react";
 import CreateSaving from "./CreateSaving";
 import axios from "@/libs/axios";
 import { formatNumber } from "@/libs/format";
-import PaymentForm from "../finance/components/PaymentForm";
 import DepositWithdraw from "./DepositWithdraw";
 import SavingLog from "./SavingLog";
 import Notification from "@/components/Notification";
 import Dropdown from "@/components/Dropdown";
+import CreateSavingMultiple from "./CreateSavingMultiple";
+import SimplePagination from "@/components/SimplePagination";
 
 const SavingContent = () => {
     const [notification, setNotification] = useState({
@@ -19,8 +20,11 @@ const SavingContent = () => {
     const [loading, setLoading] = useState(false);
     const [isModalPaymentOpen, setIsModalPaymentOpen] = useState(false);
     const [isModalCreateSavingOpen, setIsModalCreateSavingOpen] = useState(false);
+    const [isModalCreateSavingMultipleOpen, setIsModalCreateSavingMultipleOpen] = useState(false);
+
     const closeModal = () => {
         setIsModalCreateSavingOpen(false);
+        setIsModalCreateSavingMultipleOpen(false);
         setIsModalPaymentOpen(false);
         setSelectedFinanceId(null);
     };
@@ -94,7 +98,9 @@ const SavingContent = () => {
                                     </button>
                                 </li>
                                 <li className="hover:bg-slate-100 dark:hover:bg-slate-500">
-                                    <button className="w-full text-sm text-left py-2 px-4">Deposit (Multiple)</button>
+                                    <button className="w-full text-sm text-left py-2 px-4" onClick={() => setIsModalCreateSavingMultipleOpen(true)}>
+                                        Deposit (Multiple)
+                                    </button>
                                 </li>
                             </ul>
                         </Dropdown>
@@ -162,10 +168,18 @@ const SavingContent = () => {
                             </tfoot>
                         </table>
                     </div>
+                    {totalPages > 1 && (
+                        <div className="flex justify-end mt-2">
+                            <SimplePagination totalItems={totalItems} itemsPerPage={itemsPerPage} currentPage={currentPage} onPageChange={handlePageChange} />
+                        </div>
+                    )}
                 </div>
                 <SavingLog finance={finance} notification={setNotification} fetchFinance={fetchFinance} />
                 <Modal isOpen={isModalCreateSavingOpen} onClose={closeModal} modalTitle="Tambah Simpanan Karyawan">
                     <CreateSaving isModalOpen={setIsModalCreateSavingOpen} notification={setNotification} fetchFinance={fetchFinance} />
+                </Modal>
+                <Modal isOpen={isModalCreateSavingMultipleOpen} onClose={closeModal} modalTitle="Tambah Simpanan Karyawan (Multiple)" maxWidth="max-w-2xl">
+                    <CreateSavingMultiple isModalOpen={setIsModalCreateSavingMultipleOpen} notification={setNotification} fetchFinance={fetchFinance} />
                 </Modal>
                 <Modal isOpen={isModalPaymentOpen} onClose={closeModal} modalTitle="Form Penarikan Saldo Simpanan" maxWidth="max-w-2xl">
                     <DepositWithdraw

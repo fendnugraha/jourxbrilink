@@ -162,7 +162,11 @@ const SavingContent = () => {
                             <tfoot>
                                 <tr>
                                     <th className="">Total</th>
-                                    <th className="text-end">{formatNumber(filteredFinance.reduce((total, item) => total + Number(item.sisa), 0))}</th>
+                                    <th className="text-end">
+                                        {formatNumber(
+                                            filteredFinance.filter((f) => f.finance_type === "Saving").reduce((total, item) => total + Number(item.sisa), 0)
+                                        )}
+                                    </th>
                                     <th></th>
                                 </tr>
                             </tfoot>

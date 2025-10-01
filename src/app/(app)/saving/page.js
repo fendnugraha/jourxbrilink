@@ -8,7 +8,7 @@ export const metadata = {
 
 const Saving = () => {
     return (
-        <MainPage headerTitle="Saving">
+        <MainPage headerTitle="Simpanan">
             <div className="py-4 sm:py-8 px-4 sm:px-12">
                 <div className="grid grid-cols-1 gap-4">
                     <SavingContent />

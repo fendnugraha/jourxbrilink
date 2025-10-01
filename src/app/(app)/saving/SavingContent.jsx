@@ -86,9 +86,9 @@ const SavingContent = () => {
                 <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
             )}
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
-                <div className="card p-4 sm:col-span-2">
+                <div className="card p-4 sm:col-span-2 h-fit">
                     <div className="flex items-start justify-between">
-                        <h1 className="card-title mb-4">Saving Content</h1>
+                        <h1 className="card-title mb-4">Simpanan Karyawan</h1>
 
                         <Dropdown trigger={<button className="btn btn-primary">Tambah</button>} align="left">
                             <ul className="min-w-max">
@@ -138,7 +138,7 @@ const SavingContent = () => {
                             </thead>
                             <tbody>
                                 {currentItems.map((item, index) => (
-                                    <tr key={index} className="hover:bg-slate-700 hover:text-white" onClick={() => setSelectedContactId(item.contact_id)}>
+                                    <tr key={index} className="" onClick={() => setSelectedContactId(item.contact_id)}>
                                         <td>
                                             <button className="hover:underline">{item.contact.name}</button>
                                         </td>

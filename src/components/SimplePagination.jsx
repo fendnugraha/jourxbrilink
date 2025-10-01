@@ -56,14 +56,14 @@ const SimplePagination = ({ totalItems, itemsPerPage, currentPage, onPageChange,
                 <button
                     onClick={() => goToPage(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="bg-slate-600 dark:bg-slate-400 rounded-lg py-1 px-4 disabled:text-slate-300 disabled:border-slate-300 dark:disabled:border-slate-500"
+                    className="text-white dark:text-slate-700 bg-slate-600 dark:bg-slate-400 rounded-lg py-1 px-4 disabled:text-slate-300 disabled:bg-slate-400 disabled:dark:bg-slate-600"
                 >
                     <ChevronLeftIcon size={16} />
                 </button>
                 <button
                     onClick={() => goToPage(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="bg-slate-600 dark:bg-slate-400 rounded-lg py-1 px-4 disabled:text-slate-300 disabled:border-slate-300 dark:disabled:border-slate-500"
+                    className="text-white dark:text-slate-700 bg-slate-600 dark:bg-slate-400 rounded-lg py-1 px-4 disabled:text-slate-300 disabled:bg-slate-400 disabled:dark:bg-slate-600"
                 >
                     <ChevronRightIcon size={16} />
                 </button>

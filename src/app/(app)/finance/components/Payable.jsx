@@ -178,7 +178,7 @@ const Payable = () => {
                             </thead>
                             <tbody>
                                 {currentItems.map((item, index) => (
-                                    <tr key={index} className="hover:bg-slate-700 hover:text-white" onClick={() => setSelectedContactId(item.contact_id)}>
+                                    <tr key={index} className="" onClick={() => setSelectedContactId(item.contact_id)}>
                                         <td>
                                             <button className="hover:underline">{item.contact.name}</button>
                                         </td>
@@ -245,7 +245,7 @@ const Payable = () => {
                                     </tr>
                                 ) : (
                                     finance.finance?.data.map((item, index) => (
-                                        <tr key={index} className="hover:bg-slate-700 hover:text-white">
+                                        <tr key={index} className="">
                                             <td className="text-center whitespace-nowrap">
                                                 {item.bill_amount > 0 ? (
                                                     <ArrowBigDown className="inline text-green-600 dark:text-green-400" />

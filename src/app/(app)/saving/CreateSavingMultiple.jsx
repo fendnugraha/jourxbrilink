@@ -22,7 +22,7 @@ const CreateSavingMultiple = ({ isModalOpen, fetchFinance, notification }) => {
     const [errors, setErrors] = useState([]);
     const [selectedContacts, setSelectedContacts] = useState([]);
 
-    const fetchContacts = async (url = "/api/get-all-contacts/all") => {
+    const fetchContacts = async (url = "/api/get-all-contacts/Employee") => {
         setLoading(true);
         try {
             const response = await axios.get(url);
@@ -180,7 +180,9 @@ const CreateSavingMultiple = ({ isModalOpen, fetchFinance, notification }) => {
                                 }
                             }}
                         />
-                        <label htmlFor={contact.id}>{contact.name}</label>
+                        <label htmlFor={contact.id} className="text-sm text-nowrap">
+                            {contact.name}
+                        </label>
                     </div>
                 ))}
                 {totalPages > 1 && (

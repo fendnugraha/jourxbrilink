@@ -68,12 +68,12 @@ const SavingContent = () => {
     const [itemsPerPage, setItemsPerPage] = useState(5);
 
     // Calculate the total number of pages
-    const totalItems = filteredFinance.length;
+    const totalItems = filteredFinance.filter((f) => f.finance_type === "Saving").length;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     // Get the items for the current page
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentItems = filteredFinance.slice(startIndex, startIndex + itemsPerPage);
+    const currentItems = filteredFinance.filter((f) => f.finance_type === "Saving").slice(startIndex, startIndex + itemsPerPage);
 
     // Handle page change from the Pagination component
     const handlePageChange = (page) => {

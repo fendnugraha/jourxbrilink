@@ -137,7 +137,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                         <span className="card-subtitle text-nowrap">Periode: {endDate}</span>
                     </h1>
                     <div className="sm:flex gap-2 w-full sm:col-span-2">
-                        {userRole === "Administrator" && (
+                        {["Administrator", "Super Admin"].includes(userRole) && (
                             <div className="gap-2 sm:flex grid grid-cols-2 mb-2 sm:mb-0">
                                 <button
                                     onClick={() => setIsModalCreateJournalOpen(true)}
@@ -154,7 +154,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                             </div>
                         )}
                         <div className="w-full flex justify-end gap-2 mb-2 sm:mb-0">
-                            {userRole === "Administrator" && (
+                            {["Administrator", "Super Admin"].includes(userRole) && (
                                 <select
                                     value={selectedWarehouse}
                                     onChange={(e) => setSelectedWarehouse(e.target.value)}

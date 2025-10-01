@@ -5,7 +5,7 @@ import formatDateTime from "@/libs/formatDateTime";
 import axios from "@/libs/axios";
 import { useState } from "react";
 import Pagination from "@/components/PaginateList";
-import { ArrowRightIcon, FilterIcon, LoaderCircleIcon, MessageCircleWarningIcon, PencilIcon, SearchIcon, TrashIcon } from "lucide-react";
+import { CheckCheck, CheckIcon, FilterIcon, MessageCircleWarningIcon, PencilIcon, SearchIcon, TrashIcon, XIcon } from "lucide-react";
 import Modal from "@/components/Modal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
@@ -13,7 +13,6 @@ import EditJournal from "./EditJournal";
 import TimeAgo from "@/libs/formatDateDistance";
 import EditMutationJournal from "./EditMutationJournal";
 import EditDeposit from "./EditDeposit";
-import Dropdown from "@/components/Dropdown";
 
 const getCurrentDate = () => {
     const nowUTC = new Date();
@@ -128,6 +127,17 @@ const JournalTable = ({
 
         return formatted;
     };
+
+    const ConfirmJournalIsClean = async (id) => {
+        try {
+            const response = await axios.put(`/api/update-confirm-status/${id}`);
+            notification({ type: "success", message: response.data.message });
+            fetchJournalsByWarehouse();
+        } catch (error) {
+            notification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
+            console.log(error);
+        }
+    };
     return (
         <>
             <div className="flex gap-2 px-4">
@@ -166,7 +176,7 @@ const JournalTable = ({
                     <FilterIcon className="size-4" />
                 </button>
                 <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
-                    {userRole === "Administrator" && (
+                    {["Administrator", "Super Admin"].includes(userRole) && (
                         <div className="mb-4">
                             <Label>Cabang</Label>
                             <select
@@ -236,6 +246,7 @@ const JournalTable = ({
                                 <th>Deskripsi</th>
                                 <th>Jumlah</th>
                                 <th className="hidden sm:table-cell">Action</th>
+                                <th className="hidden sm:table-cell" hidden={!["Super Admin"].includes(userRole)}></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -251,7 +262,15 @@ const JournalTable = ({
                                         <td>
                                             <span className="text-xs text-blue-700 dark:text-blue-300 group-hover:dark:text-blue-200 group-hover:text-blue-400 block">
                                                 #{journal.id} <span className="font-bold hidden sm:inline">{journal.invoice}</span>{" "}
-                                                {formatDateTime(journal.created_at)}
+                                                {formatDateTime(journal.created_at)}{" "}
+                                                {journal.is_confirmed ? (
+                                                    <span className="font-bold bg-green-300 text-green-700 rounded-full px-1 inline-flex gap-1 items-center">
+                                                        <CheckCheck size={12} />
+                                                        Clear
+                                                    </span>
+                                                ) : (
+                                                    ""
+                                                )}
                                             </span>
                                             <span className="font-bold text-xs block text-lime-600 dark:text-lime-300 group-hover:text-lime-700 group-hover:dark:text-lime-400">
                                                 {journal.trx_type === "Voucher & SP" || journal.trx_type === "Accessories" ? (
@@ -383,6 +402,22 @@ const JournalTable = ({
                                                     <TrashIcon className="size-4" />
                                                 </button>
                                             </div>
+                                        </td>
+                                        <td className="hidden sm:table-cell w-16" hidden={!["Super Admin"].includes(userRole)}>
+                                            <button
+                                                onClick={() => {
+                                                    if (confirm("Are you sure to confirm this journal?")) ConfirmJournalIsClean(journal.id);
+                                                }}
+                                                className={`hover:scale-125 transtition-all duration-200 ${
+                                                    journal.is_confirmed ? "bg-red-500" : "bg-green-500"
+                                                } p-2 rounded-full cursor-pointer`}
+                                            >
+                                                {journal.is_confirmed ? (
+                                                    <XIcon size={20} className="text-white" />
+                                                ) : (
+                                                    <CheckIcon size={20} className="text-white" />
+                                                )}
+                                            </button>
                                         </td>
                                     </tr>
                                 ))

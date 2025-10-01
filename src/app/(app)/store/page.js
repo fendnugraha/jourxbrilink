@@ -139,7 +139,7 @@ const StorePage = () => {
                                     <Link href="/store/sales" className="btn-primary text-sm font-normal text-center">
                                         <PlusCircleIcon className="w-4 h-4 inline" /> Penjualan
                                     </Link>
-                                    {userRole === "Administrator" && (
+                                    {["Administrator", "Super Admin"].includes(userRole) && (
                                         <Link href="#" className="btn-primary text-sm font-normal text-center">
                                             <PlusCircleIcon className="w-4 h-4 inline" /> Pembelian
                                         </Link>
@@ -153,7 +153,7 @@ const StorePage = () => {
                                     <FilterIcon size={12} />
                                 </button>
                                 <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
-                                    {userRole === "Administrator" && (
+                                    {["Administrator", "Super Admin"].includes(userRole) && (
                                         <div className="mb-4">
                                             <Label>Cabang</Label>
                                             <select

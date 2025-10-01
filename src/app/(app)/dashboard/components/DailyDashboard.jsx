@@ -57,7 +57,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                     </span>
                 </h1>
                 <div className="mb-2 flex justify-end gap-2 w-full sm:w-1/2">
-                    {userRole === "Administrator" && (
+                    {["Administrator", "Super Admin"].includes(userRole) && (
                         <select value={selectedWarehouse} onChange={(e) => setSelectedWarehouse(e.target.value)} className="form-select block w-full p-2.5">
                             <option value="all">Semua Cabang</option>
                             {warehouses?.data?.map((warehouse) => (

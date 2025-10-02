@@ -208,7 +208,7 @@ const Sales = () => {
                         <div className="flex items-center">
                             <input
                                 type="search"
-                                className="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-300 text-sm rounded-full outline-1 outline-gray-300 dark:outline-gray-600 focus:outline-orange-500/50 dark:focus:outline-orange-400 focus:outline-2 block w-full px-4 py-2.5"
+                                className="bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-300 text-sm rounded-full outline-1 outline-gray-300 dark:outline-gray-600 focus:outline-orange-500/50 dark:focus:outline-orange-400 focus:outline-2 block w-full px-4 py-2.5"
                                 placeholder="Cari Barang"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
@@ -223,7 +223,7 @@ const Sales = () => {
                         </div>
                     </div>
                 </div>
-                <div className="bg-white dark:bg-slate-700 rounded-3xl px-6 py-4 hidden sm:flex flex-col justify-between">
+                <div className="card px-6 py-4 hidden sm:flex flex-col justify-between">
                     <div>
                         <h1 className="text-2xl font-bold mb-4">Detail Order</h1>
                         <div className="max-h-[calc(49px*7)] overflow-y-scroll">

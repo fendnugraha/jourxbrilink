@@ -4,9 +4,12 @@ import axios from "@/libs/axios";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
+import { DateTimeNow } from "@/libs/format";
 
 const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, user, accountBalance, openingCash }) => {
+    const { today } = DateTimeNow();
     const [formData, setFormData] = useState({
+        date_issued: today,
         debt_code: "",
         cred_code: "",
         amount: "",
@@ -33,6 +36,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                 message: response.data.message + " " + successMessage,
             });
             setFormData({
+                date_issued: today,
                 debt_code: "",
                 cred_code: "",
                 amount: "",
@@ -60,6 +64,19 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
 
     return (
         <form onSubmit={handleSubmit}>
+            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+                <Label>Tanggal</Label>
+                <div className="col-span-1 sm:col-span-2">
+                    <input
+                        type="datetime-local"
+                        value={formData.date_issued}
+                        className="form-control"
+                        required
+                        onChange={(e) => setFormData({ ...formData, date_issued: e.target.value })}
+                    />
+                    {errors.cred_code && <span className="text-red-500 text-xs">{errors.cred_code}</span>}
+                </div>
+            </div>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Dari (Cabang)</Label>
                 <div className="col-span-1 sm:col-span-2">

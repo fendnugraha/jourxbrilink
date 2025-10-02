@@ -4,9 +4,12 @@ import axios from "@/libs/axios";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
+import { DateTimeNow } from "@/libs/format";
 
 const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse, notification, fetchJournalsByWarehouse }) => {
+    const { today } = DateTimeNow();
     const [formData, setFormData] = useState({
+        date_issued: today,
         debt_code: "",
         cred_code: "",
         amount: "",
@@ -54,6 +57,18 @@ const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse
                 {journal.trx_type} ({journal.invoice})
             </h1>
             <form onSubmit={handleSubmit}>
+                <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 sm:gap-4 items-center">
+                    <Label>Tanggal</Label>
+                    <div className="col-span-1 sm:col-span-2">
+                        <input
+                            type="datetime-local"
+                            value={formData.date_issued}
+                            className="form-control"
+                            onChange={(e) => setFormData({ ...formData, date_issued: e.target.value })}
+                        />
+                        {errors.date_issued && <span className="text-red-500 text-xs">{errors.date_issued}</span>}
+                    </div>
+                </div>
                 <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Dari (Cabang)</Label>
                     <div className="col-span-1 sm:col-span-2">

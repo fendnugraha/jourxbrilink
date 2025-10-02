@@ -262,7 +262,7 @@ const JournalTable = ({
                                         <td>
                                             <span className="text-xs text-blue-700 dark:text-blue-300 group-hover:dark:text-blue-200 group-hover:text-blue-400 block">
                                                 #{journal.id} <span className="font-bold hidden sm:inline">{journal.invoice}</span>{" "}
-                                                {formatDateTime(journal.created_at)}{" "}
+                                                {formatDateTime(journal.date_issued)}{" "}
                                                 {journal.is_confirmed ? (
                                                     <span className="font-bold bg-green-300 text-green-700 rounded-full px-1 inline-flex gap-1 items-center">
                                                         <CheckCheck size={12} />

@@ -66,7 +66,6 @@ const RevenueReport = () => {
         { key: "fee", label: "Profit" },
         { key: "cash", label: "Kas" },
     ];
-    console.log(revenue);
     return (
         <div className="card relative">
             <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -125,6 +124,7 @@ const RevenueReport = () => {
                             <th className="">Trx</th>
                             <th className="">Biaya</th>
                             <th className="">Laba Bersih</th>
+                            <th className="">Setoran Kas</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -148,6 +148,7 @@ const RevenueReport = () => {
                                     <td className="text-end">{formatNumber(item.trx)}</td>
                                     <td className="text-end font-bold text-red-500 dark:text-red-400">{formatNumber(item.expense)}</td>
                                     <td className="text-end font-bold text-green-500 dark:text-green-400">{formatNumber(item.fee)}</td>
+                                    <td className="text-end font-bold text-green-500 dark:text-green-400">{formatNumber(item.cash)}</td>
                                 </tr>
                             ))
                         )}
@@ -168,6 +169,7 @@ const RevenueReport = () => {
                                 <th className="font-bold">{formatNumber(sumByTrxType("trx"))}</th>
                                 <th className="font-bold text-red-500">{formatNumber(sumByTrxType("expense"))}</th>
                                 <th className="font-bold text-green-500">{formatNumber(sumByTrxType("fee"))}</th>
+                                <th className="font-bold text-green-500">{formatNumber(sumByTrxType("cash"))}</th>
                             </tr>
                         ) : (
                             <tr>

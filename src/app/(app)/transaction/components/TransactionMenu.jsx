@@ -33,7 +33,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
     useEffect(() => {
         const initBalances = JSON.parse(localStorage.getItem("initBalances"));
         if (initBalances) {
-            setOpeningCash(initBalances[warehouseCashId]);
+            setOpeningCash(initBalances[warehouseCashId] || 0);
         }
     });
 

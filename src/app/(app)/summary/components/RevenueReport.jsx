@@ -64,7 +64,9 @@ const RevenueReport = () => {
         { key: "trx", label: "Transaksi" },
         { key: "expense", label: "Pengeluaran" },
         { key: "fee", label: "Profit" },
+        { key: "cash", label: "Kas" },
     ];
+    console.log(revenue);
     return (
         <div className="card relative">
             <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-2">

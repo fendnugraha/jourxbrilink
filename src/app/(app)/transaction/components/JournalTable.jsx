@@ -132,7 +132,7 @@ const JournalTable = ({
         try {
             const response = await axios.put(`/api/update-confirm-status/${id}`);
             notification({ type: "success", message: response.data.message });
-            fetchJournalsByWarehouse();
+            fetchJournalsByWarehouse(selectedWarehouse, startDate, endDate);
         } catch (error) {
             notification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
             console.log(error);

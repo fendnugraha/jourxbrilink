@@ -52,18 +52,18 @@ const SimplePagination = ({ totalItems, itemsPerPage, currentPage, onPageChange,
 
     return (
         <>
-            <div className={`flex justify-between text-xs gap-1 items-center mt-3 ${className}`}>
+            <div className={`flex justify-end text-xs gap-1 items-center mt-3 ${className}`}>
                 <button
                     onClick={() => goToPage(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="text-white dark:text-slate-700 bg-slate-600 dark:bg-slate-400 rounded-lg py-1 px-4 disabled:text-slate-300 disabled:bg-slate-400 disabled:dark:bg-slate-600"
+                    className="text-white dark:text-slate-700 bg-slate-600 dark:bg-slate-400 rounded-lg py-1 px-4 disabled:text-slate-300 disabled:bg-slate-400 disabled:dark:bg-slate-600 cursor-pointer focus:scale-95"
                 >
                     <ChevronLeftIcon size={16} />
                 </button>
                 <button
                     onClick={() => goToPage(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="text-white dark:text-slate-700 bg-slate-600 dark:bg-slate-400 rounded-lg py-1 px-4 disabled:text-slate-300 disabled:bg-slate-400 disabled:dark:bg-slate-600"
+                    className="text-white dark:text-slate-700 bg-slate-600 dark:bg-slate-400 rounded-lg py-1 px-4 disabled:text-slate-300 disabled:bg-slate-400 disabled:dark:bg-slate-600 cursor-pointer focus:scale-95"
                 >
                     <ChevronRightIcon size={16} />
                 </button>

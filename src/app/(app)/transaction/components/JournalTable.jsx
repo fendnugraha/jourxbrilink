@@ -13,6 +13,7 @@ import EditJournal from "./EditJournal";
 import TimeAgo from "@/libs/formatDateDistance";
 import EditMutationJournal from "./EditMutationJournal";
 import EditDeposit from "./EditDeposit";
+import Link from "next/link";
 
 const getCurrentDate = () => {
     const nowUTC = new Date();
@@ -225,7 +226,7 @@ const JournalTable = ({
             <input
                 type="search"
                 className={`transform transition-all duration-500 ease-in-out origin-top-left 
-                            ${showSearch ? "form-control !w-1/2 !py-1 opacity-100 scale-100 mt-1 drop-shadow-sm" : "opacity-0 scale-0 h-0 p-0"}
+                            ${showSearch ? "px-4 form-control !w-1/2 !py-1 opacity-100 scale-100 mt-1 drop-shadow-sm" : "opacity-0 scale-0 h-0 p-0"}
                         `}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -233,10 +234,17 @@ const JournalTable = ({
             />
 
             <div className="pt-1 px-4">
-                <h4 className="text-xs text-slate-500 dark:text-slate-200">
-                    {warehouses?.data?.find((w) => w.id === Number(selectedWarehouse))?.name},{" "}
-                    {startDate === endDate ? formatLongDate(endDate) : `${formatLongDate(startDate)} s/d ${formatLongDate(endDate)}`}
-                </h4>
+                <div className="flex justify-between items-center">
+                    <h4 className="text-xs text-slate-500 dark:text-slate-200">
+                        {warehouses?.data?.find((w) => w.id === Number(selectedWarehouse))?.name},{" "}
+                        {startDate === endDate ? formatLongDate(endDate) : `${formatLongDate(startDate)} s/d ${formatLongDate(endDate)}`}
+                    </h4>
+                    {["Super Admin"].includes(userRole) && (
+                        <Link href="/transaction/inspection" className="text-xs hover:underline text-slate-500 dark:text-slate-200">
+                            Inspection
+                        </Link>
+                    )}
+                </div>
             </div>
             <div className="pb-4 mt-2">
                 <div className="overflow-x-auto">

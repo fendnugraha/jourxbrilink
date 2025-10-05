@@ -237,11 +237,14 @@ const JournalTable = ({
             </div>
             <div className="pb-4 mt-2">
                 <div className="overflow-x-auto">
-                    <table className="table w-full text-xs">
+                    <table className="table w-full table-auto text-xs">
                         <thead>
                             <tr>
+                                <th className="w-8 text-center" hidden={!["Super Admin"].includes(userRole)}>
+                                    #
+                                </th>
                                 <th>Deskripsi</th>
-                                <th>Jumlah</th>
+                                <th className="">Jumlah</th>
                                 <th className="hidden sm:table-cell">Action</th>
                             </tr>
                         </thead>
@@ -255,18 +258,17 @@ const JournalTable = ({
                             ) : (
                                 currentItems.map((journal, index) => (
                                     <tr key={index} className="group hover:bg-slate-500 hover:text-white">
+                                        <td className="text-center w-8" hidden={!["Super Admin"].includes(userRole)}>
+                                            {journal.is_confirmed === 1 && (
+                                                <span className="w-8 h-8 bg-green-500 dark:bg-green-400 rounded-full flex justify-center items-center text-white">
+                                                    <CheckCheck size={18} />
+                                                </span>
+                                            )}
+                                        </td>
                                         <td>
                                             <span className="text-xs text-blue-700 dark:text-blue-300 group-hover:dark:text-blue-200 group-hover:text-blue-400 block">
                                                 #{journal.id} <span className="font-bold hidden sm:inline">{journal.invoice}</span>{" "}
-                                                {formatDateTime(journal.date_issued)}{" "}
-                                                {journal.is_confirmed ? (
-                                                    <span className="font-bold bg-green-300 text-green-700 rounded-full px-1 inline-flex gap-1 items-center">
-                                                        <CheckCheck size={12} />
-                                                        Clear
-                                                    </span>
-                                                ) : (
-                                                    ""
-                                                )}
+                                                {formatDateTime(journal.date_issued)}
                                             </span>
                                             <span className="font-bold text-xs block text-lime-600 dark:text-lime-300 group-hover:text-lime-700 group-hover:dark:text-lime-400">
                                                 {journal.trx_type === "Voucher & SP" || journal.trx_type === "Accessories" ? (

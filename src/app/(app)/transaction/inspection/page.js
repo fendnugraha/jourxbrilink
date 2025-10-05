@@ -4,7 +4,7 @@ import MainPage from "../../main";
 import { useAuth } from "@/libs/auth";
 import useGetWarehouses from "@/libs/getAllWarehouse";
 import axios from "@/libs/axios";
-import { formatLongDate, todayDate } from "@/libs/format";
+import { DateTimeNow, formatLongDate, todayDate } from "@/libs/format";
 import Modal from "@/components/Modal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
@@ -15,6 +15,7 @@ import TransactionTable from "./TransactionTable";
 import { set } from "date-fns";
 
 const InspectionPage = () => {
+    const { today } = DateTimeNow();
     const { user } = useAuth({ middleware: "auth" });
     const warehouse = Number(user?.role?.warehouse_id);
     const { warehouses, warehousesError } = useGetWarehouses();
@@ -144,7 +145,7 @@ const InspectionPage = () => {
         async (url = "/api/correction") => {
             setLoading(true);
             try {
-                const response = await axios.get(url, { params: { warehouse_id: selectedWarehouseId, start_date: startDate, end_date: endDate } });
+                const response = await axios.get(url, { params: { warehouse_id: selectedWarehouseId, start_date: today, end_date: today } });
                 setCorrection(response.data.data);
             } catch (error) {
                 console.error(error);
@@ -152,7 +153,7 @@ const InspectionPage = () => {
                 setLoading(false);
             }
         },
-        [selectedWarehouseId, startDate, endDate]
+        [selectedWarehouseId, today]
     );
 
     useEffect(() => {

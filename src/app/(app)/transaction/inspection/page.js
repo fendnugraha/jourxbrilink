@@ -106,12 +106,12 @@ const InspectionPage = () => {
 
             return matchAccountId; // default tetap hanya account_id=2
         }) || [];
-
     const [selectedJournalIds, setSelectedJournalIds] = useState([]);
+    const totalTransaction = journalsByWarehouse?.data?.filter((j) => Number(j.debt?.account_id) === 2 || Number(j.cred?.account_id) === 2).length || 0;
 
-    const totalTransaction = journalsByWarehouse?.data?.filter((j) => j.debt?.account_id === 2 || j.cred?.account_id === 2).length;
-
-    const totalConfirmedTransaction = journalsByWarehouse?.data?.filter((j) => j.is_confirmed).length;
+    const totalConfirmedTransaction =
+        journalsByWarehouse?.data?.filter((j) => (Number(j.debt?.account_id) === 2 || Number(j.cred?.account_id) === 2) && Number(j.is_confirmed) === 1)
+            .length || 0;
 
     const calculatePercentage = () => {
         if (totalTransaction > 0) {

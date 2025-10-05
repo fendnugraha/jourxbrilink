@@ -11,6 +11,7 @@ import useGetWarehouses from "@/libs/getAllWarehouse";
 import Notification from "@/components/Notification";
 import TransactionMenuMobile from "./TransactionMenuMobile";
 import VoucherSalesTable from "../../dashboard/components/VoucherSalesTable";
+import CorrectionTable from "../inspection/CorrectionTable";
 
 const getCurrentDate = () => {
     const nowUTC = new Date();
@@ -76,6 +77,28 @@ const TransactionContent = () => {
     useEffect(() => {
         mutate(`/api/get-cash-bank-balance/${selectedWarehouseId}/${endDate}`);
     }, [journalsByWarehouse]);
+
+    const [selectTable, setSelectTable] = useState("transaksi");
+
+    const [correction, setCorrection] = useState([]);
+    const fetchCorrection = useCallback(
+        async (url = "/api/correction") => {
+            setLoading(true);
+            try {
+                const response = await axios.get(url, { params: { warehouse_id: selectedWarehouseId, start_date: endDate, end_date: endDate } });
+                setCorrection(response.data.data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        },
+        [selectedWarehouseId, endDate]
+    );
+
+    useEffect(() => {
+        fetchCorrection();
+    }, [fetchCorrection]);
     return (
         <>
             <div className="py-4 sm:py-8 px-4 sm:px-12 mb-28 sm:mb-0">
@@ -91,18 +114,50 @@ const TransactionContent = () => {
                             setNotification={setNotification}
                             cashBank={cashBank}
                         />
-                        <JournalTable
-                            cashBank={cashBank}
-                            notification={setNotification}
-                            fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                            journalsByWarehouse={journalsByWarehouse}
-                            warehouses={warehouses}
-                            warehouse={warehouse}
-                            warehouseId={(warehouseId) => setSelectedWarehouseId(warehouseId)}
-                            user={user}
-                            loading={loading}
-                            hqCashBank={hqCashBank}
-                        />
+                        <div className="flex mb-4 px-4">
+                            <button
+                                onClick={() => setSelectTable("transaksi")}
+                                className={`${
+                                    selectTable === "transaksi"
+                                        ? "bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
+                                        : "bg-slate-100 dark:bg-slate-700"
+                                } px-3 py-1 mr-2 text-sm`}
+                            >
+                                Transaksi
+                            </button>
+                            <button
+                                onClick={() => setSelectTable("koreksi")}
+                                className={`${
+                                    selectTable === "koreksi"
+                                        ? "bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
+                                        : "bg-slate-100 dark:bg-slate-700"
+                                } px-3 py-1 text-sm`}
+                            >
+                                Koreksi
+                            </button>
+                        </div>
+                        {selectTable === "transaksi" && (
+                            <JournalTable
+                                cashBank={cashBank}
+                                notification={setNotification}
+                                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                                journalsByWarehouse={journalsByWarehouse}
+                                warehouses={warehouses}
+                                warehouse={warehouse}
+                                warehouseId={(warehouseId) => setSelectedWarehouseId(warehouseId)}
+                                user={user}
+                                loading={loading}
+                                hqCashBank={hqCashBank}
+                            />
+                        )}
+                        {selectTable === "koreksi" && (
+                            <CorrectionTable
+                                correctionData={correction}
+                                selectedWarehouseCashId={warehouseCashId}
+                                fetchCorrection={fetchCorrection}
+                                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                            />
+                        )}
                     </div>
                     <div className="order-1 sm:order-2">
                         <CashBankBalance warehouse={warehouse} accountBalance={accountBalance} isValidating={isValidating} user={user} />

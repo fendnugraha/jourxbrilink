@@ -128,17 +128,6 @@ const JournalTable = ({
 
         return formatted;
     };
-
-    const ConfirmJournalIsClean = async (id) => {
-        try {
-            const response = await axios.put(`/api/update-confirm-status/${id}`);
-            notification({ type: "success", message: response.data.message });
-            fetchJournalsByWarehouse(selectedWarehouse, startDate, endDate);
-        } catch (error) {
-            notification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
-            console.log(error);
-        }
-    };
     return (
         <>
             <div className="flex gap-2 px-4">
@@ -254,7 +243,6 @@ const JournalTable = ({
                                 <th>Deskripsi</th>
                                 <th>Jumlah</th>
                                 <th className="hidden sm:table-cell">Action</th>
-                                <th className="hidden sm:table-cell" hidden={!["Super Admin"].includes(userRole)}></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -410,22 +398,6 @@ const JournalTable = ({
                                                     <TrashIcon className="size-4" />
                                                 </button>
                                             </div>
-                                        </td>
-                                        <td className="hidden sm:table-cell w-16" hidden={!["Super Admin"].includes(userRole)}>
-                                            <button
-                                                onClick={() => {
-                                                    if (confirm("Are you sure to confirm this journal?")) ConfirmJournalIsClean(journal.id);
-                                                }}
-                                                className={`hover:scale-125 transtition-all duration-200 ${
-                                                    journal.is_confirmed ? "bg-red-500" : "bg-green-500"
-                                                } p-2 rounded-full cursor-pointer`}
-                                            >
-                                                {journal.is_confirmed ? (
-                                                    <XIcon size={20} className="text-white" />
-                                                ) : (
-                                                    <CheckIcon size={20} className="text-white" />
-                                                )}
-                                            </button>
                                         </td>
                                     </tr>
                                 ))

@@ -229,6 +229,12 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                         <h1 className="text-xs">Deposit</h1>
                         <h1 className="text-xs font-bold text-end">{formatNumber(dailyDashboard?.data?.totalCashDeposit?.total)}</h1>
                     </div>
+                    <div className="flex justify-between mb-1">
+                        <h1 className="text-xs">Koreksi</h1>
+                        <h1 className="text-xs font-bold text-yellow-300 dark:text-yellow-200 text-end">
+                            {formatNumber(dailyDashboard?.data?.totalCorrection ?? 0)}
+                        </h1>
+                    </div>
                     <hr className="border border-slate-300/50 border-dashed" />
                     <div className="flex justify-between mt-1 mb-4">
                         <h1 className="text-xs font-bold">Pendapatan</h1>

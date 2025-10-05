@@ -75,11 +75,13 @@ const CreateTransfer = ({
                             required
                         >
                             <option value="">--Pilih Rekening--</option>
-                            {filteredCashBankByWarehouse.map((cashBank) => (
-                                <option key={cashBank.id} value={cashBank.id}>
-                                    {cashBank.acc_name}
-                                </option>
-                            ))}
+                            {filteredCashBankByWarehouse
+                                .filter((cashBank) => Number(cashBank.account_id === 2))
+                                .map((cashBank) => (
+                                    <option key={cashBank.id} value={cashBank.id}>
+                                        {cashBank.acc_name}
+                                    </option>
+                                ))}
                         </select>
                         {errors.cred_code && <span className="text-red-500 text-xs">{errors.cred_code}</span>}
                     </div>

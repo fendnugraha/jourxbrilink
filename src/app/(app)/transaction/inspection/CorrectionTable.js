@@ -1,9 +1,14 @@
 import SimplePagination from "@/components/SimplePagination";
+import { useAuth } from "@/libs/auth";
+import axios from "@/libs/axios";
 import { formatDateTime, formatNumber } from "@/libs/format";
+import { Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-const CorrectionTable = ({ correctionData, selectedWarehouseCashId }) => {
+const CorrectionTable = ({ correctionData, selectedWarehouseCashId, fetchCorrection, notification }) => {
+    const { user } = useAuth({ middleware: "auth" });
+    const userRole = user?.role?.role;
     const itemsPerPage = 5;
     const [currentPage, setCurrentPage] = useState(1);
     const totalItems = correctionData?.length || 0;
@@ -15,6 +20,18 @@ const CorrectionTable = ({ correctionData, selectedWarehouseCashId }) => {
         setCurrentPage(page);
     };
 
+    const handleDeleteCorrection = async (id) => {
+        confirm("Are you sure you want to delete this correction?");
+        try {
+            const response = await axios.delete(`/api/correction/${id}`);
+            notification({ type: "success", message: response.data.message });
+            fetchCorrection();
+        } catch (error) {
+            notification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
+            console.error("Error deleting correction:", error);
+        }
+    };
+
     return (
         <>
             <div className="overflow-x-auto">
@@ -23,6 +40,9 @@ const CorrectionTable = ({ correctionData, selectedWarehouseCashId }) => {
                         <tr>
                             <th className="text-center">Description</th>
                             <th className="text-center">Jumlah</th>
+                            <th className="text-center" hidden={!["Super Admin"].includes(userRole)}>
+                                Action
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,11 +56,12 @@ const CorrectionTable = ({ correctionData, selectedWarehouseCashId }) => {
                                         Note: {item.description}
                                         {item.journal_id && (
                                             <span className="text-xs block">
-                                                Journal: {item.journal?.trx_type}{" "}
-                                                {item.journal?.debt_code === selectedWarehouseCashId
-                                                    ? item.journal?.cred?.acc_name
-                                                    : item.journal?.debt?.acc_name}
-                                                , Jumlah: {formatNumber(item.journal?.amount)}, Fee: {formatNumber(item.journal?.fee_amount)}
+                                                Journal (ID: {item.journal_id}): {item.reference_journal?.trx_type}{" "}
+                                                {item.reference_journal?.debt_code === selectedWarehouseCashId
+                                                    ? item.reference_journal?.cred?.acc_name
+                                                    : item.reference_journal?.debt?.acc_name}
+                                                , Jumlah: {formatNumber(item.reference_journal?.amount)}, Fee:{" "}
+                                                {formatNumber(item.reference_journal?.fee_amount)}
                                             </span>
                                         )}
                                         {item.image_url && (
@@ -55,6 +76,19 @@ const CorrectionTable = ({ correctionData, selectedWarehouseCashId }) => {
                                         )}
                                     </td>
                                     <td className="text-center text-xl font-bold">{formatNumber(item.amount)}</td>
+                                    <td className="" hidden={!["Super Admin"].includes(userRole)}>
+                                        <div className="flex justify-center gap-3">
+                                            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-green-500">
+                                                <Pencil size={16} />
+                                            </button>
+                                            <button
+                                                className="w-8 h-8 flex items-center justify-center rounded-full bg-red-500"
+                                                onClick={() => handleDeleteCorrection(item.id)}
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                             ))
                         ) : (

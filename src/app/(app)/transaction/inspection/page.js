@@ -237,6 +237,7 @@ const InspectionPage = () => {
                                 selectedWarehouseCashId={selectedarehouseCashId}
                                 fetchCorrection={fetchCorrection}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                                notification={setNotification}
                             />
                         )}
                     </div>

@@ -121,7 +121,7 @@ const TransactionContent = () => {
                                     selectTable === "transaksi"
                                         ? "bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
                                         : "bg-slate-100 dark:bg-slate-700"
-                                } px-3 py-1 mr-2 text-sm`}
+                                } px-3 py-1 transition-all duration-200 ease-in cursor-pointer mr-2 text-sm`}
                             >
                                 Transaksi
                             </button>
@@ -131,7 +131,7 @@ const TransactionContent = () => {
                                     selectTable === "koreksi"
                                         ? "bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
                                         : "bg-slate-100 dark:bg-slate-700"
-                                } px-3 py-1 text-sm`}
+                                } px-3 py-1 transition-all duration-200 ease-in cursor-pointer text-sm`}
                             >
                                 Koreksi
                             </button>

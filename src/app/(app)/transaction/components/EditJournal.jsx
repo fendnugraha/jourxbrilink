@@ -17,13 +17,13 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
 
     // Update formData when journalById changes
     useEffect(() => {
-        if (journal.debt_code || journal.cred_code) {
+        if (journal?.debt_code || journal?.cred_code) {
             setFormData({
-                debt_code: journal.debt_code || "",
-                cred_code: journal.cred_code || "",
-                amount: journal.amount || "",
-                fee_amount: journal.fee_amount || "",
-                description: journal.description || "",
+                debt_code: journal?.debt_code || "",
+                cred_code: journal?.cred_code || "",
+                amount: journal?.amount || "",
+                fee_amount: journal?.fee_amount || "",
+                description: journal?.description || "",
             });
         }
     }, [journal]);
@@ -32,11 +32,12 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await axios.put(`/api/journals/${journal.id}`, formData);
+            const response = await axios.put(`/api/journals/${journal?.id}`, formData);
             notification({ type: "success", message: response.data.message });
-            fetchJournalsByWarehouse();
+            await fetchJournalsByWarehouse(journal?.warehouse_id, journal?.date_issued, journal?.date_issued);
             isModalOpen(false);
         } catch (error) {
+            notification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
             console.log(error);
         } finally {
@@ -45,9 +46,9 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
     };
     return (
         <div className="relative">
-            {journal.id === undefined && <div className="absolute h-full w-full flex items-center justify-center bg-white">Loading data ...</div>}
+            {journal?.id === undefined && <div className="absolute h-full w-full flex items-center justify-center bg-white">Loading data ...</div>}
             <h1 className="text-sm sm:text-xl font-bold mb-4">
-                {journal.trx_type} ({journal.invoice})
+                {journal?.trx_type} ({journal?.invoice})
             </h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 sm:gap-4 items-center">
@@ -55,13 +56,13 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                     <div className="col-span-1 sm:col-span-2">
                         <select
                             onChange={(e) => {
-                                if (journal.trx_type === "Tarik Tunai") {
+                                if (journal?.trx_type === "Tarik Tunai") {
                                     setFormData({ ...formData, debt_code: e.target.value });
                                 } else {
                                     setFormData({ ...formData, cred_code: e.target.value });
                                 }
                             }}
-                            value={journal.trx_type === "Tarik Tunai" ? formData.debt_code : formData.cred_code}
+                            value={journal?.trx_type === "Tarik Tunai" ? formData.debt_code : formData.cred_code}
                             className="form-control"
                         >
                             <option value="">--Pilih rekening--</option>
@@ -128,7 +129,7 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                         className="bg-green-500 hover:bg-green-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
                         disabled={loading}
                     >
-                        {loading ? "Loading..." : "Update"}
+                        {loading ? "Updating..." : "Update"}
                     </button>
                 </div>
             </form>

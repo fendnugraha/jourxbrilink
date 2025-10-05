@@ -57,9 +57,9 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
                         Periode: {startDate} - {endDate}
                     </span>
                 </h1>
-                <div className="flex justify-between gap-1 flex-col sm:flex-row flex-nowrap">
+                <div className="flex justify-between gap-1 flex-col sm:flex-row flex-nowrap h-fit">
                     {["Administrator", "Super Admin"].includes(userRole) && (
-                        <select value={selectedWarehouse} onChange={(e) => setSelectedWarehouse(e.target.value)} className="form-select p-2.5">
+                        <select value={selectedWarehouse} onChange={(e) => setSelectedWarehouse(e.target.value)} className="form-select">
                             <option value="all">Semua Cabang</option>
                             {warehouses?.data?.map((warehouse) => (
                                 <option key={warehouse.id} value={warehouse.id}>

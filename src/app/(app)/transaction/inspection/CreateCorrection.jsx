@@ -7,7 +7,7 @@ const CreateCorrection = ({ isModalOpen, notification, fetchJournalsByWarehouse,
     const { today } = DateTimeNow();
     const [formData, setFormData] = useState({
         date_issued: today,
-        journal_id: "",
+        journal_reference_id: "",
         amount: "",
         warehouse_id: warehouse,
         description: "",
@@ -26,7 +26,7 @@ const CreateCorrection = ({ isModalOpen, notification, fetchJournalsByWarehouse,
             fetchCorrection();
             setFormData({
                 date_issued: today,
-                journal_id: "",
+                journal_reference_id: "",
                 amount: "",
                 warehouse_id: warehouse,
                 description: "",
@@ -64,10 +64,10 @@ const CreateCorrection = ({ isModalOpen, notification, fetchJournalsByWarehouse,
                         type="text"
                         className={"form-control"}
                         placeholder="ID"
-                        value={formData.journal_id}
-                        onChange={(e) => setFormData({ ...formData, journal_id: e.target.value })}
+                        value={formData.journal_reference_id}
+                        onChange={(e) => setFormData({ ...formData, journal_reference_id: e.target.value })}
                     />
-                    {errors.journal_id && <span className="text-red-500 text-xs">{errors.journal_id}</span>}
+                    {errors.journal_reference_id && <span className="text-red-500 text-xs">{errors.journal_reference_id}</span>}
                 </div>
             </div>
             <div className="mb-2 sm:mb-4 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">

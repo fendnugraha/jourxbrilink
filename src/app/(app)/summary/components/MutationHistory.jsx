@@ -99,7 +99,7 @@ const MutationHistory = ({ account, notification, user }) => {
                 </div>
             </div>
             <div className="mb-2 px-4 flex gap-2">
-                <select onChange={(e) => setSelectedAccount(e.target.value)} value={selectedAccount} className="form-select">
+                <select onChange={(e) => setSelectedAccount(e.target.value)} value={selectedAccount} className="form-select !w-fit ">
                     <option value="0">Pilih Akun</option>
                     {account?.map((item) => (
                         <option key={item.id} value={item.id}>

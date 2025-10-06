@@ -50,7 +50,7 @@ const WarehouseBalance = () => {
                     Saldo Kas & bank
                     <span className="card-subtitle">Periode: {endDate}</span>
                 </h4>
-                <div className="flex gap-1">
+                <div className="flex gap-1 h-fit">
                     <button onClick={fetchWarehouseBalance} className="small-button">
                         <RefreshCcwIcon className="size-4" />
                     </button>

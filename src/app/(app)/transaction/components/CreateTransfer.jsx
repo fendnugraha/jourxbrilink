@@ -130,7 +130,7 @@ const CreateTransfer = ({
                             {formData.amount && (
                                 <span
                                     onClick={(e) => setFormData({ ...formData, fee_amount: calculateFee(formData.amount) })}
-                                    className=" text-xs cursor-pointer bg-yellow-300 hover:bg-yellow-200 rounded-lg px-2 py-1 mt-1"
+                                    className=" text-xs cursor-pointer bg-yellow-300 dark:bg-yellow-500 hover:bg-yellow-200 rounded-lg px-2 py-0.5 mt-1"
                                 >
                                     {formatNumber(calculateFee(formData.amount))}
                                 </span>

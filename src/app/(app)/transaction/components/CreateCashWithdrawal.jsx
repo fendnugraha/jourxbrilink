@@ -144,7 +144,7 @@ const CreateCashWithdrawal = ({
                         </div>
                     </div>
                 </div>
-                <div className="mb-2 sm:mb-4 grid grid-cols-1 sm:grid-cols-2">
+                <div className="mb-2 sm:mb-4 grid grid-cols-1 sm:grid-cols-2 gap-2 items-end">
                     <div>
                         <Label>
                             Fee (Admin) <span className="text-green-500 font-bold">{feeAdminAuto ? "(Auto)" : ""}</span>
@@ -160,17 +160,19 @@ const CreateCashWithdrawal = ({
                                 required
                             />
                             {errors.fee_amount && <span className="text-red-500 text-xs">{errors.fee_amount}</span>}
-                            {formData.amount && (
-                                <span
-                                    type="button"
-                                    onClick={(e) => setFormData({ ...formData, fee_amount: calculateFee(formData.amount) })}
-                                    className="text-xs cursor-pointer bg-yellow-300 hover:bg-yellow-200 rounded-lg px-2 py-1 mt-1"
-                                >
-                                    {formatNumber(calculateFee(formData.amount))}
-                                </span>
-                            )}
                         </div>
                     </div>
+                    {formData.amount && (
+                        <div>
+                            <h1
+                                type="button"
+                                onClick={(e) => setFormData({ ...formData, fee_amount: calculateFee(formData.amount) })}
+                                className="text-xs dark:bg-yellow-500 cursor-pointer w-fit bg-yellow-300 hover:bg-yellow-200 rounded-lg px-2 py-0.5 mt-1"
+                            >
+                                {formatNumber(calculateFee(formData.amount))}
+                            </h1>
+                        </div>
+                    )}
                 </div>
                 <div className="mb-2 sm:mb-4">
                     <Label>Keterangan</Label>

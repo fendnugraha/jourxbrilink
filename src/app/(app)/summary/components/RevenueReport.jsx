@@ -75,7 +75,7 @@ const RevenueReport = () => {
                         Periode: {startDate} - {endDate}
                     </span>
                 </h4>
-                <div className="flex gap-1 justify-end">
+                <div className="flex gap-1 justify-end h-fit">
                     <button onClick={() => fetchRevenueReport()} className="small-button">
                         <RefreshCcwIcon className="size-4" />
                     </button>

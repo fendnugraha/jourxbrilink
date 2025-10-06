@@ -50,7 +50,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
     const filteredCashBankByWarehouse = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === warehouse);
 
     const calculateFee = (amount) => {
-        if (amount === 0 || amount === "") {
+        if (amount < 10000 || amount === "") {
             return "";
         }
 
@@ -161,7 +161,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
             <Modal
                 isOpen={isModalCreateTransferOpen}
                 onClose={closeModal}
-                maxWidth={"max-w-xl"}
+                maxWidth={"max-w-md"}
                 modalTitle={isTransferActive ? "Transfer Uang" : "Penarikan Tunai"}
             >
                 <div className="flex mb-4 justify-evenly w-full">
@@ -217,7 +217,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
             <Modal
                 isOpen={isModalCreateCashWithdrawalOpen}
                 onClose={closeModal}
-                maxWidth={"max-w-xl"}
+                maxWidth={"max-w-md"}
                 modalTitle={isTransferActive ? "Transfer Uang" : "Penarikan Tunai"}
             >
                 <div className="flex mb-4 justify-evenly w-full">

@@ -60,7 +60,7 @@ const LogActivity = ({ warehouses }) => {
                         Periode: {startDate} - {endDate}
                     </span>
                 </h4>
-                <div className="flex gap-1">
+                <div className="flex gap-1 h-fit">
                     <button onClick={() => fetchLogActivity()} className="small-button">
                         <RefreshCcwIcon className="size-4" />
                     </button>

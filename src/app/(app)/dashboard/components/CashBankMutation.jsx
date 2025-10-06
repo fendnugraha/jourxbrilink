@@ -136,7 +136,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                         Mutasi Saldo
                         <span className="card-subtitle text-nowrap">Periode: {endDate}</span>
                     </h1>
-                    <div className="sm:flex gap-2 w-full sm:col-span-2">
+                    <div className="sm:flex gap-2 w-full sm:col-span-2 h-fit">
                         {["Administrator", "Super Admin"].includes(userRole) && (
                             <div className="gap-2 sm:flex grid grid-cols-2 mb-2 sm:mb-0">
                                 <button
@@ -158,7 +158,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                 <select
                                     value={selectedWarehouse}
                                     onChange={(e) => setSelectedWarehouse(e.target.value)}
-                                    className="form-select block w-full p-2.5"
+                                    className="form-select block w-fit p-2.5"
                                 >
                                     {warehouses?.data?.map((warehouse) => (
                                         <option key={warehouse.id} value={warehouse.id}>
@@ -187,7 +187,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                             </Modal>
                         </div>
                     </div>
-                    <Modal isOpen={isModalCreateMutationFromHqOpen} onClose={closeModal} modalTitle="Penambahan Saldo Kas & Bank">
+                    <Modal isOpen={isModalCreateMutationFromHqOpen} onClose={closeModal} maxWidth={"max-w-lg"} modalTitle="Penambahan Saldo Kas & Bank">
                         <CreateMutationFromHq
                             cashBank={cashBank}
                             isModalOpen={setIsModalCreateMutationFromHqOpen}

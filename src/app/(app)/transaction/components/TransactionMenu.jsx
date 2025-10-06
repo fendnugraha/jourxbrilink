@@ -50,6 +50,10 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
     const filteredCashBankByWarehouse = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === warehouse);
 
     const calculateFee = (amount) => {
+        if (amount === 0 || amount === "") {
+            return "";
+        }
+
         if (amount < 100000) {
             return 3000;
         }

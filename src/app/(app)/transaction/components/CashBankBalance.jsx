@@ -84,6 +84,7 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
             { name: "Kas", value: formatNumber(dailyDashboard?.data?.totalCash - openingCash) },
             { name: "Voucher", value: formatNumber(dailyDashboard?.data?.totalVoucher?.total) },
             { name: "Deposit", value: formatNumber(dailyDashboard?.data?.totalCashDeposit?.total) },
+            { name: "Koreksi", value: formatNumber(dailyDashboard?.data?.totalCorrection ?? 0) },
             { name: "Acc", value: formatNumber(dailyDashboard?.data?.totalAccessories?.total) },
             { name: "Laba", value: formatNumber(dailyDashboard?.data?.profit) },
         ];
@@ -120,7 +121,7 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                     </div>
                 ))}
             </Modal>
-            <div className="flex justify-center items-center flex-col bg-gray-600 dark:bg-slate-800 hover:bg-gray-500 hover:dark:bg-slate-700 py-4 rounded-t-3xl text-white shadow-lg">
+            <div className="flex justify-center items-center flex-col bg-gray-600 dark:bg-slate-800 py-4 rounded-t-3xl text-white shadow-lg">
                 {accountBalance?.data?.chartOfAccounts?.length > 0 ? (
                     <>
                         <h1 className="text-xs">Total Saldo Kas & Bank</h1>
@@ -136,14 +137,14 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                 } origin-top transition-all duration-300 ease-in-out`}
             >
                 <div className="pt-2">
-                    <div className="flex justify-between items-center text-white bg-slate-300 dark:bg-lime-400 p-0.5 rounded-3xl">
+                    <div className="flex justify-between items-center text-white dark:text-lime-800 bg-slate-300 dark:bg-gray-400 p-0.5 rounded-3xl">
                         <button
                             onClick={() => {
                                 setShowCashBankBalance(true);
                                 setShowDailyReport(false);
                             }}
                             className={`cursor-pointer hover:font-semibold text-center w-full rounded-xl p-0.5 text-sm ${
-                                showCashBankBalance ? "bg-gray-600/70 dark:bg-lime-600" : "text-slate-600"
+                                showCashBankBalance ? "bg-gray-600/70 dark:bg-lime-400" : "text-slate-600"
                             }`}
                         >
                             Kas & Bank
@@ -154,7 +155,7 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                                 setShowCashBankBalance(false);
                             }}
                             className={`cursor-pointer hover:font-semibold text-center w-full rounded-xl p-0.5 text-sm ${
-                                showDailyReport ? "bg-gray-600/70 dark:bg-lime-600" : "text-slate-600"
+                                showDailyReport ? "bg-gray-600/70 dark:bg-lime-400" : "text-slate-600"
                             }`}
                         >
                             Report

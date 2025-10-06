@@ -49,7 +49,7 @@ const Navigation = ({ user }) => {
                                     <li key={index}>
                                         <NavLink href={item.href} active={pathName.startsWith(item.path)}>
                                             <span className="w-16 h-14 flex items-center justify-center flex-shrink-0">
-                                                <item.icon size={20} className="" />
+                                                <item.icon size={20} className="" strokeWidth={2.5} />
                                             </span>
                                             <span
                                                 className={`text-sm transition-all duration-300 origin-left ${

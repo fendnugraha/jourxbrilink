@@ -73,7 +73,7 @@ const MainPage = ({ children, headerTitle }) => {
                                     onClick={() => mutate("/api/get-rank-by-profit")}
                                     className="font-bold cursor-pointer text-2xl text-lime-700 w-12 h-12 rounded-full bg-lime-200"
                                 >
-                                    #{WarehouseRank}
+                                    {WarehouseRank}
                                     <span className="text-xs scale-50 hidden sm:inline text-slate-400">
                                         {""}
                                         <sup>{toOrdinal(WarehouseRank)}</sup>

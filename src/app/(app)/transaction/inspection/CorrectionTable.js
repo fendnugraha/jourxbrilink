@@ -21,7 +21,7 @@ const CorrectionTable = ({ correctionData, selectedWarehouseCashId, fetchCorrect
     };
 
     const handleDeleteCorrection = async (id) => {
-        confirm("Are you sure you want to delete this correction?");
+        if (!confirm("Are you sure you want to delete this correction?")) return;
         try {
             const response = await axios.delete(`/api/correction/${id}`);
             notification({ type: "success", message: response.data.message });

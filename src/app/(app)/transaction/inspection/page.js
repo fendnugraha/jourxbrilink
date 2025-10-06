@@ -165,6 +165,16 @@ const InspectionPage = () => {
             {notification.message && (
                 <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
             )}
+            {selectedJournalIds.length > 0 && (
+                <button
+                    className="py-2 px-4 text-sm w-fit bg-blue-600 hover:bg-blue-500 drop-shadow-2xl rounded-2xl fixed bottom-4 right-8"
+                    disabled={loading || selectedJournalIds.length === 0}
+                    onClick={handleConfirmSelected}
+                >
+                    Confirm selected <span className="font-bold bg-white text-blue-600 px-2 py-0.5 rounded-full">{selectedJournalIds.length}</span>
+                </button>
+            )}
+
             <MainPage headerTitle="Inspection">
                 <div className="grid grid-cols-4 gap-4 p-4 sm:p-8">
                     <div className="card p-4 col-span-3">
@@ -201,9 +211,28 @@ const InspectionPage = () => {
                                 </button>
                             </div>
                             <div className="flex justify-end gap-2">
-                                <button className="btn-primary" disabled={loading || selectedJournalIds.length === 0} onClick={handleConfirmSelected}>
-                                    Confirm selected {selectedJournalIds.length}
-                                </button>
+                                <select
+                                    onChange={(e) => {
+                                        setSelectedAccount(e.target.value);
+                                        setCurrentPage(1);
+                                    }}
+                                    value={selectedAccount}
+                                    className="form-select p-2.5"
+                                >
+                                    <option value="">Semua Akun</option>
+                                    {branchAccount
+                                        .filter((account) => account.account_id === 2)
+                                        .map((account, index) => (
+                                            <option key={index} value={account.id}>
+                                                {account.acc_name}
+                                            </option>
+                                        ))}
+                                </select>
+                                <select className="form-select p-2.5 !w-fit" value={filterConfirmed} onChange={(e) => setFilterConfirmed(e.target.value)}>
+                                    <option value={""}>Semua</option>
+                                    <option value={1}>Confirmed</option>
+                                    <option value={0}>Unconfirmed</option>
+                                </select>
                                 <select
                                     onChange={(e) => {
                                         setItemsPerPage(Number(e.target.value));
@@ -244,6 +273,14 @@ const InspectionPage = () => {
                     </div>
                     <div className="card p-4 h-fit">
                         <h1 className="card-title mb-4">Filter</h1>
+
+                        <input
+                            type="search"
+                            className="form-control mb-2 mt-4"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            placeholder="Search..."
+                        />
 
                         <div className="my-4">
                             <Label>Cabang</Label>
@@ -289,35 +326,6 @@ const InspectionPage = () => {
                         >
                             Submit
                         </button>
-                        <input
-                            type="search"
-                            className="form-control mb-2 mt-4"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            placeholder="Search..."
-                        />
-                        <select
-                            onChange={(e) => {
-                                setSelectedAccount(e.target.value);
-                                setCurrentPage(1);
-                            }}
-                            value={selectedAccount}
-                            className="form-select block w-full p-2.5"
-                        >
-                            <option value="">Semua Akun</option>
-                            {branchAccount
-                                .filter((account) => account.account_id === 2)
-                                .map((account, index) => (
-                                    <option key={index} value={account.id}>
-                                        {account.acc_name}
-                                    </option>
-                                ))}
-                        </select>
-                        <select className="form-select p-2.5 mt-2" value={filterConfirmed} onChange={(e) => setFilterConfirmed(e.target.value)}>
-                            <option value={""}>Semua</option>
-                            <option value={1}>Confirmed</option>
-                            <option value={0}>Unconfirmed</option>
-                        </select>
 
                         <div className="font-semibold text-4xl h-24 flex flex-col justify-evenly items-center border border-slate-200 dark:border-slate-600 rounded-2xl mt-2">
                             <h1>{calculatePercentage()}</h1>

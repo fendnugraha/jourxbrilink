@@ -13,6 +13,7 @@ import CreateCorrection from "./CreateCorrection";
 import CorrectionTable from "./CorrectionTable";
 import TransactionTable from "./TransactionTable";
 import { set } from "date-fns";
+import PercentageCount from "./PercentageCount";
 
 const InspectionPage = () => {
     const { today } = DateTimeNow();
@@ -122,7 +123,7 @@ const InspectionPage = () => {
     };
 
     const handleConfirmSelected = async () => {
-        confirm("Are you sure you want to confirm selected journal?");
+        if (!confirm("Are you sure you want to confirm selected journal?")) return;
         setLoading(true);
         try {
             const response = await axios.post("/api/update-confirm-status-batch", { journal_ids: selectedJournalIds });
@@ -205,9 +206,19 @@ const InspectionPage = () => {
                                         selectTable === "koreksi"
                                             ? "bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
                                             : "bg-slate-100 dark:bg-slate-700"
+                                    } px-3 py-1 mr-2 text-sm`}
+                                >
+                                    Koreksi
+                                </button>
+                                <button
+                                    onClick={() => setSelectTable("summary")}
+                                    className={`${
+                                        selectTable === "summary"
+                                            ? "bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
+                                            : "bg-slate-100 dark:bg-slate-700"
                                     } px-3 py-1 text-sm`}
                                 >
-                                    Correction
+                                    Summary
                                 </button>
                             </div>
                             <div className="flex justify-end gap-2">
@@ -270,6 +281,7 @@ const InspectionPage = () => {
                                 notification={setNotification}
                             />
                         )}
+                        {selectTable === "summary" && <PercentageCount startDate={startDate} endDate={endDate} />}
                     </div>
                     <div className="card p-4 h-fit">
                         <h1 className="card-title mb-4">Filter</h1>

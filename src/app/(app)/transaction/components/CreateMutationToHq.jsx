@@ -12,6 +12,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
         date_issued: today,
         debt_code: "",
         cred_code: "",
+        is_confirm: true,
         amount: "",
         fee_amount: 0,
         trx_type: "Mutasi Kas",
@@ -19,7 +20,6 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
     });
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
-    const [balanceDifference, setBalanceDifference] = useState(0);
 
     const hqAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === 1);
     const branchAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === Number(user.role?.warehouse_id));

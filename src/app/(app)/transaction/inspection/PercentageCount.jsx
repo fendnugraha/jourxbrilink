@@ -1,21 +1,20 @@
 import axios from "@/libs/axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const PercentageCount = ({ startDate, endDate }) => {
-    console.log(startDate, endDate);
     const [trxByWarehouse, setTrxByWarehouse] = useState([]);
-    const fetchtrxByWarehouse = async (start_date = startDate, end_date = endDate) => {
+    const fetchtrxByWarehouse = useCallback(async () => {
         try {
-            const response = await axios.get(`/api/calculate-trx-by-warehouse/${start_date}/${end_date}`);
+            const response = await axios.get(`/api/calculate-trx-by-warehouse/${startDate}/${endDate}`);
             setTrxByWarehouse(response.data.data);
         } catch (error) {
             console.error(error);
         }
-    };
+    }, [startDate, endDate]);
 
     useEffect(() => {
         fetchtrxByWarehouse();
-    }, [startDate, endDate]);
+    }, [fetchtrxByWarehouse]);
 
     const calculatePercentage = (a, b) => {
         if (b === 0) {

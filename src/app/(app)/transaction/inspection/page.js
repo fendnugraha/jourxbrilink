@@ -145,7 +145,7 @@ const InspectionPage = () => {
         async (url = "/api/correction") => {
             setLoading(true);
             try {
-                const response = await axios.get(url, { params: { warehouse_id: selectedWarehouseId, start_date: today, end_date: today } });
+                const response = await axios.get(url, { params: { warehouse_id: selectedWarehouseId, start_date: startDate, end_date: endDate } });
                 setCorrection(response.data.data);
             } catch (error) {
                 console.error(error);
@@ -153,7 +153,7 @@ const InspectionPage = () => {
                 setLoading(false);
             }
         },
-        [selectedWarehouseId, today]
+        [selectedWarehouseId, endDate, startDate]
     );
 
     useEffect(() => {
@@ -319,6 +319,7 @@ const InspectionPage = () => {
                         <button
                             onClick={() => {
                                 fetchJournalsByWarehouse(selectedWarehouseId, startDate, endDate);
+                                fetchCorrection();
                                 setSelectedAccount("");
                                 setCurrentPage(1);
                             }}

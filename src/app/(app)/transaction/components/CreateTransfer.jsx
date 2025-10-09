@@ -14,10 +14,12 @@ const CreateTransfer = ({
     calculateFee,
     setPersonalSetting,
     feeAdminAuto,
+    selectedBankAccount,
+    setSelectedBankAccount,
 }) => {
     const [formData, setFormData] = useState({
         debt_code: user.role.warehouse.chart_of_account_id,
-        cred_code: "",
+        cred_code: selectedBankAccount,
         amount: "",
         fee_amount: "",
         trx_type: "Transfer Uang",
@@ -69,7 +71,10 @@ const CreateTransfer = ({
                     <Label>Dari Rekening</Label>
                     <div className="col-span-1 sm:col-span-2">
                         <select
-                            onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })}
+                            onChange={(e) => {
+                                setFormData({ ...formData, cred_code: e.target.value });
+                                setSelectedBankAccount(e.target.value);
+                            }}
                             value={formData.cred_code}
                             className="form-select"
                             required

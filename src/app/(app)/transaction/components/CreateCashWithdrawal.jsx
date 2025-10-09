@@ -15,9 +15,11 @@ const CreateCashWithdrawal = ({
     calculateFee,
     setPersonalSetting,
     feeAdminAuto,
+    selectedBankAccount,
+    setSelectedBankAccount,
 }) => {
     const [formData, setFormData] = useState({
-        debt_code: "",
+        debt_code: selectedBankAccount,
         cred_code: user.role.warehouse.chart_of_account_id,
         amount: "",
         trx_type: "Tarik Tunai",
@@ -82,7 +84,10 @@ const CreateCashWithdrawal = ({
                     <Label>Ke Rekening</Label>
                     <div className="col-span-1 sm:col-span-2">
                         <select
-                            onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })}
+                            onChange={(e) => {
+                                setFormData({ ...formData, debt_code: e.target.value });
+                                setSelectedBankAccount(e.target.value);
+                            }}
                             value={formData.debt_code}
                             className="form-select"
                             required

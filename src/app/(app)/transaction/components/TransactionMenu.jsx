@@ -16,7 +16,6 @@ import VoucherSalesTable from "../../dashboard/components/VoucherSalesTable";
 const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNotification, cashBank }) => {
     const warehouse = Number(user?.role?.warehouse_id);
     const warehouseCashId = Number(user?.role?.warehouse?.chart_of_account_id);
-    const warehouseName = user?.role?.warehouse?.name;
 
     const [isModalCreateTransferOpen, setIsModalCreateTransferOpen] = useState(false);
     const [isModalCreateCashWithdrawalOpen, setIsModalCreateCashWithdrawalOpen] = useState(false);
@@ -83,6 +82,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
             localStorage.setItem("personalSetting", JSON.stringify(personalSetting));
         }
     }, [personalSetting, loaded]);
+    const [selectedBankAccount, setSelectedBankAccount] = useState("");
     return (
         <>
             <div className="hidden sm:flex gap-2 mb-4 px-4">
@@ -198,6 +198,8 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
                         calculateFee={calculateFee}
                         setPersonalSetting={setPersonalSetting}
                         feeAdminAuto={personalSetting.feeAdminAuto}
+                        selectedBankAccount={selectedBankAccount}
+                        setSelectedBankAccount={setSelectedBankAccount}
                     />
                 )}
                 {isCashWithdrawalActive && (
@@ -210,6 +212,8 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
                         calculateFee={calculateFee}
                         setPersonalSetting={setPersonalSetting}
                         feeAdminAuto={personalSetting.feeAdminAuto}
+                        selectedBankAccount={selectedBankAccount}
+                        setSelectedBankAccount={setSelectedBankAccount}
                     />
                 )}
             </Modal>
@@ -254,6 +258,8 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
                         calculateFee={calculateFee}
                         setPersonalSetting={setPersonalSetting}
                         feeAdminAuto={personalSetting.feeAdminAuto}
+                        selectedBankAccount={selectedBankAccount}
+                        setSelectedBankAccount={setSelectedBankAccount}
                     />
                 )}
                 {isCashWithdrawalActive && (
@@ -266,6 +272,8 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
                         calculateFee={calculateFee}
                         setPersonalSetting={setPersonalSetting}
                         feeAdminAuto={personalSetting.feeAdminAuto}
+                        selectedBankAccount={selectedBankAccount}
+                        setSelectedBankAccount={setSelectedBankAccount}
                     />
                 )}
             </Modal>

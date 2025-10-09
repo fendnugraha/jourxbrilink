@@ -300,6 +300,7 @@ const InspectionPage = () => {
                                 onChange={(e) => {
                                     setSelectedWarehouseId(e.target.value);
                                     setCurrentPage(1);
+                                    setSelectedAccount("");
                                 }}
                                 value={selectedWarehouseId}
                                 className="form-control"

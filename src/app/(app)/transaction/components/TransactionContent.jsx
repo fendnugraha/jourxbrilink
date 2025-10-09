@@ -133,7 +133,10 @@ const TransactionContent = () => {
                                         : "bg-slate-100 dark:bg-slate-700"
                                 } px-3 py-1 transition-all duration-200 ease-in cursor-pointer text-sm`}
                             >
-                                Koreksi
+                                Koreksi{" "}
+                                {correction.length > 0 && (
+                                    <span className="bg-red-500 dark:bg-red-600 text-xs rounded-full px-2 py-0.5 ml-2">{correction.length}</span>
+                                )}
                             </button>
                         </div>
                         {selectTable === "transaksi" && (

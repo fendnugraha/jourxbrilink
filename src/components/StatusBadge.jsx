@@ -61,7 +61,7 @@ const StatusBadge = ({ status, statusText }) => {
             style = "bg-gray-100 text-gray-800";
     }
     return (
-        <span className={`px-2 py-1 inline-flex text-xs leading-5 items-center gap-1 font-semibold rounded-full shadow ${style}`}>
+        <span className={`ps-1 pe-2  py-0.5 inline-flex text-xs leading-5 items-center gap-1 font-semibold rounded-full shadow ${style}`}>
             {icon}
             {statusText || status}
         </span>

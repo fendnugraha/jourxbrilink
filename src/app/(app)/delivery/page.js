@@ -211,6 +211,7 @@ const DeliveryPage = () => {
                                                     status={journal.status === 0 ? "In Progress" : "Completed"}
                                                     statusText={journal.status === 0 ? "On Delivery" : "Sudah Diterima"}
                                                 />
+                                                {/* <span className="block text-xs">({formatDateTime(journal.updated_at)})</span> */}
                                             </td>
                                         </tr>
                                     ))}

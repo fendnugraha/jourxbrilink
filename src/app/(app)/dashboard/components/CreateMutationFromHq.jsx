@@ -12,7 +12,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
         amount: "",
         fee_amount: 0,
         is_confirmed: true,
-        confirmation: 1,
+        confirmation: 0,
         trx_type: "Mutasi Kas",
         description: "",
         admin_fee: "" || 0,

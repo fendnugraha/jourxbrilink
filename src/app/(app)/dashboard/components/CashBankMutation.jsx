@@ -12,6 +12,7 @@ import Label from "@/components/Label";
 import Input from "@/components/Input";
 import useCashBankBalance from "@/libs/cashBankBalance";
 import { mutate } from "swr";
+import StatusBadge from "@/components/StatusBadge";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -300,6 +301,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                     Dari <MoveRightIcon className="size-5 inline" /> Ke
                                 </th>
                                 <th className="hidden sm:table-cell">Jumlah</th>
+                                <th className="hidden sm:table-cell">Status</th>
                                 <th>Opsi</th>
                             </tr>
                         </thead>
@@ -322,7 +324,13 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                             {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt.acc_name}
                                             <span className="block sm:hidden font-bold text-blue-500">{formatNumber(journal.amount)}</span>
                                         </td>
-                                        <td className="text-end hidden sm:table-cell">{formatNumber(journal.amount)}</td>
+                                        <td className="text-end hidden sm:table-cell text-lg font-bold">{formatNumber(journal.amount)}</td>
+                                        <td className="text-center">
+                                            <StatusBadge
+                                                status={journal.status === 0 ? "In Progress" : "Completed"}
+                                                statusText={journal.status === 0 ? "Dalam Pengiriman" : "Sudah Diterima"}
+                                            />
+                                        </td>
                                         <td className="text-center">
                                             <button
                                                 onClick={() => {

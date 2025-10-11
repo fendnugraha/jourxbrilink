@@ -12,6 +12,7 @@ import Notification from "@/components/Notification";
 import TransactionMenuMobile from "./TransactionMenuMobile";
 import VoucherSalesTable from "../../dashboard/components/VoucherSalesTable";
 import CorrectionTable from "../inspection/CorrectionTable";
+import MutationTable from "./MutationTable";
 
 const getCurrentDate = () => {
     const nowUTC = new Date();
@@ -121,9 +122,22 @@ const TransactionContent = () => {
                                     selectTable === "transaksi"
                                         ? "bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
                                         : "bg-slate-100 dark:bg-slate-700"
-                                } px-3 py-1 transition-all duration-200 ease-in cursor-pointer mr-2 text-sm`}
+                                } px-3 py-1 cursor-pointer mr-2 text-sm`}
                             >
                                 Transaksi
+                            </button>
+                            <button
+                                onClick={() => setSelectTable("mutasi")}
+                                className={`${
+                                    selectTable === "mutasi"
+                                        ? "bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
+                                        : "bg-slate-100 dark:bg-slate-700"
+                                } px-3 py-1 cursor-pointer mr-2 text-sm`}
+                            >
+                                Mutasi Kas{" "}
+                                {correction.length > 0 && (
+                                    <span className="bg-red-500 dark:bg-red-600 text-xs rounded-full px-2 py-0.5 ml-2">{correction.length}</span>
+                                )}
                             </button>
                             <button
                                 onClick={() => setSelectTable("koreksi")}
@@ -131,7 +145,7 @@ const TransactionContent = () => {
                                     selectTable === "koreksi"
                                         ? "bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
                                         : "bg-slate-100 dark:bg-slate-700"
-                                } px-3 py-1 transition-all duration-200 ease-in cursor-pointer text-sm`}
+                                } px-3 py-1 cursor-pointer text-sm`}
                             >
                                 Koreksi{" "}
                                 {correction.length > 0 && (
@@ -141,6 +155,20 @@ const TransactionContent = () => {
                         </div>
                         {selectTable === "transaksi" && (
                             <JournalTable
+                                cashBank={cashBank}
+                                notification={setNotification}
+                                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                                journalsByWarehouse={journalsByWarehouse}
+                                warehouses={warehouses}
+                                warehouse={warehouse}
+                                warehouseId={(warehouseId) => setSelectedWarehouseId(warehouseId)}
+                                user={user}
+                                loading={loading}
+                                hqCashBank={hqCashBank}
+                            />
+                        )}
+                        {selectTable === "mutasi" && (
+                            <MutationTable
                                 cashBank={cashBank}
                                 notification={setNotification}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}

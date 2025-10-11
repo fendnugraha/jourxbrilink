@@ -78,33 +78,21 @@ const UpdateUser = ({ isModalOpen, notification, fetchUsers, findSelectedAccount
             </div>
             <div className="mb-4">
                 <label>Role</label>
-                <div className="flex gap-4">
-                    <div className="flex justify-center items-center gap-2">
-                        <input
-                            type="radio"
-                            name="role"
-                            id="Administrator"
-                            value="Administrator"
-                            checked={updateUserData.role === "Administrator"}
-                            onChange={(e) => setUpdateUserData({ ...updateUserData, role: e.target.value })}
-                        />
-                        <label htmlFor="Administrator">Administrator</label>
-                    </div>
-                    <div className="flex justify-center items-center gap-2">
-                        <input
-                            type="radio"
-                            name="role"
-                            id="Kasir"
-                            value="Kasir"
-                            checked={updateUserData.role === "Kasir"}
-                            onChange={(e) => setUpdateUserData({ ...updateUserData, role: e.target.value })}
-                        />
-                        <label htmlFor="Kasir">Kasir</label>
-                    </div>
-                </div>
+                <select
+                    name="role"
+                    required
+                    value={updateUserData.role}
+                    onChange={(e) => setUpdateUserData({ ...updateUserData, role: e.target.value })}
+                    className="form-select"
+                >
+                    <option value="">Sebagai</option>
+                    <option value="Administrator">Administrator</option>
+                    <option value="Kasir">Kasir</option>
+                    <option value="Courier">Kurir</option>
+                </select>
             </div>
             <div className="flex justify-end gap-2">
-                <Button buttonType="neutral" onClick={() => isModalOpen(false)}>
+                <Button type="button" buttonType="neutral" onClick={() => isModalOpen(false)}>
                     Cancel
                 </Button>
                 <Button buttonType="success" onClick={handleUpdateUser}>

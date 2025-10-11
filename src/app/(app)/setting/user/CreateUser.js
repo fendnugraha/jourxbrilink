@@ -117,6 +117,7 @@ const CreateUser = ({ isModalOpen, notification, fetchUsers }) => {
                         <option value="">Select role</option>
                         <option value="Administrator">Administrator</option>
                         <option value="Kasir">Kasir</option>
+                        <option value="Courier">Kurir</option>
                     </select>
                     {errors.role && <p className="text-xs text-red-500">{errors.role}</p>}
                 </div>

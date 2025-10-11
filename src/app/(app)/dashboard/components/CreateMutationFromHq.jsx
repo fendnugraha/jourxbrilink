@@ -12,6 +12,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
         amount: "",
         fee_amount: 0,
         is_confirmed: true,
+        confirmation: 1,
         trx_type: "Mutasi Kas",
         description: "",
         admin_fee: "" || 0,
@@ -21,8 +22,8 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
 
-    const hqAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === 1);
-    const branchAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === Number(selectedWarehouseId));
+    const hqAccount = cashBank?.filter((cashBank) => Number(cashBank.warehouse_id) === 1);
+    const branchAccount = cashBank?.filter((cashBank) => Number(cashBank.warehouse_id) === Number(selectedWarehouseId));
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -39,6 +40,8 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                 cred_code: formData.cred_code,
                 amount: "",
                 fee_amount: 0,
+                is_confirmed: true,
+                confirmation: 1,
                 trx_type: "Mutasi Kas",
                 description: "",
                 admin_fee: "" || 0,
@@ -83,7 +86,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                         required
                     >
                         <option value="">--Pilih sumber dana--</option>
-                        {hqAccount.map((br) => (
+                        {hqAccount?.map((br) => (
                             <option key={br.id} value={br.id}>
                                 {br.acc_name}
                             </option>
@@ -103,7 +106,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                         required
                     >
                         <option value="">--Pilih tujuan mutasi--</option>
-                        {branchAccount.map((hq) => (
+                        {branchAccount?.map((hq) => (
                             <option key={hq.id} value={hq.id}>
                                 {hq.acc_name}
                             </option>
@@ -154,8 +157,19 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     />
                     {errors?.description && <span className="text-red-500 text-xs">{errors?.description}</span>}
+                    <input
+                        type="checkbox"
+                        id="confrmation"
+                        className="mt-2 mr-2"
+                        checked={formData.confirmation === 0}
+                        onChange={(e) => setFormData({ ...formData, confirmation: e.target.checked ? 0 : 1 })}
+                    />
+                    <label htmlFor="confrmation" className={`text-sm ${formData.confirmation === 0 ? "text-green-600" : ""}`}>
+                        Pakai Konfirmasi
+                    </label>
                 </div>
             </div>
+
             <button
                 className="bg-indigo-500 hover:bg-indigo-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
                 disabled={loading}

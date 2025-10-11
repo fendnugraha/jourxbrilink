@@ -251,7 +251,7 @@ const JournalTable = ({
                         <tbody>
                             {currentItems.length === 0 ? (
                                 <tr>
-                                    <td colSpan="3" className="text-center">
+                                    <td colSpan={!["Super Admin"].includes(userRole) ? 3 : 4} className="text-center">
                                         <span className="text-sm text-slate-500">{loading ? "Loading..." : "No data found."}</span>
                                     </td>
                                 </tr>

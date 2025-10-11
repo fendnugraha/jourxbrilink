@@ -1,4 +1,4 @@
-import { Activity, AlarmClockCheck, Award, Ban, CheckCheck, DotIcon, X } from "lucide-react";
+import { Activity, AlarmClockCheck, Award, Ban, CheckCheck, DotIcon, Truck, X } from "lucide-react";
 
 const StatusBadge = ({ status, statusText }) => {
     let icon = (
@@ -20,7 +20,7 @@ const StatusBadge = ({ status, statusText }) => {
         case "In Progress":
             icon = (
                 <span className="flex items-center gap-1 bg-amber-500 text-amber-100 rounded-full p-0.5">
-                    <Activity size={12} strokeWidth={2} />
+                    <Truck size={12} strokeWidth={2} />
                 </span>
             );
             style = "bg-amber-100 text-amber-800";

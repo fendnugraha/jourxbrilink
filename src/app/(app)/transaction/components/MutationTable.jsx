@@ -9,14 +9,40 @@ const MutationTable = ({ journalsByWarehouse, user }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
 
-    const filteredJournals = journalsByWarehouse.data?.filter(
-        (journal) => journal.debt_code === user?.role?.warehouse?.chart_of_account_id && journal.trx_type === "Mutasi Kas"
-    );
+    const [deliveryStatus, setDeliveryStatus] = useState("");
+
+    const filteredJournals = journalsByWarehouse.data?.filter((journal) => {
+        const matchWarehouse = journal.debt_code === user?.role?.warehouse?.chart_of_account_id && journal.trx_type === "Mutasi Kas";
+        const matchDeliveryStatus = deliveryStatus ? journal.status === Number(deliveryStatus) : true;
+
+        const matchSearchTerm = searchTerm
+            ? (journal.invoice ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+              (journal.amount ?? "").toString().toLowerCase().includes(searchTerm.toLowerCase())
+            : true;
+
+        return matchDeliveryStatus && matchWarehouse && matchSearchTerm;
+    });
+
+    const totalItems = filteredJournals?.length || 0;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentItems = filteredJournals?.slice(startIndex, startIndex + itemsPerPage);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
     return (
         <>
             <div className="flex gap-2 px-4">
-                <input type="search" placeholder="Search..." className="form-control flex-1" />
-                <select className="form-select !w-fit block p-2.5">
+                <input
+                    type="search"
+                    placeholder="Search..."
+                    className="form-control flex-1"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <select className="form-select !w-fit block p-2.5" onChange={(e) => setDeliveryStatus(e.target.value)}>
+                    <option value="">Semua</option>
                     <option value={0}>Dalam Pengiriman</option>
                     <option value={1}>Diterima</option>
                 </select>
@@ -50,7 +76,7 @@ const MutationTable = ({ journalsByWarehouse, user }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredJournals.map((journal) => (
+                            {currentItems.map((journal) => (
                                 <tr key={journal.id}>
                                     <td className="">
                                         <span className="block font-bold text-yellow-500 dark:text-yellow-300">{journal.invoice}</span>

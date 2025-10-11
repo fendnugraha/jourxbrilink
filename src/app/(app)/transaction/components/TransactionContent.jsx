@@ -167,20 +167,7 @@ const TransactionContent = () => {
                                 hqCashBank={hqCashBank}
                             />
                         )}
-                        {selectTable === "mutasi" && (
-                            <MutationTable
-                                cashBank={cashBank}
-                                notification={setNotification}
-                                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                                journalsByWarehouse={journalsByWarehouse}
-                                warehouses={warehouses}
-                                warehouse={warehouse}
-                                warehouseId={(warehouseId) => setSelectedWarehouseId(warehouseId)}
-                                user={user}
-                                loading={loading}
-                                hqCashBank={hqCashBank}
-                            />
-                        )}
+                        {selectTable === "mutasi" && <MutationTable journalsByWarehouse={journalsByWarehouse} user={user} />}
                         {selectTable === "koreksi" && (
                             <CorrectionTable
                                 correctionData={correction}

@@ -10,6 +10,8 @@ import { set } from "date-fns";
 import useGetWarehouses from "@/libs/getAllWarehouse";
 import { PlusCircleIcon } from "lucide-react";
 import Link from "next/link";
+import Notification from "@/components/Notification";
+import SimplePagination from "@/components/SimplePagination";
 
 const DeliveryPage = () => {
     const { today } = DateTimeNow();
@@ -60,37 +62,91 @@ const DeliveryPage = () => {
     useEffect(() => {
         fetchJournals();
     }, [fetchJournals]);
+
+    const updateJournalStatus = async (journalId, status) => {
+        if (!confirm("Konfirmasi pengiriman kas, apakah anda yakin kas sudah diterima?")) return;
+        setLoading(true);
+        try {
+            const response = await axios.put(`/api/update-delivery-status/${journalId}/${status}`);
+            fetchJournals();
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const [searchTerm, setSearchTerm] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(5);
+
+    const [deliveryStatus, setDeliveryStatus] = useState("");
+    const [selectedWarehouse, setSelectedWarehouse] = useState("");
+
+    const filteredJournals = journals.filter((journal) => {
+        const matchDeliveryStatus = deliveryStatus ? journal.status === Number(deliveryStatus) : true;
+
+        const matchWarehouse = selectedWarehouse ? journal.debt?.warehouse?.id === Number(selectedWarehouse) : true;
+
+        const matchSearchTerm = searchTerm
+            ? (journal.invoice ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+              (journal.amount ?? "").toString().toLowerCase().includes(searchTerm.toLowerCase())
+            : true;
+
+        return matchDeliveryStatus && matchWarehouse && matchSearchTerm;
+    });
+
+    const totalItems = filteredJournals?.length || 0;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentItems = filteredJournals?.slice(startIndex, startIndex + itemsPerPage);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
     return (
         <MainPage headerTitle="Delivery">
+            {notification.message && (
+                <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
+            )}
             <div className="py-4 sm:py-8 px-4 sm:px-12">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 ">
                     <div className="h-auto sm:h-[calc(100vh-80px-64px)] overflow-auto">
-                        {journals
-                            .filter((journal) => journal.status === 0)
-                            .map((journal) => (
-                                <div className="card p-4 mb-4" key={journal.id}>
-                                    <div>
-                                        <div className="flex justify-between items-start">
-                                            <h1 className="font-bold text-xs mb-4">
-                                                <span className="block">{journal.invoice}</span>
-                                                {formatDate(journal.date_issued)}
+                        {journals.filter((journal) => journal.status === 0).length > 0 ? (
+                            journals
+                                .filter((journal) => journal.status === 0)
+                                .map((journal) => (
+                                    <div className="card p-4 mb-4" key={journal.id}>
+                                        <div>
+                                            <div className="flex justify-between items-start">
+                                                <h1 className="font-bold text-xs mb-4">
+                                                    <span className="block">{journal.invoice}</span>
+                                                    {formatDate(journal.date_issued)}
+                                                </h1>
+                                                <StatusBadge
+                                                    status={journal.status === 0 ? "In Progress" : "Completed"}
+                                                    statusText={journal.status === 0 ? "Dalam Pengiriman" : "Sudah Diterima"}
+                                                />
+                                            </div>
+                                            <h1 className="text-xs">Tujuan</h1>
+                                            <h1 className="font-bold text-md mb-2">{journal.debt?.warehouse?.name}</h1>
+                                            <h1 className="font-bold text-2xl text-right p-2 border border-slate-300 dark:border-slate-500 rounded-2xl bg-slate-500">
+                                                Rp {formatNumber(journal.amount)}
                                             </h1>
-                                            <StatusBadge
-                                                status={journal.status === 0 ? "In Progress" : "Completed"}
-                                                statusText={journal.status === 0 ? "Dalam Pengiriman" : "Sudah Diterima"}
-                                            />
+                                            <button
+                                                onClick={() => updateJournalStatus(journal.id, 1)}
+                                                className="px-6 py-2 mt-4 w-full min-w-40 hover:drop-shadow-md bg-green-500 dark:bg-green-600 hover:bg-green-400 dark:hover:bg-green-500 text-white rounded-xl text-sm cursor-pointer transition duration-300 ease-in-out"
+                                            >
+                                                Sudah Diterima
+                                            </button>
                                         </div>
-                                        <h1 className="text-xs">Tujuan</h1>
-                                        <h1 className="font-bold text-md mb-2">{journal.debt?.warehouse?.name}</h1>
-                                        <h1 className="font-bold text-2xl text-right p-2 border border-slate-300 dark:border-slate-500 rounded-2xl bg-slate-500">
-                                            Rp {formatNumber(journal.amount)}
-                                        </h1>
-                                        <button className="px-6 py-2 mt-4 w-full min-w-40 hover:drop-shadow-md bg-green-500 dark:bg-green-600 hover:bg-green-400 dark:hover:bg-green-500 text-white rounded-xl text-sm cursor-pointer transition duration-300 ease-in-out">
-                                            Sudah Diterima
-                                        </button>
                                     </div>
-                                </div>
-                            ))}
+                                ))
+                        ) : (
+                            <div className="card p-4 mb-4 h-full flex justify-center items-center">
+                                <h1 className="text-xs">Belum ada mutasi kas.</h1>
+                            </div>
+                        )}
                     </div>
                     <div className="card p-4 sm:col-span-2">
                         <div className="flex justify-between items-start mb-4">
@@ -102,18 +158,53 @@ const DeliveryPage = () => {
                                 Mutasi Saldo <PlusCircleIcon className="size-4 inline" />
                             </button>
                         </div>
+                        <div className="flex gap-2">
+                            <input
+                                type="search"
+                                placeholder="Search..."
+                                className="form-control flex-1"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                            <select className="form-select !w-fit block p-2.5" value={selectedWarehouse} onChange={(e) => setSelectedWarehouse(e.target.value)}>
+                                <option value={""}>Semua</option>
+                                {warehouses.data?.map((warehouse) => (
+                                    <option key={warehouse.id} value={warehouse.id}>
+                                        {warehouse.name}
+                                    </option>
+                                ))}
+                            </select>
+                            <select className="form-select !w-fit block p-2.5" value={deliveryStatus} onChange={(e) => setDeliveryStatus(e.target.value)}>
+                                <option value={""}>Semua</option>
+                                <option value={0}>Dalam Pengiriman</option>
+                                <option value={1}>Diterima</option>
+                            </select>
+                            <select
+                                onChange={(e) => {
+                                    setItemsPerPage(Number(e.target.value));
+                                    setCurrentPage(1);
+                                }}
+                                className="form-select !w-fit block p-2.5"
+                            >
+                                <option value={5}>5</option>
+                                <option value={10}>10</option>
+                                <option value={25}>25</option>
+                                <option value={50}>50</option>
+                                <option value={100}>100</option>
+                            </select>
+                        </div>
                         <div className="overflow-x-auto">
                             <table className="table-auto table w-full text-xs">
                                 <thead>
                                     <tr>
                                         <th className="">Date</th>
-                                        <th className="">Description</th>
+                                        <th className="">Tujuan</th>
                                         <th className="">Amount</th>
                                         <th className="">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {journals.map((journal) => (
+                                    {currentItems.map((journal) => (
                                         <tr key={journal.id}>
                                             <td className="">
                                                 <Link
@@ -124,7 +215,7 @@ const DeliveryPage = () => {
                                                 </Link>
                                                 {formatDateTime(journal.created_at)}
                                             </td>
-                                            <td className="">{journal.description}</td>
+                                            <td className="">{journal.debt?.warehouse?.name}</td>
                                             <td className="text-right text-lg font-bold">{formatNumber(journal.amount)}</td>
                                             <td className="text-center">
                                                 <StatusBadge
@@ -137,6 +228,15 @@ const DeliveryPage = () => {
                                 </tbody>
                             </table>
                         </div>
+                        {totalPages > 1 && (
+                            <SimplePagination
+                                className="w-full px-4"
+                                totalItems={totalItems}
+                                itemsPerPage={itemsPerPage}
+                                currentPage={currentPage}
+                                onPageChange={handlePageChange}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

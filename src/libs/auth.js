@@ -73,7 +73,11 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         }
 
         if (window.location.pathname === "/" && user) {
-            router.push(redirectIfAuthenticated || "/transaction");
+            if (user.role?.role === "Courier") {
+                router.push("/delivery");
+            } else {
+                router.push(redirectIfAuthenticated || "/transaction");
+            }
         }
 
         if (middleware === "auth" && error) logout();

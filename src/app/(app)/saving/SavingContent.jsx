@@ -11,6 +11,8 @@ import Notification from "@/components/Notification";
 import Dropdown from "@/components/Dropdown";
 import CreateSavingMultiple from "./CreateSavingMultiple";
 import SimplePagination from "@/components/SimplePagination";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 const SavingContent = () => {
     const [notification, setNotification] = useState({
@@ -88,7 +90,12 @@ const SavingContent = () => {
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
                 <div className="card p-4 sm:col-span-2 h-fit">
                     <div className="flex items-start justify-between">
-                        <h1 className="card-title mb-4">Simpanan Karyawan</h1>
+                        <div className="flex items-center gap-2 mb-4">
+                            <Link href="/finance" className="cursor-pointer hover:text-blue-500">
+                                <ArrowLeft className="w-6 h-6" onClick={() => window.history.back()} />
+                            </Link>
+                            <h1 className="card-title">Simpanan Karyawan</h1>
+                        </div>
 
                         <Dropdown trigger={<button className="btn btn-primary">Tambah</button>} align="left">
                             <ul className="min-w-max">

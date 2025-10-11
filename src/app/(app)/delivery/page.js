@@ -2,7 +2,7 @@
 import axios from "@/libs/axios";
 import MainPage from "../main";
 import { DateTimeNow, formatDate, formatDateTime, formatNumber } from "@/libs/format";
-import { useCallback, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 import StatusBadge from "@/components/StatusBadge";
 import CreateMutationFromHq from "../dashboard/components/CreateMutationFromHq";
 import Modal from "@/components/Modal";
@@ -11,6 +11,8 @@ import { PlusCircleIcon } from "lucide-react";
 import Link from "next/link";
 import Notification from "@/components/Notification";
 import SimplePagination from "@/components/SimplePagination";
+import { mutate } from "swr";
+import useGetMutationJournal from "@/libs/getMutationJournal";
 
 const DeliveryPage = () => {
     const { today } = DateTimeNow();
@@ -43,33 +45,20 @@ const DeliveryPage = () => {
     };
     const [startDate, setStartDate] = useState(today);
     const [endDate, setEndDate] = useState(today);
-    const [errors, setErrors] = useState([]);
-    const [journals, setJournals] = useState([]);
-    const fetchJournals = useCallback(
-        async (url = `/api/mutation-journal/${startDate}/${endDate}`) => {
-            try {
-                const response = await axios.get(url);
-                setJournals(response.data.data);
-            } catch (error) {
-                setErrors(error.response?.data?.errors || ["Something went wrong."]);
-                console.log(error);
-            }
-        },
-        [startDate, endDate]
-    );
-
+    const { journals, error, isValidating } = useGetMutationJournal(startDate, endDate);
     useEffect(() => {
-        fetchJournals();
-    }, [fetchJournals]);
-
+        mutate(`/api/mutation-journal/${startDate}/${endDate}`);
+    }, [startDate, endDate]);
     const updateJournalStatus = async (journalId, status) => {
         if (!confirm("Konfirmasi pengiriman kas, apakah anda yakin kas sudah diterima?")) return;
         setLoading(true);
         try {
             const response = await axios.put(`/api/update-delivery-status/${journalId}/${status}`);
-            fetchJournals();
+            mutate(`/api/mutation-journal/${startDate}/${endDate}`);
+            setNotification({ type: "success", message: response.data.message });
         } catch (error) {
             console.log(error);
+            setNotification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
         } finally {
             setLoading(false);
         }
@@ -82,7 +71,7 @@ const DeliveryPage = () => {
     const [deliveryStatus, setDeliveryStatus] = useState("");
     const [selectedWarehouse, setSelectedWarehouse] = useState("");
 
-    const filteredJournals = journals.filter((journal) => {
+    const filteredJournals = journals?.filter((journal) => {
         const matchDeliveryStatus = deliveryStatus ? journal.status === Number(deliveryStatus) : true;
 
         const matchWarehouse = selectedWarehouse ? journal.debt?.warehouse?.id === Number(selectedWarehouse) : true;
@@ -111,7 +100,7 @@ const DeliveryPage = () => {
             <div className="py-4 sm:py-8 px-4 sm:px-12">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 ">
                     <div className="h-auto sm:h-[calc(100vh-80px-64px)] overflow-auto">
-                        {journals.filter((journal) => journal.status === 0).length > 0 ? (
+                        {journals?.filter((journal) => journal.status === 0).length > 0 ? (
                             journals
                                 .filter((journal) => journal.status === 0)
                                 .map((journal) => (
@@ -134,6 +123,7 @@ const DeliveryPage = () => {
                                             </h1>
                                             <button
                                                 onClick={() => updateJournalStatus(journal.id, 1)}
+                                                disabled={loading}
                                                 className="px-6 py-2 mt-4 w-full min-w-40 hover:drop-shadow-md bg-green-500 dark:bg-green-600 hover:bg-green-400 dark:hover:bg-green-500 text-white rounded-xl text-sm cursor-pointer transition duration-300 ease-in-out"
                                             >
                                                 Sudah Diterima
@@ -239,12 +229,12 @@ const DeliveryPage = () => {
                     </div>
                 </div>
             </div>
-            <Modal isOpen={isModalCreateMutationFromHqOpen} onClose={closeModal} maxWidth={"max-w-lg"} modalTitle="Penambahan Saldo Kas & Bank">
+            <Modal isOpen={isModalCreateMutationFromHqOpen} onClose={closeModal} maxWidth="max-w-lg" modalTitle="Penambahan Saldo Kas & Bank">
                 <CreateMutationFromHq
                     cashBank={cashBank}
                     isModalOpen={setIsModalCreateMutationFromHqOpen}
                     notification={setNotification}
-                    fetchJournalsByWarehouse={fetchJournals}
+                    fetchJournalsByWarehouse={() => mutate(`/api/mutation-journal/${startDate}/${endDate}`)}
                     warehouses={warehouses?.data}
                 />
             </Modal>

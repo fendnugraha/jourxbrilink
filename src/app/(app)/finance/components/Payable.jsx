@@ -14,6 +14,7 @@ import CreateReceivable from "./CreateReceivable";
 import Pagination from "@/components/PaginateList";
 import Input from "@/components/Input";
 import { set } from "date-fns";
+import Link from "next/link";
 const Payable = () => {
     const [isModalCreateContactOpen, setIsModalCreateContactOpen] = useState(false);
     const [notification, setNotification] = useState({
@@ -104,15 +105,20 @@ const Payable = () => {
             <div className="overflow-hidden">
                 <div className="card mb-4">
                     <div className="p-4 flex justify-between flex-col sm:flex-row">
-                        <select
-                            onChange={(e) => {
-                                setFinanceType(e.target.value);
-                            }}
-                            className="form-select !w-40"
-                        >
-                            <option value="Payable">Hutang</option>
-                            <option value="Receivable">Piutang</option>
-                        </select>
+                        <div className="flex items-center gap-2">
+                            <select
+                                onChange={(e) => {
+                                    setFinanceType(e.target.value);
+                                }}
+                                className="form-select !w-40"
+                            >
+                                <option value="Payable">Hutang</option>
+                                <option value="Receivable">Piutang</option>
+                            </select>
+                            <Link href="/saving" className="hover:underline text-xs">
+                                Simpanan Karyawan {"->"}
+                            </Link>
+                        </div>
                         <div className="flex items-center gap-2 overflow-auto">
                             <button onClick={() => setIsModalCreatePayableOpen(true)} className="btn-primary text-xs">
                                 <PlusCircleIcon className="w-4 h-4 mr-1 inline" /> Hutang

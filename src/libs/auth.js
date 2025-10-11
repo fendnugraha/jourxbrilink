@@ -61,7 +61,11 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
     useEffect(() => {
         if (middleware === "guest" && redirectIfAuthenticated && user) {
-            router.push(redirectIfAuthenticated);
+            if (user.role?.role === "Courier") {
+                router.push("/delivery");
+            } else {
+                router.push(redirectIfAuthenticated || "/transaction");
+            }
         }
 
         if (middleware === "auth" && !user && error) {

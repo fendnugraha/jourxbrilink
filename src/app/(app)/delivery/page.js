@@ -130,7 +130,7 @@ const DeliveryPage = () => {
                                             </div>
                                             <h1 className="text-xs">Tujuan</h1>
                                             <h1 className="font-bold text-md mb-2">{journal.debt?.warehouse?.name}</h1>
-                                            <h1 className="font-bold text-2xl text-right p-2 border border-slate-300 dark:border-slate-500 rounded-2xl bg-slate-500">
+                                            <h1 className="font-bold text-2xl text-white text-right p-2 border border-slate-300 dark:border-slate-500 rounded-2xl bg-slate-500">
                                                 Rp {formatNumber(journal.amount)}
                                             </h1>
                                             <button

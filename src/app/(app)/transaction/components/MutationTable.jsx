@@ -4,7 +4,7 @@ import formatNumber from "@/libs/formatNumber";
 import formatDateTime from "@/libs/formatDateTime";
 import { useState } from "react";
 import StatusBadge from "@/components/StatusBadge";
-const MutationTable = ({ journalsByWarehouse }) => {
+const MutationTable = ({ journalsByWarehouse, user }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);

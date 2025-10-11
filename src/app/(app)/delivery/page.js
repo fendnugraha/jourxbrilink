@@ -7,7 +7,7 @@ import StatusBadge from "@/components/StatusBadge";
 import CreateMutationFromHq from "../dashboard/components/CreateMutationFromHq";
 import Modal from "@/components/Modal";
 import useGetWarehouses from "@/libs/getAllWarehouse";
-import { PlusCircleIcon } from "lucide-react";
+import { CheckCheck, PlusCircleIcon, Truck } from "lucide-react";
 import Link from "next/link";
 import Notification from "@/components/Notification";
 import SimplePagination from "@/components/SimplePagination";
@@ -98,7 +98,7 @@ const DeliveryPage = () => {
                 <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
             )}
             <div className="py-4 sm:py-8 px-4 sm:px-12">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 ">
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 ">
                     <div className="h-auto sm:h-[calc(100vh-80px-64px)] overflow-auto">
                         {journals?.filter((journal) => journal.status === 0).length > 0 ? (
                             journals
@@ -108,17 +108,17 @@ const DeliveryPage = () => {
                                         <div>
                                             <div className="flex justify-between items-start">
                                                 <h1 className="font-bold text-xs mb-4">
-                                                    <span className="block">{journal.invoice}</span>
-                                                    {formatDate(journal.date_issued)}
+                                                    {/* <span className="block">{journal.invoice}</span> */}
+                                                    {formatDateTime(journal.date_issued)}
                                                 </h1>
                                                 <StatusBadge
                                                     status={journal.status === 0 ? "In Progress" : "Completed"}
-                                                    statusText={journal.status === 0 ? "On Delivery" : "Sudah Diterima"}
+                                                    statusText={journal.status === 0 ? "On Delivery" : "Delivered"}
                                                 />
                                             </div>
-                                            <h1 className="text-xs">Tujuan</h1>
-                                            <h1 className="font-bold text-md mb-2">{journal.debt?.warehouse?.name}</h1>
-                                            <h1 className="font-bold text-2xl text-white text-right p-2 border border-slate-300 dark:border-slate-500 rounded-2xl bg-slate-500">
+                                            <h1 className="text-xs">Tujuan:</h1>
+                                            <h1 className="font-bold text-md mb-2 text-center">{journal.debt?.warehouse?.name}</h1>
+                                            <h1 className="font-bold text-xl text-white text-right px-2 py-1 border border-slate-300 dark:border-slate-500 rounded-2xl bg-slate-500">
                                                 Rp {formatNumber(journal.amount)}
                                             </h1>
                                             <button
@@ -137,7 +137,7 @@ const DeliveryPage = () => {
                             </div>
                         )}
                     </div>
-                    <div className="card p-4 sm:col-span-2">
+                    <div className="card p-4 sm:col-span-3">
                         <div className="flex justify-between items-start mb-4">
                             <h1 className="card-title mb-4">Rekap Mutasi Kas</h1>
                             <button
@@ -202,14 +202,18 @@ const DeliveryPage = () => {
                                                 >
                                                     {journal.invoice}
                                                 </Link>
-                                                {formatDateTime(journal.date_issued)}
+                                                <span className="text-xs flex gap-1">
+                                                    <Truck size={14} className="bg-yellow-500 p-0.5 rounded-full" /> {formatDateTime(journal.date_issued)}
+                                                    <CheckCheck size={14} className="ml-1 bg-green-500 p-0.5 rounded-full" />{" "}
+                                                    {journal.status === 0 ? "-" : formatDateTime(journal.updated_at)}
+                                                </span>
                                             </td>
                                             <td className="">{journal.debt?.warehouse?.name}</td>
-                                            <td className="text-right text-lg font-bold">{formatNumber(journal.amount)}</td>
+                                            <td className="text-right font-bold">{formatNumber(journal.amount)}</td>
                                             <td className="text-center">
                                                 <StatusBadge
                                                     status={journal.status === 0 ? "In Progress" : "Completed"}
-                                                    statusText={journal.status === 0 ? "On Delivery" : "Sudah Diterima"}
+                                                    statusText={journal.status === 0 ? "On Delivery" : "Delivered"}
                                                 />
                                                 {/* <span className="block text-xs">({formatDateTime(journal.updated_at)})</span> */}
                                             </td>

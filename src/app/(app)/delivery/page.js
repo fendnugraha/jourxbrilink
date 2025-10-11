@@ -220,7 +220,7 @@ const DeliveryPage = () => {
                                             <td className="text-center">
                                                 <StatusBadge
                                                     status={journal.status === 0 ? "In Progress" : "Completed"}
-                                                    statusText={journal.status === 0 ? "Dalam Pengiriman" : "Sudah Diterima"}
+                                                    statusText={journal.status === 0 ? "On Delivery" : "Sudah Diterima"}
                                                 />
                                             </td>
                                         </tr>

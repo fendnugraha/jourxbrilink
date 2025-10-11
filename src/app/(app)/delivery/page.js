@@ -6,7 +6,6 @@ import { useCallback, useEffect, useState } from "react";
 import StatusBadge from "@/components/StatusBadge";
 import CreateMutationFromHq from "../dashboard/components/CreateMutationFromHq";
 import Modal from "@/components/Modal";
-import { set } from "date-fns";
 import useGetWarehouses from "@/libs/getAllWarehouse";
 import { PlusCircleIcon } from "lucide-react";
 import Link from "next/link";
@@ -125,7 +124,7 @@ const DeliveryPage = () => {
                                                 </h1>
                                                 <StatusBadge
                                                     status={journal.status === 0 ? "In Progress" : "Completed"}
-                                                    statusText={journal.status === 0 ? "Dalam Pengiriman" : "Sudah Diterima"}
+                                                    statusText={journal.status === 0 ? "On Delivery" : "Sudah Diterima"}
                                                 />
                                             </div>
                                             <h1 className="text-xs">Tujuan</h1>
@@ -176,7 +175,7 @@ const DeliveryPage = () => {
                             </select>
                             <select className="form-select !w-fit block p-2.5" value={deliveryStatus} onChange={(e) => setDeliveryStatus(e.target.value)}>
                                 <option value={""}>Semua</option>
-                                <option value={0}>Dalam Pengiriman</option>
+                                <option value={0}>On Delivery</option>
                                 <option value={1}>Diterima</option>
                             </select>
                             <select
@@ -213,7 +212,7 @@ const DeliveryPage = () => {
                                                 >
                                                     {journal.invoice}
                                                 </Link>
-                                                {formatDateTime(journal.created_at)}
+                                                {formatDateTime(journal.date_issued)}
                                             </td>
                                             <td className="">{journal.debt?.warehouse?.name}</td>
                                             <td className="text-right text-lg font-bold">{formatNumber(journal.amount)}</td>

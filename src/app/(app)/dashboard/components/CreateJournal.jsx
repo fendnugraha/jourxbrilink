@@ -40,7 +40,7 @@ const CreateJournal = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
         setLoading(true);
         try {
             const response = await axios.post("/api/create-mutation", formData);
-            notification("success", response.data.message);
+            notification({ type: "success", message: response.data.message });
             fetchJournalsByWarehouse();
             isModalOpen(false);
             setFormData({
@@ -53,7 +53,7 @@ const CreateJournal = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
                 admin_fee: "" || 0,
             });
         } catch (error) {
-            notification("error", error.response?.data?.message || "Something went wrong.");
+            notification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
             setErrors(error.response?.data?.errors);
         } finally {
             setLoading(false);

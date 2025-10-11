@@ -27,12 +27,7 @@ const DashboardContent = () => {
             )}
             <div className="grid grid-cols-1 gap-4">
                 <DailyDashboard warehouse={warehouse} warehouses={warehouses} userRole={userRole} />
-                <CashBankMutation
-                    warehouse={warehouse}
-                    warehouses={warehouses}
-                    userRole={userRole}
-                    notification={(type, message) => setNotification({ type, message })}
-                />
+                <CashBankMutation warehouse={warehouse} warehouses={warehouses} userRole={userRole} notification={setNotification} />
                 <VoucherSalesTable warehouse={warehouse} warehouseName={warehouseName} warehouses={warehouses} userRole={userRole} />
                 <ExpenseTable warehouse={warehouse} warehouses={warehouses} userRole={userRole} />
             </div>

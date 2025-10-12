@@ -2,14 +2,14 @@
 import { useState, useEffect } from "react";
 import axios from "@/libs/axios";
 import Label from "@/components/Label";
-import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
-import { DateTimeNow } from "@/libs/format";
+import { useAuth } from "@/libs/auth";
 
 const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse, notification, fetchJournalsByWarehouse }) => {
-    const { today } = DateTimeNow();
+    const { user } = useAuth({ middleware: "auth" });
+    const userRole = user?.role?.role;
     const [formData, setFormData] = useState({
-        date_issued: today,
+        date_issued: "",
         debt_code: "",
         cred_code: "",
         amount: "",
@@ -21,13 +21,14 @@ const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse
 
     // Update formData when journalById changes
     useEffect(() => {
-        if (journal.debt_code || journal.cred_code) {
+        if (journal?.debt_code || journal?.cred_code) {
             setFormData({
-                debt_code: journal.debt_code || "",
-                cred_code: journal.cred_code || "",
-                amount: journal.amount || "",
+                date_issued: journal?.date_issued,
+                debt_code: journal?.debt_code || "",
+                cred_code: journal?.cred_code || "",
+                amount: journal?.amount || "",
                 fee_amount: 0,
-                description: journal.description || "",
+                description: journal?.description || "",
             });
         }
     }, [journal]);
@@ -36,7 +37,7 @@ const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await axios.put(`/api/journals/${journal.id}`, formData);
+            const response = await axios.put(`/api/journals/${journal?.id}`, formData);
             notification({ type: "success", message: response.data.message });
             fetchJournalsByWarehouse();
             isModalOpen(false);
@@ -48,13 +49,26 @@ const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse
         }
     };
 
-    const branchAccount = cashBank.filter((cashBank) => cashBank.warehouse_id === Number(selectedWarehouse));
-    const hqAccount = cashBank.filter((cashBank) => cashBank.warehouse_id === 1);
+    const branchAccount = cashBank.filter((acc) => {
+        if (["Administrator", "Super Admin"].includes(userRole)) {
+            return true;
+        }
+
+        return acc.warehouse_id === selectedWarehouse;
+    });
+
+    const hqAccount = cashBank.filter((acc) => {
+        if (["Administrator", "Super Admin"].includes(userRole)) {
+            return true;
+        }
+
+        return acc.warehouse_id === 1;
+    });
     return (
         <div className="relative">
-            {journal.id === undefined && <div className="absolute h-full w-full flex items-center justify-center bg-white">Loading data ...</div>}
+            {journal?.id === undefined && <div className="absolute h-full w-full flex items-center justify-center bg-white">Loading data ...</div>}
             <h1 className="text-sm sm:text-xl font-bold mb-4">
-                {journal.trx_type} ({journal.invoice})
+                {journal?.trx_type} ({journal?.invoice})
             </h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 sm:gap-4 items-center">

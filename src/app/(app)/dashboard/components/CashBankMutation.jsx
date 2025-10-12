@@ -6,13 +6,14 @@ import formatDateTime from "@/libs/formatDateTime";
 import Modal from "@/components/Modal";
 import CreateMutationFromHq from "./CreateMutationFromHq";
 import Pagination from "@/components/PaginateList";
-import { FilterIcon, LoaderCircleIcon, MessageCircleWarningIcon, MoveRightIcon, PlusCircleIcon, TrashIcon } from "lucide-react";
+import { FilterIcon, LoaderCircleIcon, MessageCircleWarningIcon, MoveRightIcon, PencilIcon, PlusCircleIcon, TrashIcon } from "lucide-react";
 import CreateJournal from "./CreateJournal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
 import useCashBankBalance from "@/libs/cashBankBalance";
 import { mutate } from "swr";
 import StatusBadge from "@/components/StatusBadge";
+import EditMutationJournal from "../../transaction/components/EditMutationJournal";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -29,6 +30,8 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
     const [journalsByWarehouse, setJournalsByWarehouse] = useState([]);
     const [isModalCreateMutationFromHqOpen, setIsModalCreateMutationFromHqOpen] = useState(false);
     const [isModalCreateJournalOpen, setIsModalCreateJournalOpen] = useState(false);
+    const [isModalEditJournalOpen, setIsModalEditJournalOpen] = useState(false);
+    const [isModalEditMutationJournalOpen, setIsModalEditMutationJournalOpen] = useState(false);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
     const [selectedJournalId, setSelectedJournalId] = useState(null);
     const [isModalDeleteJournalOpen, setIsModalDeleteJournalOpen] = useState(false);
@@ -38,6 +41,8 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
         setIsModalCreateJournalOpen(false);
         setIsModalFilterDataOpen(false);
         setIsModalDeleteJournalOpen(false);
+        setIsModalEditJournalOpen(false);
+        setIsModalEditMutationJournalOpen(false);
     };
 
     const fetchCashBank = async () => {
@@ -88,7 +93,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
     useEffect(() => {
         mutate(`/api/get-cash-bank-balance/${selectedWarehouse}/${endDate}`);
     }, [journalsByWarehouse, endDate]);
-
+    const filterSelectedJournalId = journalsByWarehouse?.data?.find((journal) => journal.id === selectedJournalId);
     const mutationInSum = accountBalance?.data?.chartOfAccounts?.reduce((sum, acc) => sum + mutationInSumById(acc.id), 0);
 
     const mutationOutSum = accountBalance?.data?.chartOfAccounts?.reduce((sum, acc) => sum + mutationOutSumById(acc.id), 0);
@@ -101,7 +106,9 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
         }
         return (
             journal.trx_type === "Mutasi Kas" &&
-            (journal.cred.acc_name.toLowerCase().includes(searchTerm) || journal.debt.acc_name.toLowerCase().includes(searchTerm))
+            (journal.cred.acc_name.toLowerCase().includes(searchTerm) ||
+                journal.debt.acc_name.toLowerCase().includes(searchTerm) ||
+                journal.invoice.toLowerCase().includes(searchTerm))
         );
     });
 
@@ -332,17 +339,29 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                             />
                                         </td>
                                         <td className="text-center">
-                                            <button
-                                                onClick={() => {
-                                                    setSelectedJournalId(journal.id);
-                                                    setIsModalDeleteJournalOpen(true);
-                                                }}
-                                                hidden={userRole !== "Administrator"}
-                                                disabled={!hqCashBankIds.includes(journal.cred_code)}
-                                                className="cursor-pointer disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transition-all group-hover:text-white duration-200"
-                                            >
-                                                <TrashIcon className="size-4" />
-                                            </button>
+                                            <div className="flex items-center gap-2">
+                                                <button
+                                                    className=" hover:scale-125 transtition-all duration-200"
+                                                    hidden={!["Administrator", "Super Admin"].includes(userRole)}
+                                                    onClick={() => {
+                                                        setSelectedJournalId(journal.id);
+                                                        setIsModalEditMutationJournalOpen(true);
+                                                    }}
+                                                >
+                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:dark:text-white group-hover:text-slate-600" />
+                                                </button>
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedJournalId(journal.id);
+                                                        setIsModalDeleteJournalOpen(true);
+                                                    }}
+                                                    hidden={!["Administrator", "Super Admin"].includes(userRole)}
+                                                    disabled={!hqCashBankIds.includes(journal.cred_code)}
+                                                    className="cursor-pointer disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transition-all group-hover:text-white duration-200"
+                                                >
+                                                    <TrashIcon className="size-4" />
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))
@@ -382,6 +401,16 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                         Tidak
                     </button>
                 </div>
+            </Modal>
+            <Modal isOpen={isModalEditMutationJournalOpen} onClose={closeModal} modalTitle="Edit Mutasi Journal" maxWidth="max-w-2xl">
+                <EditMutationJournal
+                    isModalOpen={setIsModalEditMutationJournalOpen}
+                    selectedWarehouse={selectedWarehouse}
+                    journal={filterSelectedJournalId}
+                    cashBank={cashBank}
+                    notification={notification}
+                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                />
             </Modal>
         </>
     );

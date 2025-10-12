@@ -39,11 +39,11 @@ const InvoicePage = ({ params }) => {
                         </div>
                         <div className="flex flex-col w-full mt-2">
                             <h1 className="text-xs text-center">Penambahan Saldo Kas</h1>
-                            <h1 className="text-xs font-bold text-center">{formatNumber(journal?.amount)}</h1>
+                            <h1 className="text-xl font-bold text-center">{formatNumber(journal?.amount)}</h1>
                         </div>
-                        <div className="flex justify-between w-full my-1">
-                            <h1 className="text-xs text-center">Tujuan:</h1>
-                            <h1 className="text-xs font-bold text-center">{journal?.debt?.warehouse?.name}</h1>
+                        <div className="flex flex-col w-full my-1">
+                            <h1 className="text-xs text-center">Tujuan</h1>
+                            <h1 className=" font-bold text-center">{journal?.debt?.warehouse?.name}</h1>
                         </div>
                     </div>
                     <div className="flex justify-between h-[50px] border-y border-dashed border-slate-700 ">
@@ -52,7 +52,7 @@ const InvoicePage = ({ params }) => {
                         <h1 className="text-xs border-r border-dashed border-slate-700 w-full text-center">Penerima</h1>
                     </div>
                     <span className="text-xs">-Pengirim-</span>
-                    <hr className="border-dashed border-slate-700 my-2" />
+                    <hr className="border-dashed border-slate-700 my-4" />
                     <div className="flex justify-between flex-col">
                         <div className="flex flex-col w-full">
                             <h1 className="text-xs font-bold text-center">{journal?.invoice}</h1>
@@ -60,11 +60,11 @@ const InvoicePage = ({ params }) => {
                         </div>
                         <div className="flex flex-col w-full mt-2">
                             <h1 className="text-xs text-center">Penambahan Saldo Kas</h1>
-                            <h1 className="text-xs font-bold text-center">{formatNumber(journal?.amount)}</h1>
+                            <h1 className="text-xl font-bold text-center">{formatNumber(journal?.amount)}</h1>
                         </div>
-                        <div className="flex justify-between w-full my-1">
-                            <h1 className="text-xs text-center">Tujuan:</h1>
-                            <h1 className="text-xs font-bold text-center">{journal?.debt?.warehouse?.name}</h1>
+                        <div className="flex flex-col w-full my-1">
+                            <h1 className="text-xs text-center">Tujuan</h1>
+                            <h1 className=" font-bold text-center">{journal?.debt?.warehouse?.name}</h1>
                         </div>
                     </div>
                     <div className="flex justify-between h-[50px] border-y border-dashed border-slate-700 ">

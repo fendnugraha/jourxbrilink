@@ -7,7 +7,7 @@ import StatusBadge from "@/components/StatusBadge";
 import CreateMutationFromHq from "../dashboard/components/CreateMutationFromHq";
 import Modal from "@/components/Modal";
 import useGetWarehouses from "@/libs/getAllWarehouse";
-import { CheckCheck, PlusCircleIcon, Truck } from "lucide-react";
+import { CheckCheck, PlusCircleIcon, Bike } from "lucide-react";
 import Link from "next/link";
 import Notification from "@/components/Notification";
 import SimplePagination from "@/components/SimplePagination";
@@ -117,7 +117,7 @@ const DeliveryPage = () => {
                                                 />
                                             </div>
                                             <h1 className="text-xs">Tujuan:</h1>
-                                            <h1 className="font-bold text-md mb-2 text-center">{journal.debt?.warehouse?.name}</h1>
+                                            <h1 className="font-bold text-md mb-1 text-right">{journal.debt?.warehouse?.name}</h1>
                                             <h1 className="font-bold text-xl text-white text-right px-2 py-1 border border-slate-300 dark:border-slate-500 rounded-2xl bg-slate-500">
                                                 Rp {formatNumber(journal.amount)}
                                             </h1>
@@ -137,7 +137,7 @@ const DeliveryPage = () => {
                             </div>
                         )}
                     </div>
-                    <div className="card p-4 sm:col-span-3">
+                    <div className="card p-4 sm:col-span-3 h-auto sm:h-[calc(100vh-80px-64px)]">
                         <div className="flex justify-between items-start mb-4">
                             <h1 className="card-title mb-4">Rekap Mutasi Kas</h1>
                             <button
@@ -186,7 +186,7 @@ const DeliveryPage = () => {
                             <table className="table-auto table w-full text-xs">
                                 <thead>
                                     <tr>
-                                        <th className="">Date</th>
+                                        <th className="">Waktu</th>
                                         <th className="">Tujuan</th>
                                         <th className="">Amount</th>
                                         <th className="">Status</th>
@@ -203,7 +203,7 @@ const DeliveryPage = () => {
                                                     {journal.invoice}
                                                 </Link>
                                                 <span className="text-xs flex gap-1">
-                                                    <Truck size={14} className="bg-yellow-500 p-0.5 rounded-full" /> {formatDateTime(journal.date_issued)}
+                                                    <Bike size={14} className="bg-yellow-500 p-0.5 rounded-full" /> {formatDateTime(journal.date_issued)}
                                                     <CheckCheck size={14} className="ml-1 bg-green-500 p-0.5 rounded-full" />{" "}
                                                     {journal.status === 0 ? "-" : formatDateTime(journal.updated_at)}
                                                 </span>

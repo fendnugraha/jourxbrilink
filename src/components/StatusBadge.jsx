@@ -1,4 +1,4 @@
-import { Activity, AlarmClockCheck, Award, Ban, CheckCheck, DotIcon, Truck, X } from "lucide-react";
+import { AlarmClockCheck, Award, Ban, Bike, CheckCheck, ClipboardList, X } from "lucide-react";
 
 const StatusBadge = ({ status, statusText }) => {
     let icon = (
@@ -12,7 +12,7 @@ const StatusBadge = ({ status, statusText }) => {
         case "Pending":
             icon = (
                 <span className="flex items-center gap-1 bg-yellow-500 text-yellow-100 rounded-full p-0.5">
-                    <ClipboardItem size={12} strokeWidth={2} />
+                    <ClipboardList size={12} strokeWidth={2} />
                 </span>
             );
             style = "bg-yellow-100 text-yellow-800";
@@ -20,7 +20,7 @@ const StatusBadge = ({ status, statusText }) => {
         case "In Progress":
             icon = (
                 <span className="flex items-center gap-1 bg-amber-500 text-amber-100 rounded-full p-0.5">
-                    <Truck size={12} strokeWidth={2} />
+                    <Bike size={12} strokeWidth={2} />
                 </span>
             );
             style = "bg-amber-100 text-amber-800";

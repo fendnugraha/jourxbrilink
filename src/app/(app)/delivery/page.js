@@ -137,7 +137,7 @@ const DeliveryPage = () => {
                             </div>
                         )}
                     </div>
-                    <div className="card p-4 sm:col-span-3 h-auto sm:h-[calc(100vh-80px-64px)]">
+                    <div className="card p-4 sm:col-span-3 h-auto sm:h-[calc(100vh-80px-64px)] overflow-auto">
                         <div className="flex justify-between items-start mb-4">
                             <h1 className="card-title mb-4">Rekap Mutasi Kas</h1>
                             <button

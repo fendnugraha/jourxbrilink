@@ -1,13 +1,13 @@
 "use client";
 import axios from "@/libs/axios";
 import MainPage from "../main";
-import { DateTimeNow, formatDate, formatDateTime, formatNumber } from "@/libs/format";
+import { DateTimeNow, formatDate, formatDateTime, formatDurationTime, formatNumber } from "@/libs/format";
 import { use, useCallback, useEffect, useState } from "react";
 import StatusBadge from "@/components/StatusBadge";
 import CreateMutationFromHq from "../dashboard/components/CreateMutationFromHq";
 import Modal from "@/components/Modal";
 import useGetWarehouses from "@/libs/getAllWarehouse";
-import { CheckCheck, PlusCircleIcon, Bike, LoaderIcon } from "lucide-react";
+import { CheckCheck, PlusCircleIcon, Bike, LoaderIcon, MapPin } from "lucide-react";
 import Link from "next/link";
 import Notification from "@/components/Notification";
 import SimplePagination from "@/components/SimplePagination";
@@ -192,7 +192,6 @@ const DeliveryPage = () => {
                                 <thead>
                                     <tr>
                                         <th className="">Waktu</th>
-                                        <th className="">Tujuan</th>
                                         <th className="">Amount</th>
                                         <th className="">Status</th>
                                     </tr>
@@ -203,18 +202,21 @@ const DeliveryPage = () => {
                                             <td className="">
                                                 <Link
                                                     href={`/delivery/invoice/${journal.invoice}`}
-                                                    className="block hover:underline font-bold text-yellow-500 dark:text-yellow-300"
+                                                    className="block hover:underline font-bold text-yellow-500 dark:text-yellow-300 mb-1"
                                                 >
                                                     {journal.invoice}
                                                 </Link>
                                                 <span className="text-xs flex gap-1">
-                                                    <Bike size={14} className="bg-yellow-500 p-0.5 rounded-full" /> {formatDateTime(journal.date_issued)}
+                                                    <MapPin size={14} className="text-red-500 dark:text-red-300" /> {journal.debt?.warehouse?.name}
+                                                    <Bike size={14} className="ml-1 bg-yellow-500 p-0.5 rounded-full" /> {formatDateTime(journal.date_issued)}
                                                     <CheckCheck size={14} className="ml-1 bg-green-500 p-0.5 rounded-full" />{" "}
                                                     {journal.status === 0 ? "-" : formatDateTime(journal.updated_at)}
+                                                    {journal.status === 1 && (
+                                                        <span className="italic">({formatDurationTime(journal.updated_at, journal.date_issued)})</span>
+                                                    )}
                                                 </span>
                                             </td>
-                                            <td className="">{journal.debt?.warehouse?.name}</td>
-                                            <td className="text-right font-bold">{formatNumber(journal.amount)}</td>
+                                            <td className="text-right text-lg font-bold">{formatNumber(journal.amount)}</td>
                                             <td className="text-center">
                                                 <StatusBadge
                                                     status={journal.status === 0 ? "In Progress" : "Completed"}

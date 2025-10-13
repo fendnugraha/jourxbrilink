@@ -5,6 +5,7 @@ import formatDateTime from "@/libs/formatDateTime";
 import { useState } from "react";
 import StatusBadge from "@/components/StatusBadge";
 import { Bike, CheckCheck } from "lucide-react";
+import { formatDurationTime } from "@/libs/format";
 const MutationTable = ({ journalsByWarehouse, user }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
@@ -71,7 +72,6 @@ const MutationTable = ({ journalsByWarehouse, user }) => {
                         <thead>
                             <tr>
                                 <th className="">Waktu</th>
-                                <th className="">Keterangan</th>
                                 <th className="">Jumlah</th>
                                 <th className="">Status</th>
                             </tr>
@@ -84,10 +84,12 @@ const MutationTable = ({ journalsByWarehouse, user }) => {
                                         <span className="text-xs flex gap-1">
                                             <Bike size={14} className="bg-yellow-500 p-0.5 rounded-full" /> {formatDateTime(journal.date_issued)}
                                             <CheckCheck size={14} className="ml-1 bg-green-500 p-0.5 rounded-full" />{" "}
-                                            {journal.status === 0 ? "-" : formatDateTime(journal.updated_at)}
+                                            {journal.status === 0 ? "-" : formatDateTime(journal.updated_at)}{" "}
+                                            {journal.status === 1 && (
+                                                <span className="italic">({formatDurationTime(journal.updated_at, journal.date_issued)})</span>
+                                            )}
                                         </span>
                                     </td>
-                                    <td className="">{journal.description}</td>
                                     <td className="text-right text-lg font-bold">{formatNumber(journal.amount)}</td>
                                     <td className="text-center">
                                         <StatusBadge

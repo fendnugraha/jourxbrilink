@@ -341,7 +341,7 @@ const InspectionPage = () => {
                             Submit
                         </button>
 
-                        <div className="font-semibold text-4xl h-24 flex flex-col justify-evenly items-center border border-slate-200 dark:border-slate-600 rounded-2xl mt-2">
+                        <div className="font-semibold text-4xl h-24 flex flex-col justify-center items-center bg-green-200 dark:bg-green-600 rounded-2xl mt-2">
                             <h1>{calculatePercentage()}</h1>
                             <h1 className="font-normal text-xs">Complete (%)</h1>
                         </div>

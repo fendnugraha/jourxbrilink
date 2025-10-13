@@ -7,7 +7,7 @@ import StatusBadge from "@/components/StatusBadge";
 import CreateMutationFromHq from "../dashboard/components/CreateMutationFromHq";
 import Modal from "@/components/Modal";
 import useGetWarehouses from "@/libs/getAllWarehouse";
-import { CheckCheck, PlusCircleIcon, Bike } from "lucide-react";
+import { CheckCheck, PlusCircleIcon, Bike, LoaderIcon } from "lucide-react";
 import Link from "next/link";
 import Notification from "@/components/Notification";
 import SimplePagination from "@/components/SimplePagination";
@@ -50,7 +50,7 @@ const DeliveryPage = () => {
         mutate(`/api/mutation-journal/${startDate}/${endDate}`);
     }, [startDate, endDate]);
     const updateJournalStatus = async (journalId, status) => {
-        if (!confirm("Konfirmasi pengiriman kas, apakah anda yakin kas sudah diterima?")) return;
+        if (!confirm("Konfirmasi pengiriman kas, pastikan uang sudah diterima dan dihitung?")) return;
         setLoading(true);
         try {
             const response = await axios.put(`/api/update-delivery-status/${journalId}/${status}`);
@@ -102,7 +102,7 @@ const DeliveryPage = () => {
                     <div className="h-auto sm:h-[calc(100vh-80px-64px)] overflow-auto">
                         {journals?.filter((journal) => journal.status === 0).length > 0 ? (
                             journals
-                                .filter((journal) => journal.status === 0)
+                                ?.filter((journal) => journal.status === 0)
                                 .map((journal) => (
                                     <div className="card p-4 mb-4" key={journal.id}>
                                         <div>
@@ -137,7 +137,12 @@ const DeliveryPage = () => {
                             </div>
                         )}
                     </div>
-                    <div className="card p-4 sm:col-span-3 h-auto sm:h-[calc(100vh-80px-64px)] overflow-auto">
+                    <div className="card p-4 sm:col-span-3 h-auto sm:h-[calc(100vh-80px-64px)] overflow-auto relative">
+                        {isValidating && (
+                            <div className="absolute bottom-2 right-2 flex gap-2 items-center italic bg-white dark:bg-slate-500 py-0.5 px-2 rounded-full">
+                                <LoaderIcon size={18} className="animate-spin" /> Updating data ...
+                            </div>
+                        )}
                         <div className="flex justify-between items-start mb-4">
                             <h1 className="card-title mb-4">Rekap Mutasi Kas</h1>
                             <button

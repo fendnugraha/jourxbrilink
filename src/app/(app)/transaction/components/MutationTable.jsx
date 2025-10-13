@@ -4,6 +4,7 @@ import formatNumber from "@/libs/formatNumber";
 import formatDateTime from "@/libs/formatDateTime";
 import { useState } from "react";
 import StatusBadge from "@/components/StatusBadge";
+import { Bike, CheckCheck } from "lucide-react";
 const MutationTable = ({ journalsByWarehouse, user }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
@@ -63,15 +64,15 @@ const MutationTable = ({ journalsByWarehouse, user }) => {
             <div>
                 <h1 className="text-lg font-bold mb-2 px-4">
                     <span className="font-normal text-sm">Total Mutasi:</span> Rp.{" "}
-                    {formatNumber(filteredJournals.reduce((total, journal) => total + journal.amount, 0))}
+                    {formatNumber(filteredJournals?.reduce((total, journal) => total + journal.amount, 0))}
                 </h1>
                 <div className="overflow-x-auto">
                     <table className="table-auto table w-full text-xs">
                         <thead>
                             <tr>
-                                <th className="">Date</th>
-                                <th className="">Description</th>
-                                <th className="">Amount</th>
+                                <th className="">Waktu</th>
+                                <th className="">Keterangan</th>
+                                <th className="">Jumlah</th>
                                 <th className="">Status</th>
                             </tr>
                         </thead>
@@ -80,7 +81,11 @@ const MutationTable = ({ journalsByWarehouse, user }) => {
                                 <tr key={journal.id}>
                                     <td className="">
                                         <span className="block font-bold text-yellow-500 dark:text-yellow-300">{journal.invoice}</span>
-                                        {formatDateTime(journal.created_at)}
+                                        <span className="text-xs flex gap-1">
+                                            <Bike size={14} className="bg-yellow-500 p-0.5 rounded-full" /> {formatDateTime(journal.date_issued)}
+                                            <CheckCheck size={14} className="ml-1 bg-green-500 p-0.5 rounded-full" />{" "}
+                                            {journal.status === 0 ? "-" : formatDateTime(journal.updated_at)}
+                                        </span>
                                     </td>
                                     <td className="">{journal.description}</td>
                                     <td className="text-right text-lg font-bold">{formatNumber(journal.amount)}</td>

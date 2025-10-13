@@ -25,7 +25,7 @@ const PercentageCount = ({ startDate, endDate }) => {
     return (
         <div className="grid grid-cols-4 gap-2 h-fit py-4">
             {trxByWarehouse.map((tx) => (
-                <div key={tx.warehouse_id} className="flex flex-col justify-between text-sm px-4 py-2 bg-slate-500 rounded-xl">
+                <div key={tx.warehouse_id} className="flex flex-col justify-between text-sm px-4 py-2 dark:bg-slate-500 bg-yellow-200 rounded-xl">
                     <h1 className="font-semibold text-nowrap overflow-hidden">{tx.warehouse_name}</h1>
                     <h1 className="font-semibold text-lg">{calculatePercentage(tx.confirmed_count, tx.total)}%</h1>
                 </div>

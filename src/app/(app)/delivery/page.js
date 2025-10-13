@@ -139,12 +139,18 @@ const DeliveryPage = () => {
                     </div>
                     <div className="card p-4 sm:col-span-3 h-auto sm:h-[calc(100vh-80px-64px)] overflow-auto relative">
                         {isValidating && (
-                            <div className="absolute bottom-2 right-2 flex gap-2 items-center italic bg-white dark:bg-slate-500 py-0.5 px-2 rounded-full">
+                            <div className="absolute bottom-2 right-2 flex gap-2 items-center italic bg-white dark:bg-slate-500 py-0.5 px-2 rounded-full text-xs">
                                 <LoaderIcon size={18} className="animate-spin" /> Updating data ...
                             </div>
                         )}
                         <div className="flex justify-between items-start mb-4">
-                            <h1 className="card-title mb-4">Rekap Mutasi Kas</h1>
+                            <h1 className="card-title mb-4">
+                                Rekap Mutasi Kas
+                                <span className="card-subtitle">
+                                    Delivered: {journals?.filter((journal) => journal.status === 0).length} / {journals?.length} Total:{" "}
+                                    {formatNumber(journals?.reduce((acc, journal) => acc + journal.amount, 0))}
+                                </span>
+                            </h1>
                             <button
                                 onClick={() => setIsModalCreateMutationFromHqOpen(true)}
                                 className="bg-indigo-500 text-sm sm:text-xs min-w-36 hover:bg-indigo-600 text-white py-4 sm:py-2 px-2 sm:px-6 rounded-lg"

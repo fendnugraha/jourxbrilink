@@ -147,7 +147,7 @@ export const formatDurationTime = (to, from) => {
     return `${seconds}s`;
 };
 
-export const calculateFee = (amount, chunkSize = 2500000, feePerChunk = 5000, minFee = 3000, minAmount = 10000) => {
+export const calculateFee = (amount, chunkSize = 2500000, feePerChunk = 5000, minFee = 3000, minAmount = 100000) => {
     if (amount < 10000 || amount === "") {
         return "";
     }

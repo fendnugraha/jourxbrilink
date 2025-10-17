@@ -81,13 +81,17 @@ const TransactionTable = ({
                                         >
                                             {formatNumber(journal.amount)}
                                         </span>
-                                        {journal.fee_amount !== 0 && (
+                                        {(journal.fee_amount ?? 0) !== 0 && (
                                             <h1 className="text-xs text-yellow-600 group-hover:text-slate-600 group-hover:dark:text-white block">
-                                                {formatNumber(journal.fee_amount)}{" "}
-                                                {journal.fee_amount >= calculateFee(journal.amount) ? (
-                                                    <span className="text-green-500 font-normal">OK</span>
+                                                {formatNumber(journal.fee_amount ?? 0)}{" "}
+                                                {["Transfer Uang", "Tarik Tunai"].includes(journal.trx_type) ? (
+                                                    journal.fee_amount >= calculateFee(journal.amount ?? 0) ? (
+                                                        <span className="text-green-500 font-normal">OK</span>
+                                                    ) : (
+                                                        <span className="text-red-500 font-normal">Check!!</span>
+                                                    )
                                                 ) : (
-                                                    <span className="text-red-500 font-normal">Check!!</span>
+                                                    ""
                                                 )}
                                             </h1>
                                         )}

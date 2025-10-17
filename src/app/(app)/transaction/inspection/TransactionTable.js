@@ -1,5 +1,5 @@
 import SimplePagination from "@/components/SimplePagination";
-import { formatDateTime, formatNumber } from "@/libs/format";
+import { calculateFee, formatDateTime, formatNumber } from "@/libs/format";
 import { CheckCheck, CheckIcon, Loader2, XIcon } from "lucide-react";
 
 const TransactionTable = ({
@@ -82,9 +82,14 @@ const TransactionTable = ({
                                             {formatNumber(journal.amount)}
                                         </span>
                                         {journal.fee_amount !== 0 && (
-                                            <span className="text-xs text-yellow-600 group-hover:text-slate-600 group-hover:dark:text-white block">
-                                                {formatNumber(journal.fee_amount)}
-                                            </span>
+                                            <h1 className="text-xs text-yellow-600 group-hover:text-slate-600 group-hover:dark:text-white block">
+                                                {formatNumber(journal.fee_amount)}{" "}
+                                                {journal.fee_amount >= calculateFee(journal.amount) ? (
+                                                    <span className="text-green-500 font-normal">OK</span>
+                                                ) : (
+                                                    <span className="text-red-500 font-normal">Check!!</span>
+                                                )}
+                                            </h1>
                                         )}
                                     </td>
                                     <td className="text-center w-12">
@@ -105,9 +110,9 @@ const TransactionTable = ({
                                             } p-2 rounded-full cursor-pointer`}
                                         >
                                             {selectedJournalIds?.includes(journal.id) ? (
-                                                <XIcon size={20} className="text-white" />
+                                                <XIcon size={24} className="text-white" />
                                             ) : (
-                                                <CheckIcon size={20} className="text-white" />
+                                                <CheckIcon size={24} className="text-white" />
                                             )}
                                         </button>
                                     </td>

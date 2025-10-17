@@ -146,3 +146,16 @@ export const formatDurationTime = (to, from) => {
     if (minutes > 0) return `${minutes}m ${seconds}s`;
     return `${seconds}s`;
 };
+
+export const calculateFee = (amount, chunkSize = 2500000, feePerChunk = 5000, minFee = 3000, minAmount = 10000) => {
+    if (amount < 10000 || amount === "") {
+        return "";
+    }
+
+    if (amount < minAmount) {
+        return minFee;
+    }
+
+    const chunkCount = Math.ceil(amount / chunkSize);
+    return chunkCount * feePerChunk;
+};

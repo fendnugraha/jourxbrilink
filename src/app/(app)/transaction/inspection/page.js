@@ -15,6 +15,7 @@ import TransactionTable from "./TransactionTable";
 import { set } from "date-fns";
 import PercentageCount from "./PercentageCount";
 import { Loader2 } from "lucide-react";
+import formatNumber from "@/libs/formatNumber";
 
 const InspectionPage = () => {
     const { today } = DateTimeNow();
@@ -349,6 +350,9 @@ const InspectionPage = () => {
                         </button>
 
                         <div className="font-semibold text-4xl h-24 flex flex-col justify-center items-center bg-green-200 dark:bg-green-600 rounded-2xl mt-2">
+                            <h1 className="font-semibold text-xs">
+                                {formatNumber(totalConfirmedTransaction)} / {formatNumber(totalTransaction)}
+                            </h1>
                             <h1>{calculatePercentage()}</h1>
                             <h1 className="font-normal text-xs">Complete (%)</h1>
                         </div>

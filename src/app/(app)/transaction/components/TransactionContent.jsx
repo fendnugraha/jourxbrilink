@@ -135,8 +135,16 @@ const TransactionContent = () => {
                                 } px-3 py-1 cursor-pointer mr-2 text-sm`}
                             >
                                 Mutasi Kas{" "}
-                                {correction.length > 0 && (
-                                    <span className="bg-red-500 dark:bg-red-600 text-xs rounded-full px-2 py-0.5 ml-2">{correction.length}</span>
+                                {journalsByWarehouse.data?.filter(
+                                    (journal) => Number(journal.debt_code) === warehouseCashId && journal.trx_type === "Mutasi Kas"
+                                ).length > 0 && (
+                                    <span className="bg-green-500 dark:bg-green-600 text-xs rounded-full px-2 py-0.5 ml-2">
+                                        {
+                                            journalsByWarehouse.data?.filter(
+                                                (journal) => Number(journal.debt_code) === warehouseCashId && journal.trx_type === "Mutasi Kas"
+                                            ).length
+                                        }
+                                    </span>
                                 )}
                             </button>
                             <button
@@ -149,7 +157,7 @@ const TransactionContent = () => {
                             >
                                 Koreksi{" "}
                                 {correction.length > 0 && (
-                                    <span className="bg-red-500 dark:bg-red-600 text-xs rounded-full px-2 py-0.5 ml-2">{correction.length}</span>
+                                    <span className="bg-red-500 dark:bg-red-500 text-xs rounded-full px-2 py-0.5 ml-2">{correction.length}</span>
                                 )}
                             </button>
                         </div>

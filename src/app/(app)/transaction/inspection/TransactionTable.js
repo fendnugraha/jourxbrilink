@@ -1,6 +1,6 @@
 import SimplePagination from "@/components/SimplePagination";
 import { formatDateTime, formatNumber } from "@/libs/format";
-import { CheckCheck, CheckIcon, XIcon } from "lucide-react";
+import { CheckCheck, CheckIcon, Loader2, XIcon } from "lucide-react";
 
 const TransactionTable = ({
     filteredJournals,
@@ -12,6 +12,7 @@ const TransactionTable = ({
     selectedJournalIds,
     setSelectedJournalIds,
     cashBank,
+    loading,
 }) => {
     const hqCashBank = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === 1);
     const bankAccount = hqCashBank.filter((cashBank) => Number(cashBank.account_id) === 2);

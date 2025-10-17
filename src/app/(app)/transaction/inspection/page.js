@@ -181,8 +181,8 @@ const InspectionPage = () => {
             <MainPage headerTitle="Inspection">
                 <div className="grid grid-cols-4 gap-4 p-4 sm:p-8">
                     <div className="card p-4 col-span-3 relative">
-                        {loading && (
-                            <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                        {!loading && (
+                            <div className="absolute top-24 left-3 flex items-center gap-2">
                                 <Loader2 size={16} className="animate-spin" /> <span className="italic text-xs">Loading data...</span>
                             </div>
                         )}

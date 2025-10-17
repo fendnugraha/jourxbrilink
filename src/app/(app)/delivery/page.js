@@ -148,8 +148,8 @@ const DeliveryPage = () => {
                             <h1 className="card-title mb-4">
                                 Rekap Mutasi Kas
                                 <span className="card-subtitle">
-                                    Delivered: {journals?.filter((journal) => journal.status === 1).length}/{journals?.length} Total:{" "}
-                                    {formatNumber(journals?.reduce((acc, journal) => acc + journal.amount, 0))}
+                                    Delivered: {filteredJournals?.filter((journal) => journal.status === 1).length}/{filteredJournals?.length} Total:{" "}
+                                    {formatNumber(filteredJournals?.reduce((acc, journal) => acc + journal.amount, 0))}
                                 </span>
                             </h1>
                             <button

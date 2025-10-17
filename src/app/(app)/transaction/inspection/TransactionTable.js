@@ -88,7 +88,7 @@ const TransactionTable = ({
                                                     journal.fee_amount >= calculateFee(journal.amount ?? 0) ? (
                                                         <span className="text-green-500 font-normal">OK</span>
                                                     ) : (
-                                                        <span className="text-red-500 font-normal">Check!!</span>
+                                                        <span className="text-red-500 font-normal animate-pulse">Check!!</span>
                                                     )
                                                 ) : (
                                                     ""

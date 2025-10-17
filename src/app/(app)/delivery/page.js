@@ -72,6 +72,7 @@ const DeliveryPage = () => {
     const [selectedWarehouse, setSelectedWarehouse] = useState("");
 
     const filteredJournals = journals?.filter((journal) => {
+        const matchHqCashAccount = journal.cred?.warehouse_id === 1 && journal.cred?.account_id === 1;
         const matchDeliveryStatus = deliveryStatus ? journal.status === Number(deliveryStatus) : true;
 
         const matchWarehouse = selectedWarehouse ? journal.debt?.warehouse?.id === Number(selectedWarehouse) : true;
@@ -81,7 +82,7 @@ const DeliveryPage = () => {
               (journal.amount ?? "").toString().toLowerCase().includes(searchTerm.toLowerCase())
             : true;
 
-        return matchDeliveryStatus && matchWarehouse && matchSearchTerm;
+        return matchHqCashAccount && matchDeliveryStatus && matchWarehouse && matchSearchTerm;
     });
 
     const totalItems = filteredJournals?.length || 0;

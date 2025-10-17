@@ -194,7 +194,7 @@ const InspectionPage = () => {
                                 Buat Koreksi
                             </button>
                         </div>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="flex gap-2">
                             <div>
                                 <button
                                     onClick={() => setSelectTable("transaksi")}
@@ -227,14 +227,14 @@ const InspectionPage = () => {
                                     Summary
                                 </button>
                             </div>
-                            <div className="flex justify-end gap-2">
+                            <div className="flex justify-end gap-2 flex-1">
                                 <select
                                     onChange={(e) => {
                                         setSelectedAccount(e.target.value);
                                         setCurrentPage(1);
                                     }}
                                     value={selectedAccount}
-                                    className="form-select p-2.5"
+                                    className="form-select !w-fit p-2.5"
                                 >
                                     <option value="">Semua Akun</option>
                                     {branchAccount

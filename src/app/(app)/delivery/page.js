@@ -72,14 +72,14 @@ const DeliveryPage = () => {
     const [selectedWarehouse, setSelectedWarehouse] = useState("");
 
     const filteredJournals = journals?.filter((journal) => {
-        const matchHqCashAccount = journal.cred?.warehouse_id === 1 && journal.cred?.account_id === 1;
-        const matchDeliveryStatus = deliveryStatus ? journal.status === Number(deliveryStatus) : true;
+        const matchHqCashAccount = journal?.cred?.warehouse_id === 1 && journal?.cred?.account_id === 1;
+        const matchDeliveryStatus = deliveryStatus ? journal?.status === Number(deliveryStatus) : true;
 
-        const matchWarehouse = selectedWarehouse ? journal.debt?.warehouse?.id === Number(selectedWarehouse) : true;
+        const matchWarehouse = selectedWarehouse ? journal?.debt?.warehouse?.id === Number(selectedWarehouse) : true;
 
         const matchSearchTerm = searchTerm
-            ? (journal.invoice ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-              (journal.amount ?? "").toString().toLowerCase().includes(searchTerm.toLowerCase())
+            ? (journal?.invoice ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+              (journal?.amount ?? "").toString().toLowerCase().includes(searchTerm.toLowerCase())
             : true;
 
         return matchHqCashAccount && matchDeliveryStatus && matchWarehouse && matchSearchTerm;
@@ -101,29 +101,29 @@ const DeliveryPage = () => {
             <div className="py-4 sm:py-8 px-4 sm:px-12">
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 ">
                     <div className="h-auto sm:h-[calc(100vh-80px-64px)] overflow-auto">
-                        {journals?.filter((journal) => journal.status === 0).length > 0 ? (
+                        {journals?.filter((journal) => journal?.status === 0).length > 0 ? (
                             journals
-                                ?.filter((journal) => journal.status === 0)
+                                ?.filter((journal) => journal?.status === 0)
                                 .map((journal) => (
-                                    <div className="card p-4 mb-4" key={journal.id}>
+                                    <div className="card p-4 mb-4" key={journal?.id}>
                                         <div>
                                             <div className="flex justify-between items-start">
                                                 <h1 className="font-bold text-xs mb-4">
-                                                    {/* <span className="block">{journal.invoice}</span> */}
-                                                    {formatDateTime(journal.date_issued)}
+                                                    {/* <span className="block">{journal?.invoice}</span> */}
+                                                    {formatDateTime(journal?.date_issued)}
                                                 </h1>
                                                 <StatusBadge
-                                                    status={journal.status === 0 ? "In Progress" : "Completed"}
-                                                    statusText={journal.status === 0 ? "On Delivery" : "Delivered"}
+                                                    status={journal?.status === 0 ? "In Progress" : "Completed"}
+                                                    statusText={journal?.status === 0 ? "On Delivery" : "Delivered"}
                                                 />
                                             </div>
                                             <h1 className="text-xs">Tujuan:</h1>
-                                            <h1 className="font-bold text-md mb-1 text-right">{journal.debt?.warehouse?.name}</h1>
+                                            <h1 className="font-bold text-md mb-1 text-right">{journal?.debt?.warehouse?.name}</h1>
                                             <h1 className="font-bold text-xl text-white text-right px-2 py-1 border border-slate-300 dark:border-slate-500 rounded-2xl bg-slate-500">
-                                                Rp {formatNumber(journal.amount)}
+                                                Rp {formatNumber(journal?.amount)}
                                             </h1>
                                             <button
-                                                onClick={() => updateJournalStatus(journal.id, 1)}
+                                                onClick={() => updateJournalStatus(journal?.id, 1)}
                                                 disabled={loading}
                                                 className="px-6 py-2 mt-4 w-full min-w-40 hover:drop-shadow-md bg-green-500 dark:bg-green-600 hover:bg-green-400 dark:hover:bg-green-500 text-white rounded-xl text-sm cursor-pointer transition duration-300 ease-in-out"
                                             >
@@ -148,8 +148,8 @@ const DeliveryPage = () => {
                             <h1 className="card-title mb-4">
                                 Rekap Mutasi Kas
                                 <span className="card-subtitle">
-                                    Delivered: {filteredJournals?.filter((journal) => journal.status === 1).length}/{filteredJournals?.length} Total:{" "}
-                                    {formatNumber(filteredJournals?.reduce((acc, journal) => acc + journal.amount, 0))}
+                                    Delivered: {filteredJournals?.filter((journal) => journal?.status === 1).length}/{filteredJournals?.length} Total:{" "}
+                                    {formatNumber(filteredJournals?.reduce((acc, journal) => acc + journal?.amount, 0))}
                                 </span>
                             </h1>
                             <button
@@ -204,32 +204,32 @@ const DeliveryPage = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {currentItems.map((journal) => (
-                                        <tr key={journal.id}>
+                                    {currentItems?.map((journal) => (
+                                        <tr key={journal?.id}>
                                             <td className="">
                                                 <Link
-                                                    href={`/delivery/invoice/${journal.invoice}`}
+                                                    href={`/delivery/invoice/${journal?.invoice}`}
                                                     className="block hover:underline font-bold text-yellow-500 dark:text-yellow-300 mb-1"
                                                 >
-                                                    {journal.invoice}
+                                                    {journal?.invoice}
                                                 </Link>
                                                 <span className="text-xs flex gap-1">
-                                                    <MapPin size={14} className="text-red-500 dark:text-red-300" /> {journal.debt?.warehouse?.name}
-                                                    <Bike size={14} className="ml-1 bg-yellow-500 p-0.5 rounded-full" /> {formatDateTime(journal.date_issued)}
+                                                    <MapPin size={14} className="text-red-500 dark:text-red-300" /> {journal?.debt?.warehouse?.name}
+                                                    <Bike size={14} className="ml-1 bg-yellow-500 p-0.5 rounded-full" /> {formatDateTime(journal?.date_issued)}
                                                     <CheckCheck size={14} className="ml-1 bg-green-500 p-0.5 rounded-full" />{" "}
-                                                    {journal.status === 0 ? "-" : formatDateTime(journal.updated_at)}
-                                                    {journal.status === 1 && (
-                                                        <span className="italic">({formatDurationTime(journal.updated_at, journal.date_issued)})</span>
+                                                    {journal?.status === 0 ? "-" : formatDateTime(journal?.updated_at)}
+                                                    {journal?.status === 1 && (
+                                                        <span className="italic">({formatDurationTime(journal?.updated_at, journal?.date_issued)})</span>
                                                     )}
                                                 </span>
                                             </td>
-                                            <td className="text-right text-lg font-bold">{formatNumber(journal.amount)}</td>
+                                            <td className="text-right text-lg font-bold">{formatNumber(journal?.amount)}</td>
                                             <td className="text-center">
                                                 <StatusBadge
-                                                    status={journal.status === 0 ? "In Progress" : "Completed"}
-                                                    statusText={journal.status === 0 ? "On Delivery" : "Delivered"}
+                                                    status={journal?.status === 0 ? "In Progress" : "Completed"}
+                                                    statusText={journal?.status === 0 ? "On Delivery" : "Delivered"}
                                                 />
-                                                {/* <span className="block text-xs">({formatDateTime(journal.updated_at)})</span> */}
+                                                {/* <span className="block text-xs">({formatDateTime(journal?.updated_at)})</span> */}
                                             </td>
                                         </tr>
                                     ))}

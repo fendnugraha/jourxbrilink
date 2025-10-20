@@ -14,6 +14,7 @@ import useCashBankBalance from "@/libs/cashBankBalance";
 import { mutate } from "swr";
 import StatusBadge from "@/components/StatusBadge";
 import EditMutationJournal from "../../transaction/components/EditMutationJournal";
+import CreateMutationFromHqMultiple from "./CreateMutationFromHqMultiple";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -99,7 +100,6 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
     const mutationOutSum = accountBalance?.data?.chartOfAccounts?.reduce((sum, acc) => sum + mutationOutSumById(acc.id), 0);
 
     const [searchTerm, setSearchTerm] = useState("");
-    const [checkedAccounts, setCheckedAccounts] = useState(null);
     const filteredJournals = journalsByWarehouse.data?.filter((journal) => {
         if (!searchTerm) {
             return journal.trx_type === "Mutasi Kas";
@@ -134,7 +134,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
     };
 
     const hqCashBankIds = cashBank?.filter((cashBank) => cashBank.warehouse_id === 1)?.map((cashBank) => cashBank.id);
-
+    const [mutationMode, setMutationMode] = useState("single");
     return (
         <>
             <div className="mb-4 card">
@@ -195,14 +195,46 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                             </Modal>
                         </div>
                     </div>
-                    <Modal isOpen={isModalCreateMutationFromHqOpen} onClose={closeModal} maxWidth={"max-w-lg"} modalTitle="Penambahan Saldo Kas & Bank">
-                        <CreateMutationFromHq
-                            cashBank={cashBank}
-                            isModalOpen={setIsModalCreateMutationFromHqOpen}
-                            notification={notification}
-                            fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                            warehouses={warehouses?.data}
-                        />
+                    <Modal isOpen={isModalCreateMutationFromHqOpen} onClose={closeModal} maxWidth={"max-w-2xl"} modalTitle="Penambahan Saldo Kas & Bank">
+                        <div className="flex mb-4 justify-evenly w-full">
+                            <button
+                                onClick={() => {
+                                    setMutationMode("single");
+                                }}
+                                className={`${
+                                    mutationMode === "single" ? "bg-lime-500 text-white scale-105 text-sm" : "bg-slate-400 text-slate-300 text-xs"
+                                } w-full py-1 cursor-pointer hover:text-sm transition-all duration-100 ease-in`}
+                            >
+                                Single
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setMutationMode("multiple");
+                                }}
+                                className={`${
+                                    mutationMode === "multiple" ? "bg-lime-500 text-white scale-105 text-sm" : "bg-slate-400 text-slate-300 text-xs"
+                                } w-full py-1 cursor-pointer hover:text-sm transition-all duration-100 ease-in`}
+                            >
+                                Multiple
+                            </button>
+                        </div>
+                        {mutationMode === "single" ? (
+                            <CreateMutationFromHq
+                                cashBank={cashBank}
+                                isModalOpen={setIsModalCreateMutationFromHqOpen}
+                                notification={notification}
+                                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                                warehouses={warehouses?.data}
+                            />
+                        ) : (
+                            <CreateMutationFromHqMultiple
+                                cashBank={cashBank}
+                                isModalOpen={setIsModalCreateMutationFromHqOpen}
+                                notification={notification}
+                                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                                warehouses={warehouses?.data}
+                            />
+                        )}
                     </Modal>
                     <Modal isOpen={isModalCreateJournalOpen} onClose={closeModal} modalTitle="Jurnal umum">
                         <CreateJournal

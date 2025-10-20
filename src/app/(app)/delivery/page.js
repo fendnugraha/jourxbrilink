@@ -8,14 +8,13 @@ import CreateMutationFromHq from "../dashboard/components/CreateMutationFromHq";
 import Modal from "@/components/Modal";
 import useGetWarehouses from "@/libs/getAllWarehouse";
 import { CheckCheck, PlusCircleIcon, Bike, LoaderIcon, MapPin } from "lucide-react";
-import Link from "next/link";
 import Notification from "@/components/Notification";
-import SimplePagination from "@/components/SimplePagination";
 import { mutate } from "swr";
 import useGetMutationJournal from "@/libs/getMutationJournal";
 import { getUserGeoLocation } from "@/libs/GetUserGeolocation";
 import DeliveryTable from "./DeliveryTable";
 import CourierTable from "./CourierTable";
+import CreateMutationFromHqMultiple from "../dashboard/components/CreateMutationFromHqMultiple";
 
 const DeliveryPage = () => {
     const { today } = DateTimeNow();
@@ -90,6 +89,7 @@ const DeliveryPage = () => {
     });
 
     const [selectTable, setSelectTable] = useState("delivery");
+    const [mutationMode, setMutationMode] = useState("single");
 
     return (
         <MainPage headerTitle="Delivery">
@@ -237,14 +237,46 @@ const DeliveryPage = () => {
                     </div>
                 </div>
             </div>
-            <Modal isOpen={isModalCreateMutationFromHqOpen} onClose={closeModal} maxWidth="max-w-lg" modalTitle="Penambahan Saldo Kas & Bank">
-                <CreateMutationFromHq
-                    cashBank={cashBank}
-                    isModalOpen={setIsModalCreateMutationFromHqOpen}
-                    notification={setNotification}
-                    fetchJournalsByWarehouse={() => mutate(`/api/mutation-journal/${startDate}/${endDate}`)}
-                    warehouses={warehouses?.data}
-                />
+            <Modal isOpen={isModalCreateMutationFromHqOpen} onClose={closeModal} maxWidth="max-w-2xl" modalTitle="Penambahan Saldo Kas & Bank">
+                <div className="flex mb-4 justify-evenly w-full">
+                    <button
+                        onClick={() => {
+                            setMutationMode("single");
+                        }}
+                        className={`${
+                            mutationMode === "single" ? "bg-lime-500 text-white scale-105 text-sm" : "bg-slate-400 text-slate-300 text-xs"
+                        } w-full py-1 cursor-pointer hover:text-sm transition-all duration-100 ease-in`}
+                    >
+                        Single
+                    </button>
+                    <button
+                        onClick={() => {
+                            setMutationMode("multiple");
+                        }}
+                        className={`${
+                            mutationMode === "multiple" ? "bg-lime-500 text-white scale-105 text-sm" : "bg-slate-400 text-slate-300 text-xs"
+                        } w-full py-1 cursor-pointer hover:text-sm transition-all duration-100 ease-in`}
+                    >
+                        Multiple
+                    </button>
+                </div>
+                {mutationMode === "single" ? (
+                    <CreateMutationFromHq
+                        cashBank={cashBank}
+                        isModalOpen={setIsModalCreateMutationFromHqOpen}
+                        notification={setNotification}
+                        fetchJournalsByWarehouse={() => mutate(`/api/mutation-journal/${startDate}/${endDate}`)}
+                        warehouses={warehouses?.data}
+                    />
+                ) : (
+                    <CreateMutationFromHqMultiple
+                        cashBank={cashBank}
+                        isModalOpen={setIsModalCreateMutationFromHqOpen}
+                        notification={setNotification}
+                        fetchJournalsByWarehouse={() => mutate(`/api/mutation-journal/${startDate}/${endDate}`)}
+                        warehouses={warehouses?.data}
+                    />
+                )}
             </Modal>
         </MainPage>
     );

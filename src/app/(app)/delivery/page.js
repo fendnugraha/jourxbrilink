@@ -13,6 +13,7 @@ import Notification from "@/components/Notification";
 import SimplePagination from "@/components/SimplePagination";
 import { mutate } from "swr";
 import useGetMutationJournal from "@/libs/getMutationJournal";
+import { getUserGeoLocation } from "@/libs/GetUserGeolocation";
 
 const DeliveryPage = () => {
     const { today } = DateTimeNow();
@@ -56,6 +57,7 @@ const DeliveryPage = () => {
             const response = await axios.put(`/api/update-delivery-status/${journalId}/${status}`);
             mutate(`/api/mutation-journal/${startDate}/${endDate}`);
             setNotification({ type: "success", message: response.data.message });
+            getUserGeoLocation();
         } catch (error) {
             console.log(error);
             setNotification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
@@ -93,6 +95,7 @@ const DeliveryPage = () => {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
+
     return (
         <MainPage headerTitle="Delivery">
             {notification.message && (
@@ -153,7 +156,9 @@ const DeliveryPage = () => {
                                 </span>
                             </h1>
                             <button
-                                onClick={() => setIsModalCreateMutationFromHqOpen(true)}
+                                onClick={() => {
+                                    setIsModalCreateMutationFromHqOpen(true);
+                                }}
                                 className="bg-indigo-500 text-sm sm:text-xs min-w-36 hover:bg-indigo-600 text-white py-4 sm:py-2 px-2 sm:px-6 rounded-lg"
                             >
                                 Mutasi Saldo <PlusCircleIcon className="size-4 inline" />

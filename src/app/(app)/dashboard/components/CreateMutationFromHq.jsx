@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import axios from "@/libs/axios";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
@@ -24,6 +24,28 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
 
     const hqAccount = cashBank?.filter((cashBank) => Number(cashBank.warehouse_id) === 1);
     const branchAccount = cashBank?.filter((cashBank) => Number(cashBank.warehouse_id) === Number(selectedWarehouseId));
+
+    useEffect(() => {
+        if (!formData.cred_code || !cashBank?.length || selectedWarehouseId === 1) return;
+
+        // Ambil account_group berdasarkan cred_code
+        const selectedCred = cashBank.find((acc) => Number(acc.id) === Number(formData.cred_code));
+
+        if (!selectedCred) return;
+
+        // Cari akun lain dengan group yang sama (misalnya di cabang HQ)
+        const matchingDebt = cashBank.find(
+            (acc) => acc.account_group === selectedCred.account_group && Number(acc.warehouse_id) === Number(selectedWarehouseId)
+        );
+
+        // Update debt_code hanya kalau ditemukan
+        if (matchingDebt) {
+            setFormData((prev) => ({
+                ...prev,
+                debt_code: matchingDebt.id,
+            }));
+        }
+    }, [formData.cred_code, cashBank, selectedWarehouseId]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -86,7 +108,9 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                 <Label>Dari (Pusat)</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <select
-                        onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })}
+                        onChange={(e) => {
+                            setFormData({ ...formData, cred_code: e.target.value });
+                        }}
                         value={formData.cred_code}
                         className="form-select"
                         required

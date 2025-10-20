@@ -115,6 +115,7 @@ const User = () => {
                                 <th className="">Name</th>
                                 <th className="">Role</th>
                                 <th className="">Warehouse</th>
+                                <th className="">Update location</th>
                                 <th className="">Action</th>
                             </tr>
                         </thead>
@@ -139,6 +140,13 @@ const User = () => {
                                         </td>
                                         <td className="text-center">{user.role?.role}</td>
                                         <td className="text-center">{user.role?.warehouse?.name}</td>
+                                        <td className="text-center">
+                                            {user.role?.latitude && user.role?.longitude && (
+                                                <Link target="_blank" href={`https://www.google.com/maps?q=${user.role?.latitude},${user.role?.longitude}`}>
+                                                    Buka di Maps
+                                                </Link>
+                                            )}
+                                        </td>
                                         <td className="text-center">
                                             <span className="flex gap-2 justify-center items-center">
                                                 <button

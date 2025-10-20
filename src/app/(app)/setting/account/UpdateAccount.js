@@ -8,6 +8,7 @@ const UpdateAccount = ({ isModalOpen, findSelectedAccountId, notification, fetch
     const [formData, setFormData] = useState({
         id: findSelectedAccountId?.id,
         acc_name: findSelectedAccountId?.acc_name,
+        account_group: findSelectedAccountId?.account_group,
         st_balance: findSelectedAccountId?.st_balance,
     });
 
@@ -31,6 +32,16 @@ const UpdateAccount = ({ isModalOpen, findSelectedAccountId, notification, fetch
                     type="text"
                     value={formData.acc_name}
                     onChange={(e) => setFormData({ ...formData, acc_name: e.target.value })}
+                    className="form-control"
+                    required
+                />
+            </div>
+            <div className="mb-4">
+                <Label htmlFor="name">Account Group</Label>
+                <input
+                    type="text"
+                    value={formData.account_group}
+                    onChange={(e) => setFormData({ ...formData, account_group: e.target.value })}
                     className="form-control"
                     required
                 />

@@ -8,6 +8,7 @@ const CreateAccount = ({ isModalOpen, notification, fetchAccount, categoryAccoun
     const [formData, setFormData] = useState({
         name: "",
         category_id: "",
+        account_group: "",
         st_balance: 0,
     });
     const [errors, setErrors] = useState([]);
@@ -77,6 +78,23 @@ const CreateAccount = ({ isModalOpen, notification, fetchAccount, categoryAccoun
                     ))}
                 </select>
                 {errors.category_id && <p className="text-red-500 text-xs">{errors.category_id}</p>}
+            </div>
+            <div className="mb-4">
+                <Label htmlFor="name">Account Group</Label>
+                <input
+                    type="text"
+                    id="account_group"
+                    value={formData.account_group}
+                    onChange={(e) =>
+                        setFormData({
+                            ...formData,
+                            account_group: e.target.value,
+                        })
+                    }
+                    className={`form-control ${errors.account_group ? "border-red-500" : ""}`}
+                    placeholder="Contoh: BCA, MANDIRI, BNI (Optional)"
+                />
+                {errors.account_group && <p className="text-red-500 text-xs">{errors.account_group}</p>}
             </div>
             <div className="mb-4">
                 <Label htmlFor="st_balance">Starting Balance</Label>

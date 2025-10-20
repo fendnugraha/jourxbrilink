@@ -14,6 +14,8 @@ import SimplePagination from "@/components/SimplePagination";
 import { mutate } from "swr";
 import useGetMutationJournal from "@/libs/getMutationJournal";
 import { getUserGeoLocation } from "@/libs/GetUserGeolocation";
+import DeliveryTable from "./DeliveryTable";
+import CourierTable from "./CourierTable";
 
 const DeliveryPage = () => {
     const { today } = DateTimeNow();
@@ -87,14 +89,7 @@ const DeliveryPage = () => {
         return matchHqCashAccount && matchDeliveryStatus && matchWarehouse && matchSearchTerm;
     });
 
-    const totalItems = filteredJournals?.length || 0;
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentItems = filteredJournals?.slice(startIndex, startIndex + itemsPerPage);
-
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
-    };
+    const [selectTable, setSelectTable] = useState("delivery");
 
     return (
         <MainPage headerTitle="Delivery">
@@ -199,55 +194,44 @@ const DeliveryPage = () => {
                                 <option value={100}>100</option>
                             </select>
                         </div>
-                        <div className="overflow-x-auto">
-                            <table className="table-auto table w-full text-xs">
-                                <thead>
-                                    <tr>
-                                        <th className="">Waktu</th>
-                                        <th className="">Amount</th>
-                                        <th className="">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {currentItems?.map((journal) => (
-                                        <tr key={journal?.id}>
-                                            <td className="">
-                                                <Link
-                                                    href={`/delivery/invoice/${journal?.invoice}`}
-                                                    className="block hover:underline font-bold text-yellow-500 dark:text-yellow-300 mb-1"
-                                                >
-                                                    {journal?.invoice}
-                                                </Link>
-                                                <span className="text-xs flex gap-1">
-                                                    <MapPin size={14} className="text-red-500 dark:text-red-300" /> {journal?.debt?.warehouse?.name}
-                                                    <Bike size={14} className="ml-1 bg-yellow-500 p-0.5 rounded-full" /> {formatDateTime(journal?.date_issued)}
-                                                    <CheckCheck size={14} className="ml-1 bg-green-500 p-0.5 rounded-full" />{" "}
-                                                    {journal?.status === 0 ? "-" : formatDateTime(journal?.updated_at)}
-                                                    {journal?.status === 1 && (
-                                                        <span className="italic">({formatDurationTime(journal?.updated_at, journal?.date_issued)})</span>
-                                                    )}
-                                                </span>
-                                            </td>
-                                            <td className="text-right text-lg font-bold">{formatNumber(journal?.amount)}</td>
-                                            <td className="text-center">
-                                                <StatusBadge
-                                                    status={journal?.status === 0 ? "In Progress" : "Completed"}
-                                                    statusText={journal?.status === 0 ? "On Delivery" : "Delivered"}
-                                                />
-                                                {/* <span className="block text-xs">({formatDateTime(journal?.updated_at)})</span> */}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                        <div className="flex mt-4">
+                            <button
+                                onClick={() => setSelectTable("delivery")}
+                                className={`${
+                                    selectTable === "delivery"
+                                        ? "bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
+                                        : "bg-slate-100 dark:bg-slate-700"
+                                } px-3 py-1 cursor-pointer mr-2 text-sm min-w-32`}
+                            >
+                                Mutasi Kas
+                            </button>
+                            <button
+                                onClick={() => setSelectTable("courier")}
+                                className={`${
+                                    selectTable === "courier"
+                                        ? "bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
+                                        : "bg-slate-100 dark:bg-slate-700"
+                                } px-3 py-1 cursor-pointer mr-2 text-sm min-w-32`}
+                            >
+                                Kurir
+                            </button>
                         </div>
-                        {totalPages > 1 && (
-                            <SimplePagination
-                                className="w-full px-4"
-                                totalItems={totalItems}
+                        {selectTable === "delivery" && (
+                            <DeliveryTable
+                                filteredJournals={filteredJournals}
+                                loading={isValidating}
                                 itemsPerPage={itemsPerPage}
                                 currentPage={currentPage}
-                                onPageChange={handlePageChange}
+                                setCurrentPage={setCurrentPage}
+                            />
+                        )}
+                        {selectTable === "courier" && (
+                            <CourierTable
+                                filteredJournals={filteredJournals}
+                                loading={isValidating}
+                                itemsPerPage={itemsPerPage}
+                                currentPage={currentPage}
+                                setCurrentPage={setCurrentPage}
                             />
                         )}
                     </div>

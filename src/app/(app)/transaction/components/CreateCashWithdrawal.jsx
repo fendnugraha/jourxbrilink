@@ -67,6 +67,7 @@ const CreateCashWithdrawal = ({
             });
         } finally {
             setLoading(false);
+            setIsFee(false);
         }
     };
 

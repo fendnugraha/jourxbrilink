@@ -111,6 +111,10 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole, sho
     const paginateVoucher = paginateData(filterTrxVoucher, currentPageVoucher, itemsPerPageVoucher);
     const paginateNonVoucher = paginateData(filterTrxNonVoucher, currentPageNonVoucher, itemsPerPageNonVoucher);
 
+    const profit = filterTrxVoucher?.reduce((total, transaction) => {
+        return total + Number((transaction.total_price - transaction.total_cost) * -1);
+    }, 0);
+
     return (
         <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
@@ -168,7 +172,9 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole, sho
                     <div className="flex justify-between items-start px-4 sm:px-6 pt-4">
                         <h1 className="font-bold text-xl text-blue-600 dark:text-blue-300">
                             Voucher & SP{" "}
-                            <span className="text-sm block font-normal">Total: {formatNumber(totalCostVoucher < 0 ? totalCostVoucher * -1 : 0)}</span>
+                            <span className="text-sm block font-normal">
+                                Total: {formatNumber(totalCostVoucher < 0 ? totalCostVoucher * -1 : 0)} Laba: {formatNumber(profit)}
+                            </span>
                         </h1>
                         <select
                             value={itemsPerPageVoucher}

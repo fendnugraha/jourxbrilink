@@ -173,23 +173,57 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                         </div>
                     </div>
                 </div>
-                <div className="col-start-1 sm:col-start-5 bg-violet-200 rounded-2xl sm:rounded-3xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-center items-center">
-                    <h1 className="text-xl sm:text-2xl font-bold text-violet-500">
-                        {isLoading ? (
-                            <LoaderIcon className="animate-spin" />
-                        ) : (
-                            formatNumber(
-                                dailyDashboard?.data?.totalCashDeposit?.total +
-                                    dailyDashboard?.data?.profit +
-                                    dailyDashboard?.data?.totalCash +
-                                    dailyDashboard?.data?.totalVoucher?.total +
-                                    dailyDashboard?.data?.totalAccessories?.total
-                            )
-                        )}
-                    </h1>
-                    <h1 className="text-slate-500">Total Setoran</h1>
+                <div className="col-start-1 sm:col-start-5 row-span-4 rounded-2xl flex flex-col justify-between items-center">
+                    <div className="bg-violet-200 sm:rounded-3xl drop-shadow-xs p-3 flex flex-col justify-center items-center w-full">
+                        <h1 className="text-xl sm:text-2xl font-bold text-violet-500">
+                            {isLoading ? (
+                                <LoaderIcon className="animate-spin" />
+                            ) : (
+                                formatNumber(
+                                    dailyDashboard?.data?.totalCashDeposit?.total +
+                                        dailyDashboard?.data?.profit +
+                                        dailyDashboard?.data?.totalCash +
+                                        dailyDashboard?.data?.totalVoucher?.total +
+                                        dailyDashboard?.data?.totalAccessories?.total
+                                )
+                            )}
+                        </h1>
+                        <h1 className="text-slate-500">Total Setoran</h1>
+                    </div>
+                    <div className="bg-orange-200 rounded-2xl sm:rounded-3xl drop-shadow-xs p-3 flex flex-col justify-center items-center w-full">
+                        {" "}
+                        <h1 className="text-xl sm:text-2xl font-bold text-orange-500">
+                            {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumber(dailyDashboard?.data?.totalFee)}
+                        </h1>
+                        <h1 className="text-slate-500">Fee (Admin)</h1>
+                    </div>
+                    <div className="bg-green-200 rounded-2xl sm:rounded-3xl drop-shadow-xs p-3 flex flex-col justify-center items-center w-full">
+                        {" "}
+                        <h1 className="text-xl sm:text-2xl font-bold text-green-500">
+                            {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumber(dailyDashboard?.data?.totalBankFee)}
+                        </h1>
+                        <h1 className="text-slate-500">Fee/Bunga Bank</h1>
+                    </div>
+                    <div className="w-full bg-red-200 rounded-2xl sm:rounded-3xl drop-shadow-xs p-3 flex flex-col justify-center items-center">
+                        {" "}
+                        <h1 className="text-xl sm:text-2xl font-bold text-red-500">
+                            {isLoading ? (
+                                <LoaderIcon className="animate-spin" />
+                            ) : (
+                                formatNumber(dailyDashboard?.data?.totalExpense < 0 ? dailyDashboard?.data?.totalExpense * -1 : 0)
+                            )}
+                        </h1>
+                        <h1 className="text-slate-500">Biaya</h1>
+                    </div>
+                    <div className="w-full bg-blue-200 rounded-2xl sm:rounded-3xl drop-shadow-xs p-3 flex flex-col justify-center items-center">
+                        {" "}
+                        <h1 className="text-xl sm:text-2xl font-bold text-blue-500">
+                            {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumber(dailyDashboard?.data?.salesCount)}
+                        </h1>
+                        <h1 className="text-slate-500">Transaksi</h1>
+                    </div>
                 </div>
-                <div className="col-start-1 sm:col-start-5 row-start-auto sm:row-start-2 bg-orange-200 rounded-2xl sm:rounded-3xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-center items-center">
+                {/* <div className="col-start-1 sm:col-start-5 row-start-auto sm:row-start-2 bg-orange-200 rounded-2xl sm:rounded-3xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-center items-center">
                     {" "}
                     <h1 className="text-xl sm:text-2xl font-bold text-orange-500">
                         {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumber(dailyDashboard?.data?.totalFee)}
@@ -213,7 +247,8 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                         {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumber(dailyDashboard?.data?.salesCount)}
                     </h1>
                     <h1 className="text-slate-500">Transaksi</h1>
-                </div>
+                </div> */}
+
                 <div className="col-span-1 sm:col-span-4 row-span-1 sm:row-span-2 col-start-1 row-start-auto sm:row-start-3 flex flex-col sm:flex-row gap-4 items-center justify-between w-full h-full">
                     <div className="bg-slate-200 dark:bg-yellow-100 w-full h-full rounded-2xl sm:rounded-3xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-between">
                         <div>

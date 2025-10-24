@@ -119,9 +119,10 @@ const RevenueReport = () => {
                             <th className="">Transfer</th>
                             <th className="">Tarik Tunai</th>
                             <th className="">Voucher</th>
-                            <th className="">Accessories</th>
+                            <th className="">Acc.</th>
                             <th className="">Deposit</th>
                             <th className="">Trx</th>
+                            <th className="">Bank Fee</th>
                             <th className="">Biaya</th>
                             <th className="">Laba Bersih</th>
                             <th className="">Setoran Kas</th>
@@ -146,9 +147,10 @@ const RevenueReport = () => {
                                     <td className="text-end">{formatNumber(item.accessories)}</td>
                                     <td className="text-end">{formatNumber(item.deposit)}</td>
                                     <td className="text-end">{formatNumber(item.trx)}</td>
+                                    <td className="text-end">{formatNumber(item.bank_fee)}</td>
                                     <td className="text-end font-bold text-red-500 dark:text-red-400">{formatNumber(item.expense)}</td>
                                     <td className="text-end font-bold text-green-500 dark:text-green-400">{formatNumber(item.fee)}</td>
-                                    <td className="text-end font-bold text-green-500 dark:text-green-400">{formatNumber(item.cash)}</td>
+                                    <td className="text-end">{formatNumber(item.cash)}</td>
                                 </tr>
                             ))
                         )}

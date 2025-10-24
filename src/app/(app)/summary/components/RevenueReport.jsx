@@ -169,6 +169,7 @@ const RevenueReport = () => {
                                 <th className="font-bold">{formatNumber(sumByTrxType("accessories"))}</th>
                                 <th className="font-bold">{formatNumber(sumByTrxType("deposit"))}</th>
                                 <th className="font-bold">{formatNumber(sumByTrxType("trx"))}</th>
+                                <th className="font-bold">{formatNumber(sumByTrxType("bank_fee"))}</th>
                                 <th className="font-bold text-red-500">{formatNumber(sumByTrxType("expense"))}</th>
                                 <th className="font-bold text-green-500">{formatNumber(sumByTrxType("fee"))}</th>
                                 <th className="font-bold text-green-500">{formatNumber(sumByTrxType("cash"))}</th>

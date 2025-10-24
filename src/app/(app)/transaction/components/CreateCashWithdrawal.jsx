@@ -77,7 +77,12 @@ const CreateCashWithdrawal = ({
             fee_amount: isFee ? prev.amount : feeAdminAuto ? calculateFee(prev.amount) : prev.fee_amount,
             trx_type: isFee ? "Bank Fee" : "Tarik Tunai",
         }));
-    }, [isFee, formData.amount]);
+    }, [isFee, feeAdminAuto]);
+
+    useEffect(() => {
+        setIsFee(formData.amount && formData.amount === Number(formData.fee_amount));
+    }, [formData.amount, formData.fee_amount]);
+
     return (
         <>
             <form onSubmit={handleSubmit}>
@@ -129,14 +134,14 @@ const CreateCashWithdrawal = ({
                             <div>
                                 <input
                                     type="checkbox"
-                                    id="feeAdminAuto"
+                                    id="isFee"
                                     className="mt-2 mr-2"
                                     checked={isFee}
                                     onChange={(e) => {
                                         setIsFee(e.target.checked);
                                     }}
                                 />
-                                <label htmlFor="feeAdminAuto" className={`text-sm `}>
+                                <label htmlFor="isFee" className={`text-sm `}>
                                     Fee/Bunga Bank
                                 </label>
                             </div>
@@ -152,8 +157,23 @@ const CreateCashWithdrawal = ({
                 </div>
                 <div className="mb-2 sm:mb-4 grid grid-cols-1 sm:grid-cols-2 gap-2 items-end">
                     <div>
-                        <Label>
-                            Fee (Admin) <span className="text-green-500 font-bold">{feeAdminAuto ? "(Auto)" : ""}</span>
+                        <Label className={"flex gap-2"}>
+                            Fee (Admin){" "}
+                            <button
+                                onClick={() => setPersonalSetting((prev) => ({ ...prev, feeAdminAuto: !prev.feeAdminAuto }))}
+                                type="button"
+                                className={`w-8 h-4 rounded-full bg-slate-600 text-white flex items-center transition-all duration-300 ease-in-out ${
+                                    !feeAdminAuto ? "justify-start" : "justify-end"
+                                }`}
+                            >
+                                <div
+                                    className={`w-4 h-4 rounded-full transition-all duration-300 ease-in-out ${
+                                        !feeAdminAuto ? "bg-slate-400" : "bg-green-500"
+                                    }`}
+                                >
+                                    {feeAdminAuto ? "A" : "M"}
+                                </div>
+                            </button>
                         </Label>
                         <div className="">
                             <input
@@ -168,7 +188,7 @@ const CreateCashWithdrawal = ({
                             {errors.fee_amount && <span className="text-red-500 text-xs">{errors.fee_amount}</span>}
                         </div>
                     </div>
-                    {formData.amount && (
+                    {formData.amount && !feeAdminAuto && (
                         <div>
                             <h1
                                 type="button"
@@ -179,6 +199,18 @@ const CreateCashWithdrawal = ({
                             </h1>
                         </div>
                     )}
+                    {/* <div>
+                        <input
+                            type="checkbox"
+                            id="feeAdminAuto"
+                            className="mt-2 mr-2"
+                            checked={feeAdminAuto}
+                            onChange={(e) => setPersonalSetting((prev) => ({ ...prev, feeAdminAuto: e.target.checked }))}
+                        />
+                        <label htmlFor="feeAdminAuto" className={`text-sm ${feeAdminAuto ? "text-green-600" : ""}`}>
+                            Fee Admin Auto
+                        </label>
+                    </div> */}
                 </div>
                 <div className="mb-2 sm:mb-4">
                     <Label>Keterangan</Label>
@@ -192,16 +224,6 @@ const CreateCashWithdrawal = ({
                         />
                         {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                     </div>
-                    <input
-                        type="checkbox"
-                        id="feeAdminAuto"
-                        className="mt-2 mr-2"
-                        checked={feeAdminAuto}
-                        onChange={(e) => setPersonalSetting((prev) => ({ ...prev, feeAdminAuto: e.target.checked }))}
-                    />
-                    <label htmlFor="feeAdminAuto" className={`text-sm ${feeAdminAuto ? "text-green-600" : ""}`}>
-                        Fee Admin Auto
-                    </label>
                 </div>
 
                 <div className="flex justify-end gap-2">

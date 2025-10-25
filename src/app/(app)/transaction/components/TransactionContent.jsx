@@ -102,11 +102,11 @@ const TransactionContent = () => {
     }, [fetchCorrection]);
     return (
         <>
+            {notification.message && (
+                <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
+            )}
             <div className="py-4 sm:py-8 px-4 sm:px-12 mb-28 sm:mb-0">
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                    {notification.message && (
-                        <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
-                    )}
                     <div className="card py-4 col-span-1 sm:col-span-3 order-2 sm:order-1 drop-shadow-sm h-fit">
                         <TransactionMenu
                             user={user}

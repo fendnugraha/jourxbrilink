@@ -40,7 +40,10 @@ const TransactionTable = ({
                     <tbody>
                         {currentItems?.length > 0 ? (
                             currentItems.map((journal) => (
-                                <tr key={journal.id}>
+                                <tr
+                                    key={journal.id}
+                                    className={`${selectedJournalIds.includes(journal.id) ? "!outline-lime-400 outline-2 outline-dashed" : ""}`}
+                                >
                                     <td>
                                         <span className="text-xs text-blue-700 dark:text-blue-300 group-hover:dark:text-blue-200 group-hover:text-blue-400 block">
                                             #{journal.id} <span className="font-bold hidden sm:inline">{journal.invoice}</span>{" "}

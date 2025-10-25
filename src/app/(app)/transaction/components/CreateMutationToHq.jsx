@@ -23,6 +23,24 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
 
     const hqAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === 1);
     const branchAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === Number(user.role?.warehouse_id));
+    useEffect(() => {
+        if (!formData.cred_code || !cashBank?.length) return;
+        const isCash = cashBank.find((acc) => Number(acc.id) === Number(formData.cred_code)).account_id === 1;
+
+        if (isCash) return;
+        const selectedCred = cashBank.find((acc) => Number(acc.id) === Number(formData.cred_code));
+
+        if (!selectedCred) return;
+
+        const matchingDebt = cashBank.find((acc) => acc.account_group === selectedCred.account_group);
+
+        if (matchingDebt) {
+            setFormData((prev) => ({
+                ...prev,
+                debt_code: matchingDebt.id,
+            }));
+        }
+    }, [formData.cred_code, cashBank]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

@@ -8,7 +8,7 @@ const UpdateAccount = ({ isModalOpen, findSelectedAccountId, notification, fetch
     const [formData, setFormData] = useState({
         id: findSelectedAccountId?.id,
         acc_name: findSelectedAccountId?.acc_name,
-        account_group: findSelectedAccountId?.account_group,
+        account_group: findSelectedAccountId?.account_group || "",
         st_balance: findSelectedAccountId?.st_balance,
     });
 

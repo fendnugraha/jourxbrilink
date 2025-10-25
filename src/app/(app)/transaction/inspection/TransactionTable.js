@@ -40,10 +40,7 @@ const TransactionTable = ({
                     <tbody>
                         {currentItems?.length > 0 ? (
                             currentItems.map((journal) => (
-                                <tr
-                                    key={journal.id}
-                                    className={`${selectedJournalIds.includes(journal.id) ? "!outline-lime-400 outline-2 outline-dashed" : ""}`}
-                                >
+                                <tr key={journal.id} className={`${selectedJournalIds.includes(journal.id) ? "!border-e-4 !border-lime-400" : ""}`}>
                                     <td>
                                         <span className="text-xs text-blue-700 dark:text-blue-300 group-hover:dark:text-blue-200 group-hover:text-blue-400 block">
                                             #{journal.id} <span className="font-bold hidden sm:inline">{journal.invoice}</span>{" "}
@@ -89,9 +86,9 @@ const TransactionTable = ({
                                                 {formatNumber(journal.fee_amount ?? 0)}{" "}
                                                 {["Transfer Uang", "Tarik Tunai"].includes(journal.trx_type) ? (
                                                     journal.fee_amount >= calculateFee(journal.amount ?? 0) ? (
-                                                        <span className="text-green-500 font-normal">OK</span>
+                                                        <span className="text-green-500 dark:text-green-400 font-normal">OK</span>
                                                     ) : (
-                                                        <span className="text-red-500 font-normal animate-pulse">Check!!</span>
+                                                        <span className="text-red-500 dark:text-red-400 font-normal animate-pulse">Check!!</span>
                                                     )
                                                 ) : (
                                                     ""

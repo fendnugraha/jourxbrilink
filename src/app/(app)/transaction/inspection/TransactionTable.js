@@ -25,12 +25,24 @@ const TransactionTable = ({
         setCurrentPage(page);
     };
 
-    const totalDebt = (filteredJournals || []).reduce((total, journal) => total + (journal.debt_code === selectedAccount ? journal.amount : 0), 0);
+    const totalDebt = (filteredJournals || []).reduce(
+        (total, journal) => total + (Number(journal.debt_code) === Number(selectedAccount) ? journal.amount : 0),
+        0
+    );
 
-    const totalCredit = (filteredJournals || []).reduce((total, journal) => total + (journal.cred_code === selectedAccount ? journal.amount : 0), 0);
+    const totalCredit = (filteredJournals || []).reduce(
+        (total, journal) => total + (Number(journal.credit_code) === Number(selectedAccount) ? journal.amount : 0),
+        0
+    );
+
     return (
         <>
-            <h1 className="text-sm text-slate-500 font-bold">Balance Check: {totalDebt + totalCredit === 0 ? "OK" : formatNumber(totalDebt + totalCredit)}</h1>
+            <h1 className="text-xs text-slate-500">
+                Balance Check:{" "}
+                <span className={`font-bold ${totalDebt - totalCredit === 0 ? "text-green-600 dark:text-green-300" : "text-red-600 dark:text-red-300"}`}>
+                    {totalDebt - totalCredit === 0 ? "OK" : formatNumber(totalDebt - totalCredit)}
+                </span>
+            </h1>
             <div className="overflow-x-auto">
                 <table className="table w-full text-xs">
                     <thead>

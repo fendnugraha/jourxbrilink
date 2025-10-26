@@ -31,7 +31,7 @@ const TransactionTable = ({
     );
 
     const totalCredit = (filteredJournals || []).reduce(
-        (total, journal) => total + (Number(journal.credit_code) === Number(selectedAccount) ? journal.amount : 0),
+        (total, journal) => total + (Number(journal.cred_code) === Number(selectedAccount) ? journal.amount : 0),
         0
     );
 

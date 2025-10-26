@@ -3,11 +3,12 @@
 import { useCallback, useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
-import { DownloadIcon, FilterIcon, RefreshCcwIcon } from "lucide-react";
+import { DownloadIcon, FilterIcon, RefreshCcwIcon, Star } from "lucide-react";
 import Modal from "@/components/Modal";
 import Input from "@/components/Input";
 import Label from "@/components/Label";
 import Link from "next/link";
+import { getStorePerformanceRating } from "@/libs/GetStorePerformanceRating";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -76,6 +77,9 @@ const WarehouseBalance = () => {
                     <thead className="">
                         <tr className="">
                             <th className="text-center">Cabang (Konter)</th>
+                            <th className="text-center">
+                                <Star size={16} fill="yellow" />
+                            </th>
                             <th className="text-center">Kas Tunai</th>
                             <th className="text-center">Saldo Bank</th>
                             <th className="text-center">Jumlah</th>
@@ -94,6 +98,7 @@ const WarehouseBalance = () => {
                                             {i + 1}. {w.name}
                                         </Link>
                                     </td>
+                                    <td className="text-center">{w.id > 1 && getStorePerformanceRating(w.average_profit)}</td>
                                     <td className="text-end">{formatNumber(w.cash)}</td>
                                     <td className="text-end">{formatNumber(w.bank)}</td>
                                     <td className="text-end font-bold">{formatNumber(w.cash + w.bank)}</td>
@@ -104,11 +109,12 @@ const WarehouseBalance = () => {
                     <tfoot>
                         {loading ? (
                             <tr>
-                                <td colSpan={4}>Loading...</td>
+                                <td colSpan={5}>Loading...</td>
                             </tr>
                         ) : (
                             <tr>
                                 <th>Total</th>
+                                <th></th>
                                 <th>{formatNumber(warehouseBalance.totalCash)}</th>
                                 <th>{formatNumber(warehouseBalance.totalBank)}</th>
                                 <th>{formatNumber(warehouseBalance.totalCash + warehouseBalance.totalBank)}</th>

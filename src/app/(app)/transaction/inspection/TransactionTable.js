@@ -1,6 +1,6 @@
 import SimplePagination from "@/components/SimplePagination";
 import { calculateFee, formatDateTime, formatNumber } from "@/libs/format";
-import { CheckCheck, CheckIcon, Loader2, XIcon } from "lucide-react";
+import { CheckCheck, CheckIcon, Loader2, Scale, XIcon } from "lucide-react";
 
 const TransactionTable = ({
     filteredJournals,
@@ -24,8 +24,13 @@ const TransactionTable = ({
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
+
+    const totalDebt = (filteredJournals || []).reduce((total, journal) => total + (journal.debt_code === selectedAccount ? journal.amount : 0), 0);
+
+    const totalCredit = (filteredJournals || []).reduce((total, journal) => total + (journal.cred_code === selectedAccount ? journal.amount : 0), 0);
     return (
         <>
+            <h1 className="text-sm text-slate-500 font-bold">Balance Check: {totalDebt + totalCredit === 0 ? "OK" : formatNumber(totalDebt + totalCredit)}</h1>
             <div className="overflow-x-auto">
                 <table className="table w-full text-xs">
                     <thead>
@@ -40,7 +45,7 @@ const TransactionTable = ({
                     <tbody>
                         {currentItems?.length > 0 ? (
                             currentItems.map((journal) => (
-                                <tr key={journal.id} className={`${selectedJournalIds.includes(journal.id) ? "!border-e-4 !border-lime-400" : ""}`}>
+                                <tr key={journal.id} className={`${selectedJournalIds.includes(journal.id) ? "!bg-green-200 dark:!bg-green-800" : ""}`}>
                                     <td>
                                         <span className="text-xs text-blue-700 dark:text-blue-300 group-hover:dark:text-blue-200 group-hover:text-blue-400 block">
                                             #{journal.id} <span className="font-bold hidden sm:inline">{journal.invoice}</span>{" "}

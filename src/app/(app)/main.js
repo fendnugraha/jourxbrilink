@@ -1,16 +1,5 @@
 "use client";
-import {
-    ArrowLeftRightIcon,
-    ChartAreaIcon,
-    CirclePowerIcon,
-    DollarSignIcon,
-    GemIcon,
-    LayoutDashboardIcon,
-    LoaderIcon,
-    MenuIcon,
-    StoreIcon,
-    XIcon,
-} from "lucide-react";
+import { CirclePowerIcon, GemIcon, LoaderIcon, MenuIcon, Star, XIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import ResponsiveNavLink, { ResponsiveNavButton } from "@/components/ResponsiveNavLink";
 import { usePathname } from "next/navigation";
@@ -18,16 +7,17 @@ import { useAuth } from "@/libs/auth";
 import useGetProfit from "@/components/RankByProfit";
 import formatNumber from "@/libs/formatNumber";
 import { mutate } from "swr";
-import useLiveClock from "@/components/useLiveClock";
+// import useLiveClock from "@/components/useLiveClock";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import { navMenu } from "../constants/NavMenu";
+import { getStorePerformanceRating } from "@/libs/GetStorePerformanceRating";
 
 const MainPage = ({ children, headerTitle }) => {
     const { user, logout } = useAuth({ middleware: "auth" });
     const [isOpen, setIsOpen] = useState(false);
     const { profit, loading: profitLoading, error } = useGetProfit();
 
-    const { dayName, date, time, raw } = useLiveClock();
+    // const { dayName, date, time, raw } = useLiveClock();
 
     const pathName = usePathname();
     const drawerReff = useRef();
@@ -35,8 +25,9 @@ const MainPage = ({ children, headerTitle }) => {
 
     const userWarehouseId = user?.role?.warehouse_id;
     const userWarehouseName = user?.role?.warehouse?.name;
-    const WarehouseRank = profit?.data?.findIndex((item) => Number(item.warehouse_id) === Number(userWarehouseId)) + 1 || 0;
-    const WarehouseRankProfit = profit?.data?.find((item) => Number(item.warehouse_id) === Number(userWarehouseId))?.total || 0;
+    const WarehouseRank = profit?.data?.revenue?.findIndex((item) => Number(item.warehouse_id) === Number(userWarehouseId)) + 1 || 0;
+    const WarehouseRankProfit = profit?.data?.revenue?.find((item) => Number(item.warehouse_id) === Number(userWarehouseId))?.total || 0;
+    const WarehouseMonthlyProfit = profit?.data?.totalProfitMonthly?.find((item) => Number(item.warehouse_id) === Number(userWarehouseId))?.average_profit || 0;
     const toOrdinal = (number) => {
         const suffixes = ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"];
         const mod = number % 100;
@@ -61,9 +52,7 @@ const MainPage = ({ children, headerTitle }) => {
             <header className="w-full h-20 flex items-center justify-between px-4 sm:px-12 py-2">
                 <h1 className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-white">
                     {headerTitle}
-                    <span className="text-xs font-normal p-0 sm:block hidden">
-                        {userWarehouseName} | {dayName}, {date} {time}
-                    </span>
+                    <span className="text-xs font-normal p-0 sm:block hidden">{userWarehouseName}</span>
                 </h1>
                 <div className="flex items-center justify-end sm:gap-4">
                     {WarehouseRank > 0 && (
@@ -80,7 +69,11 @@ const MainPage = ({ children, headerTitle }) => {
                                     </span>
                                 </button>{" "}
                                 <h1 className="hidden text-sm uppercase sm:inline">
-                                    {userWarehouseName}
+                                    {userWarehouseName}{" "}
+                                    <span className="text-xs inline-flex items-center">
+                                        <Star size={10} fill="yellow" className="inline" />
+                                        {!profitLoading && getStorePerformanceRating(WarehouseMonthlyProfit)}
+                                    </span>
                                     <span className="hidden text-end font-light text-xs text-slate-500 dark:text-yellow-400 sm:block ">
                                         {" "}
                                         {profitLoading ? <LoaderIcon className="w-3 h-3 animate-spin inline" /> : <GemIcon className="w-3 h-3 inline" />}{" "}

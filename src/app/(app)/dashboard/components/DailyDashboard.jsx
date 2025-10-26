@@ -3,12 +3,13 @@ import formatNumber from "@/libs/formatNumber";
 import axios from "@/libs/axios";
 import useSWR, { mutate } from "swr";
 import { useState, useEffect } from "react";
-import { CableIcon, FilterIcon, GemIcon, LoaderIcon, RefreshCcwIcon, SmartphoneIcon, TicketIcon } from "lucide-react";
+import { CableIcon, FilterIcon, GemIcon, LoaderIcon, RefreshCcwIcon, SmartphoneIcon, Star, TicketIcon } from "lucide-react";
 import Modal from "@/components/Modal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
 import { useGetDailyDashboard } from "@/libs/getDailyDashboard";
 import { formatNumberToK } from "@/libs/formatNumberToK";
+import { getStorePerformanceRating } from "@/libs/GetStorePerformanceRating";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -52,6 +53,11 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                     {selectedWarehouse === "all"
                         ? "Semua Cabang"
                         : warehouses?.data?.find((warehouse) => Number(warehouse.id) === Number(selectedWarehouse))?.name}
+                    {!isLoading && (
+                        <span className="font-normal ml-2 inline-flex items-center">
+                            <Star size={14} fill="yellow" className="inline" /> {getStorePerformanceRating(dailyDashboard?.data?.averageProfit)}
+                        </span>
+                    )}
                     <span className="text-xs block font-normal text-nowrap">
                         Periode: {startDate} s/d {endDate}
                     </span>

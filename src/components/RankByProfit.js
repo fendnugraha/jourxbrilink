@@ -10,7 +10,6 @@ const useGetProfit = () => {
     } = useSWR(`/api/get-rank-by-profit`, fetcher, {
         revalidateOnFocus: true, // Refetch data when the window is focused
         dedupingInterval: 60000, // Avoid duplicate requests for the same data within 1 minute
-        refreshInterval: 30000,
         fallbackData: [], // Optional: you can specify default data here while it's loading
     });
 

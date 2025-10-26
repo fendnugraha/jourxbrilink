@@ -72,7 +72,11 @@ const MainPage = ({ children, headerTitle }) => {
                                     {userWarehouseName}{" "}
                                     <span className="text-xs inline-flex items-center">
                                         <Star size={10} fill="yellow" className="inline" />
-                                        {!profitLoading && getStorePerformanceRating(WarehouseMonthlyProfit)}
+                                        {!profitLoading ? (
+                                            getStorePerformanceRating(WarehouseMonthlyProfit)
+                                        ) : (
+                                            <LoaderIcon className="w-3 h-3 animate-spin inline" />
+                                        )}
                                     </span>
                                     <span className="hidden text-end font-light text-xs text-slate-500 dark:text-yellow-400 sm:block ">
                                         {" "}

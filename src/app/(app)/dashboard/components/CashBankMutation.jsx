@@ -6,7 +6,17 @@ import formatDateTime from "@/libs/formatDateTime";
 import Modal from "@/components/Modal";
 import CreateMutationFromHq from "./CreateMutationFromHq";
 import Pagination from "@/components/PaginateList";
-import { FilterIcon, LoaderCircleIcon, MessageCircleWarningIcon, MoveRightIcon, PencilIcon, PlusCircleIcon, TrashIcon } from "lucide-react";
+import {
+    FilterIcon,
+    LoaderCircleIcon,
+    MessageCircleWarningIcon,
+    MoveRightIcon,
+    PencilIcon,
+    PlusCircleIcon,
+    RefreshCcw,
+    RefreshCcwIcon,
+    TrashIcon,
+} from "lucide-react";
 import CreateJournal from "./CreateJournal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
@@ -59,7 +69,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
         fetchCashBank();
     }, []);
 
-    const { accountBalance, error: accountBalanceError, loading: isValidating } = useCashBankBalance(selectedWarehouse, endDate);
+    const { accountBalance, error: accountBalanceError, loading: isValidating, mutateCashBankBalance } = useCashBankBalance(selectedWarehouse, endDate);
 
     const fetchJournalsByWarehouse = async () => {
         setLoading(true);
@@ -175,6 +185,9 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                     ))}
                                 </select>
                             )}
+                            <button onClick={() => mutateCashBankBalance()} className="small-button">
+                                <RefreshCcwIcon className="size-4" />
+                            </button>
                             <button onClick={() => setIsModalFilterDataOpen(true)} className="small-button">
                                 <FilterIcon className="size-4" />
                             </button>

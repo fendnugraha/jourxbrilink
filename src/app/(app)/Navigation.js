@@ -20,7 +20,7 @@ const Navigation = ({ user }) => {
                 <button className="flex items-center cursor-pointer text-blue-800 dark:text-white">
                     {/* Tombol Toggle */}
                     <span
-                        className="w-16 h-20 flex items-center justify-center flex-shrink-0 text-slate-700 dark:text-white"
+                        className="w-16 h-20 flex items-center justify-center shrink-0 text-slate-700 dark:text-white"
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                     >
                         <Menu size={32} />
@@ -48,7 +48,7 @@ const Navigation = ({ user }) => {
                                 .map((item, index) => (
                                     <li key={index}>
                                         <NavLink href={item.href} active={pathName.startsWith(item.path)}>
-                                            <span className="w-16 h-14 flex items-center justify-center flex-shrink-0">
+                                            <span className="w-16 h-14 flex items-center justify-center shrink-0">
                                                 <item.icon size={20} className="" strokeWidth={`${pathName.startsWith(item.path) ? 2 : 1}`} />
                                             </span>
                                             <span
@@ -67,7 +67,7 @@ const Navigation = ({ user }) => {
 
                 {/* Footer */}
                 {/* <NavLink href="/user/profile" active={pathName.startsWith("/user/profile")}>
-                        <span className="w-16 h-14 flex items-center justify-center flex-shrink-0">
+                        <span className="w-16 h-14 flex items-center justify-center shrink-0">
                             <UserIcon size={20} className="" />
                         </span>
                         <span
@@ -80,7 +80,7 @@ const Navigation = ({ user }) => {
                     </NavLink> */}
                 <button onClick={logout} className="flex items-center cursor-pointer">
                     {/* Tombol Toggle */}
-                    <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-red-500 hover:text-red-400 dark:text-yellow-300 dark:hover:text-yellow-200">
+                    <span className="w-16 h-14 flex items-center justify-center shrink-0 text-red-500 hover:text-red-400 dark:text-yellow-300 dark:hover:text-yellow-200">
                         <PowerIcon size={24} strokeWidth={3} />
                     </span>
 

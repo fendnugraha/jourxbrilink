@@ -15,6 +15,7 @@ import { getUserGeoLocation } from "@/libs/GetUserGeolocation";
 import DeliveryTable from "./DeliveryTable";
 import CourierTable from "./CourierTable";
 import CreateMutationFromHqMultiple from "../dashboard/components/CreateMutationFromHqMultiple";
+import useCashBankBalance from "@/libs/cashBankBalance";
 
 const DeliveryPage = () => {
     const { today } = DateTimeNow();
@@ -90,6 +91,13 @@ const DeliveryPage = () => {
 
     const [selectTable, setSelectTable] = useState("delivery");
     const [mutationMode, setMutationMode] = useState("single");
+
+    const {
+        accountBalance,
+        error: accountBalanceError,
+        loading: accountBalanceLoading,
+        mutateCashBankBalance,
+    } = useCashBankBalance(selectedWarehouse, endDate);
 
     return (
         <MainPage headerTitle="Delivery">
@@ -267,6 +275,7 @@ const DeliveryPage = () => {
                         notification={setNotification}
                         fetchJournalsByWarehouse={() => mutate(`/api/mutation-journal/${startDate}/${endDate}`)}
                         warehouses={warehouses?.data}
+                        accountBalance={accountBalance}
                     />
                 ) : (
                     <CreateMutationFromHqMultiple

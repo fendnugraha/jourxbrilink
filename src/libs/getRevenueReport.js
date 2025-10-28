@@ -1,20 +1,29 @@
 import useSWR from "swr";
 import axios from "@/libs/axios";
 
-const fetcher = (url) => axios.get(url).then((res) => res.data);
+const fetcher = (url) => axios.get(url).then((res) => res.data?.data);
 
 export const useGetRevenueReport = (startDate, endDate) => {
+    const shouldFetch = startDate && endDate;
+
     const {
-        data: revenueReport,
-        error: revenueReportError,
+        data: revenue,
+        error,
         isValidating,
-    } = useSWR(`/api/get-revenue-report/${startDate}/${endDate}`, fetcher, {
-        revalidateOnFocus: true, // Refetch data when the window is focused
-        dedupingInterval: 60000, // Avoid duplicate requests for the same data within 1 minute
-        fallbackData: [], // Optional: you can specify default data here while it's loading
+        mutate,
+    } = useSWR(shouldFetch ? `/api/get-revenue-report/${startDate}/${endDate}` : null, fetcher, {
+        revalidateOnFocus: true,
+        dedupingInterval: 60000, // 1 menit
+        fallbackData: [], // data awal kosong
     });
 
-    return { revenueReport, revenueReportError, isValidating };
+    return {
+        revenue,
+        revenueError: error,
+        isLoading: !revenue && !error, // ini ganti isLoading
+        isValidating,
+        mutateRevenue: mutate,
+    };
 };
 
 export default useGetRevenueReport;

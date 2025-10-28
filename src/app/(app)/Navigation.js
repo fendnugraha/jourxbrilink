@@ -49,7 +49,7 @@ const Navigation = ({ user }) => {
                                     <li key={index}>
                                         <NavLink href={item.href} active={pathName.startsWith(item.path)}>
                                             <span className="w-16 h-14 flex items-center justify-center flex-shrink-0">
-                                                <item.icon size={20} className="" strokeWidth={2.5} />
+                                                <item.icon size={20} className="" strokeWidth={`${pathName.startsWith(item.path) ? 2 : 1}`} />
                                             </span>
                                             <span
                                                 className={`text-sm transition-all duration-300 origin-left ${
@@ -80,7 +80,7 @@ const Navigation = ({ user }) => {
                     </NavLink> */}
                 <button onClick={logout} className="flex items-center cursor-pointer">
                     {/* Tombol Toggle */}
-                    <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-red-500 hover:text-red-400">
+                    <span className="w-16 h-14 flex items-center justify-center flex-shrink-0 text-red-500 hover:text-red-400 dark:text-yellow-300 dark:hover:text-yellow-200">
                         <PowerIcon size={24} strokeWidth={3} />
                     </span>
 

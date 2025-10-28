@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import axios from "@/libs/axios";
+import { useState } from "react";
 import formatNumber from "@/libs/formatNumber";
 import { DownloadIcon, FilterIcon, RefreshCcwIcon } from "lucide-react";
 import Modal from "@/components/Modal";
@@ -9,6 +8,7 @@ import Input from "@/components/Input";
 import Label from "@/components/Label";
 import Link from "next/link";
 import exportToExcel from "@/libs/exportToExcel";
+import useGetRevenueReport from "@/libs/getRevenueReport";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -19,32 +19,33 @@ const getCurrentDate = () => {
 };
 
 const RevenueReport = () => {
-    const [revenue, setRevenue] = useState([]);
+    // const [revenue, setRevenue] = useState([]);
     const [notification, setNotification] = useState("");
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
+    const { revenue, revenueError, isValidating, mutateRevenue } = useGetRevenueReport(startDate, endDate);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
 
     const closeModal = () => {
         setIsModalFilterDataOpen(false);
     };
 
-    const fetchRevenueReport = async () => {
-        setLoading(true);
-        try {
-            const response = await axios.get(`/api/get-revenue-report/${startDate}/${endDate}`);
-            setRevenue(response.data.data);
-        } catch (error) {
-            setNotification(error.response?.data?.message || "Something went wrong.");
-        } finally {
-            setLoading(false);
-        }
-    };
+    // const fetchRevenueReport = async () => {
+    //     setLoading(true);
+    //     try {
+    //         const response = await axios.get(`/api/get-revenue-report/${startDate}/${endDate}`);
+    //         setRevenue(response.data.data);
+    //     } catch (error) {
+    //         setNotification(error.response?.data?.message || "Something went wrong.");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
-    useEffect(() => {
-        fetchRevenueReport();
-    }, []);
+    // useEffect(() => {
+    //     mutateRevenue();
+    // }, [startDate, endDate]);
 
     const sumByTrxType = (trxType) => {
         return revenue.revenue?.reduce((total, item) => {
@@ -76,7 +77,7 @@ const RevenueReport = () => {
                     </span>
                 </h4>
                 <div className="flex gap-1 justify-end h-fit">
-                    <button onClick={() => fetchRevenueReport()} className="small-button">
+                    <button onClick={() => mutateRevenue()} className="small-button">
                         <RefreshCcwIcon className="size-4" />
                     </button>
                     <button
@@ -105,9 +106,6 @@ const RevenueReport = () => {
                             <Label className="font-bold">s/d</Label>
                             <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="form-control" />
                         </div>
-                        <button onClick={fetchRevenueReport} className="btn-primary">
-                            Submit
-                        </button>
                     </Modal>
                 </div>
             </div>
@@ -131,7 +129,7 @@ const RevenueReport = () => {
                     <tbody>
                         {loading ? (
                             <tr>
-                                <td colSpan={9}>Loading...</td>
+                                <td colSpan={11}>Loading...</td>
                             </tr>
                         ) : (
                             revenue.revenue?.map((item, index) => (
@@ -156,9 +154,9 @@ const RevenueReport = () => {
                         )}
                     </tbody>
                     <tfoot>
-                        {loading ? (
+                        {isValidating ? (
                             <tr>
-                                <td colSpan={9}>Loading...</td>
+                                <td colSpan={11}>Loading...</td>
                             </tr>
                         ) : revenue?.revenue?.length > 0 ? (
                             <tr>
@@ -176,7 +174,7 @@ const RevenueReport = () => {
                             </tr>
                         ) : (
                             <tr>
-                                <td colSpan={9} className="text-center p-4">
+                                <td colSpan={11} className="text-center p-4">
                                     No data found
                                 </td>
                             </tr>

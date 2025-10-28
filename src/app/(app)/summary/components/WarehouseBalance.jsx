@@ -1,14 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import axios from "@/libs/axios";
+import { useState } from "react";
 import formatNumber from "@/libs/formatNumber";
 import { DownloadIcon, FilterIcon, RefreshCcwIcon, Star } from "lucide-react";
-import Modal from "@/components/Modal";
 import Input from "@/components/Input";
-import Label from "@/components/Label";
 import Link from "next/link";
 import { getStorePerformanceRating } from "@/libs/GetStorePerformanceRating";
+import { useGetWarehouseBalance } from "@/libs/getWarehouseBalance";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -19,31 +17,32 @@ const getCurrentDate = () => {
 };
 
 const WarehouseBalance = () => {
-    const [warehouseBalance, setWarehouseBalance] = useState([]);
+    // const [warehouseBalance, setWarehouseBalance] = useState([]);
     const [notification, setNotification] = useState("");
     const [loading, setLoading] = useState(false);
     const [endDate, setEndDate] = useState(getCurrentDate());
+    const { warehouseBalance, warehouseBalanceError, isValidating, mutate } = useGetWarehouseBalance(endDate);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
 
     const closeModal = () => {
         setIsModalFilterDataOpen(false);
     };
 
-    const fetchWarehouseBalance = useCallback(async () => {
-        setLoading(true);
-        try {
-            const response = await axios.get(`/api/get-warehouse-balance/${endDate}`);
-            setWarehouseBalance(response.data.data);
-        } catch (error) {
-            setNotification(error.response?.data?.message || "Something went wrong.");
-        } finally {
-            setLoading(false);
-        }
-    }, [endDate]);
+    // const fetchWarehouseBalance = useCallback(async () => {
+    //     setLoading(true);
+    //     try {
+    //         const response = await axios.get(`/api/get-warehouse-balance/${endDate}`);
+    //         setWarehouseBalance(response.data.data);
+    //     } catch (error) {
+    //         setNotification(error.response?.data?.message || "Something went wrong.");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }, [endDate]);
 
-    useEffect(() => {
-        fetchWarehouseBalance();
-    }, [fetchWarehouseBalance]);
+    // useEffect(() => {
+    //     fetchWarehouseBalance();
+    // }, [fetchWarehouseBalance]);
     return (
         <div className="card relative">
             <div className="p-4 flex justify-between gap-2">
@@ -52,41 +51,31 @@ const WarehouseBalance = () => {
                     <span className="card-subtitle">Periode: {endDate}</span>
                 </h4>
                 <div className="flex gap-1 h-fit">
-                    <button onClick={fetchWarehouseBalance} className="small-button">
+                    <button onClick={() => mutate()} className="small-button">
                         <RefreshCcwIcon className="size-4" />
                     </button>
                     <button className="small-button" disabled={true}>
                         <DownloadIcon className="size-4" />
                     </button>
-                    <button onClick={() => setIsModalFilterDataOpen(true)} className="small-button">
+                    <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="form-control " />
+                    {/* <button onClick={() => setIsModalFilterDataOpen(true)} className="small-button">
                         <FilterIcon className="size-4" />
-                    </button>
+                    </button> */}
                 </div>
-                <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
-                    <div className="mb-4">
-                        <Label className="font-bold">Tanggal</Label>
-                        <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="form-control" />
-                    </div>
-                    <button onClick={fetchWarehouseBalance} className="btn-primary">
-                        Submit
-                    </button>
-                </Modal>
             </div>
             <div className="overflow-x-auto">
                 <table className="table w-full text-xs">
                     <thead className="">
                         <tr className="">
                             <th className="text-center">Cabang (Konter)</th>
-                            <th className="text-center">
-                                <Star size={16} fill="yellow" />
-                            </th>
                             <th className="text-center">Kas Tunai</th>
                             <th className="text-center">Saldo Bank</th>
                             <th className="text-center">Jumlah</th>
+                            <th className="text-center w-12">Rate</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {loading ? (
+                        {isValidating ? (
                             <tr>
                                 <td colSpan={4}>Loading...</td>
                             </tr>
@@ -98,10 +87,10 @@ const WarehouseBalance = () => {
                                             {i + 1}. {w.name}
                                         </Link>
                                     </td>
-                                    <td className="text-center">{w.id > 1 && getStorePerformanceRating(w.average_profit)}</td>
                                     <td className="text-end">{formatNumber(w.cash)}</td>
                                     <td className="text-end">{formatNumber(w.bank)}</td>
                                     <td className="text-end font-bold">{formatNumber(w.cash + w.bank)}</td>
+                                    <td className="text-center w-12">{w.id > 1 && getStorePerformanceRating(w.average_profit)}</td>
                                 </tr>
                             ))
                         )}
@@ -114,10 +103,10 @@ const WarehouseBalance = () => {
                         ) : (
                             <tr>
                                 <th>Total</th>
+                                <th className="text-right">{formatNumber(warehouseBalance.totalCash)}</th>
+                                <th className="text-right">{formatNumber(warehouseBalance.totalBank)}</th>
+                                <th className="text-right">{formatNumber(warehouseBalance.totalCash + warehouseBalance.totalBank)}</th>
                                 <th></th>
-                                <th>{formatNumber(warehouseBalance.totalCash)}</th>
-                                <th>{formatNumber(warehouseBalance.totalBank)}</th>
-                                <th>{formatNumber(warehouseBalance.totalCash + warehouseBalance.totalBank)}</th>
                             </tr>
                         )}
                     </tfoot>

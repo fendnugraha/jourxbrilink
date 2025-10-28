@@ -11,13 +11,14 @@ import { mutate } from "swr";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import { navMenu } from "../constants/NavMenu";
 import { getStorePerformanceRating } from "@/libs/GetStorePerformanceRating";
+import useLiveClock from "@/components/useLiveClock";
 
 const MainPage = ({ children, headerTitle }) => {
     const { user, logout } = useAuth({ middleware: "auth" });
     const [isOpen, setIsOpen] = useState(false);
     const { profit, loading: profitLoading, error } = useGetProfit();
 
-    // const { dayName, date, time, raw } = useLiveClock();
+    const { dayName, date, time, raw } = useLiveClock();
 
     const pathName = usePathname();
     const drawerReff = useRef();
@@ -52,7 +53,9 @@ const MainPage = ({ children, headerTitle }) => {
             <header className="w-full h-20 flex items-center justify-between px-4 sm:px-12 py-2">
                 <h1 className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-white">
                     {headerTitle}
-                    <span className="text-xs font-normal p-0 sm:block hidden">{userWarehouseName}</span>
+                    <span className="text-xs font-normal p-0 sm:block hidden">
+                        {userWarehouseName} | {dayName}, {date} {time}
+                    </span>
                 </h1>
                 <div className="flex items-center justify-end sm:gap-4">
                     {WarehouseRank > 0 && (

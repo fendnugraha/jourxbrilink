@@ -115,7 +115,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
         return (
             journal.trx_type === "Mutasi Kas" &&
             (journal.cred.acc_name.toLowerCase().includes(searchTerm) ||
-                journal.debt.acc_name.toLowerCase().includes(searchTerm) ||
+                journal.debt?.acc_name.toLowerCase().includes(searchTerm) ||
                 journal.invoice.toLowerCase().includes(searchTerm))
         );
     });
@@ -365,11 +365,11 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                         <tbody>
                             {loading ? (
                                 <tr className="text-center">
-                                    <td colSpan={2}>Loading ...</td>
+                                    <td colSpan={4}>Loading ...</td>
                                 </tr>
                             ) : currentItems?.length === 0 ? (
                                 <tr className="text-center">
-                                    <td colSpan={3}>Tidak ada data</td>
+                                    <td colSpan={4}>Tidak ada data</td>
                                 </tr>
                             ) : (
                                 currentItems.map((journal, index) => (
@@ -378,10 +378,18 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                             <span className="block font-bold text-slate-500 dark:text-yellow-200">
                                                 {formatDateTime(journal.created_at)} | {journal.invoice}
                                             </span>
-                                            {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt.acc_name}
+                                            {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt?.acc_name}
                                             <span className="block sm:hidden font-bold text-blue-500">{formatNumber(journal.amount)}</span>
                                         </td>
-                                        <td className="text-end hidden sm:table-cell text-lg font-bold">{formatNumber(journal.amount)}</td>
+                                        <td
+                                            className={`text-end hidden sm:table-cell text-lg font-bold ${
+                                                journal.debt?.warehouse_id === warehouse
+                                                    ? "text-green-600 dark:text-green-300"
+                                                    : "text-red-600 dark:text-red-400"
+                                            }`}
+                                        >
+                                            {formatNumber(journal.amount)}
+                                        </td>
                                         <td className="text-center">
                                             <StatusBadge
                                                 status={journal.status === 0 ? "In Progress" : "Completed"}

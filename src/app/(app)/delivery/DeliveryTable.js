@@ -32,6 +32,7 @@ const DeliveryTable = ({ filteredJournals, itemsPerPage, currentPage, setCurrent
                                 <td className="">
                                     <Link
                                         href={`/delivery/invoice/${journal?.invoice}`}
+                                        target="blank"
                                         className="block hover:underline font-bold text-yellow-500 dark:text-yellow-300 mb-1"
                                     >
                                         {journal?.invoice}

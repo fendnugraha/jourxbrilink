@@ -93,6 +93,7 @@ const DeliveryPage = () => {
     const [mutationMode, setMutationMode] = useState("single");
 
     const { accountBalance, error: accountBalanceError, loading: accountBalanceLoading, mutateCashBankBalance } = useCashBankBalance(1, endDate);
+    const cashBalance = accountBalance?.data?.chartOfAccounts?.find((acc) => acc?.account_id === 1)?.balance;
 
     return (
         <MainPage headerTitle="Delivery">
@@ -150,7 +151,7 @@ const DeliveryPage = () => {
                                 Rekap Mutasi Kas
                                 <span className="card-subtitle">
                                     Delivered: {filteredJournals?.filter((journal) => journal?.status === 1).length}/{filteredJournals?.length} Total:{" "}
-                                    {formatNumber(filteredJournals?.reduce((acc, journal) => acc + journal?.amount, 0))}
+                                    {formatNumber(filteredJournals?.reduce((acc, journal) => acc + journal?.amount, 0))}. Sisa Kas: {formatNumber(cashBalance)}
                                 </span>
                             </h1>
                             <button

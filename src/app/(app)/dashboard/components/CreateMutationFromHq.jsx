@@ -5,7 +5,7 @@ import Label from "@/components/Label";
 import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
 
-const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, warehouses }) => {
+const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, warehouses, accountBalance }) => {
     const [formData, setFormData] = useState({
         debt_code: "",
         cred_code: "",
@@ -46,6 +46,8 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
             }));
         }
     }, [formData.cred_code, cashBank, selectedWarehouseId]);
+
+    const fiindAccount = accountBalance.data?.chartOfAccounts?.find((acc) => acc.warehouse_id === 1 && acc.id === Number(formData.cred_code));
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -122,6 +124,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                             </option>
                         ))}
                     </select>
+                    <span className="text-xs">Saldo: {formData.cred_code && formatNumber(fiindAccount?.balance || 0)}</span>
                     {errors?.cred_code && <span className="text-red-500 text-xs">{errors?.cred_code}</span>}
                 </div>
             </div>
@@ -165,7 +168,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                 <Label>Biaya admin bank</Label>
                 <div className="col-span-1">
                     <input
-                        className="form-control"
+                        className="form-control !w-full sm:!w-1/2"
                         type="number"
                         placeholder="Rp."
                         value={formData.admin_fee}

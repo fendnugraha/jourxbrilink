@@ -41,7 +41,6 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
     const [journalsByWarehouse, setJournalsByWarehouse] = useState([]);
     const [isModalCreateMutationFromHqOpen, setIsModalCreateMutationFromHqOpen] = useState(false);
     const [isModalCreateJournalOpen, setIsModalCreateJournalOpen] = useState(false);
-    const [isModalEditJournalOpen, setIsModalEditJournalOpen] = useState(false);
     const [isModalEditMutationJournalOpen, setIsModalEditMutationJournalOpen] = useState(false);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
     const [selectedJournalId, setSelectedJournalId] = useState(null);
@@ -52,7 +51,6 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
         setIsModalCreateJournalOpen(false);
         setIsModalFilterDataOpen(false);
         setIsModalDeleteJournalOpen(false);
-        setIsModalEditJournalOpen(false);
         setIsModalEditMutationJournalOpen(false);
     };
 
@@ -238,6 +236,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                 notification={notification}
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                                 warehouses={warehouses?.data}
+                                accountBalance={accountBalance}
                             />
                         ) : (
                             <CreateMutationFromHqMultiple

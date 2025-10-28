@@ -183,7 +183,13 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                     ))}
                                 </select>
                             )}
-                            <button onClick={() => mutateCashBankBalance()} className="small-button">
+                            <button
+                                onClick={() => {
+                                    mutateCashBankBalance();
+                                    fetchJournalsByWarehouse();
+                                }}
+                                className="small-button"
+                            >
                                 <RefreshCcwIcon className="size-4" />
                             </button>
                             <button onClick={() => setIsModalFilterDataOpen(true)} className="small-button">

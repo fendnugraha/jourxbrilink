@@ -92,12 +92,7 @@ const DeliveryPage = () => {
     const [selectTable, setSelectTable] = useState("delivery");
     const [mutationMode, setMutationMode] = useState("single");
 
-    const {
-        accountBalance,
-        error: accountBalanceError,
-        loading: accountBalanceLoading,
-        mutateCashBankBalance,
-    } = useCashBankBalance(selectedWarehouse, endDate);
+    const { accountBalance, error: accountBalanceError, loading: accountBalanceLoading, mutateCashBankBalance } = useCashBankBalance(1, endDate);
 
     return (
         <MainPage headerTitle="Delivery">

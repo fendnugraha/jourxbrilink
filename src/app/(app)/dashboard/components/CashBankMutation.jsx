@@ -114,7 +114,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
         }
         return (
             journal.trx_type === "Mutasi Kas" &&
-            (journal.cred.acc_name.toLowerCase().includes(searchTerm) ||
+            (journal.cred?.acc_name.toLowerCase().includes(searchTerm) ||
                 journal.debt?.acc_name.toLowerCase().includes(searchTerm) ||
                 journal.invoice.toLowerCase().includes(searchTerm))
         );

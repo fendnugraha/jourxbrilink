@@ -23,6 +23,7 @@ const WarehouseBalance = () => {
     const [endDate, setEndDate] = useState(getCurrentDate());
     const { warehouseBalance, warehouseBalanceError, isValidating, mutate } = useGetWarehouseBalance(endDate);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
+    console.log(warehouseBalance);
 
     const closeModal = () => {
         setIsModalFilterDataOpen(false);
@@ -90,7 +91,11 @@ const WarehouseBalance = () => {
                                     <td className="text-end">{formatNumber(w.cash)}</td>
                                     <td className="text-end">{formatNumber(w.bank)}</td>
                                     <td className="text-end font-bold">{formatNumber(w.cash + w.bank)}</td>
-                                    <td className="text-center w-12">{w.id > 1 && getStorePerformanceRating(w.average_profit)}</td>
+                                    <td className="text-center w-12">
+                                        {w.id > 1 && (
+                                            <span className="bg-green-300 text-green-800 p-1 rounded">{getStorePerformanceRating(w.average_profit)}</span>
+                                        )}
+                                    </td>
                                 </tr>
                             ))
                         )}

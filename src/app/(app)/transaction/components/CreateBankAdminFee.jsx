@@ -4,9 +4,12 @@ import axios from "@/libs/axios";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
 import { set } from "date-fns";
+import { DateTimeNow } from "@/libs/format";
 
 const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notification, fetchJournalsByWarehouse, user }) => {
+    const { today } = DateTimeNow();
     const [formData, setFormData] = useState({
+        date_issued: today,
         debt_code: user?.role?.warehouse?.chart_of_account_id,
         cred_code: "",
         amount: "",
@@ -24,6 +27,7 @@ const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notifica
             const response = await axios.post("/api/create-mutation", formData);
             notification({ type: "success", message: "Pengeluaran operasional berhasil" });
             setFormData({
+                date_issued: today,
                 debt_code: user?.role?.warehouse?.chart_of_account_id,
                 cred_code: "",
                 amount: "",
@@ -44,6 +48,19 @@ const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notifica
     return (
         <>
             <form onSubmit={handleSubmit}>
+                <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+                    <Label>Tanggal</Label>
+                    <div className="col-span-1 sm:col-span-2">
+                        <input
+                            type="datetime-local"
+                            className="form-control"
+                            value={formData.date_issued}
+                            onChange={(e) => setFormData({ ...formData, date_issued: e.target.value })}
+                            required
+                        />
+                        {errors.date_issued && <span className="text-red-500 text-xs">{errors.date_issued}</span>}
+                    </div>
+                </div>
                 <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Dari Rekening</Label>
                     <div className="col-span-1 sm:col-span-2">

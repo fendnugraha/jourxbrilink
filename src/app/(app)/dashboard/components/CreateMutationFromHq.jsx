@@ -4,9 +4,12 @@ import axios from "@/libs/axios";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
+import { DateTimeNow } from "@/libs/format";
 
 const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, warehouses, accountBalance }) => {
+    const { today } = DateTimeNow();
     const [formData, setFormData] = useState({
+        date_issued: today,
         debt_code: "",
         cred_code: "",
         amount: "",
@@ -63,6 +66,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
             fetchJournalsByWarehouse();
             isModalOpen(true);
             setFormData({
+                date_issued: today,
                 debt_code: "",
                 cred_code: formData.cred_code,
                 amount: "",
@@ -86,6 +90,21 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
     };
     return (
         <form onSubmit={handleSubmit}>
+            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+                <Label>Tanggal</Label>
+                <div className="col-span-1">
+                    <input
+                        className="form-control"
+                        type="datetime-local"
+                        value={formData.date_issued}
+                        onChange={(e) => setFormData({ ...formData, date_issued: e.target.value })}
+                        required
+                    />
+                    {errors?.date_issued && <span className="text-red-500 text-xs">{errors?.date_issued}</span>}
+                </div>
+
+                {formData.date_issued > 0 && <h1 className="text-sm sm:text-lg font-bold">{formatNumber(formData.date_issued)}</h1>}
+            </div>
             <div className="mb-6 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Pilih Cabang</Label>
                 <div className="col-span-1 sm:col-span-2">

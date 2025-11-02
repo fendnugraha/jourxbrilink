@@ -5,6 +5,7 @@ import Label from "@/components/Label";
 import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
 import { set } from "date-fns";
+import { DateTimeNow } from "@/libs/format";
 
 const CreateCashWithdrawal = ({
     isModalOpen,
@@ -18,7 +19,9 @@ const CreateCashWithdrawal = ({
     selectedBankAccount,
     setSelectedBankAccount,
 }) => {
+    const { today } = DateTimeNow();
     const [formData, setFormData] = useState({
+        date_issued: today,
         debt_code: selectedBankAccount,
         cred_code: user.role.warehouse.chart_of_account_id,
         amount: "",
@@ -48,6 +51,7 @@ const CreateCashWithdrawal = ({
                 message: "Penarikan uang ke " + successMessage,
             });
             setFormData({
+                date_issued: today,
                 debt_code: formData.debt_code,
                 cred_code: user.role.warehouse.chart_of_account_id,
                 amount: "",
@@ -86,6 +90,19 @@ const CreateCashWithdrawal = ({
     return (
         <>
             <form onSubmit={handleSubmit}>
+                <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+                    <Label>Tanggal</Label>
+                    <div className="col-span-1 sm:col-span-2">
+                        <input
+                            type="datetime-local"
+                            className="form-control"
+                            value={formData.date_issued}
+                            onChange={(e) => setFormData({ ...formData, date_issued: e.target.value })}
+                            required
+                        />
+                        {errors.date_issued && <span className="text-red-500 text-xs">{errors.date_issued}</span>}
+                    </div>
+                </div>
                 <div className="mb-2 sm:mb-4">
                     <Label>Ke Rekening</Label>
                     <div className="col-span-1 sm:col-span-2">

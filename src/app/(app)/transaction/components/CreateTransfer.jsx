@@ -4,6 +4,7 @@ import axios from "@/libs/axios";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
+import { DateTimeNow } from "@/libs/format";
 
 const CreateTransfer = ({
     isModalOpen,
@@ -17,7 +18,9 @@ const CreateTransfer = ({
     selectedBankAccount,
     setSelectedBankAccount,
 }) => {
+    const { today } = DateTimeNow();
     const [formData, setFormData] = useState({
+        date_issued: today,
         debt_code: user.role.warehouse.chart_of_account_id,
         cred_code: selectedBankAccount,
         amount: "",
@@ -46,6 +49,7 @@ const CreateTransfer = ({
                 message: "Transfer uang ke " + successMessage,
             });
             setFormData({
+                date_issued: today,
                 debt_code: user.role.warehouse.chart_of_account_id,
                 cred_code: formData.cred_code,
                 amount: "",
@@ -67,6 +71,19 @@ const CreateTransfer = ({
     return (
         <>
             <form onSubmit={handleSubmit}>
+                <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+                    <Label>Tanggal</Label>
+                    <div className="col-span-1 sm:col-span-2">
+                        <input
+                            type="datetime-local"
+                            className="form-control"
+                            value={formData.date_issued}
+                            onChange={(e) => setFormData({ ...formData, date_issued: e.target.value })}
+                            required
+                        />
+                        {errors.date_issued && <span className="text-red-500 text-xs">{errors.date_issued}</span>}
+                    </div>
+                </div>
                 <div className="mb-2 sm:mb-4">
                     <Label>Dari Rekening</Label>
                     <div className="col-span-1 sm:col-span-2">

@@ -46,6 +46,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
     const [selectedJournalId, setSelectedJournalId] = useState(null);
     const [isModalDeleteJournalOpen, setIsModalDeleteJournalOpen] = useState(false);
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
+    const [selectedWarehouseId, setSelectedWarehouseId] = useState(warehouse);
     const closeModal = () => {
         setIsModalCreateMutationFromHqOpen(false);
         setIsModalCreateJournalOpen(false);
@@ -102,22 +103,30 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
     useEffect(() => {
         mutate(`/api/get-cash-bank-balance/${selectedWarehouse}/${endDate}`);
     }, [journalsByWarehouse, endDate]);
+
     const filterSelectedJournalId = journalsByWarehouse?.data?.find((journal) => journal.id === selectedJournalId);
     const mutationInSum = accountBalance?.data?.chartOfAccounts?.reduce((sum, acc) => sum + mutationInSumById(acc.id), 0);
 
     const mutationOutSum = accountBalance?.data?.chartOfAccounts?.reduce((sum, acc) => sum + mutationOutSumById(acc.id), 0);
 
+    const hqCashBankIds = cashBank?.filter((cashBank) => cashBank.warehouse_id === 1)?.map((cashBank) => cashBank.id);
+    const selectedAccountIds = cashBank
+        ?.filter((cashBank) => selectedWarehouseId && cashBank.warehouse_id === Number(selectedWarehouseId))
+        ?.map((cashBank) => cashBank.id);
+
     const [searchTerm, setSearchTerm] = useState("");
     const filteredJournals = journalsByWarehouse.data?.filter((journal) => {
-        if (!searchTerm) {
-            return journal.trx_type === "Mutasi Kas";
-        }
-        return (
-            journal.trx_type === "Mutasi Kas" &&
-            (journal.cred?.acc_name.toLowerCase().includes(searchTerm) ||
-                journal.debt?.acc_name.toLowerCase().includes(searchTerm) ||
-                journal.invoice.toLowerCase().includes(searchTerm))
-        );
+        const matchSearchTerm =
+            !searchTerm ||
+            (journal.trx_type === "Mutasi Kas" &&
+                (journal.cred?.acc_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    journal.debt?.acc_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    journal.invoice?.toLowerCase().includes(searchTerm.toLowerCase())));
+
+        const matchSelectedIds =
+            !selectedAccountIds?.length || selectedAccountIds.includes(journal.debt_code) || selectedAccountIds.includes(journal.cred_code);
+
+        return matchSearchTerm && matchSelectedIds;
     });
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -141,7 +150,6 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
         }
     };
 
-    const hqCashBankIds = cashBank?.filter((cashBank) => cashBank.warehouse_id === 1)?.map((cashBank) => cashBank.id);
     const [mutationMode, setMutationMode] = useState("single");
     return (
         <>
@@ -348,6 +356,16 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                         <option value={50}>50</option>
                         <option value={100}>100</option>
                     </select>
+                    {["Administrator", "Super Admin"].includes(userRole) && (
+                        <select onChange={(e) => setSelectedWarehouseId(e.target.value)} value={selectedWarehouseId} className="form-select !w-fit block p-2.5">
+                            <option value={""}>Semua</option>
+                            {warehouses?.data?.map((warehouse) => (
+                                <option key={warehouse.id} value={warehouse.id}>
+                                    {warehouse.name}
+                                </option>
+                            ))}
+                        </select>
+                    )}
                     <Input type="search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="form-control" placeholder="Cari..." />
                 </div>
                 <div className="overflow-x-auto">

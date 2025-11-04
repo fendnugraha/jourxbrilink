@@ -181,7 +181,10 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                             {["Administrator", "Super Admin"].includes(userRole) && (
                                 <select
                                     value={selectedWarehouse}
-                                    onChange={(e) => setSelectedWarehouse(e.target.value)}
+                                    onChange={(e) => {
+                                        setSelectedWarehouse(e.target.value);
+                                        setCurrentPage(1);
+                                    }}
                                     className="form-select block w-fit p-2.5"
                                 >
                                     {warehouses?.data?.map((warehouse) => (
@@ -357,7 +360,14 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                         <option value={100}>100</option>
                     </select>
                     {["Administrator", "Super Admin"].includes(userRole) && (
-                        <select onChange={(e) => setSelectedWarehouseId(e.target.value)} value={selectedWarehouseId} className="form-select !w-fit block p-2.5">
+                        <select
+                            onChange={(e) => {
+                                setSelectedWarehouseId(e.target.value);
+                                setCurrentPage(1);
+                            }}
+                            value={selectedWarehouseId}
+                            className="form-select !w-fit block p-2.5"
+                        >
                             <option value={""}>Semua</option>
                             {warehouses?.data?.map((warehouse) => (
                                 <option key={warehouse.id} value={warehouse.id}>

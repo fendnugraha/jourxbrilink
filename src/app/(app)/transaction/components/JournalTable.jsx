@@ -393,7 +393,7 @@ const JournalTable = ({
                                                     }}
                                                     disabled={
                                                         ["Voucher & SP", "Accessories", "Correction", null].includes(journal.trx_type) ||
-                                                        (userRole !== "Administrator" && hqCashBankIds.includes(journal.cred_code))
+                                                        (!["Administrator", "Super Admin"].includes(userRole) && hqCashBankIds.includes(journal.cred_code))
                                                     }
                                                     className="disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 dark:text-red-400 hover:scale-125 transition-all group-hover:dark:text-white group-hover:text-slate-600 duration-200"
                                                 >

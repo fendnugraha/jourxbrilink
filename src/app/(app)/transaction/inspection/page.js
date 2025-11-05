@@ -29,6 +29,7 @@ const InspectionPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
+    const [sortMode, setSortMode] = useState("desc");
     const [isModalCreateCorrectionOpen, setIsModalCreateCorrectionOpen] = useState(false);
     const closeModal = () => {
         setIsModalCreateCorrectionOpen(false);
@@ -59,7 +60,11 @@ const InspectionPage = () => {
         async (selectedWarehouse = selectedWarehouseId, start_Date = startDate, end_Date = endDate) => {
             setLoading(true);
             try {
-                const response = await axios.get(`/api/get-journal-by-warehouse/${selectedWarehouse}/${start_Date}/${end_Date}`);
+                const response = await axios.get(`/api/get-journal-by-warehouse/${selectedWarehouse}/${start_Date}/${end_Date}`, {
+                    params: {
+                        sort: sortMode,
+                    },
+                });
                 setJournalsByWarehouse(response.data);
             } catch (error) {
                 setNotification({ type: "error", message: "Something went wrong." });
@@ -68,7 +73,7 @@ const InspectionPage = () => {
                 setLoading(false);
             }
         },
-        [selectedWarehouseId, startDate, endDate]
+        [selectedWarehouseId, startDate, endDate, sortMode]
     );
 
     useEffect(() => {
@@ -256,6 +261,7 @@ const InspectionPage = () => {
                                         setItemsPerPage(Number(e.target.value));
                                         setCurrentPage(1);
                                     }}
+                                    value={itemsPerPage}
                                     className="form-select !w-fit p-2.5"
                                 >
                                     <option value={5}>5</option>
@@ -263,6 +269,17 @@ const InspectionPage = () => {
                                     <option value={25}>25</option>
                                     <option value={50}>50</option>
                                     <option value={100}>100</option>
+                                </select>
+                                <select
+                                    onChange={(e) => {
+                                        setSortMode(e.target.value);
+                                        setCurrentPage(1);
+                                    }}
+                                    value={sortMode}
+                                    className="form-select !w-fit p-2.5"
+                                >
+                                    <option value={"asc"}>Asc</option>
+                                    <option value={"desc"}>Desc</option>
                                 </select>
                             </div>
                         </div>
@@ -278,6 +295,7 @@ const InspectionPage = () => {
                                 setSelectedJournalIds={setSelectedJournalIds}
                                 cashBank={cashBank}
                                 loading={loading}
+                                sortMode={sortMode}
                             />
                         )}
                         {selectTable === "koreksi" && (

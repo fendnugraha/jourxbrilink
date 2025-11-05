@@ -64,12 +64,13 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                 description: "",
             });
             fetchJournalsByWarehouse();
-            setErrors([]);
         } catch (error) {
             setErrors(error.response?.data?.errors);
+            notification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
             console.log(error);
         } finally {
             setLoading(false);
+            setErrors([]);
         }
     };
 
@@ -93,7 +94,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                         required
                         onChange={(e) => setFormData({ ...formData, date_issued: e.target.value })}
                     />
-                    {errors.cred_code && <span className="text-red-500 text-xs">{errors.cred_code}</span>}
+                    {errors?.date_issued && <span className="text-red-500 text-xs">{errors?.date_issued}</span>}
                 </div>
             </div>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
@@ -129,7 +130,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                             </option>
                         ))}
                     </select>
-                    {errors.cred_code && <span className="text-red-500 text-xs">{errors.cred_code}</span>}
+                    {errors?.cred_code && <span className="text-red-500 text-xs">{errors?.cred_code}</span>}
                 </div>
             </div>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
@@ -153,7 +154,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                             </option>
                         ))}
                     </select>
-                    {errors.debt_code && <span className="text-red-500 text-xs">{errors.debt_code}</span>}
+                    {errors?.debt_code && <span className="text-red-500 text-xs">{errors?.debt_code}</span>}
                 </div>
             </div>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
@@ -167,7 +168,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                         onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                         required
                     />
-                    {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
+                    {errors?.amount && <span className="text-red-500 text-xs">{errors?.amount}</span>}
                 </div>
                 <h1 className="text-sm sm:text-lg font-bold">{formatNumber(formData.amount)}</h1>
             </div>
@@ -194,7 +195,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     />
-                    {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
+                    {errors?.description && <span className="text-red-500 text-xs">{errors?.description}</span>}
                 </div>
             </div>
             <div className="flex justify-end gap-2">

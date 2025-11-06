@@ -54,6 +54,12 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                 trx_type: "Bank Fee",
                 description: "Bank Fee",
             }));
+        } else if (formData.amount !== formData.fee_amount && formData.trx_type === "Bank Fee") {
+            setFormData((prev) => ({
+                ...prev,
+                trx_type: "Tarik Tunai",
+                description: "Tarik Tunai",
+            }));
         }
     }, [formData.amount, formData.fee_amount, formData.trx_type]);
 

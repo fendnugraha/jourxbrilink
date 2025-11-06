@@ -69,7 +69,7 @@ const JournalTable = ({
         try {
             const response = await axios.delete(`/api/journals/${id}`);
             notification({ type: "success", message: response.data.message });
-            fetchJournalsByWarehouse();
+            fetchJournalsByWarehouse(warehouse, startDate, endDate);
         } catch (error) {
             notification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
             console.log(error);
@@ -128,6 +128,13 @@ const JournalTable = ({
 
         return formatted;
     };
+
+    const sumByTrxType = (journals, trxType) => {
+        return journals.filter((journal) => journal.trx_type === trxType).reduce((total, journal) => total + journal.amount, 0);
+    };
+
+    const sumTransfer = sumByTrxType(filteredJournals, "Transfer Uang");
+    const sumWithdrawal = sumByTrxType(filteredJournals, "Tarik Tunai");
     return (
         <>
             <div className="flex gap-2 px-4">
@@ -226,7 +233,8 @@ const JournalTable = ({
                 <div className="flex justify-between items-center">
                     <h4 className="text-xs text-slate-500 dark:text-slate-200">
                         {warehouses?.data?.find((w) => w.id === Number(selectedWarehouse))?.name},{" "}
-                        {startDate === endDate ? formatLongDate(endDate) : `${formatLongDate(startDate)} s/d ${formatLongDate(endDate)}`}
+                        {startDate === endDate ? formatLongDate(endDate) : `${formatLongDate(startDate)} s/d ${formatLongDate(endDate)}`} | Transfer:{" "}
+                        {formatNumber(sumTransfer)}, Tarik Tunai: {formatNumber(sumWithdrawal)}
                     </h4>
                     {["Super Admin"].includes(userRole) && (
                         <Link href="/transaction/inspection" className="text-xs hover:underline text-slate-500 dark:text-slate-200">

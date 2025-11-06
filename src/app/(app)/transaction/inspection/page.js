@@ -174,13 +174,22 @@ const InspectionPage = () => {
                 <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
             )}
             {selectedJournalIds.length > 0 && (
-                <button
-                    className="py-2 px-4 text-sm w-fit bg-blue-600 hover:bg-blue-500 drop-shadow-2xl rounded-2xl fixed bottom-4 right-8"
-                    disabled={loading || selectedJournalIds.length === 0}
-                    onClick={handleConfirmSelected}
-                >
-                    Confirm selected <span className="font-bold bg-white text-blue-600 px-2 py-0.5 rounded-full">{selectedJournalIds.length}</span>
-                </button>
+                <div className="flex flex-col w-fit gap-2 fixed bottom-4 right-8">
+                    <button
+                        className="py-2 w-full px-4 text-sm bg-red-600 hover:bg-red-500 drop-shadow-2xl rounded-2xl"
+                        disabled={loading || selectedJournalIds.length === 0}
+                        onClick={() => setSelectedJournalIds([])}
+                    >
+                        Clear selected
+                    </button>
+                    <button
+                        className="py-2 px-4 text-sm w-fit bg-blue-600 hover:bg-blue-500 drop-shadow-2xl rounded-2xl"
+                        disabled={loading || selectedJournalIds.length === 0}
+                        onClick={handleConfirmSelected}
+                    >
+                        Confirm selected <span className="font-bold bg-white text-blue-600 px-2 py-0.5 rounded-full">{selectedJournalIds.length}</span>
+                    </button>
+                </div>
             )}
 
             <MainPage headerTitle="Inspection">

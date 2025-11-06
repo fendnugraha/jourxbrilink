@@ -9,6 +9,7 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
         debt_code: "",
         cred_code: "",
         amount: "",
+        trx_type: "",
         fee_amount: "",
         description: "",
     });
@@ -22,6 +23,7 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
                 debt_code: journal?.debt_code || "",
                 cred_code: journal?.cred_code || "",
                 amount: journal?.amount || "",
+                trx_type: journal?.trx_type || "",
                 fee_amount: journal?.fee_amount || "",
                 description: journal?.description || "",
             });
@@ -44,6 +46,17 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (formData.amount === formData.fee_amount && formData.trx_type !== "Bank Fee") {
+            setFormData((prev) => ({
+                ...prev,
+                trx_type: "Bank Fee",
+                description: "Bank Fee",
+            }));
+        }
+    }, [formData.amount, formData.fee_amount, formData.trx_type]);
+
     return (
         <div className="relative">
             {journal?.id === undefined && <div className="absolute h-full w-full flex items-center justify-center bg-white">Loading data ...</div>}

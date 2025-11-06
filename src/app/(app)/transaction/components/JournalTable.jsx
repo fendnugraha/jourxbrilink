@@ -130,7 +130,9 @@ const JournalTable = ({
     };
 
     const sumByTrxType = (journals, trxType) => {
-        return journals.filter((journal) => journal.trx_type === trxType).reduce((total, journal) => total + journal.amount, 0);
+        const sum = journals.filter((journal) => journal.trx_type === trxType).reduce((total, journal) => total + journal.amount, 0);
+        const count = journals.filter((journal) => journal.trx_type === trxType).length;
+        return { sum, count };
     };
 
     const sumTransfer = sumByTrxType(filteredJournals, "Transfer Uang");
@@ -234,7 +236,8 @@ const JournalTable = ({
                     <h4 className="text-xs text-slate-500 dark:text-slate-200">
                         {warehouses?.data?.find((w) => w.id === Number(selectedWarehouse))?.name},{" "}
                         {startDate === endDate ? formatLongDate(endDate) : `${formatLongDate(startDate)} s/d ${formatLongDate(endDate)}`} | Transfer:{" "}
-                        {formatNumber(sumTransfer)}, Tarik Tunai: {formatNumber(sumWithdrawal)}
+                        {formatNumber(sumTransfer.sum)} ({formatNumber(sumTransfer.count)}), Tarik Tunai: {formatNumber(sumWithdrawal.sum)} (
+                        {sumWithdrawal.count})
                     </h4>
                     {["Super Admin"].includes(userRole) && (
                         <Link href="/transaction/inspection" className="text-xs hover:underline text-slate-500 dark:text-slate-200">

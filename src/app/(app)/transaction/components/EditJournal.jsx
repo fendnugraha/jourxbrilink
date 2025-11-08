@@ -47,16 +47,24 @@ const EditJournal = ({ isModalOpen, journal, branchAccount, notification, fetchJ
         }
     };
 
-    useEffect(() => {
-        if (formData.amount === formData.fee_amount && formData.trx_type !== "Bank Fee") {
-            setFormData((prev) => ({
-                ...prev,
-                trx_type: "Bank Fee",
-                description: "Bank Fee",
-            }));
-        }
-    }, [formData.amount, formData.fee_amount, formData.trx_type]);
-
+    // useEffect(() => {
+    //     if (formData?.amount === formData?.fee_amount && formData?.trx_type !== "Bank Fee") {
+    //         setFormData((prev) => ({
+    //             ...prev,
+    //             trx_type: "Bank Fee",
+    //             description: "Bank Fee",
+    //         }));
+    //         console.log(formData?.amount, formData?.fee_amount, formData?.trx_type);
+    //     } else if (formData?.amount !== formData?.fee_amount && formData?.trx_type === "Bank Fee") {
+    //         setFormData((prev) => ({
+    //             ...prev,
+    //             trx_type: "Tarik Tunai",
+    //             description: "Tarik Tunai",
+    //         }));
+    //         console.log(formData?.amount, formData?.fee_amount, formData?.trx_type);
+    //     }
+    //     console.log(formData?.amount, formData?.fee_amount, formData?.trx_type);
+    // }, [formData?.amount, formData?.fee_amount, formData?.trx_type]);
     return (
         <div className="relative">
             {journal?.id === undefined && <div className="absolute h-full w-full flex items-center justify-center bg-white">Loading data ...</div>}

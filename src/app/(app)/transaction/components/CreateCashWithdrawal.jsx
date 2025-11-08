@@ -86,7 +86,6 @@ const CreateCashWithdrawal = ({
     useEffect(() => {
         setIsFee(formData.amount && formData.amount === Number(formData.fee_amount));
     }, [formData.amount, formData.fee_amount]);
-
     return (
         <>
             <form onSubmit={handleSubmit}>

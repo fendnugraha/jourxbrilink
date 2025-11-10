@@ -19,6 +19,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
         trx_type: "Mutasi Kas",
         description: "",
         admin_fee: "" || 0,
+        warehouse_id: 1,
     });
     const [selectedWarehouseId, setSelectedWarehouseId] = useState(1);
 
@@ -76,6 +77,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                 trx_type: "Mutasi Kas",
                 description: "",
                 admin_fee: "" || 0,
+                warehouse_id: 1,
             });
             setErrors([]);
         } catch (error) {

@@ -172,7 +172,7 @@ const JournalTable = ({
                     <option value={100}>100</option>
                 </select>
                 <button onClick={() => setIsModalFilterJournalOpen(true)} className="small-button">
-                    <FilterIcon className="size-4" />
+                    <FilterIcon size={20} />
                 </button>
                 <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                     {["Administrator", "Super Admin"].includes(userRole) && (

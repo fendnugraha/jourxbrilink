@@ -126,55 +126,10 @@ const CreateCashWithdrawal = ({
                         {errors.debt_code && <span className="text-red-500 text-xs">{errors.debt_code}</span>}
                     </div>
                 </div>
-                <div className="mb-2 sm:mb-4">
-                    <Label>Jumlah Penarikan</Label>
-                    <div className="col-span-1">
-                        <input
-                            className="form-control"
-                            type="number"
-                            placeholder="Rp."
-                            value={formData.amount}
-                            onChange={(e) => {
-                                const value = Number(e.target.value); // pastikan number
-                                setFormData({
-                                    ...formData,
-                                    amount: value,
-                                    fee_amount: feeAdminAuto && !isFee ? calculateFee(value) : formData.fee_amount,
-                                });
-                            }}
-                            required
-                        />
-
-                        {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
-                        <div className="flex justify-between">
-                            <div>
-                                <input
-                                    type="checkbox"
-                                    id="isFee"
-                                    className="mt-2 mr-2"
-                                    checked={isFee}
-                                    onChange={(e) => {
-                                        setIsFee(e.target.checked);
-                                    }}
-                                />
-                                <label htmlFor="isFee" className={`text-sm `}>
-                                    Fee/Bunga Bank
-                                </label>
-                            </div>
-
-                            {formData.amount && (
-                                <h1 className="text-sm">
-                                    Jml: <span className="font-bold">{formatNumber(formData.amount)}</span>, Adm:{" "}
-                                    <span className="font-bold">{formatNumber(formData.fee_amount)}</span>
-                                </h1>
-                            )}
-                        </div>
-                    </div>
-                </div>
-                <div className="mb-2 sm:mb-4 grid grid-cols-1 sm:grid-cols-2 gap-2 items-end">
-                    <div>
-                        <Label className={"flex gap-2"}>
-                            Fee (Admin){" "}
+                <div className="mb-2 sm:mb-4 grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
+                    <div className=" col-span-1 sm:col-span-2">
+                        <Label className={"flex gap-2 justify-between"}>
+                            Jumlah Penarikan
                             <button
                                 onClick={() => setPersonalSetting((prev) => ({ ...prev, feeAdminAuto: !prev.feeAdminAuto }))}
                                 type="button"
@@ -191,6 +146,35 @@ const CreateCashWithdrawal = ({
                                 </div>
                             </button>
                         </Label>
+                        <div>
+                            <input
+                                className="form-control"
+                                type="number"
+                                placeholder="Rp."
+                                value={formData.amount}
+                                onChange={(e) => {
+                                    const value = Number(e.target.value); // pastikan number
+                                    setFormData({
+                                        ...formData,
+                                        amount: value,
+                                        fee_amount: feeAdminAuto && !isFee ? calculateFee(value) : formData.fee_amount,
+                                    });
+                                }}
+                                required
+                            />
+                            {errors.amount && <span className="text-red-500 text-xs">{errors.amount}</span>}
+                            {formData.amount && (
+                                <h1 className="text-xs">
+                                    Jml: <span className="font-bold">{formatNumber(formData.amount)}</span>, Adm:{" "}
+                                    <span className="font-bold">{formatNumber(formData.fee_amount)}</span>
+                                </h1>
+                            )}
+                        </div>
+                    </div>
+                    <div className="">
+                        <Label>
+                            Fee (Admin) <span className="text-green-500 font-bold">{feeAdminAuto ? "(Auto)" : ""}</span>
+                        </Label>
                         <div className="">
                             <input
                                 className={`form-control ${feeAdminAuto ? "!bg-green-200 text-green-700 font-bold" : ""}`}
@@ -202,32 +186,29 @@ const CreateCashWithdrawal = ({
                                 required
                             />
                             {errors.fee_amount && <span className="text-red-500 text-xs">{errors.fee_amount}</span>}
+                            {formData.amount && (
+                                <span
+                                    onClick={(e) => setFormData({ ...formData, fee_amount: calculateFee(formData.amount) })}
+                                    className=" text-xs cursor-pointer bg-yellow-300 dark:bg-yellow-500 hover:bg-yellow-200 rounded-lg px-2 py-0.5 mt-1"
+                                >
+                                    {formatNumber(calculateFee(formData.amount))}
+                                </span>
+                            )}
                         </div>
                     </div>
-                    {formData.amount && !feeAdminAuto && (
-                        <div>
-                            <h1
-                                type="button"
-                                onClick={(e) => setFormData({ ...formData, fee_amount: calculateFee(formData.amount) })}
-                                className="text-xs dark:bg-yellow-500 cursor-pointer w-fit bg-yellow-300 hover:bg-yellow-200 rounded-lg px-2 py-0.5 mt-1"
-                            >
-                                {formatNumber(calculateFee(formData.amount))}
-                            </h1>
-                        </div>
-                    )}
-                    {/* <div>
-                        <input
-                            type="checkbox"
-                            id="feeAdminAuto"
-                            className="mt-2 mr-2"
-                            checked={feeAdminAuto}
-                            onChange={(e) => setPersonalSetting((prev) => ({ ...prev, feeAdminAuto: e.target.checked }))}
-                        />
-                        <label htmlFor="feeAdminAuto" className={`text-sm ${feeAdminAuto ? "text-green-600" : ""}`}>
-                            Fee Admin Auto
-                        </label>
-                    </div> */}
                 </div>
+                <input
+                    type="checkbox"
+                    id="isFee"
+                    className="mb-2 mr-2"
+                    checked={isFee}
+                    onChange={(e) => {
+                        setIsFee(e.target.checked);
+                    }}
+                />
+                <label htmlFor="isFee" className={`text-sm `}>
+                    Fee/Bunga Bank
+                </label>
                 <div className="mb-2 sm:mb-4">
                     <Label>Keterangan</Label>
                     <div className="col-span-1 sm:col-span-2">

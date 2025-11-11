@@ -303,7 +303,7 @@ const JournalTable = ({
                                                 </span>
                                             </span>
                                             <span className="text-xs hidden sm:block text-slate-500 dark:text-slate-400">
-                                                Last update at <TimeAgo timestamp={journal.updated_at} />
+                                                Last update at <TimeAgo timestamp={journal.updated_at} /> by {journal.user?.name}
                                             </span>
                                             <div className="flex mt-1 gap-3 sm:hidden">
                                                 <button

@@ -110,10 +110,10 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                 </Modal>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-5 grid-row-1 sm:grid-rows-4 gap-4 grow h-full">
-                <div className="bg-lime-200/80 dark:bg-lime-200 text-green-900 p-3 sm:p-5 rounded-2xl sm:rounded-3xl drop-shadow-xs flex flex-col gap-2 sm:gap-4 items-start justify-between col-span-1 sm:col-span-2 row-span-1 sm:row-span-2">
+                <div className="bg-lime-200/80 dark:bg-lime-500 text-green-900 dark:text-lime-800 p-3 sm:p-5 rounded-2xl sm:rounded-3xl drop-shadow-xs flex flex-col gap-2 sm:gap-4 items-start justify-between col-span-1 sm:col-span-2 row-span-1 sm:row-span-2">
                     <div className={`flex flex-col`}>
                         <h4 className="text-lg">Kas Tunai</h4>
-                        <h1 className="text-2xl sm:text-4xl font-bold text-lime-700">
+                        <h1 className="text-2xl sm:text-4xl font-bold text-lime-700 dark:text-lime-800">
                             {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumber(Number(dailyDashboard?.data?.totalCash))}
                         </h1>
                     </div>
@@ -136,13 +136,13 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                         </div>
                     </div>
                 </div>
-                <div className="bg-teal-200/80 dark:bg-teal-200 text-green-900 p-3 sm:p-5 rounded-2xl sm:rounded-3xl drop-shadow-xs flex flex-col gap-2 sm:gap-4 items-start justify-between col-span-1 sm:col-span-2 row-span-auto sm:row-span-2 col-start-1 sm:col-start-3">
+                <div className="bg-teal-200/80 dark:bg-teal-400 text-green-900 p-3 sm:p-5 rounded-2xl sm:rounded-3xl drop-shadow-xs flex flex-col gap-2 sm:gap-4 items-start justify-between col-span-1 sm:col-span-2 row-span-auto sm:row-span-2 col-start-1 sm:col-start-3">
                     {" "}
                     <div className={`flex flex-col`}>
                         <h4 className="text-lg">
                             <GemIcon size={20} className="inline" /> Laba (Net Profit)
                         </h4>
-                        <h1 className="text-2xl sm:text-4xl font-bold text-slate-500 dark:text-teal-700">
+                        <h1 className="text-2xl sm:text-4xl font-bold text-slate-500 dark:text-teal-800">
                             {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumber(Number(dailyDashboard?.data?.profit))}
                         </h1>
                     </div>
@@ -256,7 +256,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                 </div> */}
 
                 <div className="col-span-1 sm:col-span-4 row-span-1 sm:row-span-2 col-start-1 row-start-auto sm:row-start-3 flex flex-col sm:flex-row gap-4 items-center justify-between w-full h-full">
-                    <div className="bg-slate-200 dark:bg-yellow-100 w-full h-full rounded-2xl sm:rounded-3xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-between">
+                    <div className="bg-slate-200 dark:bg-yellow-200 w-full h-full rounded-2xl sm:rounded-3xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-between">
                         <div>
                             <h1 className="text-lg text-slate-500">Voucher & SP</h1>
                             <TicketIcon size={50} strokeWidth={1.5} className="text-slate-500" />
@@ -270,7 +270,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                             </h1>
                         </div>
                     </div>
-                    <div className="bg-slate-200 dark:bg-yellow-100 w-full h-full rounded-2xl sm:rounded-3xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-between">
+                    <div className="bg-slate-200 dark:bg-yellow-200 w-full h-full rounded-2xl sm:rounded-3xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-between">
                         <div>
                             <h1 className="text-lg text-slate-500">Accessories</h1>
                             <CableIcon size={50} strokeWidth={1.5} className="text-slate-500" />
@@ -284,7 +284,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                             </h1>
                         </div>
                     </div>
-                    <div className="bg-slate-200 dark:bg-yellow-100 w-full h-full rounded-2xl sm:rounded-3xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-between">
+                    <div className="bg-slate-200 dark:bg-yellow-200 w-full h-full rounded-2xl sm:rounded-3xl drop-shadow-xs p-3 sm:p-5 flex flex-col justify-between">
                         <div>
                             {" "}
                             <h1 className="text-lg text-slate-500">Deposit (Pulsa, Token, Dll)</h1>

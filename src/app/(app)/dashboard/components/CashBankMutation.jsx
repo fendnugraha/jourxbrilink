@@ -116,6 +116,8 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
 
     const [searchTerm, setSearchTerm] = useState("");
     const filteredJournals = journalsByWarehouse.data?.filter((journal) => {
+        const matchJournalType = journal.trx_type === "Mutasi Kas";
+
         const matchSearchTerm =
             !searchTerm ||
             (journal.trx_type === "Mutasi Kas" &&
@@ -126,7 +128,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
         const matchSelectedIds =
             !selectedAccountIds?.length || selectedAccountIds.includes(journal.debt_code) || selectedAccountIds.includes(journal.cred_code);
 
-        return matchSearchTerm && matchSelectedIds;
+        return matchJournalType && matchSearchTerm && matchSelectedIds;
     });
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -406,14 +408,15 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                             <span className="block font-bold text-slate-500 dark:text-yellow-200">
                                                 {formatDateTime(journal.date_issued)} | {journal.invoice}
                                             </span>
-                                            {journal.cred.acc_name} <MoveRightIcon className="size-5 inline" /> {journal.debt?.acc_name}
+                                            <span>{journal.cred?.acc_name}</span> <MoveRightIcon className="size-5 inline" />{" "}
+                                            <span>{journal.debt?.acc_name}</span>
                                             <span className="block sm:hidden font-bold text-blue-500">{formatNumber(journal.amount)}</span>
                                         </td>
                                         <td
                                             className={`text-end hidden sm:table-cell text-lg font-bold ${
                                                 journal.debt?.warehouse_id === warehouse
                                                     ? "text-green-600 dark:text-green-300"
-                                                    : "text-red-600 dark:text-red-400"
+                                                    : "text-red-600 dark:text-red-300"
                                             }`}
                                         >
                                             {formatNumber(journal.amount)}
@@ -421,7 +424,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                         <td className="text-center">
                                             <StatusBadge
                                                 status={journal.status === 0 ? "In Progress" : "Completed"}
-                                                statusText={journal.status === 0 ? "Dalam Pengiriman" : "Sudah Diterima"}
+                                                statusText={journal.status === 0 ? "On Delivery" : "Delivered"}
                                             />
                                         </td>
                                         <td className="text-center">
@@ -443,7 +446,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                                     }}
                                                     hidden={!["Administrator", "Super Admin"].includes(userRole)}
                                                     disabled={!hqCashBankIds.includes(journal.cred_code)}
-                                                    className="cursor-pointer disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 hover:scale-125 transition-all group-hover:text-white duration-200"
+                                                    className="cursor-pointer disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 dark:text-red-300 hover:scale-125 transition-all group-hover:text-white duration-200"
                                                 >
                                                     <TrashIcon className="size-4" />
                                                 </button>

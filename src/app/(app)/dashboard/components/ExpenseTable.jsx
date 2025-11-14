@@ -124,11 +124,13 @@ const ExpenseTable = ({ warehouse, warehouses, userRole }) => {
                                     expenses.map((expense) => (
                                         <tr key={expense.id}>
                                             <td>
-                                                <span className="text-xs text-slate-500 dark:text-yellow-100">{formatDateTime(expense.created_at)}</span>
+                                                <span className="text-xs text-slate-500 dark:text-yellow-100 font-bold">
+                                                    {formatDateTime(expense.date_issued)} {expense.cred?.acc_name}
+                                                </span>
                                                 <br />
-                                                {expense.debt.acc_name}: {expense.description}
+                                                {expense.description}
                                             </td>
-                                            <td className="text-right">{formatNumber(-expense.fee_amount)}</td>
+                                            <td className="text-right text-sm font-bold">{formatNumber(-expense.fee_amount)}</td>
                                         </tr>
                                     ))
                                 )}

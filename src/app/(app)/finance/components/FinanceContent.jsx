@@ -7,12 +7,8 @@ import CreateContact from "../../setting/contact/CreateContact";
 import CreatePayable from "./CreatePayable";
 import formatNumber from "@/libs/formatNumber";
 import Notification from "@/components/Notification";
-import formatDateTime from "@/libs/formatDateTime";
 import PaymentForm from "./PaymentForm";
-import Paginator from "@/components/Paginator";
 import CreateReceivable from "./CreateReceivable";
-import Pagination from "@/components/PaginateList";
-import Input from "@/components/Input";
 import Link from "next/link";
 import Dropdown from "@/components/Dropdown";
 import FinanceLog from "./FinanceLog";
@@ -21,8 +17,6 @@ import { DateTimeNow } from "@/libs/format";
 
 const FinanceContent = () => {
     const { today } = DateTimeNow();
-    const [startDate, setStartDate] = useState(today);
-    const [endDate, setEndDate] = useState(today);
     const [isModalCreateContactOpen, setIsModalCreateContactOpen] = useState(false);
     const [notification, setNotification] = useState({
         type: "",

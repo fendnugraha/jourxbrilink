@@ -164,12 +164,12 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                 </div>
                 <div hidden={!showCashBankBalance} className="max-h-[calc(57px*7)] overflow-y-scroll">
                     {accountBalance?.data?.chartOfAccounts?.map((account) => (
-                        <div className="group border-b border-slate-300 dark:border-slate-500 border-dashed last:border-none pt-2 pb-1" key={account.id}>
+                        <div className="group border-b border-slate-400 border-dashed last:border-none pt-2 pb-1" key={account.id}>
                             <div className="text-white">
                                 <h1 className="text-xs text-nowrap">{account.acc_name}</h1>
 
                                 <div className="flex justify-between items-center">
-                                    <h1 className="text-sm sm:text-lg group-hover:scale-105 text-yellow-200 dark:text-lime-300 font-bold transition delay-100 duration-150 ease-out">
+                                    <h1 className="text-sm group-hover:scale-105 text-yellow-200 dark:text-lime-300 font-bold transition delay-100 duration-150 ease-out">
                                         {formatNumber(account.balance)}
                                     </h1>
                                     <h2

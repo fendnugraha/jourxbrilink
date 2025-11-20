@@ -251,9 +251,6 @@ const JournalTable = ({
                     <table className="table w-full table-auto text-xs">
                         <thead>
                             <tr>
-                                <th className="w-8 text-center" hidden={!["Super Admin"].includes(userRole)}>
-                                    #
-                                </th>
                                 <th>Deskripsi</th>
                                 <th className="">Jumlah</th>
                                 <th className="hidden sm:table-cell">Action</th>
@@ -269,13 +266,6 @@ const JournalTable = ({
                             ) : (
                                 currentItems.map((journal, index) => (
                                     <tr key={index} className="group hover:bg-slate-500 hover:text-white">
-                                        <td className="text-center w-8" hidden={!["Super Admin"].includes(userRole)}>
-                                            {journal.is_confirmed === 1 && (
-                                                <span className="w-8 h-8 bg-green-500 dark:bg-green-400 rounded-full flex justify-center items-center text-white">
-                                                    <CheckCheck size={18} />
-                                                </span>
-                                            )}
-                                        </td>
                                         <td>
                                             <span className="text-xs text-blue-700 dark:text-blue-300 group-hover:dark:text-blue-200 group-hover:text-blue-400 block">
                                                 #{journal.id} <span className="font-bold hidden sm:inline">{journal.invoice}</span>{" "}

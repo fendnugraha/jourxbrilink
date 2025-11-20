@@ -176,14 +176,14 @@ const InspectionPage = () => {
             {selectedJournalIds.length > 0 && (
                 <div className="flex flex-col w-fit gap-2 fixed bottom-4 right-8">
                     <button
-                        className="py-2 w-full px-4 text-sm bg-red-600 hover:bg-red-500 drop-shadow-2xl rounded-2xl"
+                        className="py-2 w-full px-4 text-white text-sm bg-red-600 hover:bg-red-500 drop-shadow-2xl rounded-2xl"
                         disabled={loading || selectedJournalIds.length === 0}
                         onClick={() => setSelectedJournalIds([])}
                     >
                         Clear selected
                     </button>
                     <button
-                        className="py-2 px-4 text-sm w-fit bg-blue-600 hover:bg-blue-500 drop-shadow-2xl rounded-2xl"
+                        className="py-2 px-4 text-white text-sm w-fit bg-blue-600 hover:bg-blue-500 drop-shadow-2xl rounded-2xl"
                         disabled={loading || selectedJournalIds.length === 0}
                         onClick={handleConfirmSelected}
                     >

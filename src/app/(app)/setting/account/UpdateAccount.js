@@ -43,7 +43,6 @@ const UpdateAccount = ({ isModalOpen, findSelectedAccountId, notification, fetch
                     value={formData.account_group}
                     onChange={(e) => setFormData({ ...formData, account_group: e.target.value })}
                     className="form-control"
-                    required
                 />
             </div>
             <div className="mb-4">

@@ -27,6 +27,7 @@ const CreateDeposit = ({ isModalOpen, notification, fetchJournalsByWarehouse }) 
             setErrors([]);
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
+            notification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
         } finally {
             setLoading(false);
         }

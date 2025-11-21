@@ -49,9 +49,13 @@ const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse
         }
     };
 
+    const [credGroup, setCredGroup] = useState("");
+    const [debtGroup, setDebtGroup] = useState("");
+
     const branchAccount = cashBank.filter((acc) => {
         if (["Administrator", "Super Admin"].includes(userRole)) {
-            return true;
+            const matchGroup = credGroup ? acc.account_group === credGroup : true;
+            return matchGroup;
         }
 
         return acc.warehouse_id === selectedWarehouse;
@@ -59,11 +63,14 @@ const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse
 
     const hqAccount = cashBank.filter((acc) => {
         if (["Administrator", "Super Admin"].includes(userRole)) {
-            return true;
+            const matchGroup = debtGroup ? acc.account_group === debtGroup : true;
+            return matchGroup;
         }
 
         return acc.warehouse_id === 1;
     });
+
+    const accountGroupArray = [...new Set(cashBank.map((acc) => acc.account_group))];
     return (
         <div className="relative">
             {journal?.id === undefined && <div className="absolute h-full w-full flex items-center justify-center bg-white">Loading data ...</div>}
@@ -86,40 +93,68 @@ const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse
                 <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Dari (Cabang)</Label>
                     <div className="col-span-1 sm:col-span-2">
-                        <select
-                            onChange={(e) => {
-                                setFormData({ ...formData, cred_code: e.target.value });
-                            }}
-                            value={formData.cred_code}
-                            className="form-select"
-                        >
-                            <option value="">--Pilih rekening--</option>
-                            {branchAccount.map((br) => (
-                                <option key={br.id} value={br.id}>
-                                    {br.acc_name}
-                                </option>
-                            ))}
-                        </select>
+                        <div className="flex gap-2">
+                            <select
+                                className="form-select !w-24"
+                                value={credGroup}
+                                onChange={(e) => setCredGroup(e.target.value)}
+                                hidden={!["Administrator", "Super Admin"].includes(userRole)}
+                            >
+                                {accountGroupArray.map((group) => (
+                                    <option key={group} value={group}>
+                                        {group}
+                                    </option>
+                                ))}
+                            </select>
+                            <select
+                                onChange={(e) => {
+                                    setFormData({ ...formData, cred_code: e.target.value });
+                                }}
+                                value={formData.cred_code}
+                                className="form-select"
+                            >
+                                <option value="">--Pilih rekening--</option>
+                                {branchAccount.map((br) => (
+                                    <option key={br.id} value={br.id}>
+                                        {br.acc_name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                         {errors.cred_code && <span className="text-red-500 text-xs">{errors.cred_code}</span>}
                     </div>
                 </div>
                 <div className="mb-2 grid-cols-1 grid sm:grid-cols-3 sm:gap-4 items-center">
                     <Label>Ke (Pusat)</Label>
                     <div className="col-span-1 sm:col-span-2">
-                        <select
-                            onChange={(e) => {
-                                setFormData({ ...formData, debt_code: e.target.value });
-                            }}
-                            value={formData.debt_code}
-                            className="form-select"
-                        >
-                            <option value="">--Pilih rekening--</option>
-                            {hqAccount.map((br) => (
-                                <option key={br.id} value={br.id}>
-                                    {br.acc_name}
-                                </option>
-                            ))}
-                        </select>
+                        <div className="flex gap-2">
+                            <select
+                                className="form-select !w-24"
+                                value={debtGroup}
+                                onChange={(e) => setDebtGroup(e.target.value)}
+                                hidden={!["Administrator", "Super Admin"].includes(userRole)}
+                            >
+                                {accountGroupArray.map((group) => (
+                                    <option key={group} value={group}>
+                                        {group}
+                                    </option>
+                                ))}
+                            </select>
+                            <select
+                                onChange={(e) => {
+                                    setFormData({ ...formData, debt_code: e.target.value });
+                                }}
+                                value={formData.debt_code}
+                                className="form-select"
+                            >
+                                <option value="">--Pilih rekening--</option>
+                                {hqAccount.map((br) => (
+                                    <option key={br.id} value={br.id}>
+                                        {br.acc_name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                         {errors.debt_code && <span className="text-red-500 text-xs">{errors.debt_code}</span>}
                     </div>
                 </div>

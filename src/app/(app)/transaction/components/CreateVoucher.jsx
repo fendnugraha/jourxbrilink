@@ -59,6 +59,7 @@ const CreateVoucher = ({ isModalOpen, notification, fetchJournalsByWarehouse, us
         } catch (error) {
             console.log(error);
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
+            notification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
         } finally {
             setLoading(false);
         }

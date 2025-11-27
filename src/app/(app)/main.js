@@ -12,6 +12,8 @@ import DarkModeToggle from "@/components/DarkModeToggle";
 import { navMenu } from "../constants/NavMenu";
 import { getStorePerformanceRating } from "@/libs/GetStorePerformanceRating";
 import useLiveClock from "@/components/useLiveClock";
+import useAttendanceCheck from "@/libs/attendanceCheck";
+import AttendanceForm from "./employee/attendanceForm";
 
 const MainPage = ({ children, headerTitle }) => {
     const { user, logout } = useAuth({ middleware: "auth" });
@@ -35,6 +37,13 @@ const MainPage = ({ children, headerTitle }) => {
         return suffixes[mod - 10] || suffixes[mod] || suffixes[0];
     };
 
+    const attCheck = useAttendanceCheck({
+        date: new Date().toISOString().split("T")[0],
+        userId: user?.id,
+    });
+
+    // console.log(attCheck.data?.approval_status);
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (drawerReff.current && !drawerReff.current.contains(event.target)) {
@@ -50,6 +59,8 @@ const MainPage = ({ children, headerTitle }) => {
     }, [isOpen]);
     return (
         <>
+            {/* {!attCheck.data?.approval_status && <AttendanceForm logout={logout} />} */}
+
             <header className="w-full h-20 flex items-center justify-between px-4 sm:px-12 py-2">
                 <h1 className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-white">
                     {headerTitle}
@@ -57,6 +68,7 @@ const MainPage = ({ children, headerTitle }) => {
                         {userWarehouseName} | {dayName}, {date} {time}
                     </span>
                 </h1>
+
                 <div className="flex items-center justify-end sm:gap-4">
                     {WarehouseRank > 0 && (
                         <div className="text-lg sm:text-md drop-shadow-xs sm:bg-white dark:sm:bg-slate-800 shadow rounded-full px-4 sm:ps-1 sm:pe-6 py-1 flex flex-col justify-end items-end">

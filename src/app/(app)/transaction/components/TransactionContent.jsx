@@ -13,6 +13,8 @@ import TransactionMenuMobile from "./TransactionMenuMobile";
 import VoucherSalesTable from "../../dashboard/components/VoucherSalesTable";
 import CorrectionTable from "../inspection/CorrectionTable";
 import MutationTable from "./MutationTable";
+import Button from "@/components/Button";
+import { set } from "date-fns";
 
 const getCurrentDate = () => {
     const nowUTC = new Date();
@@ -31,6 +33,10 @@ const TransactionContent = () => {
     const warehouse = Number(user?.role?.warehouse_id);
     const warehouseCashId = Number(user?.role?.warehouse?.chart_of_account_id);
     const warehouseName = user?.role?.warehouse?.name;
+    // const lat = user?.role?.warehouse?.latitude;
+    // const lng = user?.role?.warehouse?.longitude;
+    const [lat, setLat] = useState(user?.role?.warehouse?.latitude);
+
     const { warehouses, warehousesError } = useGetWarehouses();
     const [cashBank, setCashBank] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -100,6 +106,37 @@ const TransactionContent = () => {
     useEffect(() => {
         fetchCorrection();
     }, [fetchCorrection]);
+
+    const getLocation = () =>
+        new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+                enableHighAccuracy: true,
+            });
+        });
+
+    const updateWarehouseLocation = async (warehouseId) => {
+        try {
+            const pos = await getLocation();
+
+            const response = await axios.put(`/api/update-warehouse-location/${warehouseId}`, {
+                latitude: pos.coords.latitude,
+                longitude: pos.coords.longitude,
+            });
+            setLat(pos.coords.latitude);
+
+            setNotification({
+                type: "success",
+                message: response.data.message,
+            });
+        } catch (err) {
+            setNotification({
+                type: "error",
+                message: "Gagal mengambil lokasi atau update lokasi.",
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
     return (
         <>
             {notification.message && (
@@ -186,6 +223,11 @@ const TransactionContent = () => {
                         )}
                     </div>
                     <div className="order-1 sm:order-2">
+                        {!lat && (
+                            <Button buttonType="info" className={`w-full mb-2`} onClick={() => updateWarehouseLocation(warehouse)}>
+                                Update Lokasi Cabang
+                            </Button>
+                        )}
                         <CashBankBalance warehouse={warehouse} accountBalance={accountBalance} isValidating={isValidating} user={user} />
                         <div className="mt-4 hidden sm:block">
                             <VoucherSalesTable

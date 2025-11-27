@@ -3,11 +3,19 @@
 import { useEffect, useState } from "react";
 import imageCompression from "browser-image-compression";
 import axios from "@/libs/axios";
+import { TimeOnly } from "@/libs/format";
+import { LiveClock } from "@/libs/LiveClock";
+import Button from "@/components/Button";
+import { set } from "date-fns";
+import useAttendanceCheck from "@/libs/attendanceCheck";
 
-export default function AttendanceForm() {
+export default function AttendanceForm({ logout }) {
     const [file, setFile] = useState(null);
     const [preview, setPreview] = useState(null);
     const [location, setLocation] = useState(null);
+    const [address, setAddress] = useState(null);
+    const [type, setType] = useState("Kasir");
+    const [error, setError] = useState(null);
 
     // 🔥 Ambil lokasi otomatis saat komponen tampil
     useEffect(() => {
@@ -44,6 +52,18 @@ export default function AttendanceForm() {
         setFile(compressed);
     };
 
+    async function getAddress(lat, lng) {
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
+        const data = await res.json();
+        setAddress(data.address);
+    }
+
+    useEffect(() => {
+        if (location) {
+            getAddress(location.lat, location.lng);
+        }
+    }, [location]);
+
     // Upload ke Backend Laravel
     const handleSubmit = async () => {
         if (!file) {
@@ -59,32 +79,57 @@ export default function AttendanceForm() {
         formData.append("photo", file);
         formData.append("latitude", location.lat);
         formData.append("longitude", location.lng);
+        formData.append("type", type);
 
-        await axios.post("/attendance", formData, {
-            headers: { "Content-Type": "multipart/form-data" },
-        });
-
-        alert("Absensi berhasil!");
+        try {
+            await axios.post("/api/create-attendance", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+            alert("Absensi berhasil!");
+            setFile(null);
+            setPreview(null);
+            setLocation(null);
+        } catch (error) {
+            // alert("Absensi gagal! " + error.response.data.message);
+            setError(error.response.data.message);
+            console.error(error);
+            return;
+        }
     };
 
     return (
-        <div className="p-4">
-            {/* Lokasi otomatis */}
-            {location ? (
-                <p className="mb-4">
-                    📍 Lokasi Terdeteksi: {location.lat}, {location.lng}
-                </p>
-            ) : (
-                <p className="mb-4 text-red-500">Mengambil lokasi...</p>
-            )}
+        <div className="p-4 fixed h-screen overflow-hidden z-9999 bg-slate-700/90 w-screen">
+            <div className="p-4 flex flex-col items-center justify-center h-full w-full sm:w-1/3 mx-auto">
+                {/* Lokasi otomatis */}
+                <LiveClock textSize="text-5xl" style="font-bold" />
+                {location ? (
+                    <p className="mb-4 text-sm">
+                        {address?.town}, {address?.county}
+                    </p>
+                ) : (
+                    <p className="mb-4 text-red-500">Mengambil lokasi...</p>
+                )}
 
-            <input type="file" capture="environment" className="form-control" accept="image/*" onChange={handleFileChange} />
+                <div className="flex mb-4 bg-slate-300 dark:bg-slate-500 rounded-full">
+                    <button onClick={() => setType("Kasir")} className={`${type === "Kasir" && "bg-green-600"} text-white px-4 py-1 rounded-full w-24`}>
+                        Kasir
+                    </button>
+                    <button onClick={() => setType("Backup")} className={`${type === "Backup" && "bg-green-600"} text-white px-4 py-1 rounded-full w-24`}>
+                        Backup
+                    </button>
+                </div>
+                <input type="file" capture="environment" className="form-control" accept="image/*" onChange={handleFileChange} />
+                {error && <p className="text-red-500 text-xs">{error}</p>}
 
-            {preview && <img src={preview} className="w-48 mt-4 rounded shadow" alt="preview" />}
+                {preview && <img src={preview} className="w-48 mt-4 rounded shadow" alt="preview" />}
 
-            <button onClick={handleSubmit} className="px-4 py-2 bg-green-600 text-white rounded mt-4">
-                Submit Absensi
-            </button>
+                <Button buttonType="primary" onClick={handleSubmit} className="mt-2">
+                    Submit Absensi
+                </Button>
+                <button className="mt-2 hover:underline" onClick={logout}>
+                    Logout
+                </button>
+            </div>
         </div>
     );
 }

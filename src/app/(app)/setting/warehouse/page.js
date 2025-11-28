@@ -96,6 +96,19 @@ const Warehouse = () => {
             });
         }
     };
+
+    const resetLocation = async (id) => {
+        try {
+            await axios.put(`api/warehouse/${id}/reset-location`);
+            fetchWarehouses();
+        } catch (error) {
+            setErrors(error.response?.data?.errors || ["Something went wrong."]);
+            setNotification({
+                type: "error",
+                message: error.response?.data?.message || "Reset location failed",
+            });
+        }
+    };
     return (
         <MainPage headerTitle="Warehouse">
             <div className="p-8">
@@ -156,10 +169,25 @@ const Warehouse = () => {
                                         <td>
                                             <span className="font-bold text-green-600">{warehouse.name}</span>
                                             <span className="block text-xs">
-                                                {warehouse.code} | {warehouse.chart_of_account.acc_name} | {formatDateTime(warehouse.created_at)}
+                                                {warehouse.code}, {warehouse.chart_of_account.acc_name}, {formatDateTime(warehouse.created_at)},{" "}
+                                                {warehouse.contact?.name || "Unassigned"}
                                             </span>
                                             <span className="block text-xs">
-                                                <MapPinIcon className="w-4 h-4 inline" /> {warehouse.address}
+                                                Zona: {warehouse.zone_name ?? "None"} <MapPinIcon className="w-4 h-4 inline" /> {warehouse.address}
+                                                {warehouse.latitude && warehouse.longitude && (
+                                                    <>
+                                                        <Link
+                                                            target="_blank"
+                                                            className="hover:underline ml-4"
+                                                            href={`https://www.google.com/maps?q=${warehouse.latitude},${warehouse.longitude}`}
+                                                        >
+                                                            Buka di Maps
+                                                        </Link>
+                                                        <button onClick={() => resetLocation(warehouse.id)} className="hover:underline ml-4">
+                                                            Reset
+                                                        </button>
+                                                    </>
+                                                )}
                                             </span>
                                         </td>
                                         <td className="text-center">

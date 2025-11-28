@@ -64,6 +64,8 @@ export default function AttendanceForm({ logout }) {
         }
     }, [location]);
 
+    console.log(address);
+
     // Upload ke Backend Laravel
     const handleSubmit = async () => {
         if (!file) {
@@ -98,8 +100,9 @@ export default function AttendanceForm({ logout }) {
     };
 
     return (
-        <div className="p-4 fixed h-screen overflow-hidden z-9999 bg-slate-700/90 w-screen">
-            <div className="p-4 flex flex-col items-center justify-center h-full w-full sm:w-1/3 mx-auto">
+        // <div className="p-4 fixed h-screen overflow-hidden z-9999 bg-slate-700/90 w-screen">
+        <div className="">
+            <div className="p-4 flex flex-col items-center justify-center h-full w-full mx-auto">
                 {/* Lokasi otomatis */}
                 <LiveClock textSize="text-5xl" style="font-bold" />
                 {location ? (

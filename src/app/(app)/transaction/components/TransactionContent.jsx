@@ -14,7 +14,8 @@ import VoucherSalesTable from "../../dashboard/components/VoucherSalesTable";
 import CorrectionTable from "../inspection/CorrectionTable";
 import MutationTable from "./MutationTable";
 import Button from "@/components/Button";
-import { set } from "date-fns";
+import { add, set } from "date-fns";
+import getAddress from "@/libs/getAddress";
 
 const getCurrentDate = () => {
     const nowUTC = new Date();
@@ -115,12 +116,22 @@ const TransactionContent = () => {
         });
 
     const updateWarehouseLocation = async (warehouseId) => {
+        setLoading(true);
+
+        if (!navigator.geolocation) {
+            alert("Browser tidak mendukung GPS");
+            return;
+        }
+
         try {
             const pos = await getLocation();
+
+            const address = await getAddress(pos.coords.latitude, pos.coords.longitude);
 
             const response = await axios.put(`/api/update-warehouse-location/${warehouseId}`, {
                 latitude: pos.coords.latitude,
                 longitude: pos.coords.longitude,
+                address: address.town + ", " + address.county + ", " + address.postcode,
             });
             setLat(pos.coords.latitude);
 
@@ -224,7 +235,7 @@ const TransactionContent = () => {
                     </div>
                     <div className="order-1 sm:order-2">
                         {!lat && (
-                            <Button buttonType="info" className={`w-full mb-2`} onClick={() => updateWarehouseLocation(warehouse)}>
+                            <Button buttonType="info" className={`w-full mb-2`} disabled={loading} onClick={() => updateWarehouseLocation(warehouse)}>
                                 Update Lokasi Cabang
                             </Button>
                         )}

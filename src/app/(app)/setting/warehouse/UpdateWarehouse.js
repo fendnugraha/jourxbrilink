@@ -9,10 +9,29 @@ const UpdateWarehouse = ({ isModalOpen, notification, findSelectedWarehouseId, f
     const [accounts, setAccounts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState({
-        name: findSelectedWarehouseId?.name,
-        address: findSelectedWarehouseId?.address,
-        chart_of_account_id: findSelectedWarehouseId?.chart_of_account_id,
+        name: findSelectedWarehouseId?.name || "",
+        address: findSelectedWarehouseId?.address || "",
+        chart_of_account_id: findSelectedWarehouseId?.chart_of_account_id || "",
+        contact_id: findSelectedWarehouseId?.contact_id || "",
+        zone_name: findSelectedWarehouseId?.zone_name || "",
     });
+    const [employees, setEmployees] = useState([]);
+
+    const fetchContacts = async (url = "/api/get-all-contacts/Employee") => {
+        setLoading(true);
+        try {
+            const response = await axios.get(url);
+            setEmployees(response.data.data);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchContacts();
+    }, []);
 
     const fetchAccountByIds = useCallback(
         async ({ account_ids }) => {
@@ -56,13 +75,13 @@ const UpdateWarehouse = ({ isModalOpen, notification, findSelectedWarehouseId, f
                 <Input type="text" className={"form-control"} value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
             </div>
             <div className="mt-4">
-                <Label>Chart of Account</Label>
+                <Label>Akun</Label>
                 <select
                     className="form-select"
                     value={formData.chart_of_account_id}
                     onChange={(e) => setFormData({ ...formData, chart_of_account_id: e.target.value })}
                 >
-                    <option value="">Select Chart of Account</option>
+                    <option value="">Select Account</option>
                     {availableAccounts.map((account) => (
                         <option key={account.id} value={account.id}>
                             {account.acc_name}
@@ -71,8 +90,28 @@ const UpdateWarehouse = ({ isModalOpen, notification, findSelectedWarehouseId, f
                 </select>
             </div>
             <div className="mt-4">
+                <Label>Kasir</Label>
+                <select className="form-select" value={formData.contact_id} onChange={(e) => setFormData({ ...formData, contact_id: e.target.value })}>
+                    <option value="">Pilih Kasir</option>
+                    {employees.map((emp) => (
+                        <option key={emp.id} value={emp.id}>
+                            {emp.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            <div className="mt-4">
                 <Label>Address</Label>
                 <textarea className="form-control" value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} />
+            </div>
+            <div>
+                <Label>Zona</Label>
+                <Input
+                    type="text"
+                    className={"form-control"}
+                    value={formData.zone_name}
+                    onChange={(e) => setFormData({ ...formData, zone_name: e.target.value })}
+                />
             </div>
             <div className="mt-4">
                 <Button buttonType="success">Update</Button>

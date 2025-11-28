@@ -235,8 +235,13 @@ const TransactionContent = () => {
                     </div>
                     <div className="order-1 sm:order-2">
                         {!lat && (
-                            <Button buttonType="info" className={`w-full mb-2`} disabled={loading} onClick={() => updateWarehouseLocation(warehouse)}>
-                                Update Lokasi Cabang
+                            <Button
+                                buttonType="success"
+                                className={`w-full mb-2 animate-bounce`}
+                                disabled={loading}
+                                onClick={() => updateWarehouseLocation(warehouse)}
+                            >
+                                {loading ? "Updating..." : "Update Lokasi Cabang"}
                             </Button>
                         )}
                         <CashBankBalance warehouse={warehouse} accountBalance={accountBalance} isValidating={isValidating} user={user} />

@@ -10,7 +10,7 @@ const nextConfig = {
             },
             {
                 protocol: "https",
-                hostname: "api.threekomunika.com",
+                hostname: "api.three-komunika.com",
                 pathname: "/storage/**",
             },
         ],

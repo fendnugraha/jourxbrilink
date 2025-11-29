@@ -62,7 +62,7 @@ const Warehouse = () => {
         return () => clearTimeout(timeout);
     }, [search, fetchWarehouses]);
 
-    const findSelectedWarehouseId = warehouses.data?.find((warehouse) => warehouse.id === selectedWarehouseId);
+    const findSelectedWarehouseId = warehouses.data?.find((warehouse) => warehouse?.id === selectedWarehouseId);
 
     const handleChangePage = (url) => {
         fetchWarehouses(url);
@@ -111,7 +111,7 @@ const Warehouse = () => {
         }
     };
 
-    const headquarter = warehouses.data?.find((warehouse) => warehouse.id === 1);
+    const headquarter = warehouses.data?.find((warehouse) => warehouse?.id === 1);
     return (
         <MainPage headerTitle="Warehouse">
             <div className="p-8">
@@ -171,38 +171,41 @@ const Warehouse = () => {
                                 </tr>
                             ) : (
                                 warehouses?.data?.map((warehouse) => (
-                                    <tr key={warehouse.id}>
+                                    <tr key={warehouse?.id}>
                                         <td>
-                                            <span className="font-bold text-green-600 dark:text-green-400">{warehouse.name}</span>
+                                            <span className="font-bold text-green-600 dark:text-green-400">{warehouse?.name}</span>
                                             <span className="block text-xs">
-                                                {warehouse.code}, {warehouse.chart_of_account.acc_name}, {formatDateTime(warehouse.created_at)}
+                                                {warehouse?.code}, {warehouse?.chart_of_account.acc_name}, {formatDateTime(warehouse?.created_at)}
                                             </span>
                                             <span className="block text-xs">
-                                                <MapPinIcon className="w-4 h-4 inline" /> {warehouse.address}
-                                                {warehouse.latitude && warehouse.longitude && (
+                                                <MapPinIcon className="w-4 h-4 inline" /> {warehouse?.address}
+                                                {warehouse?.latitude && warehouse?.longitude && (
                                                     <>
                                                         <Link
                                                             target="_blank"
                                                             className="hover:underline ml-4"
-                                                            href={`https://www.google.com/maps?q=${warehouse.latitude},${warehouse.longitude}`}
+                                                            href={`https://www.google.com/maps?q=${warehouse?.latitude},${warehouse?.longitude}`}
                                                         >
                                                             Buka di Maps
                                                         </Link>
-                                                        <button onClick={() => resetLocation(warehouse.id)} className="hover:underline ml-4">
+                                                        <button onClick={() => resetLocation(warehouse?.id)} className="hover:underline ml-4">
                                                             Reset
                                                         </button>
                                                     </>
                                                 )}
                                             </span>
                                         </td>
-                                        <td className="text-center">{warehouse.contact?.name || "-"}</td>
-                                        <td className="text-center">{warehouse.zone_name}</td>
+                                        <td className="text-center">{warehouse?.contact?.name || "-"}</td>
+                                        <td className="text-center">{warehouse?.zone_name}</td>
                                         <td className="text-center">
-                                            {warehouse.id !== 1 && warehouse.latitude && warehouse.longitude && (
+                                            {warehouse?.id !== 1 && warehouse?.latitude && warehouse?.longitude && (
                                                 <span className="text-lg">
-                                                    {getDistance(headquarter.latitude, headquarter.longitude, warehouse.latitude, warehouse.longitude).toFixed(
-                                                        3
-                                                    )}{" "}
+                                                    {getDistance(
+                                                        headquarter?.latitude,
+                                                        headquarter?.longitude,
+                                                        warehouse?.latitude,
+                                                        warehouse?.longitude
+                                                    ).toFixed(3)}{" "}
                                                     km
                                                 </span>
                                             )}
@@ -211,14 +214,14 @@ const Warehouse = () => {
                                             <span className="flex gap-2 justify-center">
                                                 <Link
                                                     className="cursor-pointer hover:scale-125 transition transform ease-in"
-                                                    href={`/setting/warehouse/detail/${warehouse.id}`}
+                                                    href={`/setting/warehouse/detail/${warehouse?.id}`}
                                                 >
                                                     <EyeIcon size={24} />
                                                 </Link>
                                                 <button
                                                     onClick={() => {
                                                         setIsModalUpdateWarehouseOpen(true);
-                                                        setSelectedWarehouseId(warehouse.id);
+                                                        setSelectedWarehouseId(warehouse?.id);
                                                     }}
                                                     className="cursor-pointer hover:scale-125 transition transform ease-in"
                                                 >
@@ -227,7 +230,7 @@ const Warehouse = () => {
                                                 <button
                                                     onClick={() => {
                                                         setIsModalDeleteWarehouseOpen(true);
-                                                        setSelectedWarehouseId(warehouse.id);
+                                                        setSelectedWarehouseId(warehouse?.id);
                                                     }}
                                                     className="disabled:text-red-400 cursor-pointer hover:scale-125 transition transform ease-in"
                                                 >

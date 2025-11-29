@@ -95,6 +95,8 @@ const DeliveryPage = () => {
     const { accountBalance, error: accountBalanceError, loading: accountBalanceLoading, mutateCashBankBalance } = useCashBankBalance(1, endDate);
     const cashBalance = accountBalance?.data?.chartOfAccounts?.find((acc) => acc?.account_id === 1)?.balance;
 
+    const headquarter = warehouses?.data?.find((warehouse) => warehouse?.id === 1);
+
     return (
         <MainPage headerTitle="Delivery">
             {notification.message && (
@@ -222,6 +224,7 @@ const DeliveryPage = () => {
                         </div>
                         {selectTable === "delivery" && (
                             <DeliveryTable
+                                headquarter={headquarter}
                                 filteredJournals={filteredJournals}
                                 loading={isValidating}
                                 itemsPerPage={itemsPerPage}

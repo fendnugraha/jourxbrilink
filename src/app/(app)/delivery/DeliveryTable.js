@@ -2,11 +2,12 @@
 import SimplePagination from "@/components/SimplePagination";
 import StatusBadge from "@/components/StatusBadge";
 import { formatDateTime, formatDurationTime, formatNumber } from "@/libs/format";
+import getDistance from "@/libs/getDistance";
 import { Bike, CheckCheck, MapPin } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-const DeliveryTable = ({ filteredJournals, itemsPerPage, currentPage, setCurrentPage }) => {
+const DeliveryTable = ({ headquarter, filteredJournals, itemsPerPage, currentPage, setCurrentPage }) => {
     const totalItems = filteredJournals?.length || 0;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -38,7 +39,18 @@ const DeliveryTable = ({ filteredJournals, itemsPerPage, currentPage, setCurrent
                                         {journal?.invoice}
                                     </Link>
                                     <span className="text-xs flex gap-1">
-                                        <MapPin size={14} className="text-red-500 dark:text-red-300" /> {journal?.debt?.warehouse?.name}
+                                        <MapPin size={14} className="text-red-500 dark:text-red-300" /> {journal?.debt?.warehouse?.name}{" "}
+                                        {journal?.debt?.warehouse?.latitude && journal?.debt?.warehouse?.longitude && (
+                                            <span className="italic">
+                                                {getDistance(
+                                                    headquarter.latitude,
+                                                    headquarter.longitude,
+                                                    journal?.debt?.warehouse?.latitude,
+                                                    journal?.debt?.warehouse?.longitude
+                                                ).toFixed(2)}{" "}
+                                                km
+                                            </span>
+                                        )}
                                         <Bike size={14} className="ml-1 bg-yellow-500 p-0.5 rounded-full" /> {formatDateTime(journal?.date_issued)}
                                         <CheckCheck size={14} className="ml-1 bg-green-500 p-0.5 rounded-full" />{" "}
                                         {journal?.status === 0 ? "-" : formatDateTime(journal?.updated_at)}

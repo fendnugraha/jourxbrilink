@@ -167,7 +167,7 @@ const Warehouse = () => {
                                 warehouses?.data?.map((warehouse) => (
                                     <tr key={warehouse.id}>
                                         <td>
-                                            <span className="font-bold text-green-600">{warehouse.name}</span>
+                                            <span className="font-bold text-green-600 dark:text-green-400">{warehouse.name}</span>
                                             <span className="block text-xs">
                                                 {warehouse.code}, {warehouse.chart_of_account.acc_name}, {formatDateTime(warehouse.created_at)},{" "}
                                                 {warehouse.contact?.name || "Unassigned"}

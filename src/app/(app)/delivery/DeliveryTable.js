@@ -1,11 +1,10 @@
 "use client";
 import SimplePagination from "@/components/SimplePagination";
 import StatusBadge from "@/components/StatusBadge";
-import { formatDateTime, formatDurationTime, formatNumber } from "@/libs/format";
+import { formatDurationTime, formatNumber, formatTime } from "@/libs/format";
 import getDistance from "@/libs/getDistance";
 import { Bike, CheckCheck, MapPin } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 
 const DeliveryTable = ({ headquarter, filteredJournals, itemsPerPage, currentPage, setCurrentPage }) => {
     const totalItems = filteredJournals?.length || 0;
@@ -47,13 +46,13 @@ const DeliveryTable = ({ headquarter, filteredJournals, itemsPerPage, currentPag
                                                     headquarter.longitude,
                                                     journal?.debt?.warehouse?.latitude,
                                                     journal?.debt?.warehouse?.longitude
-                                                ).toFixed(2)}{" "}
+                                                ).toFixed(3)}{" "}
                                                 km
                                             </span>
                                         )}
-                                        <Bike size={14} className="ml-1 bg-yellow-500 p-0.5 rounded-full" /> {formatDateTime(journal?.date_issued)}
+                                        <Bike size={14} className="ml-1 bg-yellow-500 p-0.5 rounded-full" /> {formatTime(journal?.date_issued)}
                                         <CheckCheck size={14} className="ml-1 bg-green-500 p-0.5 rounded-full" />{" "}
-                                        {journal?.status === 0 ? "-" : formatDateTime(journal?.updated_at)}
+                                        {journal?.status === 0 ? "-" : formatTime(journal?.updated_at)}
                                         {journal?.status === 1 && (
                                             <span className="italic">({formatDurationTime(journal?.updated_at, journal?.date_issued)})</span>
                                         )}

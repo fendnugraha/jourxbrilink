@@ -13,6 +13,7 @@ import CreateWarehouse from "./CreateWarehouse";
 import CreateAccount from "../account/CreateAccount";
 import UpdateWarehouse from "./UpdateWarehouse";
 import { set } from "date-fns";
+import getDistance from "@/libs/getDistance";
 
 const Warehouse = () => {
     const [warehouses, setWarehouses] = useState([]);
@@ -109,6 +110,8 @@ const Warehouse = () => {
             });
         }
     };
+
+    const headquarter = warehouses.data?.find((warehouse) => warehouse.id === 1);
     return (
         <MainPage headerTitle="Warehouse">
             <div className="p-8">
@@ -150,11 +153,14 @@ const Warehouse = () => {
                         autoComplete="off"
                     />
                 </div>
-                <div className="overflow-y-auto card w-full sm:w-3/4">
+                <div className="overflow-y-auto card w-full">
                     <table className="table w-full text-xs">
                         <thead>
                             <tr>
-                                <th>Warehouse Name</th>
+                                <th>Nama Cabang</th>
+                                <th>Kasir</th>
+                                <th>Zona</th>
+                                <th>Jarak</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -169,11 +175,10 @@ const Warehouse = () => {
                                         <td>
                                             <span className="font-bold text-green-600 dark:text-green-400">{warehouse.name}</span>
                                             <span className="block text-xs">
-                                                {warehouse.code}, {warehouse.chart_of_account.acc_name}, {formatDateTime(warehouse.created_at)},{" "}
-                                                {warehouse.contact?.name || "Unassigned"}
+                                                {warehouse.code}, {warehouse.chart_of_account.acc_name}, {formatDateTime(warehouse.created_at)}
                                             </span>
                                             <span className="block text-xs">
-                                                Zona: {warehouse.zone_name ?? "None"} <MapPinIcon className="w-4 h-4 inline" /> {warehouse.address}
+                                                <MapPinIcon className="w-4 h-4 inline" /> {warehouse.address}
                                                 {warehouse.latitude && warehouse.longitude && (
                                                     <>
                                                         <Link
@@ -189,6 +194,18 @@ const Warehouse = () => {
                                                     </>
                                                 )}
                                             </span>
+                                        </td>
+                                        <td className="text-center">{warehouse.contact?.name || "-"}</td>
+                                        <td className="text-center">{warehouse.zone_name}</td>
+                                        <td className="text-center">
+                                            {warehouse.id !== 1 && warehouse.latitude && warehouse.longitude && (
+                                                <span className="text-lg">
+                                                    {getDistance(headquarter.latitude, headquarter.longitude, warehouse.latitude, warehouse.longitude).toFixed(
+                                                        3
+                                                    )}{" "}
+                                                    km
+                                                </span>
+                                            )}
                                         </td>
                                         <td className="text-center">
                                             <span className="flex gap-2 justify-center">

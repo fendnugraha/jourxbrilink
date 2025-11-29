@@ -7,6 +7,7 @@ import { formatDateTime, formatTime, todayDate } from "@/libs/format";
 import { DownloadIcon, FilterIcon, RefreshCcwIcon } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
+import AttendanceDetail from "./attendanceDetail";
 
 const AttendanceTable = () => {
     const today = todayDate();
@@ -17,6 +18,8 @@ const AttendanceTable = () => {
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
     const [warehouses, setWarehouses] = useState([]);
     const [errors, setErrors] = useState([]);
+    const [selectedWarehouse, setSelectedWarehouse] = useState(null);
+    const [isModalWarehouseDetailOpen, setIsModalWarehouseDetailOpen] = useState(false);
 
     const fetchWarehouses = useCallback(async () => {
         try {
@@ -34,6 +37,7 @@ const AttendanceTable = () => {
     console.log(warehouses);
     const closeModal = () => {
         setIsModalFilterDataOpen(false);
+        setIsModalWarehouseDetailOpen(false);
     };
     return (
         <div className="card p-4">
@@ -66,28 +70,38 @@ const AttendanceTable = () => {
                         <tr>
                             <th className="">Cabang</th>
                             <th className="text-center">Jam Masuk</th>
-                            <th className="">Foto Bukti</th>
+                            <th className="">Detail</th>
                         </tr>
                     </thead>
                     <tbody>
                         {warehouses?.map((warehouse) => (
                             <tr key={warehouse?.id}>
-                                <td className="">{warehouse?.name}</td>
+                                <td className="">
+                                    {warehouse?.name}
+                                    <span className="block">{warehouse?.address}</span>
+                                </td>
                                 <td className="text-center text-2xl font-bold">
                                     {warehouse?.attendance?.[0]?.created_at && formatTime(warehouse?.attendance[0]?.created_at)}
                                 </td>
                                 <td className="text-center">
-                                    {warehouse?.attendance?.[0]?.photo ? (
-                                        <Image src={warehouse?.attendance[0]?.photo_url} alt="attendance photo" width={50} height={50} />
-                                    ) : (
-                                        <span className="text-gray-400">Tidak ada foto</span>
-                                    )}
+                                    <button
+                                        onClick={() => {
+                                            setSelectedWarehouse(warehouse);
+                                            setIsModalWarehouseDetailOpen(true);
+                                        }}
+                                        className="small-button"
+                                    >
+                                        Detail
+                                    </button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
+            <Modal isOpen={isModalWarehouseDetailOpen} onClose={closeModal} modalTitle="Detail" maxWidth="max-w-lg">
+                <AttendanceDetail selectedWarehouse={selectedWarehouse} />
+            </Modal>
         </div>
     );
 };

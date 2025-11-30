@@ -1,0 +1,92 @@
+"use client";
+
+import { useState } from "react";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, getDay } from "date-fns";
+import id from "date-fns/locale/id";
+
+// Utility untuk memberi warna
+const getColor = (data) => {
+    if (!data) return "bg-gray-100 dark:bg-gray-800";
+
+    if (data.type === "attendance") {
+        if (data.status === "Hadir") return "bg-green-500 text-white";
+        if (data.status === "Telat") return "bg-red-500 text-white";
+        if (data.status === "Alpha") return "bg-gray-400 text-white";
+    }
+
+    if (data.type === "holiday") {
+        return "bg-yellow-400 text-black";
+    }
+
+    if (data.type === "event") {
+        return "bg-blue-400 text-white";
+    }
+
+    return "bg-gray-200";
+};
+
+export default function Calendar({ data = {}, className, maxWidth = "max-w-lg", withHeader = true }) {
+    const [currentMonth, setCurrentMonth] = useState(new Date());
+
+    const monthStart = startOfMonth(currentMonth);
+    const monthEnd = endOfMonth(currentMonth);
+    const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
+
+    const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
+    const prevMonth = () => setCurrentMonth(addMonths(currentMonth, -1));
+
+    // Hitung offset hari awal bulan (Senin = 1)
+    const startOffset = (getDay(monthStart) + 6) % 7;
+
+    return (
+        <div className={`w-full ${maxWidth} ${className} p-4`}>
+            {/* HEADER */}
+            <div className="flex justify-between items-center mb-4" hidden={!withHeader}>
+                <button onClick={prevMonth} className="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded">
+                    ◀
+                </button>
+
+                <h2 className="text-lg font-semibold">{format(currentMonth, "MMMM yyyy", { locale: id })}</h2>
+
+                <button onClick={nextMonth} className="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded">
+                    ▶
+                </button>
+            </div>
+
+            {/* GRID */}
+            <div className="grid grid-cols-7 gap-2 text-center text-sm mb-2">
+                {["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"].map((d) => (
+                    <div key={d} className="font-semibold text-gray-500 dark:text-gray-400">
+                        {d}
+                    </div>
+                ))}
+            </div>
+
+            <div className="grid grid-cols-7 gap-2 text-center">
+                {/* OFFSET kosong sebelum tanggal 1 */}
+                {[...Array(startOffset)].map((_, i) => (
+                    <div key={i}></div>
+                ))}
+
+                {/* RENDER TANGGAL */}
+                {days.map((day) => {
+                    const key = format(day, "yyyy-MM-dd");
+                    const info = data[key];
+                    const color = getColor(info);
+
+                    return (
+                        <div key={key} className={`h-20 rounded-xl flex flex-col justify-center items-center cursor-pointer ${color}`}>
+                            <span className="font-bold">{format(day, "d")}</span>
+
+                            {info?.type === "attendance" && <span className="text-xs">{info.status}</span>}
+
+                            {info?.type === "holiday" && <span className="text-[10px]">{info.name}</span>}
+
+                            {info?.type === "event" && <span className="text-[10px] italic">{info.name}</span>}
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}

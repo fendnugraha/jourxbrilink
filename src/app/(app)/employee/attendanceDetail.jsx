@@ -1,8 +1,6 @@
 "use client";
 import Button from "@/components/Button";
 import axios from "@/libs/axios";
-import { formatTime } from "@/libs/format";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const AttendanceDetail = ({ selectedWarehouse, fetchWarehouses, notification, isModalOpen }) => {
@@ -42,7 +40,6 @@ const AttendanceDetail = ({ selectedWarehouse, fetchWarehouses, notification, is
         setLoading(true);
         try {
             const response = await axios.put(`/api/attendance/${selectedWarehouse?.attendance?.[0]?.id}`, formData);
-            console.log(response);
             notification({ type: "success", message: response.data.message });
             isModalOpen(false);
             fetchContacts();
@@ -56,13 +53,16 @@ const AttendanceDetail = ({ selectedWarehouse, fetchWarehouses, notification, is
     return (
         <div className="flex gap-2">
             {selectedWarehouse?.attendance?.[0]?.photo ? (
-                <Image src={selectedWarehouse?.attendance[0]?.photo_url} alt={selectedWarehouse?.name} width={150} height={250} />
+                <div className="relative w-[250px] h-auto">
+                    <img src={selectedWarehouse.attendance[0].photo_url} alt={selectedWarehouse.name} className="object-contain w-full h-full" />
+                </div>
             ) : (
                 <div className="text-gray-400 border border-gray-300 rounded-2xl dark:border-gray-500 p-2 h-[250px] w-[150px]">Tidak ada foto</div>
             )}
+
             <div className="flex-1">
                 <label className="text-sm font-bold">{selectedWarehouse?.name}</label>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{selectedWarehouse?.address}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">{selectedWarehouse?.address}</p>
                 <label className="text-sm font-bold">Kasir</label>
                 <select className="form-select" value={formData.contact_id} onChange={(e) => setFormData({ ...formData, contact_id: e.target.value })}>
                     <option value="">-</option>

@@ -12,8 +12,8 @@ import Notification from "@/components/Notification";
 const AttendanceTable = () => {
     const today = todayDate();
     const [notification, setNotification] = useState({
-        type: "success",
-        message: "test",
+        type: "",
+        message: "",
     });
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(today);
@@ -112,7 +112,7 @@ const AttendanceTable = () => {
                     </tbody>
                 </table>
             </div>
-            <Modal isOpen={isModalWarehouseDetailOpen} onClose={closeModal} modalTitle="Detail" maxWidth="max-w-lg">
+            <Modal isOpen={isModalWarehouseDetailOpen} onClose={closeModal} modalTitle="Detail" maxWidth="max-w-xl">
                 <AttendanceDetail
                     selectedWarehouse={selectedWarehouse}
                     fetchWarehouses={fetchWarehouses}

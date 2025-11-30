@@ -3,7 +3,7 @@ import Input from "@/components/Input";
 import Label from "@/components/Label";
 import Modal from "@/components/Modal";
 import axios from "@/libs/axios";
-import { formatDateTime, formatTime, todayDate } from "@/libs/format";
+import { diffHuman, formatDateTime, formatTime, todayDate } from "@/libs/format";
 import { DownloadIcon, FilterIcon, RefreshCcwIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import AttendanceDetail from "./attendanceDetail";
@@ -87,11 +87,19 @@ const AttendanceTable = () => {
                                     {warehouse?.name}
                                     <span className="block text-slate-400 font-normal">{warehouse?.address}</span>
                                 </td>
-                                <td className="text-center">{warehouse?.zone_name}</td>
+                                <td className="text-center">{warehouse?.zone?.zone_name}</td>
                                 <td className="text-center text-2xl font-bold">{warehouse?.opening_time ?? "-"}</td>
                                 <td className="text-center text-2xl font-bold">
                                     {warehouse?.attendance?.[0]?.created_at ? (
-                                        warehouse?.attendance?.[0]?.time_in
+                                        <>
+                                            {warehouse?.attendance?.[0]?.time_in}
+                                            <span className="block text-slate-400 font-normal text-xs">
+                                                {" "}
+                                                {warehouse?.attendance?.[0]?.approval_status === "Late" && (
+                                                    <span>Telat {diffHuman(warehouse?.opening_time, warehouse?.attendance?.[0]?.time_in)}</span>
+                                                )}
+                                            </span>
+                                        </>
                                     ) : (
                                         <span className="text-gray-400 text-xs font-normal">Belum absen</span>
                                     )}

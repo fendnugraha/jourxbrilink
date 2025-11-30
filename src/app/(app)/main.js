@@ -77,11 +77,11 @@ const MainPage = ({ children, headerTitle }) => {
 
     return (
         <>
-            {/* {!attCheck?.approval_status && userWarehouseId !== 1 && userRole !== "Super Admin" && (
+            {!attCheck?.approval_status && isWithinTime && userWarehouseId !== 1 && userRole !== "Super Admin" && (
                 <div className="p-4 fixed h-screen overflow-hidden z-9999 bg-slate-700/90 w-screen text-white">
                     <AttendanceForm attCheckMutate={attCheckMutate} />
                 </div>
-            )} */}
+            )}
 
             <header className="w-full h-20 flex items-center justify-between px-4 sm:px-12 py-2">
                 <h1 className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-white">

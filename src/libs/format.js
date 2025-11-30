@@ -1,4 +1,4 @@
-import { differenceInDays, formatDistanceToNow } from "date-fns";
+import { differenceInDays, differenceInMinutes, formatDistanceToNow, parse } from "date-fns";
 
 /**
  * Format angka dengan separator ribuan.
@@ -167,3 +167,22 @@ export const formatTime = (time) => {
     const seconds = date.getSeconds();
     return `${hours}:${minutes}:${seconds}`;
 };
+
+export function diffHuman(t1, t2) {
+    const time1 = parse(t1, "HH:mm:ss", new Date());
+    const time2 = parse(t2, "HH:mm:ss", new Date());
+
+    const diff = differenceInMinutes(time2, time1);
+    const hours = Math.floor(diff / 60);
+    const minutes = diff % 60;
+
+    if (hours === 0) {
+        return `${minutes} menit`;
+    } else if (minutes === 0) {
+        return `${hours} jam`;
+    } else if (hours === 0 && minutes === 0) {
+        return "";
+    } else {
+        return `${hours} jam ${minutes} menit`;
+    }
+}

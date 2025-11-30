@@ -59,6 +59,12 @@ export default function AttendanceForm({ attCheckMutate }) {
         setTimeIn(formatTime(new Date()));
     };
 
+    useEffect(() => {
+        return () => {
+            if (preview) URL.revokeObjectURL(preview);
+        };
+    }, [preview]);
+
     async function getAddress(lat, lng) {
         const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
         const data = await res.json();
@@ -107,8 +113,6 @@ export default function AttendanceForm({ attCheckMutate }) {
         }
     };
 
-    console.log(timeIn);
-
     return (
         <>
             {/* // <div className=""> */}
@@ -142,17 +146,18 @@ export default function AttendanceForm({ attCheckMutate }) {
                     </p>
                 )}
                 {timeIn ? (
-                    <span className="text-6xl my-4 font-bold text-yellow-200 animate-bounce block">{timeIn}</span>
+                    <span className="text-6xl my-4 font-bold text-blue-200 block">{timeIn}</span>
                 ) : (
                     <LiveClock textSize="text-6xl my-4" style="font-bold" />
                 )}
 
                 <div className="flex items-center gap-2 w-full">
                     <label
-                        htmlFor="photo"
+                        htmlFor={file ? null : "photo"}
                         className={`p-4 w-full flex justify-center items-center rounded-2xl text-white cursor-pointer ${
                             location ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
                         }`}
+                        hidden={file}
                     >
                         <CameraIcon size={28} strokeWidth={2} />
                     </label>
@@ -164,8 +169,9 @@ export default function AttendanceForm({ attCheckMutate }) {
                                 setFile(null);
                                 setPreview(null);
                                 setError(null);
+                                setTimeIn(null);
                             }}
-                            className="p-4 w-full flex justify-center items-center text-center rounded-2xl text-white bg-red-600 hover:bg-red-700"
+                            className="p-2 w-full flex justify-center items-center text-center rounded-2xl text-white bg-red-500 hover:bg-red-300"
                         >
                             <Undo size={28} strokeWidth={2} />
                         </button>
@@ -183,7 +189,7 @@ export default function AttendanceForm({ attCheckMutate }) {
 
                 {preview && <img src={preview} className="w-48 mt-4 rounded shadow" alt="preview" />}
 
-                <Button buttonType="success" onClick={handleSubmit} className="mt-2 !p-4 w-full sm:w-auto !text-lg" hidden={!location || !file}>
+                <Button buttonType="info" onClick={handleSubmit} className="mt-2 !p-4 w-full sm:w-auto !text-lg" hidden={!location || !file}>
                     Submit Absensi
                 </Button>
 

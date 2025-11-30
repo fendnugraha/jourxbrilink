@@ -5,7 +5,7 @@ import Label from "@/components/Label";
 import axios from "@/libs/axios";
 import { useCallback, useEffect, useState } from "react";
 
-const UpdateWarehouse = ({ isModalOpen, notification, findSelectedWarehouseId, fetchWarehouses }) => {
+const UpdateWarehouse = ({ isModalOpen, notification, findSelectedWarehouseId, fetchWarehouses, zones }) => {
     const [accounts, setAccounts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState({
@@ -13,7 +13,8 @@ const UpdateWarehouse = ({ isModalOpen, notification, findSelectedWarehouseId, f
         address: findSelectedWarehouseId?.address || "",
         chart_of_account_id: findSelectedWarehouseId?.chart_of_account_id || "",
         contact_id: findSelectedWarehouseId?.contact_id || "",
-        zone_name: findSelectedWarehouseId?.zone_name || "",
+        warehouse_zone_id: findSelectedWarehouseId?.warehouse_zone_id || "",
+        opening_time: findSelectedWarehouseId?.opening_time || "",
     });
     const [employees, setEmployees] = useState([]);
 
@@ -104,14 +105,31 @@ const UpdateWarehouse = ({ isModalOpen, notification, findSelectedWarehouseId, f
                 <Label>Address</Label>
                 <textarea className="form-control" value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} />
             </div>
-            <div>
-                <Label>Zona</Label>
-                <Input
-                    type="text"
-                    className={"form-control"}
-                    value={formData.zone_name}
-                    onChange={(e) => setFormData({ ...formData, zone_name: e.target.value })}
-                />
+            <div className="mt-4 flex gap-2">
+                <div>
+                    <Label>Zona</Label>
+                    <select
+                        className="form-select"
+                        value={formData.warehouse_zone_id}
+                        onChange={(e) => setFormData({ ...formData, warehouse_zone_id: e.target.value })}
+                    >
+                        <option value="">Pilih Zona</option>
+                        {zones?.map((zone) => (
+                            <option key={zone.id} value={zone.id}>
+                                {zone.zone_name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div>
+                    <Label>Waktu Buka</Label>
+                    <Input
+                        type="time"
+                        className={"form-control"}
+                        value={formData.opening_time}
+                        onChange={(e) => setFormData({ ...formData, opening_time: e.target.value })}
+                    />
+                </div>
             </div>
             <div className="mt-4">
                 <Button buttonType="success">Update</Button>

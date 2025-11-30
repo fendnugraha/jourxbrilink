@@ -1,7 +1,58 @@
+"use client";
+import Button from "@/components/Button";
+import axios from "@/libs/axios";
 import { formatTime } from "@/libs/format";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
-const AttendanceDetail = ({ selectedWarehouse }) => {
+const AttendanceDetail = ({ selectedWarehouse, fetchWarehouses, notification, isModalOpen }) => {
+    const [formData, setFormData] = useState({
+        contact_id: "",
+        time_in: "",
+        approval_status: "",
+    });
+
+    useEffect(() => {
+        setFormData({
+            contact_id: selectedWarehouse?.attendance?.[0]?.contact_id,
+            time_in: selectedWarehouse?.attendance?.[0]?.time_in,
+            approval_status: selectedWarehouse?.attendance?.[0]?.approval_status,
+        });
+    }, [selectedWarehouse]);
+    const [loading, setLoading] = useState(true);
+    const [employees, setEmployees] = useState([]);
+    const fetchContacts = async (url = "/api/get-all-contacts/Employee") => {
+        setLoading(true);
+        try {
+            const response = await axios.get(url);
+            setEmployees(response.data.data);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchContacts();
+    }, []);
+
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const response = await axios.put(`/api/attendance/${selectedWarehouse?.attendance?.[0]?.id}`, formData);
+            console.log(response);
+            notification({ type: "success", message: response.data.message });
+            isModalOpen(false);
+            fetchContacts();
+        } catch (error) {
+            notification("error", error.response?.data?.message || "Something went wrong.");
+        } finally {
+            setLoading(false);
+            fetchWarehouses();
+        }
+    };
     return (
         <div className="flex gap-2">
             {selectedWarehouse?.attendance?.[0]?.photo ? (
@@ -10,17 +61,48 @@ const AttendanceDetail = ({ selectedWarehouse }) => {
                 <div className="text-gray-400 border border-gray-300 rounded-2xl dark:border-gray-500 p-2 h-[250px] w-[150px]">Tidak ada foto</div>
             )}
             <div className="flex-1">
-                <h1 className="text-lg font-bold">{selectedWarehouse?.name}</h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{selectedWarehouse?.address}</p>
-                <h1 className="text-lg font-bold">Kasir</h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{selectedWarehouse?.contact?.name}</p>
-                <h1 className="text-lg font-bold">Jam Masuk</h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {selectedWarehouse?.attendance?.[0]?.created_at && formatTime(selectedWarehouse?.attendance[0]?.created_at)} (
-                    {selectedWarehouse?.attendance?.[0]?.created_at ? selectedWarehouse?.attendance[0]?.approval_status : "Belum absen"})
+                <label className="text-sm font-bold">{selectedWarehouse?.name}</label>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{selectedWarehouse?.address}</p>
+                <label className="text-sm font-bold">Kasir</label>
+                <select className="form-select" value={formData.contact_id} onChange={(e) => setFormData({ ...formData, contact_id: e.target.value })}>
+                    <option value="">-</option>
+                    {employees.map((employee) => (
+                        <option key={employee.id} value={employee.id}>
+                            {employee.name}
+                        </option>
+                    ))}
+                </select>
+                <label className="text-sm font-bold">Check In</label>
+                <p className={`text-sm text-gray-500 dark:text-gray-400`}>
+                    {selectedWarehouse?.attendance?.[0]?.created_at && (
+                        <input
+                            type="time"
+                            className="form-control !w-fit"
+                            value={formData.time_in}
+                            onChange={(e) => setFormData({ ...formData, time_in: e.target.value })}
+                        />
+                    )}
                 </p>
-                <h1 className="text-lg font-bold">Status</h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400">-</p>
+                <label className="text-sm font-bold">Status</label>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {selectedWarehouse?.attendance?.[0]?.created_at ? (
+                        <select
+                            className="form-select"
+                            value={formData.approval_status}
+                            onChange={(e) => setFormData({ ...formData, approval_status: e.target.value })}
+                        >
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Good">Good</option>
+                            <option value="Late">Terlambat</option>
+                        </select>
+                    ) : (
+                        "Belum absen"
+                    )}
+                </p>
+                <Button buttonType="success" className={"mt-4"} onClick={handleUpdate} disabled={loading || !formData.approval_status}>
+                    {loading ? "Loading..." : "Update"}
+                </Button>
             </div>
         </div>
     );

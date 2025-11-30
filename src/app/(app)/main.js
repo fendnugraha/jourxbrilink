@@ -37,7 +37,11 @@ const MainPage = ({ children, headerTitle }) => {
         return suffixes[mod - 10] || suffixes[mod] || suffixes[0];
     };
 
-    const attCheck = useAttendanceCheck({
+    const {
+        data: attCheck,
+        error: attCheckError,
+        mutate: attCheckMutate,
+    } = useAttendanceCheck({
         date: new Date().toISOString().split("T")[0],
         userId: user?.id,
     });
@@ -57,9 +61,27 @@ const MainPage = ({ children, headerTitle }) => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [isOpen]);
+
+    const now = new Date();
+
+    // Ambil jam & menit WIB
+    const wibTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Jakarta" }));
+
+    const currentMinutes = wibTime.getHours() * 60 + wibTime.getMinutes();
+
+    // range waktu
+    const start = 6 * 60; // 06:00  -> 360 menit
+    const end = 9 * 60 + 30; // 09:30  -> 570 menit
+
+    const isWithinTime = currentMinutes >= start && currentMinutes <= end;
+
     return (
         <>
-            {/* {!attCheck.data?.approval_status && <AttendanceForm logout={logout} />} */}
+            {/* {!attCheck?.approval_status && userWarehouseId !== 1 && userRole !== "Super Admin" && (
+                <div className="p-4 fixed h-screen overflow-hidden z-9999 bg-slate-700/90 w-screen text-white">
+                    <AttendanceForm attCheckMutate={attCheckMutate} />
+                </div>
+            )} */}
 
             <header className="w-full h-20 flex items-center justify-between px-4 sm:px-12 py-2">
                 <h1 className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-white">

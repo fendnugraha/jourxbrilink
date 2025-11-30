@@ -5,13 +5,16 @@ import Modal from "@/components/Modal";
 import axios from "@/libs/axios";
 import { formatDateTime, formatTime, todayDate } from "@/libs/format";
 import { DownloadIcon, FilterIcon, RefreshCcwIcon } from "lucide-react";
-import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import AttendanceDetail from "./attendanceDetail";
+import Notification from "@/components/Notification";
 
 const AttendanceTable = () => {
     const today = todayDate();
-    const [notification, setNotification] = useState("");
+    const [notification, setNotification] = useState({
+        type: "success",
+        message: "test",
+    });
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(today);
     const [endDate, setEndDate] = useState(today);
@@ -34,13 +37,15 @@ const AttendanceTable = () => {
         fetchWarehouses();
     }, [fetchWarehouses]);
 
-    console.log(warehouses);
     const closeModal = () => {
         setIsModalFilterDataOpen(false);
         setIsModalWarehouseDetailOpen(false);
     };
     return (
         <div className="card p-4">
+            {notification.message && (
+                <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <h1 className="card-title mb-4">
                     Absensi Karyawan
@@ -69,6 +74,8 @@ const AttendanceTable = () => {
                     <thead>
                         <tr>
                             <th className="">Cabang</th>
+                            <th className="text-center">Zona</th>
+                            <th className="text-center">Waktu Buka</th>
                             <th className="text-center">Jam Masuk</th>
                             <th className="">Detail</th>
                         </tr>
@@ -76,12 +83,18 @@ const AttendanceTable = () => {
                     <tbody>
                         {warehouses?.map((warehouse) => (
                             <tr key={warehouse?.id}>
-                                <td className="">
+                                <td className="font-bold">
                                     {warehouse?.name}
-                                    <span className="block">{warehouse?.address}</span>
+                                    <span className="block text-slate-400 font-normal">{warehouse?.address}</span>
                                 </td>
+                                <td className="text-center">{warehouse?.zone_name}</td>
+                                <td className="text-center text-2xl font-bold">{warehouse?.opening_time ?? "-"}</td>
                                 <td className="text-center text-2xl font-bold">
-                                    {warehouse?.attendance?.[0]?.created_at && formatTime(warehouse?.attendance[0]?.created_at)}
+                                    {warehouse?.attendance?.[0]?.created_at ? (
+                                        warehouse?.attendance?.[0]?.time_in
+                                    ) : (
+                                        <span className="text-gray-400 text-xs font-normal">Belum absen</span>
+                                    )}
                                 </td>
                                 <td className="text-center">
                                     <button
@@ -100,7 +113,12 @@ const AttendanceTable = () => {
                 </table>
             </div>
             <Modal isOpen={isModalWarehouseDetailOpen} onClose={closeModal} modalTitle="Detail" maxWidth="max-w-lg">
-                <AttendanceDetail selectedWarehouse={selectedWarehouse} />
+                <AttendanceDetail
+                    selectedWarehouse={selectedWarehouse}
+                    fetchWarehouses={fetchWarehouses}
+                    notification={setNotification}
+                    isModalOpen={setIsModalWarehouseDetailOpen}
+                />
             </Modal>
         </div>
     );

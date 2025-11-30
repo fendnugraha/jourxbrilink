@@ -14,14 +14,17 @@ import CreateAccount from "../account/CreateAccount";
 import UpdateWarehouse from "./UpdateWarehouse";
 import { set } from "date-fns";
 import getDistance from "@/libs/getDistance";
+import CreateZone from "./CreateZone";
 
 const Warehouse = () => {
     const [warehouses, setWarehouses] = useState([]);
+    const [zones, setZones] = useState([]);
     const [categoryAccount, setCategoryAccount] = useState([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
     const [isModalCreateWarehouseOpen, setIsModalCreateWarehouseOpen] = useState(false);
     const [isModalCreateAccountOpen, setIsModalCreateAccountOpen] = useState(false);
+    const [isModalCreateZoneOpen, setIsModalCreateZoneOpen] = useState(false);
     const [notification, setNotification] = useState({ type: "", message: "" });
     const [errors, setErrors] = useState([]); // Store validation errors
     const [isModalDeleteWarehouseOpen, setIsModalDeleteWarehouseOpen] = useState(false);
@@ -33,6 +36,7 @@ const Warehouse = () => {
         setSelectedWarehouseId(null);
         setIsModalDeleteWarehouseOpen(false);
         setIsModalUpdateWarehouseOpen(false);
+        setIsModalCreateZoneOpen(false);
     };
 
     const fetchWarehouses = useCallback(
@@ -111,6 +115,19 @@ const Warehouse = () => {
         }
     };
 
+    const fetchZones = useCallback(async () => {
+        try {
+            const response = await axios.get("api/zones");
+            setZones(response.data.data);
+        } catch (error) {
+            setErrors(error.response?.message || ["Something went wrong."]);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchZones();
+    }, [fetchZones]);
+
     const headquarter = warehouses.data?.find((warehouse) => warehouse?.id === 1);
     return (
         <MainPage headerTitle="Warehouse">
@@ -125,6 +142,9 @@ const Warehouse = () => {
                     <Button buttonType="primary" onClick={() => setIsModalCreateAccountOpen(true)} className={`flex item-center gap-2`}>
                         <PlusIcon size={20} /> Add Account
                     </Button>
+                    <Button buttonType="primary" onClick={() => setIsModalCreateZoneOpen(true)} className={`flex item-center gap-2`}>
+                        <PlusIcon size={20} /> Add Zone
+                    </Button>
                     <Modal isOpen={isModalCreateWarehouseOpen} onClose={closeModal} modalTitle="Add new warehouse" maxWidth="max-w-lg">
                         <CreateWarehouse
                             isModalOpen={setIsModalCreateWarehouseOpen}
@@ -138,6 +158,9 @@ const Warehouse = () => {
                             notification={(type, message) => setNotification({ type, message })}
                             categoryAccount={categoryAccount}
                         />
+                    </Modal>
+                    <Modal isOpen={isModalCreateZoneOpen} onClose={closeModal} modalTitle="Create Zone" maxWidth="max-w-lg">
+                        <CreateZone isModalOpen={setIsModalCreateZoneOpen} notification={setNotification} fetchZones={fetchZones} />
                     </Modal>
                 </div>
                 <div className="relative w-full sm:max-w-sm">
@@ -196,7 +219,7 @@ const Warehouse = () => {
                                             </span>
                                         </td>
                                         <td className="text-center">{warehouse?.contact?.name || "-"}</td>
-                                        <td className="text-center">{warehouse?.zone_name}</td>
+                                        <td className="text-center">{warehouse?.zone?.zone_name}</td>
                                         <td className="text-center">
                                             {warehouse?.id !== 1 && warehouse?.latitude && warehouse?.longitude && (
                                                 <span className="text-lg">
@@ -252,6 +275,7 @@ const Warehouse = () => {
                     notification={(type, message) => setNotification({ type, message })}
                     findSelectedWarehouseId={findSelectedWarehouseId}
                     fetchWarehouses={fetchWarehouses}
+                    zones={zones}
                 />
             </Modal>
             <Modal isOpen={isModalDeleteWarehouseOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">

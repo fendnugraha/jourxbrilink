@@ -78,7 +78,7 @@ const MainPage = ({ children, headerTitle }) => {
 
     return (
         <>
-            {!attCheck?.approval_status && isWithinTime && !attCheckLoading && userWarehouseId !== 1 && userRole !== "Super Admin" && (
+            {!attCheck?.approval_status && isWithinTime && userWarehouseId !== 1 && userRole !== "Super Admin" && (
                 <div className="p-4 fixed h-screen overflow-hidden z-9999 bg-slate-800/50 backdrop-blur-sm w-screen text-white">
                     <AttendanceForm attCheckMutate={attCheckMutate} />
                 </div>

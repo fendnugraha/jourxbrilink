@@ -22,7 +22,7 @@ const EmployeePage = () => {
         "2025-11-05": { type: "event", name: "Meeting Bulanan" },
     };
     return (
-        <MainPage headerTitle="Employee">
+        <MainPage headerTitle="Absensi">
             <div className="py-4 sm:py-8 px-4 sm:px-12 overflow-x-auto">
                 {/* <SimpleLeaveCalendar /> */}
                 {/* <AttendanceForm /> */}

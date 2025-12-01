@@ -35,7 +35,7 @@ const AttenndanceCalendar = () => {
     attendanceData.forEach((item) => {
         calendarData[item.date] = {
             type: "attendance",
-            status: item.approval_status === "Late" ? "Telat" : "Hadir",
+            status: item.approval_status === "Late" ? "Telat" : item.approval_status === "Good" ? "Good" : "Hadir",
             time_in: item.time_in,
         };
     });

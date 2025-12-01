@@ -3,8 +3,8 @@ import Input from "@/components/Input";
 import Label from "@/components/Label";
 import Modal from "@/components/Modal";
 import axios from "@/libs/axios";
-import { diffHuman, formatDateTime, formatTime, todayDate } from "@/libs/format";
-import { DownloadIcon, FilterIcon, RefreshCcwIcon } from "lucide-react";
+import { DateTimeNow, diffHuman, formatDateTime, formatTime, todayDate } from "@/libs/format";
+import { Check, DownloadIcon, FilterIcon, RefreshCcwIcon, Star, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import AttendanceDetail from "./attendanceDetail";
 import Notification from "@/components/Notification";
@@ -13,16 +13,17 @@ import { useAuth } from "@/libs/auth";
 const AttendanceTable = () => {
     const { user } = useAuth();
     const userRole = user?.role?.role;
-    const today = todayDate();
+    const { thisMonth, today } = DateTimeNow();
     const [notification, setNotification] = useState({
         type: "",
         message: "",
     });
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(today);
-    const [endDate, setEndDate] = useState(today);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
     const [warehouses, setWarehouses] = useState([]);
+    const [zones, setZones] = useState([]);
+    const [selectedZone, setSelectedZone] = useState("");
     const [errors, setErrors] = useState([]);
     const [selectedWarehouse, setSelectedWarehouse] = useState(null);
     const [isModalWarehouseDetailOpen, setIsModalWarehouseDetailOpen] = useState(false);
@@ -40,10 +41,30 @@ const AttendanceTable = () => {
         fetchWarehouses();
     }, [fetchWarehouses]);
 
+    const fetchZones = useCallback(async () => {
+        try {
+            const response = await axios.get("/api/zones");
+            setZones(response.data.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchZones();
+    }, [fetchZones]);
+
     const closeModal = () => {
         setIsModalFilterDataOpen(false);
         setIsModalWarehouseDetailOpen(false);
     };
+
+    const filteredWarehouses = warehouses.filter((warehouse) => {
+        const zoneMatch = Number(warehouse.warehouse_zone_id) === Number(selectedZone);
+
+        return !selectedZone || zoneMatch;
+    });
+
     return (
         <div className="card p-4">
             {notification.message && (
@@ -55,7 +76,7 @@ const AttendanceTable = () => {
                     <span className="card-subtitle">Tanggal: {formatDateTime(startDate)}</span>
                 </h1>
                 <div className="flex gap-1 justify-end h-fit">
-                    <button className="small-button">
+                    <button className="small-button" onClick={() => fetchWarehouses()}>
                         <RefreshCcwIcon className="size-4" />
                     </button>
                     <button className="small-button">
@@ -67,10 +88,20 @@ const AttendanceTable = () => {
                     <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                         <div className="mb-4">
                             <Label className="font-bold">Tanggal</Label>
-                            <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="form-control" />
+                            <Input type="datetime-local" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="form-control" />
                         </div>
                     </Modal>
                 </div>
+            </div>
+            <div>
+                <select className="form-select" value={selectedZone} onChange={(e) => setSelectedZone(e.target.value)}>
+                    <option value="">Semua Zona</option>
+                    {zones?.map((zone) => (
+                        <option key={zone?.id} value={zone?.id}>
+                            {zone?.zone_name}
+                        </option>
+                    ))}
+                </select>
             </div>
             <div className="overflow-x-auto">
                 <table className="table-auto table w-full text-xs">
@@ -80,11 +111,12 @@ const AttendanceTable = () => {
                             <th className="text-center">Zona</th>
                             <th className="text-center">Waktu Buka</th>
                             <th className="text-center">Jam Masuk</th>
+                            <th className="text-center">Rating</th>
                             <th className="">Detail</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {warehouses?.map((warehouse) => (
+                        {filteredWarehouses?.map((warehouse) => (
                             <tr key={warehouse?.id}>
                                 <td className="font-bold">
                                     <div className="flex items-center">
@@ -107,13 +139,24 @@ const AttendanceTable = () => {
                                             {warehouse?.attendance?.[0]?.time_in}
                                             <span className="block text-slate-400 font-normal text-xs">
                                                 {" "}
-                                                {warehouse?.attendance?.[0]?.approval_status === "Late" && (
+                                                {warehouse?.attendance?.[0]?.approval_status === "Late" ? (
                                                     <span>Telat {diffHuman(warehouse?.opening_time, warehouse?.attendance?.[0]?.time_in)}</span>
+                                                ) : (
+                                                    <span>Lebih awal {diffHuman(warehouse?.attendance?.[0]?.time_in, warehouse?.opening_time)}</span>
                                                 )}
                                             </span>
                                         </>
                                     ) : (
                                         <span className="text-gray-400 text-xs font-normal">Belum absen</span>
+                                    )}
+                                </td>
+                                <td className="text-center">
+                                    {warehouse?.attendance?.[0]?.approval_status === "Late" ? (
+                                        <X size={20} className="text-red-500" />
+                                    ) : warehouse?.attendance?.[0]?.approval_status === "Good" ? (
+                                        <Star size={20} className="text-yellow-300" fill="yellow" />
+                                    ) : (
+                                        <Check size={20} className="text-green-500" />
                                     )}
                                 </td>
                                 <td className="text-center">

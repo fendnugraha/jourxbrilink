@@ -38,8 +38,8 @@ const EmployeePage = () => {
                 <Modal isOpen={isModalAttendanceFormOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Absensi">
                     <AttendanceForm />
                 </Modal> */}
-                {/* <AttendanceTable /> */}
-                <AttenndanceCalendar />
+                <AttendanceTable />
+                {/* <AttenndanceCalendar /> */}
             </div>
         </MainPage>
     );

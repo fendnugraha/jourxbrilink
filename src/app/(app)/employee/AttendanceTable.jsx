@@ -8,8 +8,11 @@ import { DownloadIcon, FilterIcon, RefreshCcwIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import AttendanceDetail from "./attendanceDetail";
 import Notification from "@/components/Notification";
+import { useAuth } from "@/libs/auth";
 
 const AttendanceTable = () => {
+    const { user } = useAuth();
+    const userRole = user?.role?.role;
     const today = todayDate();
     const [notification, setNotification] = useState({
         type: "",
@@ -105,15 +108,17 @@ const AttendanceTable = () => {
                                     )}
                                 </td>
                                 <td className="text-center">
-                                    <button
-                                        onClick={() => {
-                                            setSelectedWarehouse(warehouse);
-                                            setIsModalWarehouseDetailOpen(true);
-                                        }}
-                                        className="small-button"
-                                    >
-                                        Detail
-                                    </button>
+                                    {["Administrator", "Super Admin"].includes(userRole) && (
+                                        <button
+                                            onClick={() => {
+                                                setSelectedWarehouse(warehouse);
+                                                setIsModalWarehouseDetailOpen(true);
+                                            }}
+                                            className="small-button"
+                                        >
+                                            Detail
+                                        </button>
+                                    )}
                                 </td>
                             </tr>
                         ))}

@@ -187,7 +187,7 @@ export default function AttendanceForm({ attCheckMutate }) {
                 /> */}
                 {error && <p className="text-red-500 text-xs">{error}</p>}
 
-                {preview && <img src={preview} className="w-48 mt-4 rounded shadow" alt="preview" />}
+                {preview && <img src={preview} className="w-48 mt-4 rounded-full h-48 object-cover shadow" alt="preview" />}
 
                 <Button buttonType="info" onClick={handleSubmit} className="mt-2 !p-4 w-full sm:w-auto !text-lg" hidden={!location || !file}>
                     Submit Absensi

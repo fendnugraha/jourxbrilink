@@ -3,26 +3,27 @@
 import { useState } from "react";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, getDay } from "date-fns";
 import id from "date-fns/locale/id";
+import { Check, Clock, X } from "lucide-react";
 
 // Utility untuk memberi warna
 const getColor = (data) => {
-    if (!data) return "bg-gray-100 dark:bg-gray-800";
+    if (!data) return { style: "bg-gray-200 dark:bg-gray-700", icon: "" };
 
     if (data.type === "attendance") {
-        if (data.status === "Hadir") return "bg-green-500 text-white";
-        if (data.status === "Telat") return "bg-red-500 text-white";
-        if (data.status === "Alpha") return "bg-gray-400 text-white";
+        if (data.status === "Hadir") return { style: "bg-green-500 dark:bg-green-600 text-white", icon: <Check size={15} /> };
+        if (data.status === "Telat") return { style: "bg-amber-500 dark:bg-amber-600 text-white", icon: <Clock size={15} /> };
+        if (data.status === "Alpha") return { style: "bg-red-500 dark:bg-red-600 text-white", icon: <X size={15} /> };
     }
 
     if (data.type === "holiday") {
-        return "bg-yellow-400 text-black";
+        return { style: "bg-amber-500 dark:bg-amber-600 text-white", icon: "" };
     }
 
     if (data.type === "event") {
-        return "bg-blue-400 text-white";
+        return { style: "bg-blue-500 dark:bg-blue-600 text-white", icon: "Calendar" };
     }
 
-    return "bg-gray-200";
+    return { style: "bg-gray-100 dark:bg-gray-700", icon: "" };
 };
 
 export default function Calendar({ data = {}, className, maxWidth = "max-w-lg", withHeader = true }) {
@@ -62,7 +63,7 @@ export default function Calendar({ data = {}, className, maxWidth = "max-w-lg", 
                 ))}
             </div>
 
-            <div className="grid grid-cols-7 gap-2 text-center">
+            <div className="grid grid-cols-7 gap-1 sm:gap-2 text-center">
                 {/* OFFSET kosong sebelum tanggal 1 */}
                 {[...Array(startOffset)].map((_, i) => (
                     <div key={i}></div>
@@ -75,10 +76,11 @@ export default function Calendar({ data = {}, className, maxWidth = "max-w-lg", 
                     const color = getColor(info);
 
                     return (
-                        <div key={key} className={`h-20 rounded-xl flex flex-col justify-center items-center cursor-pointer ${color}`}>
+                        <div key={key} className={`h-10 sm:h-20 rounded-xl flex flex-col justify-center items-center cursor-pointer ${color.style}`}>
                             <span className="font-bold">{format(day, "d")}</span>
 
-                            {info?.type === "attendance" && <span className="text-xs">{info.status}</span>}
+                            {info?.type === "attendance" && <span className="text-xs hidden sm:block">{color.icon}</span>}
+                            {info?.type === "attendance" && <span className="text-xs hidden sm:block">{info.time_in}</span>}
 
                             {info?.type === "holiday" && <span className="text-[10px]">{info.name}</span>}
 

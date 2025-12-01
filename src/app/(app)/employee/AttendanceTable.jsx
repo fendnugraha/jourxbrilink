@@ -87,8 +87,17 @@ const AttendanceTable = () => {
                         {warehouses?.map((warehouse) => (
                             <tr key={warehouse?.id}>
                                 <td className="font-bold">
-                                    {warehouse?.name}
-                                    <span className="block text-slate-400 font-normal">{warehouse?.address}</span>
+                                    <div className="flex items-center">
+                                        {warehouse?.attendance?.[0]?.approval_status ? (
+                                            <img src={warehouse?.attendance?.[0]?.photo_url} alt={warehouse?.name} className="w-8 h-8 rounded-full mr-2" />
+                                        ) : (
+                                            <div className="w-8 h-8 rounded-full bg-gray-300 mr-2"></div>
+                                        )}
+                                        <div>
+                                            {warehouse?.name}
+                                            <span className="block text-slate-400 font-normal">{warehouse?.address}</span>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className="text-center">{warehouse?.zone?.zone_name}</td>
                                 <td className="text-center text-2xl font-bold">{warehouse?.opening_time ?? "-"}</td>

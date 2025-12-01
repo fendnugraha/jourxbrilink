@@ -16,6 +16,7 @@ import MutationTable from "./MutationTable";
 import Button from "@/components/Button";
 import { add, set } from "date-fns";
 import getAddress from "@/libs/getAddress";
+import AttenndanceCalendar from "../../employee/AttendanceCalendar";
 
 const getCurrentDate = () => {
     const nowUTC = new Date();
@@ -201,12 +202,22 @@ const TransactionContent = () => {
                                     selectTable === "koreksi"
                                         ? "bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
                                         : "bg-slate-100 dark:bg-slate-700"
-                                } px-3 py-1 cursor-pointer text-sm`}
+                                } px-3 py-1 cursor-pointer text-sm mr-2`}
                             >
                                 Koreksi{" "}
                                 {correction.length > 0 && (
                                     <span className="bg-red-500 dark:bg-red-500 text-xs rounded-full px-2 py-0.5 ml-2">{correction.length}</span>
                                 )}
+                            </button>
+                            <button
+                                onClick={() => setSelectTable("attendance")}
+                                className={`${
+                                    selectTable === "attendance"
+                                        ? "bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
+                                        : "bg-slate-100 dark:bg-slate-700"
+                                } px-3 py-1 cursor-pointer mr-2 text-sm`}
+                            >
+                                Absensi
                             </button>
                         </div>
                         {selectTable === "transaksi" && (
@@ -232,6 +243,7 @@ const TransactionContent = () => {
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                             />
                         )}
+                        {selectTable === "attendance" && <AttenndanceCalendar />}
                     </div>
                     <div className="order-1 sm:order-2">
                         {!lat && (

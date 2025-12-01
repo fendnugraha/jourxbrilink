@@ -46,7 +46,7 @@ const AttenndanceCalendar = () => {
         <div>
             <div className="px-4 flex gap-2">
                 <span className="flex gap-1 items-center w-fit justify-between bg-slate-500 text-white rounded-full px-3 py-0.5">
-                    <IdCardLanyard size={15} strokeWidth={2} /> {attendanceData[0].contact?.name}
+                    <IdCardLanyard size={15} strokeWidth={2} /> {attendanceData[0].contact?.name ?? "N/A"}
                 </span>
                 <span className="flex gap-1 items-center w-16 justify-between bg-yellow-300 text-yellow-800 rounded-full px-2 py-0.5">
                     <Star size={15} strokeWidth={2} fill="orange" /> {attGood}

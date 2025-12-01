@@ -4,7 +4,7 @@ import Label from "@/components/Label";
 import Modal from "@/components/Modal";
 import axios from "@/libs/axios";
 import { DateTimeNow, diffHuman, formatDateTime, formatTime, todayDate } from "@/libs/format";
-import { Check, DownloadIcon, FilterIcon, RefreshCcwIcon, Star, X } from "lucide-react";
+import { Check, Clock, DownloadIcon, FilterIcon, RefreshCcwIcon, Star, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import AttendanceDetail from "./attendanceDetail";
 import Notification from "@/components/Notification";
@@ -152,7 +152,7 @@ const AttendanceTable = () => {
                                 </td>
                                 <td className="text-center">
                                     {warehouse?.attendance?.[0]?.approval_status === "Late" ? (
-                                        <X size={20} className="text-red-500" />
+                                        <Clock size={20} className="text-red-500" />
                                     ) : warehouse?.attendance?.[0]?.approval_status === "Good" ? (
                                         <Star size={20} className="text-yellow-300" fill="yellow" />
                                     ) : (

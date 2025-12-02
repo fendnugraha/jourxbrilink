@@ -16,7 +16,7 @@ import MutationTable from "./MutationTable";
 import Button from "@/components/Button";
 import { add, set } from "date-fns";
 import getAddress from "@/libs/getAddress";
-import AttenndanceCalendar from "../../employee/AttendanceCalendar";
+import AttendanceCalendar from "../../employee/AttendanceCalendar";
 
 const getCurrentDate = () => {
     const nowUTC = new Date();
@@ -243,7 +243,7 @@ const TransactionContent = () => {
                                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                             />
                         )}
-                        {selectTable === "attendance" && <AttenndanceCalendar />}
+                        {selectTable === "attendance" && <AttendanceCalendar />}
                     </div>
                     <div className="order-1 sm:order-2">
                         {!lat && (

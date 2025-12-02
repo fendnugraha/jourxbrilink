@@ -10,7 +10,7 @@ import useAttendanceCheck from "@/libs/attendanceCheck";
 import { useAuth } from "@/libs/auth";
 import { CameraIcon, Trash2Icon, Undo } from "lucide-react";
 
-export default function AttendanceForm({ attCheckMutate }) {
+export default function AttendanceForm({ attCheckMutate, openMessage }) {
     const { user, authLoading, logout } = useAuth({ middleware: "auth" });
     const userWarehouseName = user?.role?.warehouse?.name;
     const userWhCashier = user?.role?.warehouse?.contact?.name;
@@ -22,6 +22,7 @@ export default function AttendanceForm({ attCheckMutate }) {
     const [type, setType] = useState("Kasir");
     const [error, setError] = useState(null);
     const [timeIn, setTimeIn] = useState(null);
+    const [successMessgageOpen, setSuccessMessageOpen] = useState(false);
 
     // 🔥 Ambil lokasi otomatis saat komponen tampil
     useEffect(() => {
@@ -103,6 +104,7 @@ export default function AttendanceForm({ attCheckMutate }) {
             setFile(null);
             setPreview(null);
             setLocation(null);
+            openMessage(true);
         } catch (error) {
             // alert("Absensi gagal! " + error.response.data.message);
             setError(error.response.data.message);
@@ -115,69 +117,63 @@ export default function AttendanceForm({ attCheckMutate }) {
 
     return (
         <>
-            {/* // <div className=""> */}
-            <div className="p-4 flex flex-col items-center justify-center h-full w-full mx-auto">
-                {/* Lokasi otomatis */}
-                <span className="text-sm text-red-500 italic animate-pulse">INFO: INI MASIH DALAM MODE TESTING</span>
-                <span className="text-xl font-bold">{userWarehouseName}</span>
-                {location ? (
-                    <p className="mb-4 text-sm">
-                        {address?.town}, {address?.county}
-                    </p>
-                ) : (
-                    <p className="mb-4 text-red-500">Mengambil lokasi...</p>
-                )}
+            {/* Lokasi otomatis */}
+            <span className="text-sm text-red-500 italic animate-pulse">INFO: INI MASIH DALAM MODE TESTING</span>
+            <span className="text-xl font-bold">{userWarehouseName}</span>
+            {location ? (
+                <p className="mb-4 text-sm">
+                    {address?.town}, {address?.county}
+                </p>
+            ) : (
+                <p className="mb-4 text-red-500">Mengambil lokasi...</p>
+            )}
 
-                <div className="flex bg-slate-300 dark:bg-slate-500 rounded-full">
-                    <button onClick={() => setType("Kasir")} className={`${type === "Kasir" && "bg-blue-600 text-white"} px-4 py-1 rounded-full w-32`}>
-                        Kasir
-                    </button>
-                    <button onClick={() => setType("Backup")} className={`${type === "Backup" && "bg-blue-600 text-white"} px-4 py-1 rounded-full w-32`}>
-                        Backup
-                    </button>
-                </div>
-                {userWhCashier && type === "Kasir" ? (
-                    <p className="text-sm text-center">
-                        <span className="text-lg font-bold text-green-300 block">{userWhCashier}</span>
-                    </p>
-                ) : (
-                    <p className="text-sm">
-                        <span className="text-lg font-bold text-green-300 block">{whBackupCahsier}</span>
-                    </p>
-                )}
-                {timeIn ? (
-                    <span className="text-6xl my-4 font-bold text-blue-200 block">{timeIn}</span>
-                ) : (
-                    <LiveClock textSize="text-6xl my-4" style="font-bold" />
-                )}
+            <div className="flex bg-slate-300 dark:bg-slate-500 rounded-full">
+                <button onClick={() => setType("Kasir")} className={`${type === "Kasir" && "bg-blue-600 text-white"} px-4 py-1 rounded-full w-32`}>
+                    Kasir
+                </button>
+                <button onClick={() => setType("Backup")} className={`${type === "Backup" && "bg-blue-600 text-white"} px-4 py-1 rounded-full w-32`}>
+                    Backup
+                </button>
+            </div>
+            {userWhCashier && type === "Kasir" ? (
+                <p className="text-sm text-center">
+                    <span className="text-lg font-bold text-green-300 block">{userWhCashier}</span>
+                </p>
+            ) : (
+                <p className="text-sm">
+                    <span className="text-lg font-bold text-green-300 block">{whBackupCahsier}</span>
+                </p>
+            )}
+            {timeIn ? <span className="text-6xl my-4 font-bold text-blue-200 block">{timeIn}</span> : <LiveClock textSize="text-6xl my-4" style="font-bold" />}
 
-                <div className="flex items-center gap-2 w-full">
-                    <label
-                        htmlFor={file ? null : "photo"}
-                        className={`p-4 w-full flex justify-center items-center rounded-2xl text-white cursor-pointer ${
-                            location ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
-                        }`}
-                        hidden={file}
+            <div className="flex items-center gap-2 w-full">
+                <label
+                    htmlFor={file ? null : "photo"}
+                    className={`p-4 w-full flex justify-center items-center rounded-2xl text-white cursor-pointer ${
+                        location ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
+                    }`}
+                    hidden={file}
+                >
+                    <CameraIcon size={28} strokeWidth={2} />
+                </label>
+
+                <input id="photo" type="file" capture="environment" accept="image/*" className="hidden" disabled={!location} onChange={handleFileChange} />
+                {file && (
+                    <button
+                        onClick={() => {
+                            setFile(null);
+                            setPreview(null);
+                            setError(null);
+                            setTimeIn(null);
+                        }}
+                        className="p-2 w-full flex justify-center items-center text-center rounded-2xl text-white bg-red-500 hover:bg-red-300"
                     >
-                        <CameraIcon size={28} strokeWidth={2} />
-                    </label>
-
-                    <input id="photo" type="file" capture="environment" accept="image/*" className="hidden" disabled={!location} onChange={handleFileChange} />
-                    {file && (
-                        <button
-                            onClick={() => {
-                                setFile(null);
-                                setPreview(null);
-                                setError(null);
-                                setTimeIn(null);
-                            }}
-                            className="p-2 w-full flex justify-center items-center text-center rounded-2xl text-white bg-red-500 hover:bg-red-300"
-                        >
-                            <Undo size={28} strokeWidth={2} />
-                        </button>
-                    )}
-                </div>
-                {/* <input
+                        <Undo size={28} strokeWidth={2} />
+                    </button>
+                )}
+            </div>
+            {/* <input
                     type="file"
                     capture="environment"
                     className="form-control disabled:text-slate-400"
@@ -185,18 +181,17 @@ export default function AttendanceForm({ attCheckMutate }) {
                     accept="image/*"
                     onChange={handleFileChange}
                 /> */}
-                {error && <p className="text-red-500 text-xs">{error}</p>}
+            {error && <p className="text-red-500 text-xs">{error}</p>}
 
-                {preview && <img src={preview} className="w-48 mt-4 rounded-full h-48 object-cover shadow" alt="preview" />}
+            {preview && <img src={preview} className="w-48 mt-4 rounded-full h-48 object-cover shadow" alt="preview" />}
 
-                <Button buttonType="info" onClick={handleSubmit} className="mt-2 !p-4 w-full sm:w-auto !text-lg" hidden={!location || !file}>
-                    Submit Absensi
-                </Button>
+            <Button buttonType="info" onClick={handleSubmit} className="mt-2 !p-4 w-full sm:w-auto !text-lg" hidden={!location || !file}>
+                Submit Absensi
+            </Button>
 
-                <button className="mt-2 hover:underline" onClick={logout}>
-                    Logout
-                </button>
-            </div>
+            <button className="mt-2 hover:underline" onClick={logout}>
+                Logout
+            </button>
         </>
     );
 }

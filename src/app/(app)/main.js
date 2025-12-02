@@ -14,11 +14,13 @@ import { getStorePerformanceRating } from "@/libs/GetStorePerformanceRating";
 import useLiveClock from "@/components/useLiveClock";
 import useAttendanceCheck from "@/libs/attendanceCheck";
 import AttendanceForm from "./employee/attendanceForm";
+import ShareAttendance from "./employee/ShareAttendance";
 
 const MainPage = ({ children, headerTitle }) => {
     const { user, logout } = useAuth({ middleware: "auth" });
     const [isOpen, setIsOpen] = useState(false);
     const { profit, loading: profitLoading, error } = useGetProfit();
+    const [attSuccessMessageOpen, setAttSuccessMessageOpen] = useState(false);
 
     const { dayName, date, time, raw } = useLiveClock();
 
@@ -28,6 +30,7 @@ const MainPage = ({ children, headerTitle }) => {
 
     const userWarehouseId = user?.role?.warehouse_id;
     const userWarehouseName = user?.role?.warehouse?.name;
+    const warehouseOpeningTime = user?.role?.warehouse?.opening_time;
     const WarehouseRank = profit?.data?.revenue?.findIndex((item) => Number(item.warehouse_id) === Number(userWarehouseId)) + 1 || 0;
     const WarehouseRankProfit = profit?.data?.revenue?.find((item) => Number(item.warehouse_id) === Number(userWarehouseId))?.total || 0;
     const WarehouseMonthlyProfit = profit?.data?.totalProfitMonthly?.find((item) => Number(item.warehouse_id) === Number(userWarehouseId))?.average_profit || 0;
@@ -37,13 +40,17 @@ const MainPage = ({ children, headerTitle }) => {
         return suffixes[mod - 10] || suffixes[mod] || suffixes[0];
     };
 
+    const todayJakarta = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Jakarta",
+    }).format(new Date());
+
     const {
         data: attCheck,
         error: attCheckError,
         isValidating: attCheckLoading,
         mutate: attCheckMutate,
     } = useAttendanceCheck({
-        date: new Date().toISOString().split("T")[0],
+        date: todayJakarta,
         userId: user?.id,
     });
 
@@ -75,12 +82,20 @@ const MainPage = ({ children, headerTitle }) => {
     const end = 9 * 60 + 30; // 09:30  -> 570 menit
 
     const isWithinTime = currentMinutes >= start && currentMinutes <= end;
-
     return (
         <>
             {!attCheck?.approval_status && isWithinTime && userWarehouseId !== 1 && userRole !== "Super Admin" && (
-                <div className="p-4 fixed h-screen overflow-hidden z-9999 bg-slate-800/50 backdrop-blur-sm w-screen text-white">
-                    <AttendanceForm attCheckMutate={attCheckMutate} />
+                <div className="p-4 fixed h-screen overflow-hidden z-9999 bg-slate-800/50 backdrop-blur-sm w-screen text-white flex flex-col items-center justify-center">
+                    <AttendanceForm attCheckMutate={attCheckMutate} openMessage={setAttSuccessMessageOpen} />
+                </div>
+            )}
+            {attSuccessMessageOpen && (
+                <div className="p-4 fixed h-screen overflow-hidden z-9999 bg-slate-800/50 backdrop-blur-sm w-screen text-white flex flex-col items-center justify-center">
+                    <p className="text-lg mb-4">Absensi Berhasil</p>
+                    <ShareAttendance attendance={attCheck} warehouseOpeningTime={warehouseOpeningTime} />
+                    <button onClick={() => setAttSuccessMessageOpen(false)} className="bg-white text-slate-800 px-4 py-2 rounded-full mt-4">
+                        OK
+                    </button>
                 </div>
             )}
 

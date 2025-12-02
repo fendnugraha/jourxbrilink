@@ -6,7 +6,7 @@ import { DateTimeNow } from "@/libs/format";
 import { Clock, IdCardLanyard, Star, User } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const AttenndanceCalendar = () => {
+const AttendanceCalendar = () => {
     const { today } = DateTimeNow();
     const [attendanceData, setAttendanceData] = useState([]);
     const [selectedDate, setSelectedDate] = useState(today);
@@ -60,4 +60,4 @@ const AttenndanceCalendar = () => {
     );
 };
 
-export default AttenndanceCalendar;
+export default AttendanceCalendar;

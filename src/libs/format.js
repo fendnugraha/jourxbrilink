@@ -168,11 +168,14 @@ export const formatTime = (time) => {
     return `${hours}:${minutes}:${seconds}`;
 };
 
-export function diffHuman(t1, t2) {
+export function diffTimeHuman(t1, t2) {
     const time1 = parse(t1, "HH:mm:ss", new Date());
     const time2 = parse(t2, "HH:mm:ss", new Date());
 
     const diff = differenceInMinutes(time2, time1);
+    if (diff < 0) {
+        return "";
+    }
     const hours = Math.floor(diff / 60);
     const minutes = diff % 60;
 

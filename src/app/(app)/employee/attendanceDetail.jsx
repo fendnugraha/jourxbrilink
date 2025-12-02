@@ -3,7 +3,7 @@ import Button from "@/components/Button";
 import axios from "@/libs/axios";
 import { useEffect, useState } from "react";
 
-const AttendanceDetail = ({ selectedWarehouse, fetchWarehouses, notification, isModalOpen }) => {
+const AttendanceDetail = ({ selectedWarehouse, fetchWarehouses, notification, isModalOpen, userRole }) => {
     const [formData, setFormData] = useState({
         contact_id: "",
         time_in: "",
@@ -64,7 +64,12 @@ const AttendanceDetail = ({ selectedWarehouse, fetchWarehouses, notification, is
                 <label className="text-sm font-bold">{selectedWarehouse?.name}</label>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">{selectedWarehouse?.address}</p>
                 <label className="text-sm font-bold">Kasir</label>
-                <select className="form-select" value={formData.contact_id} onChange={(e) => setFormData({ ...formData, contact_id: e.target.value })}>
+                <select
+                    className="form-select"
+                    value={formData.contact_id}
+                    onChange={(e) => setFormData({ ...formData, contact_id: e.target.value })}
+                    disabled={!["Administrator", "Super Admin"].includes(userRole)}
+                >
                     <option value="">-</option>
                     {employees.map((employee) => (
                         <option key={employee.id} value={employee.id}>
@@ -80,6 +85,7 @@ const AttendanceDetail = ({ selectedWarehouse, fetchWarehouses, notification, is
                             className="form-control !w-fit"
                             value={formData.time_in}
                             onChange={(e) => setFormData({ ...formData, time_in: e.target.value })}
+                            disabled={!["Administrator", "Super Admin"].includes(userRole)}
                         />
                     )}
                 </p>
@@ -90,6 +96,7 @@ const AttendanceDetail = ({ selectedWarehouse, fetchWarehouses, notification, is
                             className="form-select"
                             value={formData.approval_status}
                             onChange={(e) => setFormData({ ...formData, approval_status: e.target.value })}
+                            disabled={!["Administrator", "Super Admin"].includes(userRole)}
                         >
                             <option value="Pending">Pending</option>
                             <option value="Approved">Approved</option>
@@ -100,9 +107,11 @@ const AttendanceDetail = ({ selectedWarehouse, fetchWarehouses, notification, is
                         "Belum absen"
                     )}
                 </p>
-                <Button buttonType="success" className={"mt-4"} onClick={handleUpdate} disabled={loading || !formData.approval_status}>
-                    {loading ? "Loading..." : "Update"}
-                </Button>
+                {["Administrator", "Super Admin"].includes(userRole) && (
+                    <Button buttonType="success" className={"mt-4"} onClick={handleUpdate} disabled={loading || !formData.approval_status}>
+                        {loading ? "Loading..." : "Update"}
+                    </Button>
+                )}
             </div>
         </div>
     );

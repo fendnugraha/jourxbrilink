@@ -21,7 +21,7 @@ export const navMenu = {
         { name: "Finance", path: "/finance", href: "/finance", icon: DollarSignIcon, role: ["Administrator", "Super Admin"] },
         { name: "Delivery", path: "/delivery", href: "/delivery", icon: Truck, role: ["Administrator", "Super Admin", "Courier"] },
         { name: "Summary", path: "/summary", href: "/summary", icon: ChartAreaIcon, role: ["Administrator", "Super Admin"] },
-        { name: "Absensi", path: "/employee", href: "/employee", icon: IdCardLanyardIcon, role: ["Administrator", "Super Admin"] },
+        { name: "Absensi", path: "/employee", href: "/employee", icon: IdCardLanyardIcon, role: ["Administrator", "Super Admin", "Kasir", "Staff"] },
         { name: "Settings", path: "/setting", href: "/setting", icon: CogIcon, role: ["Administrator", "Super Admin"] },
     ],
     settings: [{ name: "Settings", path: "/setting", href: "/setting", icon: CogIcon, role: ["Administrator", "Super Admin"] }],

@@ -160,17 +160,15 @@ const AttendanceTable = () => {
                                     )}
                                 </td>
                                 <td className="text-center">
-                                    {["Administrator", "Super Admin"].includes(userRole) && (
-                                        <button
-                                            onClick={() => {
-                                                setSelectedWarehouse(warehouse);
-                                                setIsModalWarehouseDetailOpen(true);
-                                            }}
-                                            className="small-button"
-                                        >
-                                            Detail
-                                        </button>
-                                    )}
+                                    <button
+                                        onClick={() => {
+                                            setSelectedWarehouse(warehouse);
+                                            setIsModalWarehouseDetailOpen(true);
+                                        }}
+                                        className="small-button"
+                                    >
+                                        Detail
+                                    </button>
                                 </td>
                             </tr>
                         ))}
@@ -183,6 +181,7 @@ const AttendanceTable = () => {
                     fetchWarehouses={fetchWarehouses}
                     notification={setNotification}
                     isModalOpen={setIsModalWarehouseDetailOpen}
+                    userRole={userRole}
                 />
             </Modal>
         </div>

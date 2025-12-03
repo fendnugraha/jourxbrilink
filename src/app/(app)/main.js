@@ -79,7 +79,7 @@ const MainPage = ({ children, headerTitle }) => {
 
     // range waktu
     const start = 6 * 60; // 06:00  -> 360 menit
-    const end = 9 * 60 + 30; // 09:30  -> 570 menit
+    const end = 10 * 60 + 30; // 09:30  -> 570 menit
 
     const isWithinTime = currentMinutes >= start && currentMinutes <= end;
     return (

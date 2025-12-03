@@ -11,12 +11,14 @@ import Modal from "@/components/Modal";
 import Calendar from "@/components/Calendar";
 import AttenndanceCalendar from "./AttendanceCalendar";
 import { DownloadIcon, FilterIcon, RefreshCcwIcon } from "lucide-react";
-import { DateTimeNow, formatDateTime } from "@/libs/format";
+import { DateTimeNow, formatDate, formatDateTime, getMonthYear } from "@/libs/format";
 import axios from "@/libs/axios";
+import AttendanceTableMonthly from "./AttendanceTableMonthly";
 
 const EmployeePage = () => {
     const [isModalAttendanceFormOpen, setIsModalAttendanceFormOpen] = useState(false);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
+    const [selectPage, setSelectPage] = useState("daily");
     const { thisMonth, today } = DateTimeNow();
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
@@ -37,6 +39,8 @@ const EmployeePage = () => {
         fetchZones();
     }, [fetchZones]);
     const [warehouses, setWarehouses] = useState([]);
+    const [warehouseMonthly, setWarehouseMonthly] = useState([]);
+
     const fetchWarehouses = useCallback(async () => {
         try {
             const response = await axios.get(`/api/get-warehouse-attendance/${startDate}`);
@@ -49,6 +53,21 @@ const EmployeePage = () => {
     useEffect(() => {
         fetchWarehouses();
     }, [fetchWarehouses]);
+
+    const fetchWarehousesMonthly = useCallback(async () => {
+        try {
+            const response = await axios.get(`/api/get-attendance-monthly/${startDate}`);
+            setWarehouseMonthly(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }, [startDate]);
+
+    useEffect(() => {
+        fetchWarehousesMonthly();
+    }, [fetchWarehousesMonthly]);
+
+    console.log(warehouseMonthly);
 
     const closeModal = () => {
         setIsModalAttendanceFormOpen(false);
@@ -99,7 +118,7 @@ const EmployeePage = () => {
                         </select>
                     </div>
                     {/* <SimpleLeaveCalendar /> */}
-                    <Button
+                    {/* <Button
                         buttonType="primary"
                         className="mb-4 group text-nowrap"
                         onClick={() => {
@@ -112,9 +131,25 @@ const EmployeePage = () => {
                         <div className="flex justify-center flex-col">
                             <AttendanceForm />
                         </div>
-                    </Modal>
-                    <AttendanceTable selectedZone={selectedZone} startDate={startDate} warehouses={warehouses} fetchWarehouses={fetchWarehouses} />
-                    {/* <AttenndanceCalendar /> */}
+                    </Modal> */}
+                    <div className="my-2 bg-slate-300 dark:bg-slate-50 w-fit rounded-lg flex gap-2 items-center justify-center p-0.5 text-sm">
+                        <button
+                            className={`${selectPage === "daily" ? "bg-slate-800 text-white" : "text-slate-600"} px-4 py-1 rounded-lg min-w-32`}
+                            onClick={() => setSelectPage("daily")}
+                        >
+                            Daily
+                        </button>
+                        <button
+                            className={`${selectPage === "monthly" ? "bg-slate-800 text-white" : "text-slate-600"} px-4 py-1 rounded-lg min-w-32`}
+                            onClick={() => setSelectPage("monthly")}
+                        >
+                            {getMonthYear(startDate)}
+                        </button>
+                    </div>
+                    {selectPage === "daily" && <AttendanceTable selectedZone={selectedZone} warehouses={warehouses} fetchWarehouses={fetchWarehouses} />}
+                    {selectPage === "monthly" && (
+                        <AttendanceTableMonthly selectedZone={selectedZone} dateString={startDate} warehouseMonthly={warehouseMonthly} />
+                    )}
                 </div>
             </div>
         </MainPage>

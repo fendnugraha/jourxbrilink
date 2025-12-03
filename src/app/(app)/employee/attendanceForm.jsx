@@ -191,6 +191,7 @@ export default function AttendanceForm({ attCheckMutate, openMessage }) {
                                 setPreview(null);
                                 setError(null);
                                 setTimeIn(null);
+                                URL.revokeObjectURL(preview);
                             }}
                             className="p-2 w-full flex justify-center gap-2 items-center text-center rounded-2xl text-white bg-red-500 hover:bg-red-300"
                         >

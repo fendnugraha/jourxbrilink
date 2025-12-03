@@ -84,11 +84,11 @@ const AttendanceTable = ({ selectedZone, warehouses, fetchWarehouses }) => {
                                 </td>
                                 <td className="text-center">
                                     {warehouse?.attendance?.[0]?.approval_status === "Late" ? (
-                                        <Clock size={20} className="text-red-500" />
+                                        <Clock size={20} className="text-red-500 dark:text-red-400" />
                                     ) : warehouse?.attendance?.[0]?.approval_status === "Good" ? (
-                                        <Star size={20} className="text-yellow-300" fill="yellow" />
+                                        <Star size={20} className="text-yellow-500 dark:text-yellow-300" fill="yellow" />
                                     ) : (
-                                        <Check size={20} className="text-green-500" />
+                                        <Check size={20} className="text-green-500 dark:text-green-400" />
                                     )}
                                 </td>
                                 <td className="text-center">

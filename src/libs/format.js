@@ -189,3 +189,15 @@ export function diffTimeHuman(t1, t2) {
         return `${hours} jam ${minutes} menit`;
     }
 }
+
+export function getMonthYear(monthNumber) {
+    const date = new Date();
+    // date.setMonth(monthNumber - 1);
+    return date.toLocaleString("default", { month: "long", year: "numeric" });
+}
+
+export function getDay(date, weekday) {
+    if (!weekday) {
+        return new Date(date).getDate();
+    }
+}

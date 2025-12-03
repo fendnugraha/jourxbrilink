@@ -42,8 +42,8 @@ const DeliveryTable = ({ headquarter, filteredJournals, itemsPerPage, currentPag
                                         {journal?.debt?.warehouse?.latitude && journal?.debt?.warehouse?.longitude && (
                                             <span className="italic">
                                                 {getDistance(
-                                                    headquarter.latitude,
-                                                    headquarter.longitude,
+                                                    headquarter?.latitude,
+                                                    headquarter?.longitude,
                                                     journal?.debt?.warehouse?.latitude,
                                                     journal?.debt?.warehouse?.longitude
                                                 ).toFixed(3)}{" "}

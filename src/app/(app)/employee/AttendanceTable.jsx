@@ -57,7 +57,8 @@ const AttendanceTable = ({ selectedZone, warehouses, fetchWarehouses }) => {
                                             <div className="w-8 h-8 rounded-full bg-gray-300 mr-2"></div>
                                         )}
                                         <div>
-                                            {warehouse?.name}
+                                            {warehouse?.name}{" "}
+                                            <span className="block text-slate-400 font-normal">Kasir: {warehouse?.attendance?.[0]?.contact?.name ?? "-"}</span>
                                             <span className="block text-slate-400 font-normal">{warehouse?.address}</span>
                                         </div>
                                     </div>

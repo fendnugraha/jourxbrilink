@@ -1,6 +1,7 @@
 "use client";
 import Button from "@/components/Button";
 import axios from "@/libs/axios";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const AttendanceDetail = ({ selectedWarehouse, fetchWarehouses, notification, isModalOpen, userRole }) => {
@@ -62,7 +63,17 @@ const AttendanceDetail = ({ selectedWarehouse, fetchWarehouses, notification, is
 
             <div className="flex-1">
                 <label className="text-sm font-bold">{selectedWarehouse?.name}</label>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">{selectedWarehouse?.address}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+                    {selectedWarehouse?.address}
+                    <Link
+                        target="_blank"
+                        className="hover:underline block"
+                        href={`https://www.google.com/maps?q=${selectedWarehouse?.attendance?.[0]?.latitude},${selectedWarehouse?.attendance?.[0]?.longitude}`}
+                    >
+                        Buka di Maps
+                    </Link>
+                </p>
+
                 <label className="text-sm font-bold">Kasir</label>
                 <select
                     className="form-select"

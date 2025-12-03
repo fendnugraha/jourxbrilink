@@ -99,19 +99,20 @@ const EmployeePage = () => {
                         </select>
                     </div>
                     {/* <SimpleLeaveCalendar /> */}
-                    {/* <AttendanceForm /> */}
-                    {/* <Button
-                    buttonType="primary"
-                    className="mb-4 group text-nowrap"
-                    onClick={() => {
-                        setIsModalAttendanceFormOpen(true);
-                    }}
-                >
-                    Absensi
-                </Button>
-                <Modal isOpen={isModalAttendanceFormOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Absensi">
-                    <AttendanceForm />
-                </Modal> */}
+                    <Button
+                        buttonType="primary"
+                        className="mb-4 group text-nowrap"
+                        onClick={() => {
+                            setIsModalAttendanceFormOpen(true);
+                        }}
+                    >
+                        Absensi
+                    </Button>
+                    <Modal isOpen={isModalAttendanceFormOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Absensi">
+                        <div className="flex justify-center flex-col">
+                            <AttendanceForm />
+                        </div>
+                    </Modal>
                     <AttendanceTable selectedZone={selectedZone} startDate={startDate} warehouses={warehouses} fetchWarehouses={fetchWarehouses} />
                     {/* <AttenndanceCalendar /> */}
                 </div>

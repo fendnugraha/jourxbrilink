@@ -8,7 +8,7 @@ import { LiveClock } from "@/libs/LiveClock";
 import Button from "@/components/Button";
 import useAttendanceCheck from "@/libs/attendanceCheck";
 import { useAuth } from "@/libs/auth";
-import { CameraIcon, Trash2Icon, Undo } from "lucide-react";
+import { CameraIcon, LocateIcon, MapPin, Trash2Icon, Undo } from "lucide-react";
 
 export default function AttendanceForm({ attCheckMutate, openMessage }) {
     const { user, authLoading, logout } = useAuth({ middleware: "auth" });
@@ -25,7 +25,7 @@ export default function AttendanceForm({ attCheckMutate, openMessage }) {
     const [successMessgageOpen, setSuccessMessageOpen] = useState(false);
 
     // 🔥 Ambil lokasi otomatis saat komponen tampil
-    useEffect(() => {
+    const getLocation = () => {
         if (!navigator.geolocation) {
             alert("Browser tidak mendukung GPS");
             return;
@@ -40,9 +40,27 @@ export default function AttendanceForm({ attCheckMutate, openMessage }) {
             },
             (err) => {
                 console.error(err);
-                alert("Tidak dapat mengambil lokasi. Pastikan GPS aktif!");
+
+                if (err.code === 1) {
+                    alert("Izin lokasi ditolak. Aktifkan GPS dan izinkan lokasi.");
+                } else if (err.code === 2) {
+                    alert("Lokasi tidak tersedia. Coba ke area terbuka.");
+                } else if (err.code === 3) {
+                    alert("GPS timeout. Pastikan GPS aktif dan sinyal kuat.");
+                } else {
+                    alert("Tidak dapat mengambil lokasi.");
+                }
+            },
+            {
+                enableHighAccuracy: true, // supaya lebih akurat
+                timeout: 10000, // maksimal 10 detik
+                maximumAge: 0, // jangan pakai lokasi cache
             }
         );
+    };
+
+    useEffect(() => {
+        getLocation();
     }, []);
 
     // Handle Foto + Compress
@@ -67,9 +85,15 @@ export default function AttendanceForm({ attCheckMutate, openMessage }) {
     }, [preview]);
 
     async function getAddress(lat, lng) {
-        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`, {
+            headers: {
+                "User-Agent": "YourAppName/1.0 (your-email@example.com)",
+                "Accept-Language": "id",
+            },
+        });
+
         const data = await res.json();
-        setAddress(data.address);
+        setAddress(data.address); // biasanya berisi city, suburb, road, etc.
     }
 
     useEffect(() => {
@@ -150,27 +174,37 @@ export default function AttendanceForm({ attCheckMutate, openMessage }) {
             <div className="flex items-center gap-2 w-full">
                 <label
                     htmlFor={file ? null : "photo"}
-                    className={`p-4 w-full flex justify-center items-center rounded-2xl text-white cursor-pointer ${
+                    className={`p-4 w-full flex justify-center gap-2 items-center rounded-2xl text-white cursor-pointer ${
                         location ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
                     }`}
                     hidden={file}
                 >
-                    <CameraIcon size={28} strokeWidth={2} />
+                    <CameraIcon size={28} strokeWidth={2} /> Ambil foto
                 </label>
 
                 <input id="photo" type="file" capture="environment" accept="image/*" className="hidden" disabled={!location} onChange={handleFileChange} />
                 {file && (
-                    <button
-                        onClick={() => {
-                            setFile(null);
-                            setPreview(null);
-                            setError(null);
-                            setTimeIn(null);
-                        }}
-                        className="p-2 w-full flex justify-center items-center text-center rounded-2xl text-white bg-red-500 hover:bg-red-300"
-                    >
-                        <Undo size={28} strokeWidth={2} />
-                    </button>
+                    <div className="flex w-full gap-2">
+                        <button
+                            onClick={() => {
+                                setFile(null);
+                                setPreview(null);
+                                setError(null);
+                                setTimeIn(null);
+                            }}
+                            className="p-2 w-full flex justify-center gap-2 items-center text-center rounded-2xl text-white bg-red-500 hover:bg-red-300"
+                        >
+                            <Undo size={28} strokeWidth={2} /> Ganti foto
+                        </button>
+                        <button
+                            onClick={() => {
+                                getLocation();
+                            }}
+                            className="p-2 w-full flex justify-center gap-2 items-center text-center rounded-2xl text-white bg-green-500 hover:bg-green-300"
+                        >
+                            <MapPin size={28} strokeWidth={2} /> Reset lokasi
+                        </button>
+                    </div>
                 )}
             </div>
             {/* <input

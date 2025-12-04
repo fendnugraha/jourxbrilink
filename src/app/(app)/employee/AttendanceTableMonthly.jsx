@@ -2,7 +2,6 @@ import { getDay } from "@/libs/format";
 import { Check, Clock, Star, X } from "lucide-react";
 
 const AttendanceTableMonthly = ({ selectedZone, warehouseMonthly }) => {
-    console.log(warehouseMonthly);
     const days = warehouseMonthly.days;
 
     const getColor = (status) => {
@@ -16,9 +15,16 @@ const AttendanceTableMonthly = ({ selectedZone, warehouseMonthly }) => {
         if (status === "Alpha") return { style: "bg-red-500 dark:bg-red-600 text-white", icon: <X size={15} /> };
         return { style: "bg-gray-500 dark:bg-gray-700", icon: null };
     };
+
+    const filteredWarehouses = warehouseMonthly.employees?.filter((warehouse) => {
+        const zoneMatch = Number(warehouse.warehouse_zone_id) === Number(selectedZone);
+
+        return !selectedZone || zoneMatch;
+    });
+
     return (
         <>
-            {warehouseMonthly.employees.map((employee) => (
+            {filteredWarehouses.map((employee) => (
                 <div key={employee.id} className="mb-2 border border-slate-500 p-1 rounded-sm">
                     <h3 className="text-sm font-bold">{employee.name}</h3>
                     {/* Kotak tanggal berjajar */}

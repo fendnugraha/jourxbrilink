@@ -67,8 +67,6 @@ const EmployeePage = () => {
         fetchWarehousesMonthly();
     }, [fetchWarehousesMonthly]);
 
-    console.log(warehouseMonthly);
-
     const closeModal = () => {
         setIsModalAttendanceFormOpen(false);
         setIsModalFilterDataOpen(false);
@@ -90,7 +88,13 @@ const EmployeePage = () => {
                             <span className="card-subtitle">Tanggal: {formatDateTime(startDate)}</span>
                         </h1>
                         <div className="flex gap-1 justify-end h-fit">
-                            <button className="small-button" onClick={() => fetchWarehouses()}>
+                            <button
+                                className="small-button"
+                                onClick={() => {
+                                    fetchWarehouses();
+                                    fetchWarehousesMonthly();
+                                }}
+                            >
                                 <RefreshCcwIcon className="size-4" />
                             </button>
                             <button className="small-button">

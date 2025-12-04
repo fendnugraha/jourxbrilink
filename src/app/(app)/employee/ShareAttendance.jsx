@@ -9,14 +9,14 @@ export default function ShareAttendanceButton({ attendance, style = "px-4 py-5 w
 
     const shareMessage = `
         Absensi Berhasil!
-        Nama: ${attendance?.contact?.name ?? "-"}
-        Tanggal: ${attendance?.date ?? "-"}
-        Jam Masuk: ${attendance?.time_in ?? "-"}
-        Status: ${status ?? "-"}
-        Lokasi: ${attendance?.latitude ?? "-"}, ${attendance?.longitude ?? "-"}
+Nama: ${attendance?.contact?.name ?? "-"}
+Tanggal: ${attendance?.date ?? "-"}
+Jam Masuk: ${attendance?.time_in ?? "-"}
+Status: ${status ?? "-"}
+Lokasi: ${attendance?.latitude ?? "-"}, ${attendance?.longitude ?? "-"}
 
-        Foto: ${attendance?.photo_url ?? "-"}
-        `.trim();
+Foto: ${attendance?.photo_url ?? "-"}
+`.trim();
 
     const handleShare = async () => {
         if (!attendance) return;
@@ -34,8 +34,10 @@ export default function ShareAttendanceButton({ attendance, style = "px-4 py-5 w
                     files: [file],
                 });
             } else {
-                // Fallback: kirim pesan + URL foto agar WA tampilkan preview
-                const waText = `${shareMessage}\n${attendance.photo_url}`;
+                // Fallback: kirim pesan dengan URL foto di baris pertama → WA show preview
+                const waText = `${attendance.photo_url}
+
+                ${shareMessage}`;
                 window.open(`https://wa.me/?text=${encodeURIComponent(waText)}`, "_blank");
             }
         } catch (error) {

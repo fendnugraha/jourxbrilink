@@ -3,6 +3,7 @@ import Button from "@/components/Button";
 import axios from "@/libs/axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import ShareAttendanceButton from "./ShareAttendance";
 
 const AttendanceDetail = ({ selectedWarehouse, fetchWarehouses, notification, isModalOpen, userRole }) => {
     const [formData, setFormData] = useState({
@@ -119,10 +120,13 @@ const AttendanceDetail = ({ selectedWarehouse, fetchWarehouses, notification, is
                     )}
                 </p>
                 {["Administrator", "Super Admin"].includes(userRole) && (
-                    <Button buttonType="success" className={"mt-4"} onClick={handleUpdate} disabled={loading || !formData.approval_status}>
+                    <Button buttonType="success" className={"mt-4 w-full"} onClick={handleUpdate} disabled={loading || !formData.approval_status}>
                         {loading ? "Loading..." : "Update"}
                     </Button>
                 )}
+                <div className="flex gap-1">
+                    <ShareAttendanceButton attendance={selectedWarehouse?.attendance?.[0]} style="px-4 py-2 w-full" buttonWithText={false} />
+                </div>
             </div>
         </div>
     );

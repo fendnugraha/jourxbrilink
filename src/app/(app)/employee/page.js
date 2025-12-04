@@ -122,7 +122,7 @@ const EmployeePage = () => {
                         </select>
                     </div>
                     {/* <SimpleLeaveCalendar /> */}
-                    <Button
+                    {/* <Button
                         buttonType="primary"
                         className="mb-4 group text-nowrap"
                         onClick={() => {
@@ -135,7 +135,7 @@ const EmployeePage = () => {
                         <div className="flex justify-center flex-col">
                             <AttendanceForm />
                         </div>
-                    </Modal>
+                    </Modal> */}
                     <div className="my-2 bg-slate-300 dark:bg-slate-50 w-fit rounded-lg flex gap-2 items-center justify-center p-0.5 text-sm">
                         <button
                             className={`${selectPage === "daily" ? "bg-slate-800 text-white" : "text-slate-600"} px-4 py-1 rounded-lg min-w-32`}
@@ -150,10 +150,12 @@ const EmployeePage = () => {
                             {getMonthYear(startDate)}
                         </button>
                     </div>
-                    {selectPage === "daily" && <AttendanceTable selectedZone={selectedZone} warehouses={warehouses} fetchWarehouses={fetchWarehouses} />}
-                    {selectPage === "monthly" && (
-                        <AttendanceTableMonthly selectedZone={selectedZone} dateString={startDate} warehouseMonthly={warehouseMonthly} />
-                    )}
+                    <div className="grid grid-cols-1 gap-4">
+                        {selectPage === "daily" && <AttendanceTable selectedZone={selectedZone} warehouses={warehouses} fetchWarehouses={fetchWarehouses} />}
+                        {selectPage === "monthly" && (
+                            <AttendanceTableMonthly selectedZone={selectedZone} dateString={startDate} warehouseMonthly={warehouseMonthly} />
+                        )}
+                    </div>
                 </div>
             </div>
         </MainPage>

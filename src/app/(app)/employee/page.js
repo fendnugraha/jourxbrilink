@@ -14,8 +14,13 @@ import { DownloadIcon, FilterIcon, RefreshCcwIcon } from "lucide-react";
 import { DateTimeNow, formatDate, formatDateTime, getMonthYear } from "@/libs/format";
 import axios from "@/libs/axios";
 import AttendanceTableMonthly from "./AttendanceTableMonthly";
+import CreateAttendance from "./CreateAttendance";
+import Notification from "@/components/Notification";
+import { useAuth } from "@/libs/auth";
 
 const EmployeePage = () => {
+    const { user } = useAuth({ middleware: "auth" });
+    const userRole = user?.role?.role;
     const [isModalAttendanceFormOpen, setIsModalAttendanceFormOpen] = useState(false);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
     const [selectPage, setSelectPage] = useState("daily");
@@ -23,6 +28,10 @@ const EmployeePage = () => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
     const [startDate, setStartDate] = useState(today);
+    const [notification, setNotification] = useState({
+        type: "",
+        message: "",
+    });
 
     const [zones, setZones] = useState([]);
     const [selectedZone, setSelectedZone] = useState("");
@@ -80,6 +89,9 @@ const EmployeePage = () => {
     // };
     return (
         <MainPage headerTitle="Absensi">
+            {notification.message && (
+                <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
+            )}
             <div className="py-4 sm:py-8 px-4 sm:px-12 overflow-x-auto">
                 <div className="card p-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -111,7 +123,20 @@ const EmployeePage = () => {
                             </Modal>
                         </div>
                     </div>
-                    <div className="">
+                    <div className="flex gap-2">
+                        <Button
+                            buttonType="info"
+                            // className="mb-4 group text-nowrap"
+                            onClick={() => {
+                                setIsModalAttendanceFormOpen(true);
+                            }}
+                            hidden={!["Administrator", "Super Admin"].includes(userRole)}
+                        >
+                            Absensi
+                        </Button>
+                        <Modal isOpen={isModalAttendanceFormOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Absensi">
+                            <CreateAttendance notification={setNotification} fetchWarehouses={fetchWarehousesMonthly} />
+                        </Modal>
                         <select className="form-select" value={selectedZone} onChange={(e) => setSelectedZone(e.target.value)}>
                             <option value="">Semua Zona</option>
                             {zones?.map((zone) => (

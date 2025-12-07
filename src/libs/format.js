@@ -76,7 +76,7 @@ export const todayDate = () => {
     const hours = pad(now.getHours());
     const minutes = pad(now.getMinutes());
 
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
+    return `${year}-${month}-${day}`;
 };
 
 export const TimeAgo = ({ timestamp }) => {

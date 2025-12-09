@@ -24,8 +24,8 @@ const InspectionPage = () => {
     const { warehouses, warehousesError } = useGetWarehouses();
     const [cashBank, setCashBank] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [startDate, setStartDate] = useState(todayDate());
-    const [endDate, setEndDate] = useState(todayDate());
+    const [startDate, setStartDate] = useState(today);
+    const [endDate, setEndDate] = useState(today);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);

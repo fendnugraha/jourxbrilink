@@ -17,9 +17,10 @@ const AttendanceTableMonthly = ({ selectedZone, warehouseMonthly }) => {
     };
 
     const filteredWarehouses = warehouseMonthly.employees?.filter((warehouse) => {
-        const zoneMatch = Number(warehouse.warehouse?.warehouse_zone_id) === Number(selectedZone);
+        const zoneMatch = Number(warehouse.warehouse?.warehouse_zone_id) === Number(selectedZone) || Number(warehouse.zone?.id) === Number(selectedZone);
         return !selectedZone || zoneMatch;
     });
+
     return (
         <>
             {filteredWarehouses.map((employee) => (

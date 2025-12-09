@@ -116,7 +116,7 @@ const BalanceMutationHistory = ({
                     currentItems.map((journal, index) => (
                         <div key={index} className="flex justify-between text-xs p-2 bg-white dark:bg-slate-800 rounded-xl mb-2 drop-shadow-sm">
                             <div>
-                                <h1 className="font-bold overflow-x-hidden text-blue-600 dark:text-cyan-400">
+                                <h1 className="font-bold overflow-x-hidden text-blue-600 dark:text-yellow-200">
                                     {journal.debt?.warehouse_id === Number(selectedWarehouse) ? journal.cred?.warehouse?.name : journal.debt?.warehouse?.name}
                                 </h1>
                                 <h1>{formatDateTime(journal.date_issued)}</h1>
@@ -130,10 +130,10 @@ const BalanceMutationHistory = ({
                             </div>
                             <div className="text-right flex flex-col justify-between">
                                 <h1
-                                    className={`font-bold text-lg text-nowrap ${
+                                    className={`font-bold text-[1.1rem] text-nowrap ${
                                         journal.debt?.warehouse_id === Number(selectedWarehouse)
-                                            ? "text-green-500 dark:text-green-400"
-                                            : "text-red-500 dark:text-red-400"
+                                            ? "text-green-500 dark:text-green-300"
+                                            : "text-red-500 dark:text-red-300"
                                     }`}
                                 >
                                     {journal.debt?.warehouse_id === Number(selectedWarehouse) ? "+" : "-"} {formatNumber(journal.amount)}

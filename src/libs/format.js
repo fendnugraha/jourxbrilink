@@ -201,3 +201,23 @@ export function getDay(date, weekday) {
         return new Date(date).getDate();
     }
 }
+
+export function formatDateTimeColumn(date) {
+    const d = new Date(date);
+
+    const day = d.getDate();
+    const shortMonth = d.toLocaleString("default", { month: "short" });
+    const month = d.toLocaleString("default", { month: "long" });
+    const shortYear = d.getFullYear().toString().slice(-2);
+    const hours = d.getHours();
+    const minutes = d.getMinutes();
+
+    return (
+        <div className="flex flex-col items-center">
+            <span className="font-bold text-xl">{day}</span>
+            <span className="text-xs">
+                {shortMonth} {shortYear}
+            </span>
+        </div>
+    );
+}

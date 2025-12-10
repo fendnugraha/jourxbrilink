@@ -136,7 +136,8 @@ const BalanceMutationHistory = ({
                                             : "text-red-500 dark:text-red-300"
                                     }`}
                                 >
-                                    {journal.debt?.warehouse_id === Number(selectedWarehouse) ? "+" : "-"} {formatNumber(journal.amount)}
+                                    {journal.debt?.warehouse_id === Number(selectedWarehouse) ? "+" : "-"}
+                                    {formatNumber(journal.amount)}
                                 </h1>
                                 <div className="flex justify-end gap-2">
                                     <button

@@ -6,12 +6,14 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/libs/auth";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import { navMenu } from "../constants/NavMenu";
+import Image from "next/image";
 
 const Navigation = ({ user }) => {
     const { logout } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const pathName = usePathname();
     const userRole = user?.role?.role;
+    const userPhoto = user?.attendances?.[0]?.photo_url || "/default.png";
 
     return (
         <>
@@ -23,7 +25,8 @@ const Navigation = ({ user }) => {
                         className="w-16 h-20 flex items-center justify-center shrink-0 text-slate-700 dark:text-white"
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                     >
-                        <Menu size={32} />
+                        {/* <Menu size={32} /> */}
+                        {userPhoto ? <Image src={userPhoto} alt="" width={40} height={40} className="rounded-full object-cover" /> : <Menu size={32} />}
                     </span>
 
                     {/* Logo Text */}

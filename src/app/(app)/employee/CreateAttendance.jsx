@@ -1,6 +1,7 @@
 "use client";
 import axios from "@/libs/axios";
 import { DateTimeNow, formatDate, todayDate } from "@/libs/format";
+import useGetWarehouses from "@/libs/getAllWarehouse";
 import { useEffect, useState } from "react";
 
 const CreateAttendance = ({ isModalOpen, notification, fetchWarehouses }) => {
@@ -8,9 +9,9 @@ const CreateAttendance = ({ isModalOpen, notification, fetchWarehouses }) => {
         contact_id: "",
         date: todayDate(),
         time_in: "",
+        warehouse_id: "",
     });
-    console.log(formData.date);
-
+    const { warehouses, warehousesError } = useGetWarehouses();
     const [loading, setLoading] = useState(true);
     const [employees, setEmployees] = useState([]);
     const fetchContacts = async (url = "/api/get-all-contacts/Employee") => {
@@ -41,6 +42,13 @@ const CreateAttendance = ({ isModalOpen, notification, fetchWarehouses }) => {
             notification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
         } finally {
             setLoading(false);
+            setFormData({
+                contact_id: "",
+                date: todayDate(),
+                time_in: "",
+                warehouse_id: "",
+            });
+            isModalOpen(false);
         }
     };
     return (
@@ -68,7 +76,23 @@ const CreateAttendance = ({ isModalOpen, notification, fetchWarehouses }) => {
                 </div>
                 <div>
                     <label>Time In</label>
-                    <input type="time" className="form-control" />
+                    <input
+                        type="time"
+                        value={formData.time_in}
+                        onChange={(e) => setFormData({ ...formData, time_in: e.target.value })}
+                        className="form-control"
+                    />
+                </div>
+                <div>
+                    <label>Cabang</label>
+                    <select className="form-select" value={formData.warehouse_id} onChange={(e) => setFormData({ ...formData, warehouse_id: e.target.value })}>
+                        <option value="">-</option>
+                        {warehouses.data?.map((warehouse) => (
+                            <option key={warehouse.id} value={warehouse.id}>
+                                {warehouse.name}
+                            </option>
+                        ))}
+                    </select>
                 </div>
                 <div className="flex justify-end">
                     <button type="submit" className="btn btn-primary" disabled={loading}>

@@ -135,7 +135,11 @@ const EmployeePage = () => {
                             Absensi
                         </Button>
                         <Modal isOpen={isModalAttendanceFormOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Absensi">
-                            <CreateAttendance notification={setNotification} fetchWarehouses={fetchWarehousesMonthly} />
+                            <CreateAttendance
+                                isModalOpen={setIsModalAttendanceFormOpen}
+                                notification={setNotification}
+                                fetchWarehouses={fetchWarehousesMonthly}
+                            />
                         </Modal>
                         <select className="form-select" value={selectedZone} onChange={(e) => setSelectedZone(e.target.value)}>
                             <option value="">Semua Zona</option>

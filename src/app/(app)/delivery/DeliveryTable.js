@@ -33,12 +33,12 @@ const DeliveryTable = ({ headquarter, filteredJournals, itemsPerPage, currentPag
                                     <Link
                                         href={`/delivery/invoice/${journal?.invoice}`}
                                         target="blank"
-                                        className="block hover:underline font-bold text-yellow-500 dark:text-yellow-300 mb-1"
+                                        className="flex gap-1 items-center hover:underline font-bold text-yellow-500 dark:text-yellow-300 mb-1"
                                     >
-                                        {journal?.invoice}
+                                        <MapPin size={14} className="text-red-500 dark:text-red-300" /> {journal?.debt?.warehouse?.name}
                                     </Link>
                                     <span className="text-xs flex gap-1">
-                                        <MapPin size={14} className="text-red-500 dark:text-red-300" /> {journal?.debt?.warehouse?.name}{" "}
+                                        {journal?.invoice}{" "}
                                         {journal?.debt?.warehouse?.latitude && journal?.debt?.warehouse?.longitude && (
                                             <span className="italic">
                                                 {getDistance(

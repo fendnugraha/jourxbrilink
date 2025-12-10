@@ -15,9 +15,11 @@ import useLiveClock from "@/components/useLiveClock";
 import useAttendanceCheck from "@/libs/attendanceCheck";
 import AttendanceForm from "./employee/attendanceForm";
 import ShareAttendance from "./employee/ShareAttendance";
+import Image from "next/image";
 
 const MainPage = ({ children, headerTitle }) => {
     const { user, logout } = useAuth({ middleware: "auth" });
+    const userPhoto = user?.attendances?.[0]?.photo_url || "/default.png";
     const [isOpen, setIsOpen] = useState(false);
     const { profit, loading: profitLoading, error } = useGetProfit();
     const [attSuccessMessageOpen, setAttSuccessMessageOpen] = useState(false);
@@ -109,11 +111,11 @@ const MainPage = ({ children, headerTitle }) => {
 
                 <div className="flex items-center justify-end sm:gap-4">
                     {WarehouseRank > 0 && (
-                        <div className="text-lg sm:text-md drop-shadow-xs sm:bg-white dark:sm:bg-slate-800 shadow rounded-full px-4 sm:ps-1 sm:pe-6 py-1 flex flex-col justify-end items-end">
+                        <div className="text-lg sm:text-md drop-shadow-xs bg-none sm:bg-white dark:sm:bg-slate-800 sm:drop-shadow rounded-full px-4 sm:ps-1 sm:pe-6 py-1 flex flex-col justify-end items-end">
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => mutate("/api/get-rank-by-profit")}
-                                    className="font-bold cursor-pointer text-2xl text-lime-700 w-12 h-12 rounded-full bg-lime-200"
+                                    className="font-bold cursor-pointer text-2xl text-lime-700 sm:w-12 sm:h-12 rounded-full sm:bg-lime-200"
                                 >
                                     {WarehouseRank}
                                     <span className="text-xs scale-50 hidden sm:inline text-slate-400">
@@ -140,8 +142,18 @@ const MainPage = ({ children, headerTitle }) => {
                             </div>
                         </div>
                     )}
-                    <button className="sm:hidden">
-                        {!isOpen ? <MenuIcon size={30} onClick={() => setIsOpen(!isOpen)} /> : <XIcon size={30} onClick={() => setIsOpen(!isOpen)} />}
+                    <button className="sm:hidden" onClick={() => setIsOpen(!isOpen)}>
+                        {userPhoto ? (
+                            isOpen ? (
+                                <XIcon size={40} />
+                            ) : (
+                                <Image src={userPhoto} alt="" width={40} height={40} className="w-12 h-12 rounded-full object-cover" />
+                            )
+                        ) : isOpen ? (
+                            <XIcon size={30} />
+                        ) : (
+                            <MenuIcon size={30} />
+                        )}
                     </button>
                 </div>
             </header>

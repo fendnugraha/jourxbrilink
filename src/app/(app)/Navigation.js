@@ -26,7 +26,11 @@ const Navigation = ({ user }) => {
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                     >
                         {/* <Menu size={32} /> */}
-                        {userPhoto ? <Image src={userPhoto} alt="" width={40} height={40} className="rounded-full object-cover" /> : <Menu size={32} />}
+                        {userPhoto ? (
+                            <Image src={userPhoto} alt="" width={40} height={40} className="w-12 h-12 rounded-full object-cover" />
+                        ) : (
+                            <Menu size={32} />
+                        )}
                     </span>
 
                     {/* Logo Text */}

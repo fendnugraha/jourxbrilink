@@ -7,8 +7,7 @@ import { DateTimeNow, formatNumber } from "@/libs/format";
 import axios from "@/libs/axios";
 import DropdownMenu from "@/components/DropdownMenu";
 
-const CreatePayroll = ({ employees, notification }) => {
-    const { thisMonth, thisYear } = DateTimeNow();
+const CreatePayroll = ({ employees, fetchContacts, notification, month, year, setMonth, setYear }) => {
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");
     const [isModalPayrollDetailOpen, setIsModalPayrollDetailOpen] = useState(false);
@@ -26,8 +25,9 @@ const CreatePayroll = ({ employees, notification }) => {
     const [deductionName, setDeductionName] = useState("");
     const [deductionAmount, setDeductionAmount] = useState("");
 
-    const [month, setMonth] = useState(thisMonth);
-    const [year, setYear] = useState(thisYear);
+    useEffect(() => {
+        fetchContacts({ month, year });
+    }, [month, year]);
 
     const closeModal = () => {
         setIsModalPayrollDetailOpen(false);

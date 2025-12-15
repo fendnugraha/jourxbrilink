@@ -7,23 +7,31 @@ import EmployeeTable from "./EmployeeTable";
 import axios from "@/libs/axios";
 import ReceivableContent from "./receivable/ReceivableContent";
 import PayrollSection from "./PayrollSection";
+import { DateTimeNow } from "@/libs/format";
 
 const PayrollPage = () => {
     const [notification, setNotification] = useState({
         type: "",
         message: "",
     });
+    const { thisMonth, thisYear } = DateTimeNow();
+    const [month, setMonth] = useState(thisMonth);
+    const [year, setYear] = useState(thisYear);
+
     const [selectPage, setSelectPage] = useState("list");
     const [employees, setEmployees] = useState([]);
 
-    const fetchContacts = useCallback(async (url = "/api/employees") => {
-        try {
-            const response = await axios.get(url);
-            setEmployees(response.data.data);
-        } catch (error) {
-            console.log(error);
-        }
-    }, []);
+    const fetchContacts = useCallback(
+        async (url = "/api/employees") => {
+            try {
+                const response = await axios.get(url, { params: { month, year } });
+                setEmployees(response.data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        [month, year]
+    );
 
     useEffect(() => {
         fetchContacts();
@@ -38,7 +46,17 @@ const PayrollPage = () => {
                 <SubNavsEmployee selectPage={selectPage} setSelectPage={setSelectPage} />
                 {selectPage === "list" && <EmployeeTable employees={employees} fetchContacts={fetchContacts} notification={setNotification} />}
                 {selectPage === "receivable" && <ReceivableContent employees={employees} fetchContacts={fetchContacts} notification={setNotification} />}
-                {selectPage === "payroll" && <PayrollSection employees={employees} fetchContacts={fetchContacts} notification={setNotification} />}
+                {selectPage === "payroll" && (
+                    <PayrollSection
+                        employees={employees}
+                        fetchContacts={fetchContacts}
+                        notification={setNotification}
+                        month={month}
+                        year={year}
+                        setMonth={setMonth}
+                        setYear={setYear}
+                    />
+                )}
             </div>
         </MainPage>
     );

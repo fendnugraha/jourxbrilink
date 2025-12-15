@@ -2,7 +2,7 @@ import { useState } from "react";
 import CreatePayroll from "./CreatePayroll";
 import PayrollTable from "./PayrollTable";
 
-const PayrollSection = ({ employees, fetchContacts, notification }) => {
+const PayrollSection = ({ employees, fetchContacts, notification, month, year, setMonth, setYear }) => {
     const [selectSection, setSelectSection] = useState("payroll-table");
     return (
         <div className="card p-4">
@@ -21,7 +21,17 @@ const PayrollSection = ({ employees, fetchContacts, notification }) => {
                 </button>
             </div>
 
-            {selectSection === "payrollPayement" && <CreatePayroll employees={employees} fetchContacts={fetchContacts} notification={notification} />}
+            {selectSection === "payrollPayement" && (
+                <CreatePayroll
+                    employees={employees}
+                    fetchContacts={fetchContacts}
+                    notification={notification}
+                    month={month}
+                    year={year}
+                    setMonth={setMonth}
+                    setYear={setYear}
+                />
+            )}
             {selectSection === "payroll-table" && <PayrollTable />}
         </div>
     );

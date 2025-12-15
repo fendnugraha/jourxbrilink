@@ -111,7 +111,7 @@ export function formatDuration(toDate = new Date(), fromDate) {
         return `${weeks} Week${weeks > 1 ? "s" : ""}`;
     } else if (days < 365) {
         const months = Math.floor(days / 30);
-        return `${months} Month${months > 1 ? "s" : ""}`;
+        return `${months} Bln ${days % 30} Hr`;
     } else {
         const years = Math.floor(days / 365);
         return `${years} Year${years > 1 ? "s" : ""}`;

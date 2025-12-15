@@ -10,13 +10,13 @@ const AttendanceCalendar = () => {
     const { today } = DateTimeNow();
     const [attendanceData, setAttendanceData] = useState([]);
     const [selectedDate, setSelectedDate] = useState(today);
-    const [emplyeeId, setEmployeeId] = useState(null);
+    const [employeeId, setEmployeeId] = useState(null);
 
     const fetchAttendanceData = async () => {
         try {
             const response = await axios.get("/api/get-attendance-by-contact", {
                 params: {
-                    contact_id: emplyeeId,
+                    contact_id: employeeId,
                     date: selectedDate,
                 },
             });
@@ -28,9 +28,8 @@ const AttendanceCalendar = () => {
 
     useEffect(() => {
         fetchAttendanceData();
-    }, [selectedDate, emplyeeId]);
+    }, [selectedDate, employeeId]);
 
-    console.log(attendanceData);
     const calendarData = {};
 
     attendanceData.forEach((item) => {

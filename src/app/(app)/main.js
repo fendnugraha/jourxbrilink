@@ -16,14 +16,17 @@ import useAttendanceCheck from "@/libs/attendanceCheck";
 import AttendanceForm from "./employee/attendance/attendanceForm";
 import ShareAttendance from "./employee/attendance/ShareAttendance";
 import Image from "next/image";
+import { formatDate, formatDuration } from "@/libs/format";
 
 const MainPage = ({ children, headerTitle }) => {
     const { user, logout } = useAuth({ middleware: "auth" });
+    console.log(user);
     const userPhoto = user?.attendances?.[0]?.photo_url || "/default.png";
     const [isOpen, setIsOpen] = useState(false);
     const { profit, loading: profitLoading, error } = useGetProfit();
     const [attSuccessMessageOpen, setAttSuccessMessageOpen] = useState(false);
-
+    const contactLoginName = user?.attendances?.[0]?.contact?.name || "Guest";
+    const contactWarningStatus = user?.attendances?.[0]?.contact?.employee?.warning_active || false;
     const { dayName, date, time, raw } = useLiveClock();
 
     const pathName = usePathname();
@@ -104,8 +107,21 @@ const MainPage = ({ children, headerTitle }) => {
             <header className="w-full h-20 flex items-center justify-between px-4 sm:px-12 py-2">
                 <h1 className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-white">
                     {headerTitle}
-                    <span className="text-xs font-normal p-0 sm:block hidden">
-                        {userWarehouseName} | {dayName}, {date} {time}
+                    <span className="text-xs font-normal p-0 block mt-0.5">
+                        {contactLoginName}
+                        {contactWarningStatus ? (
+                            <>
+                                {" | "}
+                                <span className="bg-red-200 rounded-lg text-red-600 pe-0 sm:pe-2">
+                                    <span className="bg-red-600 text-white rounded-lg w-fit px-2 py-0.5 font-bold">{contactWarningStatus.level}</span>{" "}
+                                    <span className="hidden sm:inline">Exp {formatDate(contactWarningStatus.expired_date)}</span>
+                                </span>
+                            </>
+                        ) : (
+                            <>
+                                {" | "} {dayName}, {date} {time}
+                            </>
+                        )}
                     </span>
                 </h1>
 
@@ -115,7 +131,7 @@ const MainPage = ({ children, headerTitle }) => {
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => mutate("/api/get-rank-by-profit")}
-                                    className="font-bold cursor-pointer text-2xl text-lime-700 sm:w-12 sm:h-12 rounded-full sm:bg-lime-200"
+                                    className="font-bold cursor-pointer text-2xl text-lime-700 dark:text-lime-400 sm:w-12 sm:h-12 rounded-full sm:bg-lime-200"
                                 >
                                     {WarehouseRank}
                                     <span className="text-xs scale-50 hidden sm:inline text-slate-400">

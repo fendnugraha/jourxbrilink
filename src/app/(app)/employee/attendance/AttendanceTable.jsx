@@ -2,7 +2,7 @@
 
 import Modal from "@/components/Modal";
 import { diffTimeHuman } from "@/libs/format";
-import { Check, Clock, Star } from "lucide-react";
+import { AlarmClockPlus, Check, Clock, Star } from "lucide-react";
 import { useState } from "react";
 import AttendanceDetail from "./attendanceDetail";
 import Notification from "@/components/Notification";
@@ -87,6 +87,8 @@ const AttendanceTable = ({ selectedZone, warehouses, fetchWarehouses }) => {
                                         <Clock size={20} className="text-red-500 dark:text-red-400" />
                                     ) : warehouse?.attendance?.[0]?.approval_status === "Good" ? (
                                         <Star size={20} className="text-yellow-500 dark:text-yellow-300" fill="yellow" />
+                                    ) : warehouse?.attendance?.[0]?.approval_status === "Overtime" ? (
+                                        <AlarmClockPlus size={20} className="text-violet-500 dark:text-violet-300" fill="yellow" />
                                     ) : (
                                         <Check size={20} className="text-green-500 dark:text-green-400" />
                                     )}

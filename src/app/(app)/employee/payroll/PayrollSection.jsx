@@ -1,0 +1,30 @@
+import { useState } from "react";
+import CreatePayroll from "./CreatePayroll";
+import PayrollTable from "./PayrollTable";
+
+const PayrollSection = ({ employees, fetchContacts, notification }) => {
+    const [selectSection, setSelectSection] = useState("payroll-table");
+    return (
+        <div className="card p-4">
+            <div className="mb-4 bg-slate-300 dark:bg-slate-50 w-fit rounded-lg flex gap-2 items-center justify-center p-0.5 text-sm">
+                <button
+                    className={`${selectSection === "payroll-table" ? "bg-slate-800 text-white" : "text-slate-600"} px-4 py-1 rounded-lg min-w-32`}
+                    onClick={() => setSelectSection("payroll-table")}
+                >
+                    Report
+                </button>
+                <button
+                    className={`${selectSection === "payrollPayement" ? "bg-slate-800 text-white" : "text-slate-600"} px-4 py-1 rounded-lg min-w-32`}
+                    onClick={() => setSelectSection("payrollPayement")}
+                >
+                    Buat Baru
+                </button>
+            </div>
+
+            {selectSection === "payrollPayement" && <CreatePayroll employees={employees} fetchContacts={fetchContacts} notification={notification} />}
+            {selectSection === "payroll-table" && <PayrollTable />}
+        </div>
+    );
+};
+
+export default PayrollSection;

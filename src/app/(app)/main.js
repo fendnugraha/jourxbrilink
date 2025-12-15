@@ -13,8 +13,8 @@ import { navMenu } from "../constants/NavMenu";
 import { getStorePerformanceRating } from "@/libs/GetStorePerformanceRating";
 import useLiveClock from "@/components/useLiveClock";
 import useAttendanceCheck from "@/libs/attendanceCheck";
-import AttendanceForm from "./employee/attendanceForm";
-import ShareAttendance from "./employee/ShareAttendance";
+import AttendanceForm from "./employee/attendance/attendanceForm";
+import ShareAttendance from "./employee/attendance/ShareAttendance";
 import Image from "next/image";
 
 const MainPage = ({ children, headerTitle }) => {

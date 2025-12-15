@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, getDay } from "date-fns";
 import id from "date-fns/locale/id";
-import { Check, Clock, Star, X } from "lucide-react";
+import { AlarmClockPlus, Check, Clock, Star, X } from "lucide-react";
 
 // Utility untuk memberi warna
 const getColor = (data) => {
@@ -17,6 +17,7 @@ const getColor = (data) => {
                 icon: <Star size={20} strokeWidth={2} className="text-orange-700" fill="orange" />,
             };
         if (data.status === "Telat") return { style: "bg-red-500 dark:bg-red-600 text-white", icon: <Clock size={15} /> };
+        if (data.status === "Lembur") return { style: "bg-violet-500 dark:bg-violet-600 text-white", icon: <AlarmClockPlus size={15} /> };
         if (data.status === "Alpha") return { style: "bg-red-500 dark:bg-red-600 text-white", icon: <X size={15} /> };
     }
 

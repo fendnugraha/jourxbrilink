@@ -3,7 +3,7 @@
 import Calendar from "@/components/Calendar";
 import axios from "@/libs/axios";
 import { DateTimeNow } from "@/libs/format";
-import { Clock, IdCardLanyard, Star, User } from "lucide-react";
+import { AlarmClockPlus, Clock, IdCardLanyard, Star, User } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const AttendanceCalendar = () => {
@@ -36,12 +36,15 @@ const AttendanceCalendar = () => {
     attendanceData.forEach((item) => {
         calendarData[item.date] = {
             type: "attendance",
-            status: item.approval_status === "Late" ? "Telat" : item.approval_status === "Good" ? "Good" : "Hadir",
+            status:
+                item.approval_status === "Late" ? "Telat" : item.approval_status === "Good" ? "Good" : item.approval_status === "Overtime" ? "Lembur" : "Hadir",
             time_in: item.time_in,
         };
     });
     const attGood = attendanceData.filter((item) => item.approval_status === "Good").length;
     const attLate = attendanceData.filter((item) => item.approval_status === "Late").length;
+    const overtime = attendanceData.filter((item) => item.approval_status === "Overtime").length;
+
     return (
         <div>
             <div className="px-4 flex gap-2">
@@ -50,6 +53,9 @@ const AttendanceCalendar = () => {
                 </span>
                 <span className="flex gap-1 items-center w-16 justify-between bg-yellow-300 text-yellow-800 rounded-full px-2 py-0.5">
                     <Star size={15} strokeWidth={2} fill="orange" /> {attGood}
+                </span>
+                <span className="flex gap-1 items-center w-16 justify-between bg-violet-300 text-violet-800 rounded-full px-2 py-0.5">
+                    <AlarmClockPlus size={15} strokeWidth={2} fill="orange" /> {overtime}
                 </span>
                 <span className="flex gap-1 items-center w-16 justify-between bg-red-500 text-white rounded-full px-2 py-0.5">
                     <Clock size={15} /> {attLate}

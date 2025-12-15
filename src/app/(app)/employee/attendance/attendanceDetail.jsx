@@ -47,6 +47,7 @@ const AttendanceDetail = ({ selectedWarehouse, fetchWarehouses, notification, is
             fetchContacts();
         } catch (error) {
             notification("error", error.response?.data?.message || "Something went wrong.");
+            console.log(error);
         } finally {
             setLoading(false);
             fetchWarehouses();
@@ -114,6 +115,7 @@ const AttendanceDetail = ({ selectedWarehouse, fetchWarehouses, notification, is
                             <option value="Approved">Approved</option>
                             <option value="Good">Good</option>
                             <option value="Late">Terlambat</option>
+                            <option value="Overtime">Lembur</option>
                         </select>
                     ) : (
                         "Belum absen"

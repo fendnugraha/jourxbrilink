@@ -1,12 +1,11 @@
-"use client";
 import Modal from "@/components/Modal";
 import Paginator from "@/components/Paginator";
 import axios from "@/libs/axios";
 import { formatDateTime, formatNumber, todayDate } from "@/libs/format";
-import { ArrowBigDown, ArrowBigUp, MessageCircleWarningIcon, XCircleIcon } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp, Filter, MessageCircleWarningIcon, XCircleIcon } from "lucide-react";
 import { useState } from "react";
 
-const FinanceLog = ({ finance, notification, fetchFinance }) => {
+const ReceivableLog = ({ financeLog, notification, fetchFinance }) => {
     const [startDate, setStartDate] = useState(todayDate());
     const [endDate, setEndDate] = useState(todayDate());
 
@@ -34,14 +33,22 @@ const FinanceLog = ({ finance, notification, fetchFinance }) => {
     };
     return (
         <div className="card p-4 sm:col-span-3">
-            <h1 className="card-title mb-4">Histori</h1>
+            <div className="flex justify-between mb-4">
+                <h1 className="card-title">
+                    History Piutang
+                    <span className="card-subtitle">Nama:-</span>
+                </h1>
+                <button className="small-button h-fit">
+                    <Filter size={14} />
+                </button>
+            </div>
             <div className="overflow-x-auto">
                 <table className="table w-full text-xs">
                     <thead>
                         <tr>
                             <th>Type</th>
-                            <th>Amount</th>
-                            <th>Description</th>
+                            <th>Jumlah</th>
+                            <th>Keterangan</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -53,7 +60,7 @@ const FinanceLog = ({ finance, notification, fetchFinance }) => {
                                 </td>
                             </tr>
                         ) : (
-                            finance.finance?.data.map((item, index) => (
+                            financeLog?.data.map((item, index) => (
                                 <tr key={index} className="hover:bg-slate-700 hover:text-white">
                                     <td className="text-center whitespace-nowrap !w-8">
                                         {item.bill_amount > 0 ? (
@@ -96,9 +103,8 @@ const FinanceLog = ({ finance, notification, fetchFinance }) => {
                     </tbody>
                 </table>
             </div>
-            <div className="px-4 py-4 sm:py-0">
-                {finance.finance?.last_page > 1 && <Paginator links={finance.finance} handleChangePage={handleChangePage} />}
-            </div>
+            <div className="px-4 py-4 sm:py-0">{financeLog?.last_page > 1 && <Paginator links={financeLog} handleChangePage={handleChangePage} />}</div>
+
             <Modal isOpen={isModalDeleteFinanceOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
                 <div className="flex flex-col items-center justify-center gap-3 mb-4">
                     <MessageCircleWarningIcon size={72} className="text-red-600" />
@@ -126,4 +132,4 @@ const FinanceLog = ({ finance, notification, fetchFinance }) => {
     );
 };
 
-export default FinanceLog;
+export default ReceivableLog;

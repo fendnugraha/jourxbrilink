@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 const CreateAttendance = ({ isModalOpen, notification, fetchWarehouses }) => {
     const [formData, setFormData] = useState({
+        user_id: "",
         contact_id: "",
         date: todayDate(),
         time_in: "",
@@ -14,6 +15,7 @@ const CreateAttendance = ({ isModalOpen, notification, fetchWarehouses }) => {
     const { warehouses, warehousesError } = useGetWarehouses();
     const [loading, setLoading] = useState(true);
     const [employees, setEmployees] = useState([]);
+    const [users, setUsers] = useState([]);
     const fetchContacts = async (url = "/api/get-all-contacts/Employee") => {
         setLoading(true);
         try {
@@ -30,6 +32,22 @@ const CreateAttendance = ({ isModalOpen, notification, fetchWarehouses }) => {
         fetchContacts();
     }, []);
 
+    const fetchUsers = async (url = "/api/get-all-users") => {
+        setLoading(true);
+        try {
+            const response = await axios.get(url);
+            setUsers(response.data.data);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchUsers();
+    }, []);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -43,6 +61,7 @@ const CreateAttendance = ({ isModalOpen, notification, fetchWarehouses }) => {
         } finally {
             setLoading(false);
             setFormData({
+                user_id: "",
                 contact_id: "",
                 date: todayDate(),
                 time_in: "",
@@ -55,7 +74,18 @@ const CreateAttendance = ({ isModalOpen, notification, fetchWarehouses }) => {
         <form onSubmit={handleSubmit}>
             <div className="space-y-2">
                 <div>
-                    <label>Employee ID</label>
+                    <label>User ID</label>
+                    <select className="form-select" value={formData.contact_id} onChange={(e) => setFormData({ ...formData, contact_id: e.target.value })}>
+                        <option value="">-</option>
+                        {users.map((user) => (
+                            <option key={user.id} value={user.id}>
+                                {user.email}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div>
+                    <label>Karyawan</label>
                     <select className="form-select" value={formData.contact_id} onChange={(e) => setFormData({ ...formData, contact_id: e.target.value })}>
                         <option value="">-</option>
                         {employees.map((employee) => (

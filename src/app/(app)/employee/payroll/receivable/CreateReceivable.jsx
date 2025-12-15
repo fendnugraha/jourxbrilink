@@ -4,23 +4,24 @@ import Label from "@/components/Label";
 import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
+import { DateTimeNow } from "@/libs/format";
 
 const CreateReceivable = ({ isModalOpen, fetchFinance, notification }) => {
+    const { today } = DateTimeNow();
     const [formData, setFormData] = useState({
-        date_issued: "",
+        date_issued: today,
         contact_id: "",
         amount: "",
         description: "",
-        debt_code: "",
-        cred_code: "",
-        type: "Receivable",
+        debt_code: 8,
+        cred_code: 1,
+        type: "EmployeeReceivable",
     });
     const [contacts, setContacts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [accounts, setAccounts] = useState([]);
     const [errors, setErrors] = useState([]);
 
-    const fetchContacts = async (url = "/api/get-all-contacts/all") => {
+    const fetchContacts = async (url = "/api/get-all-contacts/Employee") => {
         setLoading(true);
         try {
             const response = await axios.get(url);
@@ -36,37 +37,17 @@ const CreateReceivable = ({ isModalOpen, fetchFinance, notification }) => {
         fetchContacts();
     }, []);
 
-    const fetchAccounts = async ({ account_ids }) => {
-        setLoading(true);
-        try {
-            const response = await axios.get(`/api/get-account-by-account-id`, { params: { account_ids } });
-            setAccounts(response.data.data);
-        } catch (error) {
-            notification(error.response?.data?.message || "Something went wrong.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchAccounts({ account_ids: [1, 2, 4, 5] });
-    }, []);
-
-    const filterCashAccounts = accounts.filter((account) => account.account_id === 1 || account.account_id === 2);
-
-    const filterReceivableAccounts = accounts.filter((account) => Number(account.account_id) === 4 || account.account_id === 5);
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
             const response = await axios.post("/api/finance", formData);
-            notification(response.data.message);
+            notification({ type: "success", message: response.data.message });
             isModalOpen(false);
             fetchFinance();
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
-            notification(error.response?.data?.message || "Something went wrong.");
+            notification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
         } finally {
             setLoading(false);
         }
@@ -79,36 +60,10 @@ const CreateReceivable = ({ isModalOpen, fetchFinance, notification }) => {
                     <div className="col-span-2">
                         <Input
                             type="datetime-local"
-                            className="form-select"
+                            className="form-control"
                             value={formData.date_issued}
                             onChange={(e) => setFormData({ ...formData, date_issued: e.target.value })}
                         />
-                    </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mb-2 items-center">
-                    <Label htmlFor="debt_code">Akun Piutang</Label>
-                    <div className="col-span-2">
-                        <select value={formData.debt_code} onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })} className="form-control">
-                            <option value="">--Pilih Akun--</option>
-                            {filterReceivableAccounts.map((account) => (
-                                <option key={account.id} value={account.id}>
-                                    {account.acc_name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mb-2 items-center">
-                    <Label htmlFor="cred_code">Rekening</Label>
-                    <div className="col-span-2">
-                        <select value={formData.cred_code} onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })} className="form-control">
-                            <option value="">--Pilih Rekening--</option>
-                            {filterCashAccounts.map((account) => (
-                                <option key={account.id} value={account.id}>
-                                    {account.acc_name}
-                                </option>
-                            ))}
-                        </select>
                     </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mb-2 items-center">

@@ -1,4 +1,4 @@
-import { differenceInDays, differenceInMinutes, formatDistanceToNow, parse } from "date-fns";
+import { differenceInDays, differenceInMinutes, formatDistanceToNow, getMonth, getYear, parse } from "date-fns";
 
 /**
  * Format angka dengan separator ribuan.
@@ -119,19 +119,40 @@ export function formatDuration(toDate = new Date(), fromDate) {
 }
 
 export const DateTimeNow = () => {
-    const now = new Date();
+    const timeZone = "Asia/Jakarta";
+
+    const now = new Date(
+        new Intl.DateTimeFormat("en-US", {
+            timeZone,
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+        }).format(new Date())
+    );
+
     const pad = (n) => n.toString().padStart(2, "0");
 
     const today = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
 
-    const thisMonth = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-01T00:00`;
+    const thisMonth = now.getMonth() + 1;
     const lastMonth = `${now.getFullYear()}-${pad(now.getMonth())}-01T00:00`;
-    const thisYear = `${now.getFullYear()}-01-01T00:00`;
+    const thisYear = now.getFullYear();
     const lastYear = `${now.getFullYear() - 1}-01-01T00:00`;
 
     const thisTime = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
 
-    return { today, thisMonth, lastMonth, thisYear, lastYear, thisTime };
+    return {
+        today,
+        thisMonth,
+        lastMonth,
+        thisYear,
+        lastYear,
+        thisTime,
+    };
 };
 
 export const formatDurationTime = (to, from) => {

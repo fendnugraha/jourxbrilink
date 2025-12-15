@@ -49,13 +49,13 @@ const Navigation = ({ user }) => {
                 {/* Middle Menu */}
                 <div className="">
                     <div className="">
-                        <ul className="space-y-2 py-4">
+                        <ul className="space-y-1 py-4">
                             {navMenu.mainMenu
                                 .filter((item) => item.role.includes(userRole))
                                 .map((item, index) => (
                                     <li key={index}>
                                         <NavLink href={item.href} active={pathName.startsWith(item.path)}>
-                                            <span className="w-16 h-14 flex items-center justify-center shrink-0">
+                                            <span className="w-16 h-12 flex items-center justify-center shrink-0">
                                                 <item.icon size={20} className="" strokeWidth={`${pathName.startsWith(item.path) ? 2 : 1}`} />
                                             </span>
                                             <span

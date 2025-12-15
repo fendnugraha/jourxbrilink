@@ -74,8 +74,9 @@ const UpdateContact = ({ isModalOpen, notification, fetchContacts, contact }) =>
                         value={updateContactData.type}
                         onChange={(e) => setUpdateContactData({ ...updateContactData, type: e.target.value })}
                     >
-                        <option value="customer">Customer</option>
-                        <option value="supplier">Supplier</option>
+                        <option value="Customer">Customer</option>
+                        <option value="Supplier">Supplier</option>
+                        <option value="Employee">Karyawan</option>
                     </select>
                 </div>
                 <div className="flex justify-end gap-2 mt-6">

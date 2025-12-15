@@ -20,7 +20,6 @@ import { formatDate, formatDuration } from "@/libs/format";
 
 const MainPage = ({ children, headerTitle }) => {
     const { user, logout } = useAuth({ middleware: "auth" });
-    console.log(user);
     const userPhoto = user?.attendances?.[0]?.photo_url || "/default.png";
     const [isOpen, setIsOpen] = useState(false);
     const { profit, loading: profitLoading, error } = useGetProfit();
@@ -118,9 +117,9 @@ const MainPage = ({ children, headerTitle }) => {
                                 </span>
                             </>
                         ) : (
-                            <>
+                            <div className="hidden sm:inline">
                                 {" | "} {dayName}, {date} {time}
-                            </>
+                            </div>
                         )}
                     </span>
                 </h1>

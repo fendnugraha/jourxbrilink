@@ -75,7 +75,7 @@ const CreateAttendance = ({ isModalOpen, notification, fetchWarehouses }) => {
             <div className="space-y-2">
                 <div>
                     <label>User ID</label>
-                    <select className="form-select" value={formData.contact_id} onChange={(e) => setFormData({ ...formData, contact_id: e.target.value })}>
+                    <select className="form-select" value={formData.user_id} onChange={(e) => setFormData({ ...formData, user_id: e.target.value })}>
                         <option value="">-</option>
                         {users.map((user) => (
                             <option key={user.id} value={user.id}>

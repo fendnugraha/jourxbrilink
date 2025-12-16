@@ -43,8 +43,17 @@ const CreateReceivable = ({ isModalOpen, fetchFinance, notification }) => {
         try {
             const response = await axios.post("/api/finance", formData);
             notification({ type: "success", message: response.data.message });
-            isModalOpen(false);
+            isModalOpen(true);
             fetchFinance();
+            setFormData({
+                date_issued: today,
+                contact_id: "",
+                amount: "",
+                description: "",
+                debt_code: 8,
+                cred_code: 1,
+                type: "EmployeeReceivable",
+            });
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
             notification({ type: "error", message: error.response?.data?.message || "Something went wrong." });

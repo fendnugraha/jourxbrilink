@@ -162,7 +162,7 @@ const FinanceContent = () => {
                                 {currentItems.map((item, index) => (
                                     <tr key={index} className="" onClick={() => setSelectedContactId(item.contact_id)}>
                                         <td>
-                                            <button className="hover:underline">{item.contact.name}</button>
+                                            <button className="hover:underline">{item.contact_name}</button>
                                         </td>
                                         <td className="text-end">{formatNumber(item.sisa)}</td>
                                         <td className="text-center">

@@ -61,7 +61,7 @@ const ReceivableLog = ({ financeLog, notification, fetchFinance }) => {
                             </tr>
                         ) : (
                             financeLog?.data.map((item, index) => (
-                                <tr key={index} className="hover:bg-slate-700 hover:text-white">
+                                <tr key={index} className="hover:bg-slate-700 hover:dark:text-white">
                                     <td className="text-center whitespace-nowrap !w-8">
                                         {item.bill_amount > 0 ? (
                                             <ArrowBigDown className="inline text-green-600 dark:text-green-400" />
@@ -76,8 +76,8 @@ const ReceivableLog = ({ financeLog, notification, fetchFinance }) => {
                                     >
                                         {formatNumber(item.bill_amount > 0 ? item.bill_amount : item.payment_amount)}
                                     </td>
-                                    <td className="whitespace-normal break-words max-w-xs">
-                                        <span className="font-bold text-xs text-slate-400 block">
+                                    <td className="whitespace-normal wrap-break-word max-w-xs">
+                                        <span className="font-bold text-xs text-slate-400 dark:text-yellow-200 block">
                                             {formatDateTime(item.created_at)} | {item.invoice}
                                         </span>
                                         <span className="font-bold block">

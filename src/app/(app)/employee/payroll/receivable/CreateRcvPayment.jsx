@@ -3,12 +3,13 @@ import axios from "@/libs/axios";
 import { formatNumber } from "@/libs/format";
 import { useEffect, useState } from "react";
 
-const CreateRcvPayment = ({ isModalOpen, fetchFinance, notification, selectedContactId }) => {
+const CreateRcvPayment = ({ isModalOpen, fetchFinance, notification, selectedContactId, type }) => {
     const [formData, setFormData] = useState({
         contact_id: selectedContactId,
         account_id: 1,
         amount: "",
         notes: "",
+        finance_type: type,
     });
     const [errors, setErrors] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -20,7 +21,7 @@ const CreateRcvPayment = ({ isModalOpen, fetchFinance, notification, selectedCon
         try {
             const response = await axios.get(`/api/get-finance-by-contact-id/${selectedContactId}`, {
                 params: {
-                    type: "EmployeeReceivable",
+                    type: type,
                 },
             });
             setFinanceData(response.data.data);
@@ -53,7 +54,7 @@ const CreateRcvPayment = ({ isModalOpen, fetchFinance, notification, selectedCon
         }
     };
 
-    const contactName = financeData[0]?.contact.name;
+    const contactName = financeData?.[0]?.contact?.name;
     const filterDataByInvoice = financeData.filter((finance) => finance.invoice === selectedInvoice);
     return (
         <div>

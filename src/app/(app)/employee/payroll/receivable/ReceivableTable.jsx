@@ -8,7 +8,7 @@ import { format } from "date-fns";
 import SimplePagination from "@/components/SimplePagination";
 import CreateRcvPayment from "./CreateRcvPayment";
 
-const ReceivableTable = ({ notification, finance, fetchFinance, selectedContactId, setSelectedContactId }) => {
+const ReceivableTable = ({ notification, finance, fetchFinance, selectedContactId, setSelectedContactId, type, setType }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [paymentStatus, setPaymentStatus] = useState("Unpaid");
     const filteredFinance =
@@ -55,7 +55,16 @@ const ReceivableTable = ({ notification, finance, fetchFinance, selectedContactI
                 </button>
             </div>
             <div className="flex gap-2">
-                <input type="text" placeholder="Search" className="form-control w-full" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                <select
+                    className="form-control"
+                    value={type}
+                    onChange={(e) => {
+                        setType(e.target.value), setCurrentPage(1);
+                    }}
+                >
+                    <option value="EmployeeReceivable">Kasbon (Full Payment)</option>
+                    <option value="InstallmentReceivable">Cicilan (Installment Payment)</option>
+                </select>
                 <select
                     className="form-control !w-fit"
                     value={paymentStatus}
@@ -80,6 +89,7 @@ const ReceivableTable = ({ notification, finance, fetchFinance, selectedContactI
                     <option value="100">100</option>
                 </select>
             </div>
+            <input type="text" placeholder="Search" className="form-control w-full mt-2" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
             <div className="overflow-x-auto">
                 <table className="table w-full text-xs">
                     <thead>
@@ -128,6 +138,7 @@ const ReceivableTable = ({ notification, finance, fetchFinance, selectedContactI
                     isModalOpen={setIsModalPaymentOpen}
                     fetchFinance={fetchFinance}
                     notification={notification}
+                    type={type}
                 />
             </Modal>
         </div>

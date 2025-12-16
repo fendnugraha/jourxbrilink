@@ -2,12 +2,12 @@ import Label from "@/components/Label";
 import axios from "@/libs/axios";
 import { useCallback, useEffect, useState } from "react";
 
-const AddEmployee = ({ isModalOpen, fetchContacts, notification }) => {
+const EditEmployee = ({ isModalOpen, fetchContacts, notification, employee }) => {
     const [formData, setFormData] = useState({
-        contact_id: "",
-        salary: "",
-        commision: "",
-        hire_date: "",
+        contact_id: employee.contact_id,
+        salary: employee.salary,
+        commission: employee.commission,
+        hire_date: employee.hire_date,
     });
     const [contacts, setContacts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -29,7 +29,8 @@ const AddEmployee = ({ isModalOpen, fetchContacts, notification }) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await axios.post("/api/employees", formData);
+            const response = await axios.put(`/api/employees/${employee.id}`, formData);
+            console.log(response);
             notification({ type: "success", message: response.data.message });
             isModalOpen(false);
             fetchContacts();
@@ -70,13 +71,13 @@ const AddEmployee = ({ isModalOpen, fetchContacts, notification }) => {
                 />
             </div>
             <div className="">
-                <Label htmlFor="commision">Tunjangan Tetap</Label>
+                <Label htmlFor="commission">Tunjangan Tetap</Label>
                 <input
                     className="form-control"
-                    value={formData.commision}
-                    onChange={(e) => setFormData({ ...formData, commision: e.target.value })}
+                    value={formData.commission}
+                    onChange={(e) => setFormData({ ...formData, commission: e.target.value })}
                     type="number"
-                    id="commision"
+                    id="commission"
                 />
             </div>
             <div className="">
@@ -91,11 +92,11 @@ const AddEmployee = ({ isModalOpen, fetchContacts, notification }) => {
             </div>
             <div className="flex justify-end">
                 <button type="submit" className="btn btn-primary" disabled={loading}>
-                    {loading ? "Loading..." : "Simpan"}
+                    {loading ? "Loading..." : "Update"}
                 </button>
             </div>
         </form>
     );
 };
 
-export default AddEmployee;
+export default EditEmployee;

@@ -83,6 +83,19 @@ const CreateReceivable = ({ isModalOpen, fetchFinance, notification }) => {
                         </select>
                     </div>
                 </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mb-2 items-center">
+                    <Label htmlFor="type">Jenis Pembayaran</Label>
+                    <div className="col-span-2">
+                        <select
+                            value={formData.type}
+                            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                            className={`form-control ${errors.type ? "border-red-500" : ""}`}
+                        >
+                            <option value="EmployeeReceivable">Kasbon (Full Payment)</option>
+                            <option value="InstallmentReceivable">Cicilan (Installment Payment)</option>
+                        </select>
+                    </div>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2 items-center">
                     <Label htmlFor="amount">Jumlah</Label>
                     <div className="col-span-1">

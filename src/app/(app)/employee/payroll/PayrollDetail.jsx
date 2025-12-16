@@ -39,6 +39,10 @@ const PayrollDetail = ({ employee }) => {
             <table className="table-auto w-full text-xs">
                 <tbody>
                     <tr>
+                        <td className="font-semibold p-1">Potongan Kasbon</td>
+                        <td className="text-right">{formatNumber(employee?.employee_receivable)}</td>
+                    </tr>
+                    <tr>
                         <td className="font-semibold p-1">Potongan lainnya</td>
                         <td className="text-right"></td>
                     </tr>
@@ -50,13 +54,13 @@ const PayrollDetail = ({ employee }) => {
                     ))}
                     <tr className="border-t border-slate-300">
                         <td className="font-semibold p-1">Total Potongan</td>
-                        <td className="font-semibold text-right">Rp {formatNumber(totalDeduction)}</td>
+                        <td className="font-semibold text-right">Rp {formatNumber(totalDeduction + employee?.employee_receivable)}</td>
                     </tr>
                 </tbody>
             </table>
             <div className="mt-4 flex justify-between">
                 <h1 className="font-bold text-sm mt-2">Total Gaji Diterima:</h1>
-                <h1 className="font-bold text-sm">Rp {formatNumber(totalIncome - totalDeduction)}</h1>
+                <h1 className="font-bold text-sm">Rp {formatNumber(totalIncome - totalDeduction - employee?.employee_receivable)}</h1>
             </div>
         </div>
     );

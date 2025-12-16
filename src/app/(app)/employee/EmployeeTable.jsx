@@ -1,20 +1,24 @@
 import Button from "@/components/Button";
 import { useState } from "react";
-import AddEmployee from "../AddEmployee";
+import AddEmployee from "./AddEmployee";
 import Modal from "@/components/Modal";
 import { formatNumber } from "@/libs/format";
 import DropdownMenu from "@/components/DropdownMenu";
 import { Ellipsis } from "lucide-react";
-import WarningForm from "../WarningForm";
+import WarningForm from "./WarningForm";
 import axios from "@/libs/axios";
+import EditEmployee from "./EditEmployee";
 
 const EmployeeTable = ({ employees, fetchContacts, notification }) => {
     const [isModalAddEmployeeOpen, setIsModalAddEmployeeOpen] = useState(false);
     const [isModalAddWarningOpen, setIsModalAddWarningOpen] = useState(false);
+    const [isModalEditEmployeeOpen, setIsModalEditEmployeeOpen] = useState(false);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
     const closeModal = () => {
         setIsModalAddEmployeeOpen(false);
         setIsModalAddWarningOpen(false);
+        setIsModalEditEmployeeOpen(false);
+        setSelectedEmployee(null);
     };
     const [search, setSearch] = useState("");
 
@@ -39,6 +43,7 @@ const EmployeeTable = ({ employees, fetchContacts, notification }) => {
                             <th>Nama</th>
                             <th>Gaji Pokok</th>
                             <th>Komisi</th>
+                            <th>Piutang</th>
                             <th>Tanggal Bergabung</th>
                             <th>Aksi</th>
                         </tr>
@@ -62,6 +67,7 @@ const EmployeeTable = ({ employees, fetchContacts, notification }) => {
                                     </td>
                                     <td className="text-right">{formatNumber(employee.salary)}</td>
                                     <td className="text-right">{formatNumber(employee.commission)}</td>
+                                    <td className="text-right">{formatNumber(employee.contact?.employee_receivables_sum?.total || 0)}</td>
                                     <td className="text-center">{employee.hire_date}</td>
                                     <td>
                                         <DropdownMenu
@@ -81,7 +87,8 @@ const EmployeeTable = ({ employees, fetchContacts, notification }) => {
                                                     type: "button",
                                                     label: "Edit",
                                                     onClick: () => {
-                                                        console.log(employee);
+                                                        setSelectedEmployee(employee.id);
+                                                        setIsModalEditEmployeeOpen(true);
                                                     },
                                                 },
                                                 {
@@ -99,6 +106,9 @@ const EmployeeTable = ({ employees, fetchContacts, notification }) => {
             </div>
             <Modal isOpen={isModalAddWarningOpen} onClose={closeModal} modalTitle="Beri Peringatan" maxWidth="max-w-md">
                 <WarningForm isModalOpen={setIsModalAddWarningOpen} employee={findedEmployee} fetchContacts={fetchContacts} notification={notification} />
+            </Modal>
+            <Modal isOpen={isModalEditEmployeeOpen} onClose={closeModal} modalTitle="Edit Karyawan" maxWidth="max-w-md">
+                <EditEmployee isModalOpen={setIsModalEditEmployeeOpen} employee={findedEmployee} fetchContacts={fetchContacts} notification={notification} />
             </Modal>
         </div>
     );

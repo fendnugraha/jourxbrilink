@@ -1,4 +1,5 @@
 "use client";
+import MainPage from "@/app/(app)/main";
 import axios from "@/libs/axios";
 import { formatNumber } from "@/libs/format";
 import { use, useCallback, useEffect, useState } from "react";
@@ -22,13 +23,13 @@ const PayrollInvoices = ({ params }) => {
 
     console.log(payrolls);
     return (
-        <>
-            <button onClick={() => window.print()} className="bg-slate-700 dark:bg-amber-400 text-white px-4 py-2 rounded no-print mb-18 sm:mb-0">
+        <MainPage headerTitle="Payroll Invoice">
+            <button onClick={() => window.print()} className="small-button mb-2">
                 Cetak Nota
             </button>
-            <div id="print-area" className="grid grid-cols-3 gap-4 p-4 overflow-auto w-[1000px]">
+            <div id="print-area" className="flex gap-3 flex-wrap w-[1000px] p-2 bg-white">
                 {payrolls.map((payroll) => (
-                    <div key={payroll?.id}>
+                    <div key={payroll?.id} className="w-[300px]">
                         <div className="p-4 border border-blue-300 text-blue-500 rounded-2xl">
                             <h1 className="mb-4 font-bold">{payroll?.employee?.contact?.name}</h1>
                             <h1 className="font-bold text-sm">Pendapatan:</h1>
@@ -96,7 +97,7 @@ const PayrollInvoices = ({ params }) => {
                     </div>
                 ))}
             </div>
-        </>
+        </MainPage>
     );
 };
 

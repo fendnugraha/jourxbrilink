@@ -41,12 +41,15 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
         const payload = employees.map((employee) => {
             const lateCount = employee.attendances.filter((item) => item.approval_status === "Late").length;
             const overtimeCount = employee.attendances.filter((item) => item.approval_status === "Overtime").length;
+            const receivable = Number(employee.contact?.employee_receivables_sum?.total) || 0;
 
             return {
                 employee_id: employee.id,
+                contact_id: employee.contact_id,
                 name: employee.contact?.name,
                 basic_salary: employee.salary,
                 commission: employee.commission,
+                employee_receivable: receivable > 0 ? receivable : 0,
                 month,
                 year,
                 attendances: employee.attendances,
@@ -84,6 +87,7 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
     const totalSalary = processData.reduce((total, item) => total + Number(item.basic_salary), 0);
     const totalCommission = processData.reduce((total, item) => total + Number(item.commission), 0);
     const totalBonus = processData.reduce((total, item) => total + item.bonuses.reduce((total, bonus) => total + bonus.amount, 0), 0);
+    const totalReceivable = processData.reduce((total, item) => total + Number(item.employee_receivable), 0);
     const totalDeduction = processData.reduce((total, item) => total + item.deductions.reduce((total, deduction) => total + deduction.amount, 0), 0);
 
     const calculateTotalItem = (item) => {
@@ -91,7 +95,8 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
             Number(item.basic_salary) +
             Number(item.commission) +
             item.bonuses.reduce((total, bonus) => total + bonus.amount, 0) -
-            item.deductions.reduce((total, deduction) => total + deduction.amount, 0);
+            item.deductions.reduce((total, deduction) => total + deduction.amount, 0) -
+            Number(item.employee_receivable);
         return formatNumber(total);
     };
 
@@ -172,6 +177,7 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
     }, [isReceivable]);
 
     const handleSubmit = async (e) => {
+        if (!confirm("Anda yakin ingin menyimpan payroll?")) return;
         e.preventDefault();
 
         if (!processData.length) {
@@ -203,7 +209,7 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                 type: "success",
                 message: response.data.message || "Payroll berhasil disimpan",
             });
-
+            fetchContacts();
             clearProcessData();
         } catch (error) {
             console.error(error);
@@ -227,6 +233,7 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
             },
         },
     ];
+
     return (
         <div>
             <div className="flex gap-2 w-fit">
@@ -310,7 +317,9 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                                         <td className="text-right">{formatNumber(employee.commission)}</td>
                                         <td className="text-right">{formatNumber(employee.bonuses.reduce((total, bonus) => total + bonus.amount, 0))}</td>
                                         <td className="text-right">
-                                            {formatNumber(employee.deductions.reduce((total, deduction) => total + deduction.amount, 0))}
+                                            {formatNumber(
+                                                employee.deductions.reduce((total, deduction) => total + deduction.amount, 0) + employee.employee_receivable
+                                            )}
                                         </td>
                                         <td className="text-right font-bold">{calculateTotalItem(employee)}</td>
                                         <td className="text-center">
@@ -368,11 +377,13 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                         </div>
                         <div className="flex justify-between">
                             <h1 className="">Total Potongan</h1>
-                            <h1 className=" text-right">{formatNumber(totalDeduction && totalDeduction * -1)}</h1>
+                            <h1 className=" text-right">{formatNumber(totalDeduction && (totalDeduction + totalReceivable) * -1)}</h1>
                         </div>
                         <div className="flex justify-between border-t border-slate-300 pt-1">
                             <h1 className="font-bold">Total Diterima</h1>
-                            <h1 className="font-bold text-right">{formatNumber(totalSalary + totalCommission + totalBonus - totalDeduction)}</h1>
+                            <h1 className="font-bold text-right">
+                                {formatNumber(totalSalary + totalCommission + totalBonus - totalDeduction - totalReceivable)}
+                            </h1>
                         </div>
                     </div>
                 </div>

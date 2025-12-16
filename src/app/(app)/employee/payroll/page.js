@@ -3,7 +3,7 @@ import Notification from "@/components/Notification";
 import MainPage from "../../main";
 import { use, useCallback, useEffect, useState } from "react";
 import SubNavsEmployee from "./SubNavs";
-import EmployeeTable from "./EmployeeTable";
+import EmployeeTable from "../EmployeeTable";
 import axios from "@/libs/axios";
 import ReceivableContent from "./receivable/ReceivableContent";
 import PayrollSection from "./PayrollSection";

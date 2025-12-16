@@ -142,7 +142,6 @@ export default function AttendanceForm({ attCheckMutate, openMessage }) {
     return (
         <>
             {/* Lokasi otomatis */}
-            <span className="text-sm text-red-500 italic animate-pulse">INFO: INI MASIH DALAM MODE TESTING</span>
             <span className="text-xl font-bold">{userWarehouseName}</span>
             {location ? (
                 <p className="mb-4 text-sm">

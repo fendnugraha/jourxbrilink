@@ -25,12 +25,12 @@ const AttendanceTableMonthly = ({ selectedZone, warehouseMonthly }) => {
     return (
         <>
             {filteredWarehouses.map((employee) => (
-                <div key={employee.id} className="mb-2 border border-slate-500 p-1 rounded-sm">
-                    <h3 className="text-sm font-bold">{employee.name}</h3>
+                <div key={employee?.id} className="mb-2 border border-slate-500 p-1 rounded-sm">
+                    <h3 className="text-sm font-bold">{employee?.name}</h3>
                     {/* Kotak tanggal berjajar */}
                     <div className="flex flex-wrap justify-between gap-1 overflow-x-auto">
                         {days.map((day) => {
-                            const att = employee.attendance_by_date[day];
+                            const att = employee?.attendance_by_date[day];
                             const dateNum = day.split("-")[2];
 
                             return (

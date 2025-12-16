@@ -13,9 +13,10 @@ const ReceivableContent = () => {
         type: "",
         message: "",
     });
+    const [type, setType] = useState("EmployeeReceivable");
 
     const fetchFinance = useCallback(
-        async (url = `/api/finance-by-type/${selectedContactId}/EmployeeReceivable`) => {
+        async (url = `/api/finance-by-type/${selectedContactId}/${type}`) => {
             setLoading(true);
             try {
                 const response = await axios.get(url);
@@ -26,7 +27,7 @@ const ReceivableContent = () => {
                 setLoading(false);
             }
         },
-        [selectedContactId]
+        [selectedContactId, type]
     );
 
     useEffect(() => {
@@ -45,6 +46,8 @@ const ReceivableContent = () => {
                     finance={finance.financeGroupByContactId}
                     fetchFinance={fetchFinance}
                     notification={setNotification}
+                    type={type}
+                    setType={setType}
                 />
                 <ReceivableLog selectedContactId={selectedContactId} financeLog={finance.finance} fetchFinance={fetchFinance} notification={setNotification} />
             </div>

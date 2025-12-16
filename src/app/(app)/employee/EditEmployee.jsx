@@ -4,10 +4,10 @@ import { useCallback, useEffect, useState } from "react";
 
 const EditEmployee = ({ isModalOpen, fetchContacts, notification, employee }) => {
     const [formData, setFormData] = useState({
-        contact_id: employee.contact_id,
-        salary: employee.salary,
-        commission: employee.commission,
-        hire_date: employee.hire_date,
+        contact_id: employee?.contact_id,
+        salary: employee?.salary,
+        commission: employee?.commission,
+        hire_date: employee?.hire_date,
     });
     const [contacts, setContacts] = useState([]);
     const [loading, setLoading] = useState(false);

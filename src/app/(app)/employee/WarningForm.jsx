@@ -8,7 +8,7 @@ const WarningForm = ({ isModalOpen, fetchContacts, notification, employee }) => 
     const [errors, setErrors] = useState([]);
     const [formData, setFormData] = useState({
         date_issued: todayDate(),
-        employee_id: employee.id,
+        employee_id: employee?.id,
         level: "",
         reason: "",
     });
@@ -21,7 +21,7 @@ const WarningForm = ({ isModalOpen, fetchContacts, notification, employee }) => 
             notification({ type: "success", message: response.data.message });
             isModalOpen(false);
             fetchContacts();
-            setFormData({ date_issued: todayDate(), employee_id: employee.id, level: "", reason: "" });
+            setFormData({ date_issued: todayDate(), employee_id: employee?.id, level: "", reason: "" });
         } catch (error) {
             notification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
             console.log(error);
@@ -31,7 +31,7 @@ const WarningForm = ({ isModalOpen, fetchContacts, notification, employee }) => 
     };
     return (
         <div>
-            <h1 className="mb-4 font-semibold">{employee.contact?.name}</h1>
+            <h1 className="mb-4 font-semibold">{employee?.contact?.name}</h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                     <Label className="">Tanggal:</Label>

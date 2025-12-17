@@ -223,17 +223,6 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
         }
     };
 
-    const optionItems = [
-        {
-            type: "button",
-            label: "Tambah Bonus",
-            onClick: () => {
-                setSelectedEmployee(employee.employee_id);
-                setIsModalAddDeductionOpen(true);
-            },
-        },
-    ];
-
     return (
         <div>
             <div className="flex gap-2 w-fit">

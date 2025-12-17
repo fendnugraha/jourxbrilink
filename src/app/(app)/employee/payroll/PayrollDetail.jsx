@@ -19,7 +19,7 @@ const PayrollDetail = ({ employee }) => {
                     </tr>
                     {employee?.bonuses.length > 0 && (
                         <tr>
-                            <td className="font-semibold p-1">Bonus</td>
+                            <td className="font-semibold p-1">Pendapatan lainnya</td>
                             <td className="text-right"></td>
                         </tr>
                     )}

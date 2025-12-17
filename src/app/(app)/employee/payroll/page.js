@@ -21,21 +21,20 @@ const PayrollPage = () => {
     const [selectPage, setSelectPage] = useState("list");
     const [employees, setEmployees] = useState([]);
 
-    const fetchContacts = useCallback(
-        async (url = "/api/employees") => {
-            try {
-                const response = await axios.get(url, { params: { month, year } });
-                setEmployees(response.data.data);
-            } catch (error) {
-                console.log(error);
-            }
-        },
-        [month, year]
-    );
+    const fetchContacts = useCallback(async ({ month = null, year = null } = {}) => {
+        try {
+            const response = await axios.get("/api/employees", {
+                params: { month, year },
+            });
+            setEmployees(response.data.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }, []);
 
     useEffect(() => {
-        fetchContacts();
-    }, [fetchContacts]);
+        fetchContacts({ month, year });
+    }, [month, year, fetchContacts]);
 
     return (
         <MainPage headerTitle="Payroll">

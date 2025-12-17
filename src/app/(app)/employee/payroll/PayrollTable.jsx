@@ -28,7 +28,7 @@ const PayrollTable = () => {
                     <tr>
                         <th>Periode</th>
                         <th>Gaji/Tunjangan</th>
-                        <th>Bonus</th>
+                        <th>Bonus/Lainnya</th>
                         <th>Potongan</th>
                         <th>Total Diterima</th>
                         <th>Status</th>

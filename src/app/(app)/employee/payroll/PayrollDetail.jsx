@@ -1,8 +1,13 @@
 import { formatNumber } from "@/libs/format";
 
 const PayrollDetail = ({ employee }) => {
-    const totalIncome = Number(employee?.basic_salary) + Number(employee?.commission) + employee?.bonuses?.reduce((total, item) => total + item?.amount, 0);
+    const totalIncome =
+        Number(employee?.basic_salary) +
+        Number(employee?.commission) +
+        employee?.bonuses?.reduce((total, item) => total + item?.amount, 0) +
+        Number(employee?.overtime);
     const totalDeduction = employee?.deductions?.reduce((total, item) => total + item?.amount, 0);
+    const receivable = Number(employee?.employee_receivable) + Number(employee?.installment_receivable);
     return (
         <div>
             <h1 className="mb-4 font-bold">{employee?.name}</h1>
@@ -17,6 +22,12 @@ const PayrollDetail = ({ employee }) => {
                         <td className="font-semibold p-1">Tunjangan/Komisi</td>
                         <td className="text-right">Rp {formatNumber(employee?.commission)}</td>
                     </tr>
+                    {employee?.overtime > 0 && (
+                        <tr>
+                            <td className="font-semibold p-1">Lembur</td>
+                            <td className="text-right">Rp {formatNumber(employee?.overtime)}</td>
+                        </tr>
+                    )}
                     {employee?.bonuses.length > 0 && (
                         <tr>
                             <td className="font-semibold p-1">Pendapatan lainnya</td>
@@ -39,9 +50,15 @@ const PayrollDetail = ({ employee }) => {
             <table className="table-auto w-full text-xs">
                 <tbody>
                     <tr>
-                        <td className="font-semibold p-1">Potongan Kasbon</td>
+                        <td className="font-semibold p-1">Kasbon</td>
                         <td className="text-right">{formatNumber(employee?.employee_receivable)}</td>
                     </tr>
+                    {employee?.installment_receivable > 0 && (
+                        <tr>
+                            <td className="font-semibold p-1">Cicilan</td>
+                            <td className="text-right">{formatNumber(employee?.installment_receivable)}</td>
+                        </tr>
+                    )}
                     <tr>
                         <td className="font-semibold p-1">Potongan lainnya</td>
                         <td className="text-right"></td>
@@ -54,13 +71,13 @@ const PayrollDetail = ({ employee }) => {
                     ))}
                     <tr className="border-t border-slate-300">
                         <td className="font-semibold p-1">Total Potongan</td>
-                        <td className="font-semibold text-right">Rp {formatNumber(totalDeduction + employee?.employee_receivable)}</td>
+                        <td className="font-semibold text-right">Rp {formatNumber(totalDeduction + receivable)}</td>
                     </tr>
                 </tbody>
             </table>
             <div className="mt-4 flex justify-between">
                 <h1 className="font-bold text-sm mt-2">Total Gaji Diterima:</h1>
-                <h1 className="font-bold text-sm">Rp {formatNumber(totalIncome - totalDeduction - employee?.employee_receivable)}</h1>
+                <h1 className="font-bold text-sm">Rp {formatNumber(totalIncome - totalDeduction - receivable)}</h1>
             </div>
         </div>
     );

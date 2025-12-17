@@ -49,20 +49,13 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                 name: employee.contact?.name,
                 basic_salary: employee.salary,
                 commission: employee.commission,
+                overtime: overtimeCount > 0 ? overtimeCount * 100000 : 0,
                 employee_receivable: receivable > 0 ? receivable : 0,
+                installment_receivable: 0,
                 month,
                 year,
                 attendances: employee.attendances,
-                bonuses: [
-                    ...(overtimeCount > 0
-                        ? [
-                              {
-                                  name: "Lembur",
-                                  amount: overtimeCount * 100000,
-                              },
-                          ]
-                        : []),
-                ],
+                bonuses: [],
                 deductions: [
                     {
                         name: "Simpanan Wajib",
@@ -86,17 +79,23 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
 
     const totalSalary = processData.reduce((total, item) => total + Number(item.basic_salary), 0);
     const totalCommission = processData.reduce((total, item) => total + Number(item.commission), 0);
-    const totalBonus = processData.reduce((total, item) => total + item.bonuses.reduce((total, bonus) => total + bonus.amount, 0), 0);
-    const totalReceivable = processData.reduce((total, item) => total + Number(item.employee_receivable), 0);
+    const totalBonus =
+        processData.reduce((total, item) => total + item.bonuses.reduce((total, bonus) => total + bonus.amount, 0), 0) +
+        processData.reduce((total, item) => total + Number(item.overtime), 0);
+    const totalReceivable =
+        processData.reduce((total, item) => total + Number(item.employee_receivable), 0) +
+        processData.reduce((total, item) => total + Number(item.installment_receivable), 0);
     const totalDeduction = processData.reduce((total, item) => total + item.deductions.reduce((total, deduction) => total + deduction.amount, 0), 0);
 
     const calculateTotalItem = (item) => {
         const total =
             Number(item.basic_salary) +
             Number(item.commission) +
+            Number(item.overtime) +
             item.bonuses.reduce((total, bonus) => total + bonus.amount, 0) -
             item.deductions.reduce((total, deduction) => total + deduction.amount, 0) -
-            Number(item.employee_receivable);
+            Number(item.employee_receivable) -
+            Number(item.installment_receivable);
         return formatNumber(total);
     };
 
@@ -138,7 +137,16 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
         };
 
         setProcessData((prev) => {
-            const updated = prev.map((item) => (item.employee_id === employeeId ? { ...item, deductions: [...item.deductions, deduction] } : item));
+            const updated = isReceivable
+                ? prev.map((item) =>
+                      item.employee_id === employeeId
+                          ? {
+                                ...item,
+                                installment_receivable: Number(deductionAmount),
+                            }
+                          : item
+                  )
+                : prev.map((item) => (item.employee_id === employeeId ? { ...item, deductions: [...item.deductions, deduction] } : item));
 
             localStorage.setItem("processData", JSON.stringify(updated));
             return updated;
@@ -170,7 +178,7 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
 
     useEffect(() => {
         if (isReceivable) {
-            setDeductionName("Potong Kasbon");
+            setDeductionName("Potong Cicilan");
         } else {
             setDeductionName("");
         }
@@ -222,7 +230,6 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
             setLoading(false);
         }
     };
-
     return (
         <div>
             <div className="flex gap-2 w-fit">
@@ -304,7 +311,9 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                                         </td>
                                         <td className="text-right">{formatNumber(employee.basic_salary)}</td>
                                         <td className="text-right">{formatNumber(employee.commission)}</td>
-                                        <td className="text-right">{formatNumber(employee.bonuses.reduce((total, bonus) => total + bonus.amount, 0))}</td>
+                                        <td className="text-right">
+                                            {formatNumber(employee.bonuses.reduce((total, bonus) => total + bonus.amount, 0) + employee.overtime)}
+                                        </td>
                                         <td className="text-right">
                                             {formatNumber(
                                                 employee.deductions.reduce((total, deduction) => total + deduction.amount, 0) + employee.employee_receivable
@@ -459,7 +468,7 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                             }}
                         />
                         <label htmlFor="isReceivable" className={`text-sm `}>
-                            Potong Kasbon
+                            Potongan Cicilan
                         </label>
                         <div>
                             <label className="text-sm">Jumlah</label>

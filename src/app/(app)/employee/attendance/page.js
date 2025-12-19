@@ -11,7 +11,7 @@ import Modal from "@/components/Modal";
 import Calendar from "@/components/Calendar";
 import AttenndanceCalendar from "./AttendanceCalendar";
 import { DownloadIcon, FilterIcon, RefreshCcwIcon } from "lucide-react";
-import { DateTimeNow, formatDate, formatDateTime, getMonthYear } from "@/libs/format";
+import { DateTimeNow, dateToMonthYear, formatDate, formatDateTime, getMonthYear } from "@/libs/format";
 import axios from "@/libs/axios";
 import AttendanceTableMonthly from "./AttendanceTableMonthly";
 import CreateAttendance from "./CreateAttendance";
@@ -24,7 +24,7 @@ const AttendancePage = () => {
     const [isModalAttendanceFormOpen, setIsModalAttendanceFormOpen] = useState(false);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
     const [selectPage, setSelectPage] = useState("daily");
-    const { thisMonth, today } = DateTimeNow();
+    const { thisMonth, today, thisYear } = DateTimeNow();
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
     const [startDate, setStartDate] = useState(today);
@@ -32,7 +32,6 @@ const AttendancePage = () => {
         type: "",
         message: "",
     });
-
     const [zones, setZones] = useState([]);
     const [selectedZone, setSelectedZone] = useState("");
     const fetchZones = useCallback(async () => {
@@ -177,7 +176,7 @@ const AttendancePage = () => {
                             className={`${selectPage === "monthly" ? "bg-slate-800 text-white" : "text-slate-600"} px-4 py-1 rounded-lg min-w-32`}
                             onClick={() => setSelectPage("monthly")}
                         >
-                            {getMonthYear(startDate)}
+                            {dateToMonthYear(startDate)}
                         </button>
                     </div>
                     <div className="grid grid-cols-1 gap-4">

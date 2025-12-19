@@ -223,6 +223,11 @@ export function getDay(date, weekday) {
     }
 }
 
+export function dateToMonthYear(date) {
+    const d = new Date(date);
+    return d.toLocaleString("default", { month: "long", year: "numeric" });
+}
+
 export function formatDateTimeColumn(date) {
     const d = new Date(date);
 

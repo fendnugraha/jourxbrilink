@@ -56,7 +56,6 @@ const ProfitLossReport = ({ notification }) => {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
-    console.log(profiitLoss);
     return (
         <>
             <div className="mb-4 flex gap-2">

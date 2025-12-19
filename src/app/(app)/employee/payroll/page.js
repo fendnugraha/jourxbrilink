@@ -8,6 +8,7 @@ import axios from "@/libs/axios";
 import ReceivableContent from "./receivable/ReceivableContent";
 import PayrollSection from "./PayrollSection";
 import { DateTimeNow } from "@/libs/format";
+import ProfitLossReport from "./ProfitLossReport";
 
 const PayrollPage = () => {
     const [notification, setNotification] = useState({
@@ -56,6 +57,7 @@ const PayrollPage = () => {
                         setYear={setYear}
                     />
                 )}
+                {selectPage === "profit-loss" && <ProfitLossReport notification={setNotification} />}
             </div>
         </MainPage>
     );

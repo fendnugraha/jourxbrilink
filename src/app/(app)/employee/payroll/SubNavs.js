@@ -21,8 +21,8 @@ const SubNavsEmployee = ({ selectPage, setSelectPage }) => {
                 Piutang Karyawan
             </button>
             <button
-                className={`${selectPage === "report" ? "bg-slate-800 text-white" : "text-slate-600"} px-4 py-1 rounded-lg min-w-32`}
-                onClick={() => setSelectPage("report")}
+                className={`${selectPage === "profit-loss" ? "bg-slate-800 text-white" : "text-slate-600"} px-4 py-1 rounded-lg min-w-32`}
+                onClick={() => setSelectPage("profit-loss")}
             >
                 Laporan Keuangan
             </button>

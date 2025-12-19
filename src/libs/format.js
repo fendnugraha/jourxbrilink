@@ -211,8 +211,8 @@ export function diffTimeHuman(t1, t2) {
     }
 }
 
-export function getMonthYear(monthNumber) {
-    const date = new Date();
+export function getMonthYear(monthNumber, year) {
+    const date = new Date(year, monthNumber - 1);
     // date.setMonth(monthNumber - 1);
     return date.toLocaleString("default", { month: "long", year: "numeric" });
 }

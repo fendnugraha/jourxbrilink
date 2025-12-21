@@ -22,8 +22,6 @@ export default function AttendanceForm({ attCheckMutate, openMessage }) {
     const [type, setType] = useState("Kasir");
     const [error, setError] = useState(null);
     const [timeIn, setTimeIn] = useState(null);
-    const [successMessgageOpen, setSuccessMessageOpen] = useState(false);
-
     // 🔥 Ambil lokasi otomatis saat komponen tampil
     const getLocation = () => {
         if (!navigator.geolocation) {
@@ -164,7 +162,7 @@ export default function AttendanceForm({ attCheckMutate, openMessage }) {
                     <span className="text-lg font-bold text-green-300 block">{userWhCashier}</span>
                 </p>
             ) : (
-                <p className="text-sm">
+                <p className="text-sm text-center">
                     <span className="text-lg font-bold text-green-300 block">{whBackupCahsier}</span>
                 </p>
             )}

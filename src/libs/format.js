@@ -52,16 +52,22 @@ export const formatLongDate = (date) => {
  * @param {Date | string} date
  * @returns {string}
  */
-export const formatDateTime = (dateString) => {
+export const formatDateTime = (dateString, withDayName = false) => {
     return new Date(dateString).toLocaleDateString("en-US", {
         year: "numeric",
         month: "short",
         day: "numeric",
         hour: "numeric",
         minute: "numeric",
+        weekday: withDayName ? "long" : undefined,
         hour12: false, // Use 12-hour format; set to false for 24-hour format
         timeZone: "Asia/Jakarta",
     });
+};
+
+export const getDayName = (date) => {
+    const d = new Date(date);
+    return d.toLocaleDateString("id-ID", { weekday: "long" });
 };
 
 export const todayDate = () => {

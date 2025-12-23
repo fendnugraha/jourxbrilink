@@ -1,5 +1,5 @@
 "use client";
-import { diffTimeHuman, formatDate, formatDateTime } from "@/libs/format";
+import { diffTimeHuman, formatDate, formatDateTime, formatLongDate, getDayName } from "@/libs/format";
 import { Copy, Share2 } from "lucide-react";
 import { useState } from "react";
 
@@ -10,7 +10,7 @@ export default function ShareAttendanceButton({ attendance, style = "px-4 py-5 w
     const shareMessage = `
         Absensi Berhasil!
 Nama: ${attendance?.contact?.name ?? "-"}
-Tanggal: ${formatDateTime(attendance?.date) ?? "-"}
+Tanggal: ${getDayName(attendance?.date) ?? "-"}, ${formatLongDate(attendance?.date) ?? "-"}
 Jam Masuk: ${attendance?.time_in ?? "-"}
 Status: ${status ?? "-"}
 Lokasi: ${attendance?.latitude ?? "-"}, ${attendance?.longitude ?? "-"}

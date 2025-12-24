@@ -107,7 +107,7 @@ const MainPage = ({ children, headerTitle }) => {
                 <h1 className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-white">
                     {headerTitle}
                     <span className="text-xs font-normal p-0 block mt-0.5">
-                        {contactLoginName}
+                        {userWarehouseId === user.attendances?.[0]?.warehouse_id ? contactLoginName : userWarehouseName}
                         {contactWarningStatus ? (
                             <>
                                 {" | "}

@@ -30,8 +30,6 @@ const AttendanceCalendar = () => {
         fetchAttendanceData();
     }, [selectedDate, employeeId]);
 
-    console.log(attendanceData);
-
     const calendarData = {};
 
     attendanceData.forEach((item) => {

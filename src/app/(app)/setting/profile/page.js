@@ -66,7 +66,7 @@ const ProfilePage = () => {
                                     </tr>
                                     <tr>
                                         <td className="">Tgl Bergabung</td>
-                                        <td className="text-right">{formatLongDate(contactData?.employee?.hire_date)}</td>
+                                        <td className="text-right">{contactData?.employee?.hire_date && formatLongDate(contactData?.employee?.hire_date)}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -112,83 +112,87 @@ const ProfilePage = () => {
                             </table>
                         </div>
                     </div>
-                    <div className="card p-4 h-fit">
-                        <h1 className="card-title mb-4">
-                            Perkiraan Pendapatan
-                            <span className="card-subtitle">Desember 2025</span>
-                        </h1>
-                        <h1 className="font-semibold mb-2">Pendapatan</h1>
-                        <div className="overflow-x-auto mb-4">
-                            <table className="table-auto w-full text-xs">
-                                <tbody>
-                                    <tr>
-                                        <td className="font-semibold p-1">Gaji Pokok</td>
-                                        <td className="text-right">{formatRupiah(contactData?.employee?.salary)}</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="font-semibold p-1">Tunjangan/Komisi</td>
-                                        <td className="text-right">{formatRupiah(contactData?.employee?.commission)}</td>
-                                    </tr>
-                                    {attOvertime > 0 && (
-                                        <tr>
-                                            <td className="font-semibold p-1">Lembur</td>
-                                            <td className="text-right">{formatRupiah(attOvertime * 100000)}</td>
-                                        </tr>
-                                    )}
-                                    <tr className="border-t border-slate-300 dark:border-slate-500">
-                                        <td className="font-semibold p-1">Total Pendapatan</td>
-                                        <td className="font-semibold text-right">
-                                            {formatRupiah(
-                                                Number(contactData?.employee?.salary) + Number(contactData?.employee?.commission) + Number(attOvertime * 100000)
-                                            )}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <h1 className="font-semibold mb-2">Potongan</h1>
-                        <div className="overflow-x-auto mb-4">
-                            <table className="table-auto w-full text-xs">
-                                <tbody>
-                                    <tr>
-                                        <td className="font-semibold p-1">Simpanan Wajib</td>
-                                        <td className="text-right">{formatRupiah(100000)}</td>
-                                    </tr>
-                                    {employee_receivable > 0 && (
-                                        <tr>
-                                            <td className="font-semibold p-1">Kasbon</td>
-                                            <td className="text-right">{formatRupiah(employee_receivable)}</td>
-                                        </tr>
-                                    )}
-                                    {attLate > 0 && (
-                                        <tr>
-                                            <td className="font-semibold p-1">Denda Terlambat</td>
-                                            <td className="text-right">{formatRupiah(attLate * 10000)}</td>
-                                        </tr>
-                                    )}
-                                    <tr className="border-t border-slate-300 dark:border-slate-500">
-                                        <td className="font-semibold p-1">Total Potongan</td>
-                                        <td className="font-semibold text-right">
-                                            {formatRupiah(Number(100000) + Number(employee_receivable) + Number(attLate * 10000))}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div className="mt-4 flex justify-end gap-2 items-start">
-                            <h1 className="font-bold text-xs">Total Diterima:</h1>
-                            <h1 className="font-bold text-2xl">
-                                {formatRupiah(
-                                    Number(contactData?.employee?.salary) +
-                                        Number(contactData?.employee?.commission) +
-                                        Number(attOvertime * 100000) -
-                                        Number(100000) -
-                                        Number(employee_receivable) -
-                                        Number(attLate * 10000)
-                                )}
+                    {contactData?.employee && (
+                        <div className="card p-4 h-fit">
+                            <h1 className="card-title mb-4">
+                                Perkiraan Pendapatan
+                                <span className="card-subtitle">Desember 2025</span>
                             </h1>
+                            <h1 className="font-semibold mb-2">Pendapatan</h1>
+                            <div className="overflow-x-auto mb-4">
+                                <table className="table-auto w-full text-xs">
+                                    <tbody>
+                                        <tr>
+                                            <td className="font-semibold p-1">Gaji Pokok</td>
+                                            <td className="text-right">{formatRupiah(contactData?.employee?.salary || 0)}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-semibold p-1">Tunjangan/Komisi</td>
+                                            <td className="text-right">{formatRupiah(contactData?.employee?.commission || 0)}</td>
+                                        </tr>
+                                        {attOvertime > 0 && (
+                                            <tr>
+                                                <td className="font-semibold p-1">Lembur</td>
+                                                <td className="text-right">{formatRupiah(attOvertime * 100000)}</td>
+                                            </tr>
+                                        )}
+                                        <tr className="border-t border-slate-300 dark:border-slate-500">
+                                            <td className="font-semibold p-1">Total Pendapatan</td>
+                                            <td className="font-semibold text-right">
+                                                {formatRupiah(
+                                                    Number(contactData?.employee?.salary) +
+                                                        Number(contactData?.employee?.commission) +
+                                                        Number(attOvertime * 100000) || 0
+                                                )}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <h1 className="font-semibold mb-2">Potongan</h1>
+                            <div className="overflow-x-auto mb-4">
+                                <table className="table-auto w-full text-xs">
+                                    <tbody>
+                                        <tr>
+                                            <td className="font-semibold p-1">Simpanan Wajib</td>
+                                            <td className="text-right">{formatRupiah(100000)}</td>
+                                        </tr>
+                                        {employee_receivable > 0 && (
+                                            <tr>
+                                                <td className="font-semibold p-1">Kasbon</td>
+                                                <td className="text-right">{formatRupiah(employee_receivable)}</td>
+                                            </tr>
+                                        )}
+                                        {attLate > 0 && (
+                                            <tr>
+                                                <td className="font-semibold p-1">Denda Terlambat</td>
+                                                <td className="text-right">{formatRupiah(attLate * 10000)}</td>
+                                            </tr>
+                                        )}
+                                        <tr className="border-t border-slate-300 dark:border-slate-500">
+                                            <td className="font-semibold p-1">Total Potongan</td>
+                                            <td className="font-semibold text-right">
+                                                {formatRupiah(Number(100000) + Number(employee_receivable) + Number(attLate * 10000))}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div className="mt-4 flex justify-end gap-2 items-start">
+                                <h1 className="font-bold text-xs">Total Diterima:</h1>
+                                <h1 className="font-bold text-2xl">
+                                    {formatRupiah(
+                                        Number(contactData?.employee?.salary) +
+                                            Number(contactData?.employee?.commission) +
+                                            Number(attOvertime * 100000) -
+                                            Number(100000) -
+                                            Number(employee_receivable) -
+                                            Number(attLate * 10000) || 0
+                                    )}
+                                </h1>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         </MainPage>

@@ -6,7 +6,9 @@ import { DateTimeNow, formatLongDate, formatNumber, formatRupiah } from "@/libs/
 import axios from "@/libs/axios";
 
 const ProfilePage = () => {
-    const { today } = DateTimeNow();
+    const { thisMonth, thisYear, today } = DateTimeNow();
+    const [month, setMonth] = useState(thisMonth);
+    const [year, setYear] = useState(thisYear);
     const [notification, setNotification] = useState({
         type: "",
         message: "",
@@ -26,7 +28,7 @@ const ProfilePage = () => {
         } catch (error) {
             console.log(error);
         }
-    }, [month, year, employeeId]);
+    }, [employeeId, today]);
 
     useEffect(() => {
         fetchContactData();

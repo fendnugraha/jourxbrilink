@@ -77,17 +77,19 @@ const ProfilePage = () => {
                                 <tbody>
                                     <tr>
                                         <td className="">Kasbon</td>
-                                        <td className="text-right">{formatRupiah(contactData?.employee_receivables_sum?.total || 0)}</td>
+                                        <td className="text-right">{formatRupiah(employee_receivable)}</td>
                                     </tr>
                                     <tr>
                                         <td className="">Cicilan</td>
-                                        <td className="text-right">{formatRupiah(contactData?.installment_receivables_sum?.total || 0)}</td>
+                                        <td className="text-right">{formatRupiah(installment_receivable)}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <td className="font-semibold">Total</td>
-                                        <td className="text-right font-semibold">{formatRupiah(employee_receivable + installment_receivable)}</td>
+                                        <td className="text-right font-semibold">
+                                            {formatRupiah(Number(employee_receivable) + Number(installment_receivable))}
+                                        </td>
                                     </tr>
                                 </tfoot>
                             </table>

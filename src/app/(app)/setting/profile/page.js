@@ -6,9 +6,7 @@ import { DateTimeNow, formatLongDate, formatNumber, formatRupiah } from "@/libs/
 import axios from "@/libs/axios";
 
 const ProfilePage = () => {
-    const { thisMonth, thisYear } = DateTimeNow();
-    const [month, setMonth] = useState(thisMonth);
-    const [year, setYear] = useState(thisYear);
+    const { today } = DateTimeNow();
     const [notification, setNotification] = useState({
         type: "",
         message: "",
@@ -21,7 +19,7 @@ const ProfilePage = () => {
             const response = await axios.get("/api/get-contact-details", {
                 params: {
                     contact_id: employeeId,
-                    date: year + "-" + month + "-01",
+                    date: today,
                 },
             });
             setContactData(response.data.data);

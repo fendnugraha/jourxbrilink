@@ -29,6 +29,7 @@ const PayrollTable = () => {
                         <th>Periode</th>
                         <th>Gaji/Tunjangan</th>
                         <th>Bonus/Lainnya</th>
+                        <th>Biaya Gaji</th>
                         <th>Potongan</th>
                         <th>Total Diterima</th>
                         <th>Status</th>
@@ -39,10 +40,16 @@ const PayrollTable = () => {
                     {payrolls.data?.payrollTotal?.map((payroll, index) => (
                         <tr key={index}>
                             <td className="text-center">{payroll?.payroll_date}</td>
-                            <td className="text-center">{formatNumber(Number(payroll?.total_gross_pay) + Number(payroll?.total_commissions))}</td>
-                            <td className="text-center">{formatNumber(payroll?.total_allowances)}</td>
-                            <td className="text-center">{formatNumber(payroll?.total_deductions)}</td>
-                            <td className="text-center">{formatNumber(payroll?.net_pay)}</td>
+                            <td className="text-center text-green-500">
+                                {formatNumber(Number(payroll?.total_gross_pay) + Number(payroll?.total_commissions))}
+                            </td>
+                            <td className="text-center text-green-500">{formatNumber(payroll?.total_allowances)}</td>
+
+                            <td className="text-center font-bold text-green-500">
+                                {formatNumber(Number(payroll?.total_gross_pay) + Number(payroll?.total_commissions) + Number(payroll?.total_allowances))}
+                            </td>
+                            <td className="text-center text-red-500">{formatNumber(payroll?.total_deductions)}</td>
+                            <td className="text-center text-indigo-500">{formatNumber(payroll?.net_pay)}</td>
                             <td className="text-center">
                                 <StatusBadge status={"Completed"} />
                             </td>

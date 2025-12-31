@@ -359,25 +359,29 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                     </table>
                 </div>
                 <div className="sm:col-span-1 py-2">
-                    <h1 className="font-bold text-sm">Ringkasan</h1>
+                    <h1 className="font-bold text-sm mb-4">Ringkasan</h1>
                     <div className="text-sm space-y-1">
                         <div className="flex justify-between">
-                            <h1 className="">Total Gaji Pokok</h1>
+                            <h1 className="">Gaji Pokok</h1>
                             <h1 className=" text-right">{formatNumber(totalSalary)}</h1>
                         </div>
                         <div className="flex justify-between">
-                            <h1 className="">Total Tunjangan</h1>
+                            <h1 className="">Tunjangan</h1>
                             <h1 className=" text-right">{formatNumber(totalCommission)}</h1>
                         </div>
                         <div className="flex justify-between">
-                            <h1 className="">Total Bonus</h1>
+                            <h1 className="">Bonus</h1>
                             <h1 className=" text-right">{formatNumber(totalBonus)}</h1>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between border-t border-slate-300 pt-1 mb-4">
+                            <h1 className="font-bold">Total Biaya Gaji</h1>
+                            <h1 className="font-bold text-right">{formatNumber(totalSalary + totalCommission + totalBonus)}</h1>
+                        </div>
+                        <div className="flex justify-between border-b border-slate-300">
                             <h1 className="">Total Potongan</h1>
                             <h1 className=" text-right">{formatNumber(totalDeduction && (totalDeduction + totalReceivable) * -1)}</h1>
                         </div>
-                        <div className="flex justify-between border-t border-slate-300 pt-1">
+                        <div className="flex justify-between pt-1 mt-4">
                             <h1 className="font-bold">Total Diterima</h1>
                             <h1 className="font-bold text-right">
                                 {formatNumber(totalSalary + totalCommission + totalBonus - totalDeduction - totalReceivable)}

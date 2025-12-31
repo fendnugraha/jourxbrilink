@@ -5,10 +5,11 @@ const Payslip = ({ payroll, date }) => {
         <div className="w-[300px] bg-white text-slate-700 border border-slate-200">
             <div className="p-4 flex flex-col justify-between h-full">
                 <div>
-                    <h1 className=" font-bold mb-4 text-blue-700">
-                        {payroll?.employee?.contact?.name}
-                        <span className="text-xs text-orange-500 font-normal block">{formatLongDate(date)}</span>
+                    <h1 className=" font-bold mb-4 text-center">
+                        THREE KOMUNIKA
+                        <span className="text-xs font-normal block">{formatLongDate(date)}</span>
                     </h1>
+                    <h1 className="font-semibold mb-2 text-white bg-indigo-600 px-2">{payroll?.employee?.contact?.name}</h1>
                     <h1 className="font-bold text-sm">Pendapatan:</h1>
                     <table className="table-auto w-full text-xs">
                         <tbody>
@@ -34,7 +35,7 @@ const Payslip = ({ payroll, date }) => {
                                         <td className="text-right">Rp {formatNumber(item?.amount)}</td>
                                     </tr>
                                 ))}
-                            <tr className="border-t border-slate-300">
+                            <tr className="bg-indigo-200">
                                 <td className="font-semibold p-1">Total Pendapatan</td>
                                 <td className="font-semibold text-right">
                                     Rp {formatNumber(Number(payroll?.total_gross_pay) + Number(payroll?.total_commissions) + Number(payroll?.total_allowances))}
@@ -57,7 +58,7 @@ const Payslip = ({ payroll, date }) => {
                                         <td className="text-right">Rp {formatNumber(item?.amount)}</td>
                                     </tr>
                                 ))}
-                            <tr className="border-t border-slate-300">
+                            <tr className="bg-red-300">
                                 <td className="font-semibold p-1">Total Potongan</td>
                                 <td className="font-semibold text-right">Rp {formatNumber(payroll?.total_deductions)}</td>
                             </tr>

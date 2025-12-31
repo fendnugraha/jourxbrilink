@@ -2,12 +2,13 @@ import Button from "@/components/Button";
 import { useState } from "react";
 import AddEmployee from "./AddEmployee";
 import Modal from "@/components/Modal";
-import { formatNumber } from "@/libs/format";
+import { calculateWorkDuration, formatNumber } from "@/libs/format";
 import DropdownMenu from "@/components/DropdownMenu";
 import { Ellipsis } from "lucide-react";
 import WarningForm from "./WarningForm";
 import axios from "@/libs/axios";
 import EditEmployee from "./EditEmployee";
+import { formatDistanceToNow } from "date-fns";
 
 const EmployeeTable = ({ employees, fetchContacts, notification }) => {
     const [isModalAddEmployeeOpen, setIsModalAddEmployeeOpen] = useState(false);
@@ -68,7 +69,9 @@ const EmployeeTable = ({ employees, fetchContacts, notification }) => {
                                     <td className="text-right">{formatNumber(employee.salary)}</td>
                                     <td className="text-right">{formatNumber(employee.commission)}</td>
                                     <td className="text-right">{formatNumber(employee.contact?.employee_receivables_sum?.total || 0)}</td>
-                                    <td className="text-center">{employee.hire_date}</td>
+                                    <td className="text-center">
+                                        {employee.hire_date} <span className="text-xs text-slate-500 block">({calculateWorkDuration(employee.hire_date)})</span>
+                                    </td>
                                     <td>
                                         <DropdownMenu
                                             title={<Ellipsis size={14} />}

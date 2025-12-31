@@ -48,8 +48,8 @@ const PayrollTable = () => {
                             <td className="text-center font-bold text-green-500">
                                 {formatNumber(Number(payroll?.total_gross_pay) + Number(payroll?.total_commissions) + Number(payroll?.total_allowances))}
                             </td>
-                            <td className="text-center text-red-500">{formatNumber(payroll?.total_deductions)}</td>
-                            <td className="text-center text-indigo-500">{formatNumber(payroll?.net_pay)}</td>
+                            <td className="text-center text-red-500 dark:text-red-300">{formatNumber(payroll?.total_deductions)}</td>
+                            <td className="text-center text-indigo-500 dark:text-indigo-300">{formatNumber(payroll?.net_pay)}</td>
                             <td className="text-center">
                                 <StatusBadge status={"Completed"} />
                             </td>

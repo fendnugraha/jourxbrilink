@@ -253,3 +253,38 @@ export function formatDateTimeColumn(date) {
         </div>
     );
 }
+
+export function calculateWorkDuration(startDateString) {
+    const startDate = new Date(startDateString);
+    const today = new Date();
+
+    let years = today.getFullYear() - startDate.getFullYear();
+    let months = today.getMonth() - startDate.getMonth();
+    let days = today.getDate() - startDate.getDate();
+
+    // Kalau hari negatif, pinjam bulan
+    if (days < 0) {
+        months--;
+        const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+        days += prevMonth.getDate();
+    }
+
+    // Kalau bulan negatif, pinjam tahun
+    if (months < 0) {
+        years--;
+        months += 12;
+    }
+
+    const parts = [];
+
+    if (years > 0) parts.push(`${years} thn`);
+    if (months > 0) parts.push(`${months} bln`);
+    if (days > 0) parts.push(`${days} hr`);
+
+    // Kalau semuanya 0 (misalnya start hari ini)
+    if (parts.length === 0) {
+        return "0 hari";
+    }
+
+    return parts.join(" ");
+}

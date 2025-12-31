@@ -399,7 +399,7 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                             <h1 className="">Simpanan Wajib</h1>
                             <h1 className=" text-right">{formatNumber(totalSavingSum)}</h1>
                         </div>
-                        <div className="flex justify-between pt-1 mt-4 text-amber-200">
+                        <div className="flex justify-between pt-1 mt-4 text-amber-400 dark:text-amber-200">
                             <h1 className="font-bold">Pengajuan Gaji</h1>
                             <h1 className="font-bold text-right text-2xl">
                                 {formatNumber(totalSalary + totalCommission + totalBonus - totalDeduction - totalReceivable + totalSavingSum)}

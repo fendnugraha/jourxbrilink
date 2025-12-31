@@ -24,7 +24,7 @@ export const navMenu = {
         { name: "Summary", path: "/summary", href: "/summary", icon: ChartAreaIcon, role: ["Administrator", "Super Admin"] },
         { name: "Employee", path: "/employee", href: "/employee", icon: IdCardLanyardIcon, role: ["Administrator", "Super Admin"] },
         { name: "Settings", path: "/setting", href: "/setting", icon: CogIcon, role: ["Administrator", "Super Admin"] },
-        { name: "Profile", path: "/setting/profile", href: "/setting/profile", icon: UserCircle, role: ["Administrator", "Super Admin", "Kasir", "Staff"] },
+        // { name: "Profile", path: "/setting/profile", href: "/setting/profile", icon: UserCircle, role: ["Administrator", "Super Admin", "Kasir", "Staff"] },
     ],
     settings: [{ name: "Settings", path: "/setting", href: "/setting", icon: CogIcon, role: ["Administrator", "Super Admin"] }],
 };

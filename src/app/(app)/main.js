@@ -128,7 +128,7 @@ const MainPage = ({ children, headerTitle }) => {
                             onClick={() => setSidebarOpen(!sidebarOpen)}
                             key={index}
                             className={`flex justify-between items-center w-full text-xs text-slate-700 ${
-                                index + 1 === WarehouseRank ? "font-bold bg-amber-300" : "bg-slate-200/60 dark:bg-slate-500/80 text-amber-300 backdrop-blur-sm"
+                                index + 1 === WarehouseRank ? "font-bold bg-amber-300" : "bg-slate-400/60 dark:bg-slate-200/80 text-amber-300 backdrop-blur-sm"
                             } px-2 mb-0.5`}
                         >
                             <h1 className={`${index + 1 === WarehouseRank ? "font-bold -ml-10 bg-amber-300 px-2" : ""} py-2 w-8`}>#{index + 1}</h1>

@@ -16,7 +16,7 @@ import useAttendanceCheck from "@/libs/attendanceCheck";
 import AttendanceForm from "./employee/attendance/attendanceForm";
 import ShareAttendance from "./employee/attendance/ShareAttendance";
 import Image from "next/image";
-import { formatDate, formatDuration } from "@/libs/format";
+import { formatDate, formatDuration, formatRupiah } from "@/libs/format";
 
 const MainPage = ({ children, headerTitle }) => {
     const { user, logout } = useAuth({ middleware: "auth" });
@@ -86,6 +86,21 @@ const MainPage = ({ children, headerTitle }) => {
     const end = 10 * 60 + 30; // 09:30  -> 570 menit
 
     const isWithinTime = currentMinutes >= start && currentMinutes <= end;
+
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
+    const handleClickOutside = (event) => {
+        if (drawerReff.current && !drawerReff.current.contains(event.target)) {
+            setSidebarOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
     return (
         <>
             {!attCheck?.approval_status && isWithinTime && userWarehouseId !== 1 && userRole !== "Super Admin" && (
@@ -102,6 +117,28 @@ const MainPage = ({ children, headerTitle }) => {
                     </button>
                 </div>
             )}
+            <div
+                ref={drawerReff}
+                className={`hidden sm:block fixed top-8 ${sidebarOpen ? "right-0" : "-right-36"} z-999 w-36 h-screen transition-all ease-in-out duration-300`}
+            >
+                {profit.data?.revenue?.length > 0 &&
+                    profit.data?.revenue?.map((item, index) => (
+                        <button
+                            type="button"
+                            onClick={() => setSidebarOpen(!sidebarOpen)}
+                            key={index}
+                            className={`flex justify-between items-center w-full text-xs text-slate-700 ${
+                                index + 1 === WarehouseRank ? "font-bold bg-amber-300" : "bg-slate-200/60 dark:bg-slate-500/80 text-amber-300 backdrop-blur-sm"
+                            } px-2 mb-0.5`}
+                        >
+                            <h1 className={`${index + 1 === WarehouseRank ? "font-bold -ml-10 bg-amber-300 px-2" : ""} py-2 w-8`}>#{index + 1}</h1>
+                            <div className="flex justify-between items-center w-full">
+                                <h1 className="">{item.warehouse?.code}</h1>
+                                <h1 className="">{formatRupiah(item.total)}</h1>
+                            </div>
+                        </button>
+                    ))}
+            </div>
 
             <header className="w-full h-20 flex items-center justify-between px-4 sm:px-12 py-2">
                 <h1 className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-white">
@@ -130,7 +167,7 @@ const MainPage = ({ children, headerTitle }) => {
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => mutate("/api/get-rank-by-profit")}
-                                    className="font-bold cursor-pointer text-2xl text-lime-700 dark:text-lime-400 sm:w-12 sm:h-12 rounded-full sm:bg-lime-200"
+                                    className="font-bold cursor-pointer text-2xl text-lime-700 sm:w-12 sm:h-12 rounded-full sm:bg-lime-200"
                                 >
                                     {WarehouseRank}
                                     <span className="text-xs scale-50 hidden sm:inline text-slate-400">

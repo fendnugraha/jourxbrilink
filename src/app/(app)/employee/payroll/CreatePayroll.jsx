@@ -40,8 +40,27 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
     const AddToProcessData = (employees, month, year) => {
         const payload = employees.map((employee) => {
             const lateCount = employee.attendances.filter((item) => item.approval_status === "Late").length;
+
             const overtimeCount = employee.attendances.filter((item) => item.approval_status === "Overtime").length;
+
             const receivable = Number(employee.contact?.employee_receivables_sum?.total) || 0;
+
+            const deductions = [
+                {
+                    name: "Simpanan Wajib",
+                    amount: 100000,
+                },
+                ...(lateCount > 0
+                    ? [
+                          {
+                              name: "Denda Keterlambatan",
+                              amount: lateCount * 10000,
+                          },
+                      ]
+                    : []),
+            ];
+
+            const totalSavings = deductions.filter((d) => d.name === "Simpanan Wajib").reduce((sum, d) => sum + d.amount, 0);
 
             return {
                 employee_id: employee.id,
@@ -56,20 +75,8 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                 year,
                 attendances: employee.attendances,
                 bonuses: [],
-                deductions: [
-                    {
-                        name: "Simpanan Wajib",
-                        amount: 100000,
-                    },
-                    ...(lateCount > 0
-                        ? [
-                              {
-                                  name: "Denda Keterlambatan",
-                                  amount: lateCount * 10000,
-                              },
-                          ]
-                        : []),
-                ],
+                deductions,
+                total_savings: totalSavings,
             };
         });
 
@@ -86,6 +93,7 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
         processData.reduce((total, item) => total + Number(item.employee_receivable), 0) +
         processData.reduce((total, item) => total + Number(item.installment_receivable), 0);
     const totalDeduction = processData.reduce((total, item) => total + item.deductions.reduce((total, deduction) => total + deduction.amount, 0), 0);
+    const totalSavingSum = processData.reduce((total, item) => total + item.total_savings, 0);
 
     const calculateTotalItem = (item) => {
         const total =
@@ -385,6 +393,16 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                             <h1 className="font-bold">Total Diterima</h1>
                             <h1 className="font-bold text-right">
                                 {formatNumber(totalSalary + totalCommission + totalBonus - totalDeduction - totalReceivable)}
+                            </h1>
+                        </div>
+                        <div className="flex justify-between border-b border-slate-300">
+                            <h1 className="">Simpanan Wajib</h1>
+                            <h1 className=" text-right">{formatNumber(totalSavingSum)}</h1>
+                        </div>
+                        <div className="flex justify-between pt-1 mt-4 text-amber-200">
+                            <h1 className="font-bold">Pengajuan Gaji</h1>
+                            <h1 className="font-bold text-right text-2xl">
+                                {formatNumber(totalSalary + totalCommission + totalBonus - totalDeduction - totalReceivable + totalSavingSum)}
                             </h1>
                         </div>
                     </div>

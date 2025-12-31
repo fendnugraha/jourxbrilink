@@ -2,7 +2,7 @@ import { formatLongDate, formatNumber, getMonthYear } from "@/libs/format";
 
 const Payslip = ({ payroll, date }) => {
     return (
-        <div className="w-[300px] bg-white text-slate-700 border border-slate-200">
+        <div className="w-[300px] bg-white text-slate-700 border border-slate-200 payslip">
             <div className="p-4 flex flex-col justify-between h-full">
                 <div>
                     <h1 className=" font-bold mb-4 text-center">

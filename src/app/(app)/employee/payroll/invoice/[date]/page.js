@@ -35,7 +35,7 @@ const PayrollInvoices = ({ params }) => {
                 Cetak Nota
             </button>
 
-            <div id="print-area" className="flex gap-3 flex-wrap w-[1000px] p-2">
+            <div id="print-area" className="grid grid-cols-3 gap-2 bg-white w-[1000px] p-2">
                 {payrolls.map((payroll) => (
                     <Payslip key={payroll?.id} payroll={payroll} date={date} />
                 ))}

@@ -9,22 +9,22 @@ const Payslip = ({ payroll, date }) => {
                         THREE KOMUNIKA
                         <span className="text-xs font-normal block">{formatLongDate(date)}</span>
                     </h1>
-                    <h1 className="font-semibold mb-2 text-white bg-indigo-600 px-2">{payroll?.employee?.contact?.name}</h1>
-                    <h1 className="font-bold text-sm">Pendapatan:</h1>
+                    <h1 className="font-semibold text-sm mb-2 text-white bg-indigo-600 px-2">{payroll?.employee?.contact?.name}</h1>
+                    <h1 className="font-bold text-xs border-b border-slate-300 border-dashed pb-1">Pendapatan:</h1>
                     <table className="table-auto w-full text-xs">
                         <tbody>
                             <tr>
                                 <td className="font-semibold p-1">Gaji Pokok</td>
-                                <td className="text-right">Rp {formatNumber(payroll?.total_gross_pay)}</td>
+                                <td className="text-right p-1">Rp {formatNumber(payroll?.total_gross_pay)}</td>
                             </tr>
                             <tr>
                                 <td className="font-semibold p-1">Tunjangan/Komisi</td>
-                                <td className="text-right">Rp {formatNumber(payroll?.total_commissions)}</td>
+                                <td className="text-right p-1">Rp {formatNumber(payroll?.total_commissions)}</td>
                             </tr>
                             {payroll?.items.filter((item) => item?.type === "allowance").length > 0 && (
                                 <tr>
                                     <td className="font-semibold p-1">Lainnya</td>
-                                    <td className="text-right"></td>
+                                    <td className="text-right p-1"></td>
                                 </tr>
                             )}
                             {payroll?.items
@@ -32,35 +32,35 @@ const Payslip = ({ payroll, date }) => {
                                 .map((item, index) => (
                                     <tr key={index}>
                                         <td className="px-4 py-1">{item?.item_name}</td>
-                                        <td className="text-right">Rp {formatNumber(item?.amount)}</td>
+                                        <td className="text-right p-1">Rp {formatNumber(item?.amount)}</td>
                                     </tr>
                                 ))}
-                            <tr className="bg-indigo-200">
+                            <tr className="bg-indigo-200 text-indigo-800">
                                 <td className="font-semibold p-1">Total Pendapatan</td>
-                                <td className="font-semibold text-right">
+                                <td className="font-semibold text-right p-1">
                                     Rp {formatNumber(Number(payroll?.total_gross_pay) + Number(payroll?.total_commissions) + Number(payroll?.total_allowances))}
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <h1 className="font-bold text-sm mt-2">Potongan:</h1>
+                    <h1 className="font-bold text-xs mt-2 border-b border-slate-300 border-dashed pb-1">Potongan:</h1>
                     <table className="table-auto w-full text-xs">
                         <tbody>
                             <tr>
                                 <td className="font-semibold p-1">Potongan lainnya</td>
-                                <td className="text-right"></td>
+                                <td className="text-right p-1"></td>
                             </tr>
                             {payroll?.items
                                 ?.filter((item) => item?.type === "deduction")
                                 .map((item, index) => (
                                     <tr key={index}>
                                         <td className="px-4 py-1">{item?.item_name}</td>
-                                        <td className="text-right">Rp {formatNumber(item?.amount)}</td>
+                                        <td className="text-right p-1">Rp {formatNumber(item?.amount)}</td>
                                     </tr>
                                 ))}
-                            <tr className="bg-red-300">
+                            <tr className="bg-red-200 text-red-700">
                                 <td className="font-semibold p-1">Total Potongan</td>
-                                <td className="font-semibold text-right">Rp {formatNumber(payroll?.total_deductions)}</td>
+                                <td className="font-semibold text-right p-1">Rp {formatNumber(payroll?.total_deductions)}</td>
                             </tr>
                         </tbody>
                     </table>

@@ -121,8 +121,8 @@ const MainPage = ({ children, headerTitle }) => {
                 ref={drawerReff}
                 className={`hidden sm:block fixed top-8 ${sidebarOpen ? "right-0" : "-right-36"} z-999 w-36 h-screen transition-all ease-in-out duration-300`}
             >
-                {profit.data?.revenue?.length > 0 &&
-                    profit.data?.revenue?.map((item, index) => (
+                {profit?.data?.revenue?.length > 0 &&
+                    profit?.data?.revenue?.map((item, index) => (
                         <button
                             type="button"
                             onClick={() => setSidebarOpen(!sidebarOpen)}

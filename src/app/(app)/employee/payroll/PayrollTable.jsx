@@ -1,7 +1,7 @@
 import StatusBadge from "@/components/StatusBadge";
 import axios from "@/libs/axios";
 import { formatNumber } from "@/libs/format";
-import { Printer } from "lucide-react";
+import { Printer, Table } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 

@@ -59,7 +59,7 @@ const SavingContent = () => {
 
     const filteredFinance =
         finance.financeGroupByContactId?.filter((fnc) => {
-            const matchesSearch = searchTerm === "" || fnc.contact.name.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesSearch = searchTerm === "" || fnc.contact_name.toLowerCase().includes(searchTerm.toLowerCase());
 
             const matchesUnpaidCondition = paymentStatus === "Unpaid" ? fnc.sisa > 0 : paymentStatus === "Paid" ? Number(fnc.sisa) === 0 : true;
 
@@ -147,7 +147,7 @@ const SavingContent = () => {
                                 {currentItems.map((item, index) => (
                                     <tr key={index} className="" onClick={() => setSelectedContactId(item.contact_id)}>
                                         <td>
-                                            <button className="hover:underline">{item.contact.name}</button>
+                                            <button className="hover:underline">{item.contact_name}</button>
                                         </td>
                                         <td className="text-end">{formatNumber(item.sisa)}</td>
                                         <td className="text-center">

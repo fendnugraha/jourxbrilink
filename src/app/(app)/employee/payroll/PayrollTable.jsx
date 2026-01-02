@@ -21,6 +21,9 @@ const PayrollTable = () => {
         fetchPayrolls();
     }, [fetchPayrolls]);
 
+    const totalSavings = payrolls.data?.payroll?.reduce((total, item) => total + Number(item.total_savings), 0);
+    console.log("totalSavings: ", payrolls);
+
     return (
         <div className="overflow-x-auto">
             <table className="w-full table text-xs">
@@ -32,6 +35,8 @@ const PayrollTable = () => {
                         <th>Biaya Gaji</th>
                         <th>Potongan</th>
                         <th>Total Diterima</th>
+                        <th>Simpanan Wajib</th>
+                        <th>Pengajuan</th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
@@ -50,6 +55,10 @@ const PayrollTable = () => {
                             </td>
                             <td className="text-center text-red-500 dark:text-red-300">{formatNumber(payroll?.total_deductions)}</td>
                             <td className="text-center text-indigo-500 dark:text-indigo-300">{formatNumber(payroll?.net_pay)}</td>
+                            <td className="text-center text-indigo-500 dark:text-indigo-300">{formatNumber(payroll?.total_savings)}</td>
+                            <td className="text-center text-indigo-500 dark:text-indigo-300">
+                                {formatNumber(Number(payroll?.net_pay) + Number(payroll?.total_savings))}
+                            </td>
                             <td className="text-center">
                                 <StatusBadge status={"Completed"} />
                             </td>

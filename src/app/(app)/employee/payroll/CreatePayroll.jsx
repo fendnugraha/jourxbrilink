@@ -168,9 +168,19 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
 
     const removeDeduction = (employeeId, index) => {
         setProcessData((prev) => {
-            const updated = prev.map((item) =>
-                item.employee_id === employeeId ? { ...item, deductions: item.deductions.filter((_, i) => i !== index) } : item
-            );
+            const updated = prev.map((item) => {
+                if (item.employee_id !== employeeId) return item;
+
+                const updatedDeductions = item.deductions.filter((_, i) => i !== index);
+
+                const totalSavings = updatedDeductions.filter((d) => d.name === "Simpanan Wajib").reduce((sum, d) => sum + d.amount, 0);
+
+                return {
+                    ...item,
+                    deductions: updatedDeductions,
+                    total_savings: totalSavings,
+                };
+            });
 
             localStorage.setItem("processData", JSON.stringify(updated));
             return updated;

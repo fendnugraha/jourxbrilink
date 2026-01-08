@@ -187,6 +187,13 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
         });
     };
 
+    const removeEmployee = (employeeId) => {
+        const updated = processData.filter((item) => item.employee_id !== employeeId);
+        setProcessData(updated);
+        localStorage.setItem("processData", JSON.stringify(updated));
+        return updated;
+    };
+
     const clearProcessData = () => {
         localStorage.removeItem("processData");
         setProcessData([]);
@@ -366,6 +373,13 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                                                         onClick: () => {
                                                             setSelectedEmployee(employee.employee_id);
                                                             setIsModalPayrollDetailOpen(true);
+                                                        },
+                                                    },
+                                                    {
+                                                        type: "button",
+                                                        label: "Hapus",
+                                                        onClick: () => {
+                                                            removeEmployee(employee.employee_id);
                                                         },
                                                     },
                                                 ]}

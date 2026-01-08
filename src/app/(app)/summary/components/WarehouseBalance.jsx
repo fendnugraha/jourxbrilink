@@ -23,7 +23,6 @@ const WarehouseBalance = () => {
     const [endDate, setEndDate] = useState(getCurrentDate());
     const { warehouseBalance, warehouseBalanceError, isValidating, mutate } = useGetWarehouseBalance(endDate);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
-    console.log(warehouseBalance);
 
     const closeModal = () => {
         setIsModalFilterDataOpen(false);

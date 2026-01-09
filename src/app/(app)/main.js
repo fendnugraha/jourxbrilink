@@ -1,5 +1,5 @@
 "use client";
-import { CirclePowerIcon, GemIcon, LoaderIcon, MenuIcon, Star, XIcon } from "lucide-react";
+import { CirclePowerIcon, GemIcon, LoaderIcon, MenuIcon, Star, Trophy, XIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import ResponsiveNavLink, { ResponsiveNavButton } from "@/components/ResponsiveNavLink";
 import { usePathname } from "next/navigation";
@@ -131,7 +131,9 @@ const MainPage = ({ children, headerTitle }) => {
                                 index + 1 === WarehouseRank ? "font-bold bg-amber-300" : "bg-slate-400/60 dark:bg-slate-200/80 text-amber-300 backdrop-blur-sm"
                             } px-2 mb-0.5`}
                         >
-                            <h1 className={`${index + 1 === WarehouseRank ? "font-bold -ml-10 bg-amber-300 px-2" : ""} py-2 w-8`}>#{index + 1}</h1>
+                            <h1 className={`${index + 1 === WarehouseRank ? "font-bold -ml-10 bg-amber-300 px-2" : ""} py-2 w-8`}>
+                                {index + 1 === 1 ? <Trophy size={18} fill="yellow" /> : "# " + index + 1}
+                            </h1>
                             <div className="flex justify-between items-center w-full">
                                 <h1 className="">{item.warehouse?.code}</h1>
                                 <h1 className="">{formatRupiah(item.total)}</h1>

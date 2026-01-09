@@ -132,8 +132,16 @@ const MainPage = ({ children, headerTitle }) => {
                             } px-2 mb-0.5`}
                         >
                             <h1 className={`${index + 1 === WarehouseRank ? "font-bold -ml-10 bg-amber-300 px-2" : ""} py-2 w-8 mr-2`}>
-                                {index + 1 === 1 ? <Trophy size={18} fill="yellow" /> : index + 1 + "" + toOrdinal(index + 1)}
+                                {index + 1 === 1 ? (
+                                    <Trophy size={18} fill="yellow" />
+                                ) : (
+                                    <>
+                                        {index + 1}
+                                        <sup>{toOrdinal(index + 1)}</sup>
+                                    </>
+                                )}
                             </h1>
+
                             <div className="flex justify-between items-center w-full">
                                 <h1 className="">{item.warehouse?.code}</h1>
                                 <h1 className="">{formatRupiah(item.total)}</h1>

@@ -23,43 +23,54 @@ export default function AttendanceForm({ attCheckMutate, openMessage }) {
     const [error, setError] = useState(null);
     const [timeIn, setTimeIn] = useState(null);
     // 🔥 Ambil lokasi otomatis saat komponen tampil
-    const getLocation = () => {
-        if (!navigator.geolocation) {
-            alert("Browser tidak mendukung GPS");
-            return;
-        }
+    const [locationLoading, setLocationLoading] = useState(false);
 
-        navigator.geolocation.getCurrentPosition(
-            (pos) => {
-                setLocation({
-                    lat: pos.coords.latitude,
-                    lng: pos.coords.longitude,
-                });
-            },
-            (err) => {
-                console.error(err);
-
-                if (err.code === 1) {
-                    alert("Izin lokasi ditolak. Aktifkan GPS dan izinkan lokasi.");
-                } else if (err.code === 2) {
-                    alert("Lokasi tidak tersedia. Coba ke area terbuka.");
-                } else if (err.code === 3) {
-                    alert("GPS timeout. Pastikan GPS aktif dan sinyal kuat.");
-                } else {
-                    alert("Tidak dapat mengambil lokasi.");
-                }
-            },
-            {
-                enableHighAccuracy: true, // supaya lebih akurat
-                timeout: 10000, // maksimal 10 detik
-                maximumAge: 0, // jangan pakai lokasi cache
+    const getLocationPromise = () =>
+        new Promise((resolve, reject) => {
+            if (!navigator.geolocation) {
+                reject("Browser tidak mendukung GPS");
+                return;
             }
-        );
-    };
 
-    useEffect(() => {
-        getLocation();
-    }, []);
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    resolve({
+                        lat: pos.coords.latitude,
+                        lng: pos.coords.longitude,
+                        accuracy: pos.coords.accuracy,
+                    });
+                },
+                (err) => reject(err),
+                {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 0,
+                },
+            );
+        });
+
+    const getLocation = async () => {
+        setLocationLoading(true);
+        try {
+            const loc = await getLocationPromise();
+            setLocation(loc);
+            setError(null);
+        } catch (err) {
+            console.error(err);
+
+            if (err.code === 1) {
+                alert("Izin lokasi ditolak");
+            } else if (err.code === 2) {
+                alert("Lokasi tidak tersedia");
+            } else if (err.code === 3) {
+                alert("GPS timeout");
+            } else {
+                alert("Gagal mengambil lokasi");
+            }
+        } finally {
+            setLocationLoading(false);
+        }
+    };
 
     // Handle Foto + Compress
     const handleFileChange = async (e) => {
@@ -146,7 +157,7 @@ export default function AttendanceForm({ attCheckMutate, openMessage }) {
                     {address?.town}, {address?.county}
                 </p>
             ) : (
-                <p className="mb-4 text-red-500">Mengambil lokasi...</p>
+                <p className="mb-4 text-red-500">{locationLoading ? "Loading..." : "Lokasi belum berhasil diambil!"}</p>
             )}
 
             <div className="flex bg-slate-300 dark:bg-slate-500 rounded-full">
@@ -169,12 +180,21 @@ export default function AttendanceForm({ attCheckMutate, openMessage }) {
             {timeIn ? <span className="text-6xl my-4 font-bold text-blue-200 block">{timeIn}</span> : <LiveClock textSize="text-6xl my-4" style="font-bold" />}
 
             <div className="flex items-center gap-2 w-full">
+                <button
+                    className={`p-4 w-full flex justify-center gap-2 items-center rounded-2xl text-white cursor-pointer ${
+                        !location ? "bg-green-600 hover:bg-green-700" : "bg-gray-400 cursor-not-allowed"
+                    }`}
+                    onClick={getLocation}
+                    hidden={location}
+                >
+                    <MapPin size={28} strokeWidth={2} /> {locationLoading ? "Mengambil lokasi..." : "Ambil lokasi"}
+                </button>
                 <label
                     htmlFor={file ? null : "photo"}
                     className={`p-4 w-full flex justify-center gap-2 items-center rounded-2xl text-white cursor-pointer ${
                         location ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
                     }`}
-                    hidden={file}
+                    hidden={file || !location}
                 >
                     <CameraIcon size={28} strokeWidth={2} /> Ambil foto
                 </label>

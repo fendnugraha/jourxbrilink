@@ -59,7 +59,7 @@ const ReceivableTable = ({ notification, finance, fetchFinance, selectedContactI
                     className="form-control"
                     value={type}
                     onChange={(e) => {
-                        setType(e.target.value), setCurrentPage(1);
+                        (setType(e.target.value), setCurrentPage(1));
                     }}
                 >
                     <option value="EmployeeReceivable">Kasbon (Full Payment)</option>
@@ -69,7 +69,7 @@ const ReceivableTable = ({ notification, finance, fetchFinance, selectedContactI
                     className="form-control !w-fit"
                     value={paymentStatus}
                     onChange={(e) => {
-                        setPaymentStatus(e.target.value), setCurrentPage(1);
+                        (setPaymentStatus(e.target.value), setCurrentPage(1));
                     }}
                 >
                     <option value="Paid">Lunas</option>
@@ -79,7 +79,7 @@ const ReceivableTable = ({ notification, finance, fetchFinance, selectedContactI
                     className="form-control !w-fit"
                     value={itemsPerPage}
                     onChange={(e) => {
-                        setItemsPerPage(e.target.value), setCurrentPage(1);
+                        (setItemsPerPage(e.target.value), setCurrentPage(1));
                     }}
                 >
                     <option value="5">5</option>
@@ -89,7 +89,7 @@ const ReceivableTable = ({ notification, finance, fetchFinance, selectedContactI
                     <option value="100">100</option>
                 </select>
             </div>
-            <input type="text" placeholder="Search" className="form-control w-full mt-2" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+            <input type="search" placeholder="Search" className="form-control w-full mt-2" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
             <div className="overflow-x-auto">
                 <table className="table w-full text-xs">
                     <thead>

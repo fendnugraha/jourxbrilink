@@ -6,7 +6,7 @@ import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
 import { DateTimeNow } from "@/libs/format";
 
-const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, warehouses, accountBalance }) => {
+const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, warehouses, accountBalance = [] }) => {
     const { today } = DateTimeNow();
     const [formData, setFormData] = useState({
         date_issued: today,
@@ -39,7 +39,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
 
         // Cari akun lain dengan group yang sama (misalnya di cabang HQ)
         const matchingDebt = cashBank.find(
-            (acc) => acc.account_group === selectedCred.account_group && Number(acc.warehouse_id) === Number(selectedWarehouseId)
+            (acc) => acc.account_group === selectedCred.account_group && Number(acc.warehouse_id) === Number(selectedWarehouseId),
         );
 
         // Update debt_code hanya kalau ditemukan
@@ -51,7 +51,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
         }
     }, [formData.cred_code, cashBank, selectedWarehouseId]);
 
-    const fiindAccount = accountBalance.data?.chartOfAccounts?.find((acc) => acc.warehouse_id === 1 && acc.id === Number(formData.cred_code));
+    const fiindAccount = accountBalance?.data?.chartOfAccounts?.find((acc) => acc.warehouse_id === 1 && acc.id === Number(formData.cred_code));
 
     const handleSubmit = async (e) => {
         e.preventDefault();

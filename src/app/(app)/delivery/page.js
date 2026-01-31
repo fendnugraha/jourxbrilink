@@ -121,9 +121,11 @@ const DeliveryPage = () => {
                                                     statusText={journal?.status === 0 ? "On Delivery" : "Delivered"}
                                                 />
                                             </div>
-                                            <h1 className="text-xs">Tujuan:</h1>
-                                            <h1 className="font-bold text-md mb-1 text-right">{journal?.debt?.warehouse?.name}</h1>
-                                            <h1 className="font-bold text-xl text-white text-right px-2 py-1 border border-slate-300 dark:border-slate-500 rounded-2xl bg-slate-500">
+                                            {/* <h1 className="text-xs">Tujuan:</h1> */}
+                                            <h1 className="font-bold text-md mb-1 text-center pt-2">
+                                                {(journal?.debt?.warehouse?.name ?? "").replace(/^konter\s*/i, "")}
+                                            </h1>
+                                            <h1 className="font-bold text-xl text-yellow-500 text-right px-2 py-1 border border-slate-300 dark:border-slate-500 rounded-2xl">
                                                 Rp {formatNumber(journal?.amount)}
                                             </h1>
                                             <button

@@ -22,6 +22,8 @@ const AttendanceTableMonthly = ({ selectedZone, warehouseMonthly }) => {
         return !selectedZone || zoneMatch;
     });
 
+    console.log(filteredWarehouses);
+
     return (
         <>
             {filteredWarehouses.map((employee) => (

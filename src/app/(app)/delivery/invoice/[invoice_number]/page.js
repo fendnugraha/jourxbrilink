@@ -3,6 +3,7 @@ import MainPage from "@/app/(app)/main";
 import axios from "@/libs/axios";
 import { formatDateTime, formatNumber } from "@/libs/format";
 import { use, useCallback, useEffect, useState } from "react";
+import InvoiceCard from "./InvoiceCard";
 
 const InvoicePage = ({ params }) => {
     const { invoice_number } = use(params);
@@ -32,48 +33,8 @@ const InvoicePage = ({ params }) => {
         <MainPage headerTitle="Delivery Invoice">
             <div className="py-4 sm:py-8 px-4 sm:px-12">
                 <div id="print-area" className="p-4 bg-white w-[300px] text-slate-600">
-                    <div className="flex justify-between flex-col">
-                        <div className="flex flex-col w-full">
-                            <h1 className="text-xs font-bold text-center">{journal?.invoice}</h1>
-                            <h1 className="text-xs text-center">{formatDateTime(journal?.date_issued)}</h1>
-                        </div>
-                        <div className="flex flex-col w-full mt-4">
-                            <h1 className="text-xs text-center">Penambahan Saldo Kas</h1>
-                            <h1 className="text-xl font-bold text-center">{formatNumber(journal?.amount)}</h1>
-                        </div>
-                        <div className="flex flex-col w-full my-2">
-                            <h1 className="text-xs text-center">Tujuan</h1>
-                            <h1 className="text-sm font-bold text-center">{journal?.debt?.warehouse?.name}</h1>
-                        </div>
-                    </div>
-                    <div className="flex justify-between h-[50px] border-y border-dashed border-slate-700 ">
-                        <h1 className="text-xs border-r border-dashed border-slate-700 w-full text-center first:border-s">Pengirim</h1>
-                        <h1 className="text-xs border-r border-dashed border-slate-700 w-full text-center">Pengantar</h1>
-                        <h1 className="text-xs border-r border-dashed border-slate-700 w-full text-center">Penerima</h1>
-                    </div>
-                    <h1 className="mt-2 text-xs w-full text-center">-Pengirim-</h1>
-                    <hr className="border-dashed border-slate-700 my-4" />
-                    <div className="flex justify-between flex-col">
-                        <div className="flex flex-col w-full">
-                            <h1 className="text-xs font-bold text-center">{journal?.invoice}</h1>
-                            <h1 className="text-xs text-center">{formatDateTime(journal?.date_issued)}</h1>
-                        </div>
-                        <div className="flex flex-col w-full mt-4">
-                            <h1 className="text-xs text-center">Penambahan Saldo Kas</h1>
-                            <h1 className="text-xl font-bold text-center">{formatNumber(journal?.amount)}</h1>
-                        </div>
-                        <div className="flex flex-col w-full my-2">
-                            <h1 className="text-xs text-center">Tujuan</h1>
-                            <h1 className="text-sm font-bold text-center">{journal?.debt?.warehouse?.name}</h1>
-                        </div>
-                    </div>
-                    <div className="flex justify-between h-[50px] border-y border-dashed border-slate-700 ">
-                        <h1 className="text-xs border-r border-dashed border-slate-700 w-full text-center first:border-s">Pengirim</h1>
-                        <h1 className="text-xs border-r border-dashed border-slate-700 w-full text-center">Pengantar</h1>
-                        <h1 className="text-xs border-r border-dashed border-slate-700 w-full text-center">Penerima</h1>
-                    </div>
-                    <h1 className="mt-2 text-xs w-full text-center">-Penerima-</h1>
-                    <hr className="border-dashed border-slate-700 my-2" />
+                    <InvoiceCard journal={journal} />
+                    <InvoiceCard journal={journal} footNote="Penerima" />
                 </div>
                 <button onClick={() => window.print()} className="mt-4 bg-slate-700 dark:bg-amber-400 text-white px-4 py-2 rounded no-print mb-18 sm:mb-0">
                     Cetak Nota

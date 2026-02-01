@@ -114,23 +114,32 @@ const BalanceMutationHistory = ({
                 </div>
                 {currentItems?.length > 0 &&
                     currentItems.map((journal, index) => (
-                        <div key={index} className="flex justify-between text-xs p-2 bg-white dark:bg-slate-800 rounded-xl mb-2 drop-shadow-sm">
+                        <div
+                            key={index}
+                            className="flex justify-between text-xs p-2 bg-white dark:bg-black/50 hover:dark:bg-green-500/30 backdrop-blur-sm rounded-xl mb-2 hover:shadow-md"
+                        >
                             <div>
                                 <h1 className="font-bold overflow-x-hidden text-blue-600 dark:text-yellow-200">
-                                    {journal.debt?.warehouse_id === Number(selectedWarehouse) ? journal.cred?.warehouse?.name : journal.debt?.warehouse?.name}
+                                    {journal.debt?.warehouse_id === Number(selectedWarehouse)
+                                        ? journal.cred?.warehouse?.name?.replace(/^konter\s*/i, "")
+                                        : journal.debt?.warehouse?.name?.replace(/^konter\s*/i, "")}
                                 </h1>
                                 <h1>{formatDateTime(journal.date_issued)}</h1>
-                                <span className={`${journal.cred?.warehouse_id === Number(selectedWarehouse) ? "font-bold" : ""}`}>
+                                <span
+                                    className={`${journal.cred?.warehouse_id === Number(selectedWarehouse) ? "font-bold text-teal-500 dark:text-teal-300" : ""}`}
+                                >
                                     {journal.cred?.account_group ?? journal.cred?.acc_name}
                                 </span>{" "}
                                 {"->"}{" "}
-                                <span className={`${journal.debt?.warehouse_id === Number(selectedWarehouse) ? "font-bold" : ""}`}>
+                                <span
+                                    className={`${journal.debt?.warehouse_id === Number(selectedWarehouse) ? "font-bold text-teal-500 dark:text-teal-300" : ""}`}
+                                >
                                     {journal.debt?.account_group ?? journal.debt?.acc_name}
                                 </span>
                             </div>
                             <div className="text-right flex flex-col justify-between">
                                 <h1
-                                    className={`font-bold text-[1.1rem] text-nowrap ${
+                                    className={`font-bold text-[1.2rem] text-nowrap ${
                                         journal.debt?.warehouse_id === Number(selectedWarehouse)
                                             ? "text-green-500 dark:text-green-300"
                                             : "text-red-500 dark:text-red-300"

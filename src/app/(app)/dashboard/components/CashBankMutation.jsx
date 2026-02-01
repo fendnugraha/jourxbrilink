@@ -68,14 +68,14 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
     const mutationInSumById = (acc_id) => {
         return journalsByWarehouse?.data?.reduce(
             (sum, journal) => (Number(journal.debt_code) === Number(acc_id) && journal.trx_type === "Mutasi Kas" ? sum + Number(journal.amount) : sum),
-            0
+            0,
         );
     };
 
     const mutationOutSumById = (acc_id) => {
         return journalsByWarehouse.data?.reduce(
             (sum, journal) => (Number(journal.cred_code) === Number(acc_id) && journal.trx_type === "Mutasi Kas" ? sum + Number(journal.amount) : sum),
-            0
+            0,
         );
     };
 
@@ -92,6 +92,8 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
     const mutationOutSum = accountBalance?.data?.chartOfAccounts?.reduce((sum, acc) => sum + mutationOutSumById(acc.id), 0);
 
     const [mutationMode, setMutationMode] = useState("single");
+
+    console.log("accountBalance:", accountBalance);
     return (
         <>
             <div className="w-full flex justify-end gap-2 mb-2 sm:mb-0">
@@ -220,8 +222,8 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                 <tr>
                                     <th>Nama akun</th>
                                     <th className="hidden sm:table-cell">Saldo Akhir</th>
-                                    <th>Masuk</th>
-                                    <th>Keluar</th>
+                                    <th className="hidden sm:table-cell">Masuk</th>
+                                    <th className="hidden sm:table-cell">Keluar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -233,20 +235,35 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                                 {formatNumber(account.balance)}
                                             </span>
                                         </td>
-                                        <td className="text-end text-yellow-500 dark:text-yellow-200 font-bold hidden sm:table-cell">
+                                        <td className="text-end text-sm text-blue-500 dark:text-yellow-200 font-bold hidden sm:table-cell">
                                             {formatNumber(account.balance ?? 0)}
                                         </td>
-                                        <td className="text-end">{formatNumber(mutationInSumById(account.id) ?? 0)}</td>
-                                        <td className="text-end">{formatNumber(mutationOutSumById(account.id) ?? 0)}</td>
+                                        <td className="text-end hidden sm:table-cell">{formatNumber(mutationInSumById(account.id) ?? 0)}</td>
+                                        <td className="text-end hidden sm:table-cell">{formatNumber(mutationOutSumById(account.id) ?? 0)}</td>
                                     </tr>
                                 ))}
                                 <tr>
                                     <td className="font-bold ">
                                         {Number(selectedWarehouse) === 1 ? "Penambahan saldo ke Cabang" : "Penambahan saldo dari HQ"}
+                                        <h1 className="font-bold text-blue-500 block sm:hidden">
+                                            {(() => {
+                                                const remaining = mutationInSum - mutationOutSum;
+
+                                                if (remaining === 0) {
+                                                    return <span className="text-green-600">Completed</span>;
+                                                }
+
+                                                if (loading || isValidating) {
+                                                    return "...";
+                                                }
+
+                                                return <span className="text-red-600 dark:text-red-400">{formatNumber(remaining)}</span>;
+                                            })()}
+                                        </h1>
                                     </td>
                                     <td className="text-end font-bold hidden sm:table-cell"></td>
-                                    <td className="text-end font-bold"></td>
-                                    <td className="text-end font-bold">
+                                    <td className="text-end font-bold hidden sm:table-cell"></td>
+                                    <td className="text-end font-bold hidden sm:table-cell">
                                         {(() => {
                                             const remaining = mutationInSum - mutationOutSum;
 
@@ -278,8 +295,8 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                             ? "..."
                                             : formatNumber(accountBalance?.data?.chartOfAccounts?.reduce((sum, acc) => sum + acc.balance, 0))}
                                     </th>
-                                    <th className="text-end">{loading || isValidating ? "..." : formatNumber(mutationInSum)}</th>
-                                    <th className="text-end">{loading || isValidating ? "..." : formatNumber(mutationOutSum)}</th>
+                                    <th className="text-end hidden sm:table-cell">{loading || isValidating ? "..." : formatNumber(mutationInSum)}</th>
+                                    <th className="text-end hidden sm:table-cell">{loading || isValidating ? "..." : formatNumber(mutationOutSum)}</th>
                                 </tr>
                             </tfoot>
                         </table>

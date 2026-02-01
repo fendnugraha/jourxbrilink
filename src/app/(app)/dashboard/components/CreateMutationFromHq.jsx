@@ -186,7 +186,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                 {formData.amount > 0 && <h1 className="text-sm sm:text-lg font-bold">{formatNumber(formData.amount)}</h1>}
             </div>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
-                <Label>Biaya admin bank</Label>
+                <Label>Admin bank</Label>
                 <div className="col-span-1">
                     <input
                         className="form-control !w-full sm:!w-1/2"

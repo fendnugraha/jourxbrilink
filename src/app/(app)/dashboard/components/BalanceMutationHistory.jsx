@@ -116,7 +116,7 @@ const BalanceMutationHistory = ({
                     currentItems.map((journal, index) => (
                         <div
                             key={index}
-                            className="flex justify-between text-xs p-2 bg-white dark:bg-black/50 hover:dark:bg-green-500/30 backdrop-blur-sm rounded-xl mb-2 hover:shadow-md"
+                            className="flex justify-between text-xs p-2 bg-white dark:bg-black/40 hover:dark:bg-green-500/30 backdrop-blur-sm rounded-xl mb-2 hover:shadow-md"
                         >
                             <div>
                                 <h1 className="font-bold overflow-x-hidden text-blue-600 dark:text-yellow-200">

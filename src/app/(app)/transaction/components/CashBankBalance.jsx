@@ -121,7 +121,7 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                     </div>
                 ))}
             </Modal>
-            <div className="flex justify-center items-center flex-col bg-gray-600 dark:bg-black/50 backdrop-blur-sm py-4 rounded-t-3xl text-white shadow-lg">
+            <div className="flex justify-center items-center flex-col bg-gray-600 dark:bg-black/40 backdrop-blur-sm py-4 rounded-t-3xl text-white shadow-lg">
                 {accountBalance?.data?.chartOfAccounts?.length > 0 ? (
                     <>
                         <h1 className="text-xs">Total Saldo Kas & Bank</h1>
@@ -132,7 +132,7 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                 )}
             </div>
             <div
-                className={`bg-gray-600/75 dark:bg-black/50 backdrop-blur-xs px-2 transform ${
+                className={`bg-gray-600/75 dark:bg-black/40 backdrop-blur-xs px-2 transform ${
                     showBalanceReport ? "opacity-100 scale-y-100 max-h-[700px]" : "opacity-0 scale-y-0 max-h-0 "
                 } origin-top transition-all duration-300 ease-in-out`}
             >
@@ -297,7 +297,7 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
             </div>
             <button
                 onClick={() => setShowBalanceReport(!showBalanceReport)}
-                className="bg-gray-400 dark:bg-black/50 backdrop-blur-sm hover:bg-gray-500 w-full pb-1 rounded-b-3xl shadow-md text-white disabled:bg-gray-100"
+                className="bg-gray-400 dark:bg-black/40 backdrop-blur-sm hover:bg-gray-500 w-full pb-1 rounded-b-3xl shadow-md text-white disabled:bg-gray-100"
                 disabled={accountBalance?.data?.length === 0}
             >
                 <ChevronDown className={`w-4 h-4 inline ${showBalanceReport ? "rotate-180" : ""} transition delay-500 ease-in-out`} />

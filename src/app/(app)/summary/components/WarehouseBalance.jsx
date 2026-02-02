@@ -84,7 +84,7 @@ const WarehouseBalance = () => {
                                 <tr className="" key={i}>
                                     <td className="">
                                         <Link className="hover:underline" href={`/summary/warehouse/${w.id}`}>
-                                            {i + 1}. {w.name}
+                                            {i + 1}. {w.name.replace(/^konter\s*/i, "")}
                                         </Link>
                                     </td>
                                     <td className="text-end">{formatNumber(w.cash)}</td>

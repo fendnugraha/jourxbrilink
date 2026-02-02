@@ -1,16 +1,20 @@
 import { formatLongDate, formatNumber, getMonthYear } from "@/libs/format";
+import Image from "next/image";
 
 const Payslip = ({ payroll, date }) => {
     return (
-        <div className="w-[300px] bg-white text-slate-700 border border-slate-200 payslip">
-            <div className="p-4 flex flex-col justify-between h-full">
+        <div className="w-[300px] bg-white text-slate-700 border border-dashed border-slate-400 payslip relative">
+            <div className="absolute top-0 left-0 w-full h-full bg-indigo-600 opacity-5 ">
+                <Image src="/default.png" alt="Payslip Background" width={300} height={300} className="w-full h-full object-cover" />
+            </div>
+            <div className="p-2 flex flex-col justify-between h-full">
                 <div>
                     <h1 className=" font-bold mb-4 text-center">
                         THREE KOMUNIKA
                         <span className="text-xs font-normal block">{formatLongDate(date)}</span>
                     </h1>
                     <h1 className="font-semibold text-sm mb-2 text-white bg-indigo-600 px-2">{payroll?.employee?.contact?.name}</h1>
-                    <h1 className="font-bold text-xs border-b border-slate-300 border-dashed pb-1">Pendapatan:</h1>
+                    <h1 className="font-bold text-xs border-b border-slate-400 border-dashed pb-1">Pendapatan:</h1>
                     <table className="table-auto w-full text-xs">
                         <tbody>
                             <tr>
@@ -43,7 +47,7 @@ const Payslip = ({ payroll, date }) => {
                             </tr>
                         </tbody>
                     </table>
-                    <h1 className="font-bold text-xs mt-2 border-b border-slate-300 border-dashed pb-1">Potongan:</h1>
+                    <h1 className="font-bold text-xs mt-2 border-b border-slate-400 border-dashed pb-1">Potongan:</h1>
                     <table className="table-auto w-full text-xs">
                         <tbody>
                             <tr>

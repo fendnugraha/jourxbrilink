@@ -86,7 +86,7 @@ const RevenueReport = () => {
                                 revenue?.revenue,
                                 headersRevenue,
                                 `Summary Report by Warehouse ${startDate} s/d ${endDate}.xlsx`,
-                                `Summary Report by Warehouse ${startDate} s/d ${endDate}`
+                                `Summary Report by Warehouse ${startDate} s/d ${endDate}`,
                             )
                         }
                         className="small-button"
@@ -136,7 +136,7 @@ const RevenueReport = () => {
                                 <tr key={index} className="hover:bg-orange-100 dark:hover:bg-slate-700">
                                     <td className="">
                                         <Link className="hover:underline" href={`/summary/warehouse/${item.warehouseId}`}>
-                                            {item.warehouse}
+                                            {item.warehouse.replace(/^konter\s*/i, "")}
                                         </Link>
                                     </td>
                                     <td className="text-end">{formatNumber(item.transfer)}</td>

@@ -15,6 +15,7 @@ import UpdateWarehouse from "./UpdateWarehouse";
 import { set } from "date-fns";
 import getDistance from "@/libs/getDistance";
 import CreateZone from "./CreateZone";
+import ZoneTable from "./ZoneTable";
 
 const Warehouse = () => {
     const [warehouses, setWarehouses] = useState([]);
@@ -55,7 +56,7 @@ const Warehouse = () => {
                 setLoading(false);
             }
         },
-        [search]
+        [search],
     );
 
     useEffect(() => {
@@ -176,8 +177,8 @@ const Warehouse = () => {
                         autoComplete="off"
                     />
                 </div>
-                <div className="card py-4 grid grid-cols-1">
-                    <div className="overflow-y-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                    <div className="card py-4 overflow-y-auto sm:col-span-3">
                         <table className="table w-full text-xs">
                             <thead>
                                 <tr>
@@ -228,7 +229,7 @@ const Warehouse = () => {
                                                             headquarter?.latitude,
                                                             headquarter?.longitude,
                                                             warehouse?.latitude,
-                                                            warehouse?.longitude
+                                                            warehouse?.longitude,
                                                         ).toFixed(3)}{" "}
                                                         km
                                                     </span>
@@ -269,6 +270,7 @@ const Warehouse = () => {
                         </table>
                         <div className="px-4">{warehouses?.last_page > 1 && <Paginator links={warehouses} handleChangePage={handleChangePage} />}</div>
                     </div>
+                    <ZoneTable zones={zones} notification={setNotification} fetchZones={fetchZones} />
                 </div>
             </div>
             <Modal isOpen={isModalUpdateWarehouseOpen} onClose={closeModal} modalTitle="Update warehouse" maxWidth="max-w-lg">

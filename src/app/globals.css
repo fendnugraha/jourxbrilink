@@ -32,7 +32,7 @@ button {
 }
 
 .small-button {
-    @apply bg-white dark:bg-slate-500 dark:text-white font-bold p-2 rounded-lg border border-gray-300 dark:border-gray-500 hover:border-gray-400 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:text-slate-500 disabled:cursor-not-allowed;
+    @apply bg-white dark:bg-slate-500 dark:text-white font-bold p-2 rounded-lg border border-gray-300 dark:border-slate-600 hover:border-gray-400 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:text-slate-500 disabled:cursor-not-allowed;
 }
 
 /* card */
@@ -55,7 +55,7 @@ button {
 }
 
 .table thead th {
-    @apply py-2 sm:py-5 text-gray-700 border-b-2 border-blue-200 dark:border-gray-500 dark:text-lime-300;
+    @apply py-2 sm:py-5 text-gray-700 border-b-2 border-blue-200 dark:border-slate-600 dark:text-lime-300;
 }
 
 .table tbody tr {
@@ -63,7 +63,7 @@ button {
 }
 
 .table tfoot th {
-    @apply py-2 sm:py-4 text-gray-700 border-t-2 border-b-0 border-orange-200 dark:border-gray-500 dark:text-yellow-300;
+    @apply py-2 sm:py-4 text-gray-700 border-t-2 border-b-0 border-orange-200 dark:border-slate-600 dark:text-yellow-300;
 }
 
 .table th,
@@ -76,11 +76,11 @@ button {
 }
 
 .form-control {
-    @apply block border border-slate-200 text-slate-800 dark:text-white dark:border-slate-500 w-full px-2 py-1.5 text-sm bg-slate-200 dark:bg-slate-500 rounded-lg outline-none focus:ring-2 focus:ring-blue-500/30 disabled:text-slate-500 disabled:bg-gray-300 disabled:cursor-not-allowed;
+    @apply block border border-slate-200 text-slate-800 dark:text-white dark:border-slate-500 w-full px-2 py-1.5 text-sm bg-slate-200 dark:bg-slate-600 rounded-lg outline-none focus:ring-2 focus:ring-blue-500/30 disabled:text-slate-500 disabled:bg-gray-300 disabled:cursor-not-allowed;
 }
 
 .form-select {
-    @apply block border border-slate-200 text-slate-800 dark:text-white dark:border-slate-500 w-full px-2 py-1.5 text-sm bg-slate-200 dark:bg-slate-500 rounded-lg outline-none focus:ring-2 focus:ring-blue-500/30 disabled:text-slate-500 disabled:bg-gray-300 disabled:cursor-not-allowed;
+    @apply block border border-slate-200 text-slate-800 dark:text-white dark:border-slate-500 w-full px-2 py-1.5 text-sm bg-slate-200 dark:bg-slate-600 rounded-lg outline-none focus:ring-2 focus:ring-blue-500/30 disabled:text-slate-500 disabled:bg-gray-300 disabled:cursor-not-allowed;
 }
 
 @media print {

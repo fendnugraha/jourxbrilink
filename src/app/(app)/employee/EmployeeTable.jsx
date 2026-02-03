@@ -9,6 +9,7 @@ import WarningForm from "./WarningForm";
 import axios from "@/libs/axios";
 import EditEmployee from "./EditEmployee";
 import { formatDistanceToNow } from "date-fns";
+import StatusBadge from "@/components/StatusBadge";
 
 const EmployeeTable = ({ employees, fetchContacts, notification }) => {
     const [isModalAddEmployeeOpen, setIsModalAddEmployeeOpen] = useState(false);
@@ -45,7 +46,8 @@ const EmployeeTable = ({ employees, fetchContacts, notification }) => {
                             <th>Gaji Pokok</th>
                             <th>Komisi</th>
                             <th>Piutang</th>
-                            <th>Tanggal Bergabung</th>
+                            <th>Join</th>
+                            <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -71,6 +73,14 @@ const EmployeeTable = ({ employees, fetchContacts, notification }) => {
                                     <td className="text-right">{formatNumber(employee.contact?.employee_receivables_sum?.total || 0)}</td>
                                     <td className="text-center">
                                         {employee.hire_date} <span className="text-xs text-slate-500 block">({calculateWorkDuration(employee.hire_date)})</span>
+                                    </td>
+                                    <td className="text-center">
+                                        <StatusBadge
+                                            status={employee?.status === "active" ? "Completed" : employee?.status === "terminated" ? "Rejected" : "Canceled"}
+                                            statusText={
+                                                employee?.status === "active" ? "Active" : employee?.status === "terminated" ? "Kicked Out" : "Inactive"
+                                            }
+                                        />
                                     </td>
                                     <td>
                                         <DropdownMenu

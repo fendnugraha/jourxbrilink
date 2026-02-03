@@ -8,6 +8,7 @@ const EditEmployee = ({ isModalOpen, fetchContacts, notification, employee }) =>
         salary: employee?.salary,
         commission: employee?.commission,
         hire_date: employee?.hire_date,
+        status: employee?.status,
     });
     const [contacts, setContacts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -89,6 +90,16 @@ const EditEmployee = ({ isModalOpen, fetchContacts, notification, employee }) =>
                     type="date"
                     id="hire_date"
                 />
+            </div>
+            <div className="">
+                <Label htmlFor="status">Status</Label>
+                <select className="form-select" id="status" value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value })}>
+                    <option value="">Select Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="resigned">Resigned</option>
+                    <option value="terminated">Kicked Out</option>
+                </select>
             </div>
             <div className="flex justify-end">
                 <button type="submit" className="btn btn-primary" disabled={loading}>

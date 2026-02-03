@@ -1,4 +1,4 @@
-import { AlarmClockCheck, Award, Ban, Bike, CheckCheck, ClipboardList, X } from "lucide-react";
+import { AlarmClockCheck, Award, Ban, Bike, BugOff, CheckCheck, ClipboardList, X } from "lucide-react";
 
 const StatusBadge = ({ status, statusText }) => {
     let icon = (
@@ -44,10 +44,10 @@ const StatusBadge = ({ status, statusText }) => {
         case "Rejected":
             icon = (
                 <span className="flex items-center gap-1 bg-red-500 text-red-100 rounded-full p-0.5">
-                    <Ban size={12} strokeWidth={2} />
+                    <BugOff size={12} strokeWidth={2} />
                 </span>
             );
-            style = "bg-slate-800 dark:bg-slate-500 text-white";
+            style = "bg-slate-800 dark:bg-slate-700 text-white outline outline-1 outline-white/30";
             break;
         case "Finished":
             icon = (

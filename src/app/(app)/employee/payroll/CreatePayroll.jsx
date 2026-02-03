@@ -38,47 +38,49 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
     const findedEmployee = employees.find((emp) => emp.id === selectedEmployee);
 
     const AddToProcessData = (employees, month, year) => {
-        const payload = employees.map((employee) => {
-            const lateCount = employee.attendances.filter((item) => item.approval_status === "Late").length;
+        const payload = employees
+            .filter((employee) => employee.status === "active")
+            .map((employee) => {
+                const lateCount = employee.attendances.filter((item) => item.approval_status === "Late").length;
 
-            const overtimeCount = employee.attendances.filter((item) => item.approval_status === "Overtime").length;
+                const overtimeCount = employee.attendances.filter((item) => item.approval_status === "Overtime").length;
 
-            const receivable = Number(employee.contact?.employee_receivables_sum?.total) || 0;
+                const receivable = Number(employee.contact?.employee_receivables_sum?.total) || 0;
 
-            const deductions = [
-                {
-                    name: "Simpanan Wajib",
-                    amount: 100000,
-                },
-                ...(lateCount > 0
-                    ? [
-                          {
-                              name: "Denda Keterlambatan",
-                              amount: lateCount * 10000,
-                          },
-                      ]
-                    : []),
-            ];
+                const deductions = [
+                    {
+                        name: "Simpanan Wajib",
+                        amount: 100000,
+                    },
+                    ...(lateCount > 0
+                        ? [
+                              {
+                                  name: "Denda Keterlambatan",
+                                  amount: lateCount * 10000,
+                              },
+                          ]
+                        : []),
+                ];
 
-            const totalSavings = deductions.filter((d) => d.name === "Simpanan Wajib").reduce((sum, d) => sum + d.amount, 0);
+                const totalSavings = deductions.filter((d) => d.name === "Simpanan Wajib").reduce((sum, d) => sum + d.amount, 0);
 
-            return {
-                employee_id: employee.id,
-                contact_id: employee.contact_id,
-                name: employee.contact?.name,
-                basic_salary: employee.salary,
-                commission: employee.commission,
-                overtime: overtimeCount > 0 ? overtimeCount * 100000 : 0,
-                employee_receivable: receivable > 0 ? receivable : 0,
-                installment_receivable: 0,
-                month,
-                year,
-                attendances: employee.attendances,
-                bonuses: [],
-                deductions,
-                total_savings: totalSavings,
-            };
-        });
+                return {
+                    employee_id: employee.id,
+                    contact_id: employee.contact_id,
+                    name: employee.contact?.name,
+                    basic_salary: employee.salary,
+                    commission: employee.commission,
+                    overtime: overtimeCount > 0 ? overtimeCount * 100000 : 0,
+                    employee_receivable: receivable > 0 ? receivable : 0,
+                    installment_receivable: 0,
+                    month,
+                    year,
+                    attendances: employee.attendances,
+                    bonuses: [],
+                    deductions,
+                    total_savings: totalSavings,
+                };
+            });
 
         setProcessData(payload);
         localStorage.setItem("processData", JSON.stringify(payload));
@@ -152,7 +154,7 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                                 ...item,
                                 installment_receivable: Number(deductionAmount),
                             }
-                          : item
+                          : item,
                   )
                 : prev.map((item) => (item.employee_id === employeeId ? { ...item, deductions: [...item.deductions, deduction] } : item));
 
@@ -341,7 +343,7 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                                         </td>
                                         <td className="text-right">
                                             {formatNumber(
-                                                employee.deductions.reduce((total, deduction) => total + deduction.amount, 0) + employee.employee_receivable
+                                                employee.deductions.reduce((total, deduction) => total + deduction.amount, 0) + employee.employee_receivable,
                                             )}
                                         </td>
                                         <td className="text-right font-bold">{calculateTotalItem(employee)}</td>

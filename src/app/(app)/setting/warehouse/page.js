@@ -178,7 +178,7 @@ const Warehouse = () => {
                     />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                    <div className="card py-4 overflow-y-auto sm:col-span-3">
+                    <div className="card overflow-y-auto sm:col-span-3">
                         <table className="table w-full text-xs">
                             <thead>
                                 <tr>

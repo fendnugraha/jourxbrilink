@@ -1,11 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "@/libs/axios";
 import Label from "@/components/Label";
 import formatNumber from "@/libs/formatNumber";
 import { DateTimeNow } from "@/libs/format";
 
-const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, user, accountBalance, openingCash }) => {
+const CreateMutation = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, user, accountBalance }) => {
     const { today } = DateTimeNow();
     const [formData, setFormData] = useState({
         date_issued: today,
@@ -20,26 +20,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
 
-    const hqAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === 1);
     const branchAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === Number(user.role?.warehouse_id));
-    useEffect(() => {
-        if (!formData.cred_code || !cashBank?.length) return;
-        const isCash = cashBank.find((acc) => Number(acc.id) === Number(formData.cred_code)).account_id === 1;
-
-        if (isCash) return;
-        const selectedCred = cashBank.find((acc) => Number(acc.id) === Number(formData.cred_code));
-
-        if (!selectedCred) return;
-
-        const matchingDebt = cashBank.find((acc) => acc.account_group === selectedCred.account_group);
-
-        if (matchingDebt) {
-            setFormData((prev) => ({
-                ...prev,
-                debt_code: matchingDebt.id,
-            }));
-        }
-    }, [formData.cred_code, cashBank]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -47,7 +28,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
         try {
             const response = await axios.post("/api/create-mutation", formData);
             const successMessage =
-                response.data.journal.cred.acc_name + " ke " + response.data.journal.debt.acc_name + " sebesar " + formatNumber(response.data.journal.amount);
+                response.data.journal.cred.acc_name + " ke " + response.data.journal.debt.acc_name + " Rp " + formatNumber(response.data.journal.amount);
             notification({
                 type: "success",
                 message: response.data.message + " " + successMessage,
@@ -75,11 +56,6 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
 
     const initBalances = JSON.parse(localStorage.getItem("initBalances")) ?? {};
     const selectedBranchAccount = accountBalance?.data?.chartOfAccounts?.find((account) => Number(account.id) === Number(formData.cred_code));
-
-    const cashAccountBalance = accountBalance?.data?.chartOfAccounts?.find(
-        (account) => Number(account.id) === Number(user?.role?.warehouse?.chart_of_account_id),
-    );
-    const calculateDepositCash = cashAccountBalance?.balance - openingCash;
 
     return (
         <form onSubmit={handleSubmit}>
@@ -109,13 +85,6 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                             setFormData({
                                 ...formData,
                                 cred_code: Number(e.target.value),
-                                amount:
-                                    Number(e.target.value) === Number(user?.role?.warehouse?.chart_of_account_id)
-                                        ? Number(calculateDepositCash)
-                                        : balanceDifference > 0
-                                          ? balanceDifference
-                                          : 0,
-                                debt_code: Number(e.target.value) === Number(user?.role?.warehouse?.chart_of_account_id) ? 2 : "",
                             });
                         }}
                         value={formData.cred_code}
@@ -144,14 +113,17 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                         }
                         value={formData.debt_code}
                         className="form-control"
+                        disabled={!formData.cred_code}
                         required
                     >
                         <option value="">--Pilih tujuan mutasi--</option>
-                        {hqAccount.map((hq) => (
-                            <option key={hq.id} value={hq.id}>
-                                {hq.acc_name}
-                            </option>
-                        ))}
+                        {branchAccount
+                            .filter((acc) => acc.id !== formData.cred_code)
+                            .map((hq) => (
+                                <option key={hq.id} value={hq.id}>
+                                    {hq.acc_name}
+                                </option>
+                            ))}
                     </select>
                     {errors?.debt_code && <span className="text-red-500 text-xs">{errors?.debt_code}</span>}
                 </div>
@@ -217,4 +189,4 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
     );
 };
 
-export default CreateMutationToHq;
+export default CreateMutation;

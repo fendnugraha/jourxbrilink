@@ -2,8 +2,8 @@
 import Button from "@/components/Button";
 import Dropdown from "@/components/Dropdown";
 import Modal from "@/components/Modal";
-import { ArrowDownIcon, ArrowUpIcon, ChevronRightIcon, HandCoinsIcon, ShoppingBagIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { ArrowDownIcon, ArrowUpDown, ArrowUpIcon, ChevronRightIcon, HandCoinsIcon, ShoppingBagIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import CreateTransfer from "./CreateTransfer";
 import CreateCashWithdrawal from "./CreateCashWithdrawal";
 import CreateVoucher from "./CreateVoucher";
@@ -11,7 +11,7 @@ import CreateDeposit from "./CreateDeposit";
 import CreateMutationToHq from "./CreateMutationToHq";
 import CreateBankAdminFee from "./CreateBankAdminFee";
 import CreateExpense from "./CreateExpense";
-import VoucherSalesTable from "../../dashboard/components/VoucherSalesTable";
+import CreateMutation from "./CreateMutation";
 
 const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNotification, cashBank }) => {
     const warehouse = Number(user?.role?.warehouse_id);
@@ -24,6 +24,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
     const [isModalCreateExpenseOpen, setIsModalCreateExpenseOpen] = useState(false);
     const [isModalCreateBankAdminFeeOpen, setIsModalCreateBankAdminFeeOpen] = useState(false);
     const [isModalCreateMutationToHqOpen, setIsModalCreateMutationToHqOpen] = useState(false);
+    const [isModalCreateMutationOpen, setIsModalCreateMutationOpen] = useState(false);
 
     const [isTransferActive, setIsTransferActive] = useState(false);
     const [isCashWithdrawalActive, setIsCashWithdrawalActive] = useState(false);
@@ -44,6 +45,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
         setIsModalCreateMutationToHqOpen(false);
         setIsModalCreateBankAdminFeeOpen(false);
         setIsModalCreateExpenseOpen(false);
+        setIsModalCreateMutationOpen(false);
     };
 
     const filteredCashBankByWarehouse = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === warehouse);
@@ -85,78 +87,84 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
     const [selectedBankAccount, setSelectedBankAccount] = useState("");
     return (
         <>
-            <div className="hidden sm:flex gap-2 mb-4 px-4">
-                <Button
-                    buttonType="primary"
-                    className="mb-4 group text-nowrap"
-                    onClick={() => {
-                        setIsModalCreateTransferOpen(true);
-                        setIsTransferActive(true);
-                        setIsCashWithdrawalActive(false);
-                    }}
-                >
-                    Transfer Uang <ArrowDownIcon size={18} className="inline group-hover:scale-125 delay-300 transition-transform duration-200" />
-                </Button>
-                <Button
-                    buttonType="primary"
-                    className="mb-4 group"
-                    onClick={() => {
-                        setIsModalCreateCashWithdrawalOpen(true);
-                        setIsTransferActive(false);
-                        setIsCashWithdrawalActive(true);
-                    }}
-                >
-                    Tarik Tunai <ArrowUpIcon size={18} className="inline group-hover:scale-125 delay-300 transition-transform duration-200" />
-                </Button>
-                <Dropdown
-                    trigger={
-                        <Button buttonType="success" className={"group text-nowrap"}>
-                            Voucher & Deposit{" "}
-                            <ChevronRightIcon size={18} className="inline group-hover:rotate-90 delay-300 transition-transform duration-200" />
-                        </Button>
-                    }
-                    align="left"
-                >
-                    <ul className="min-w-max">
-                        <li className="border-b border-slate-200 hover:bg-slate-100 dark:border-slate-500 dark:hover:bg-slate-500 ">
-                            <button className="w-full text-sm text-left py-2 px-4 " onClick={() => setIsModalCreateVoucherOpen(true)}>
-                                Voucher & SP
-                            </button>
-                        </li>
-                        <li className="hover:bg-slate-100 dark:hover:bg-slate-500">
-                            <button className="w-full text-sm text-left py-2 px-4" onClick={() => setIsModalCreateDepositOpen(true)}>
-                                Penjualan Pulsa dll.
-                            </button>
-                        </li>
-                    </ul>
-                </Dropdown>
-                <Dropdown
-                    trigger={
-                        <Button buttonType="danger" className={"group text-nowrap"}>
-                            Pengeluaran (Biaya){" "}
-                            <ChevronRightIcon size={18} className="inline group-hover:rotate-90 delay-300 transition-transform duration-200" />
-                        </Button>
-                    }
-                    align="left"
-                >
-                    <ul className="min-w-max">
-                        <li className="border-b border-slate-200 hover:bg-slate-100 dark:border-slate-500 dark:hover:bg-slate-500 ">
-                            <button className="w-full text-sm text-left py-2 px-4 " onClick={() => setIsModalCreateMutationToHqOpen(true)}>
-                                Pengembalian Saldo Kas & Bank
-                            </button>
-                        </li>
-                        <li className="border-b border-slate-200 hover:bg-slate-100 dark:border-slate-500 dark:hover:bg-slate-500 ">
-                            <button className="w-full text-sm text-left py-2 px-4" onClick={() => setIsModalCreateExpenseOpen(true)}>
-                                Biaya Operasional
-                            </button>
-                        </li>
-                        <li className="hover:bg-slate-100 dark:hover:bg-slate-500">
-                            <button className="w-full text-sm text-left py-2 px-4" onClick={() => setIsModalCreateBankAdminFeeOpen(true)}>
-                                Biaya Admin Bank
-                            </button>
-                        </li>
-                    </ul>
-                </Dropdown>
+            <div className="hidden sm:flex gap-2 mb-4 px-4 justify-between">
+                <div className="flex gap-2">
+                    <Button
+                        buttonType="primary"
+                        className="mb-4 group text-nowrap"
+                        onClick={() => {
+                            setIsModalCreateTransferOpen(true);
+                            setIsTransferActive(true);
+                            setIsCashWithdrawalActive(false);
+                        }}
+                    >
+                        Transfer <ArrowUpIcon size={18} className="inline group-hover:scale-125 delay-300 transition-transform duration-200" />
+                    </Button>
+                    <Button
+                        buttonType="primary"
+                        className="mb-4 group"
+                        onClick={() => {
+                            setIsModalCreateCashWithdrawalOpen(true);
+                            setIsTransferActive(false);
+                            setIsCashWithdrawalActive(true);
+                        }}
+                    >
+                        Tarik Tunai <ArrowDownIcon size={18} className="inline group-hover:scale-125 delay-300 transition-transform duration-200" />
+                    </Button>
+                </div>
+                <div className="flex gap-2">
+                    <Button buttonType="secondary" className="mb-4 group" onClick={() => setIsModalCreateMutationOpen(true)}>
+                        Mutasi <ArrowUpDown size={18} className="inline group-hover:scale-125 delay-300 transition-transform duration-200" />
+                    </Button>
+                    <Dropdown
+                        trigger={
+                            <Button buttonType="success" className={"group text-nowrap"}>
+                                Vcr & Deposit{" "}
+                                <ChevronRightIcon size={18} className="inline group-hover:rotate-90 delay-300 transition-transform duration-200" />
+                            </Button>
+                        }
+                        align="left"
+                    >
+                        <ul className="min-w-max">
+                            <li className="border-b border-slate-200 hover:bg-slate-100 dark:border-slate-500 dark:hover:bg-slate-500 ">
+                                <button className="w-full text-sm text-left py-2 px-4 " onClick={() => setIsModalCreateVoucherOpen(true)}>
+                                    SP & Voucher
+                                </button>
+                            </li>
+                            <li className="hover:bg-slate-100 dark:hover:bg-slate-500">
+                                <button className="w-full text-sm text-left py-2 px-4" onClick={() => setIsModalCreateDepositOpen(true)}>
+                                    Deposit
+                                </button>
+                            </li>
+                        </ul>
+                    </Dropdown>
+                    <Dropdown
+                        trigger={
+                            <Button buttonType="danger" className={"group text-nowrap"}>
+                                Biaya <ChevronRightIcon size={18} className="inline group-hover:rotate-90 delay-300 transition-transform duration-200" />
+                            </Button>
+                        }
+                        align="left"
+                    >
+                        <ul className="min-w-max">
+                            <li className="border-b border-slate-200 hover:bg-slate-100 dark:border-slate-500 dark:hover:bg-slate-500 ">
+                                <button className="w-full text-sm text-left py-2 px-4 " onClick={() => setIsModalCreateMutationToHqOpen(true)}>
+                                    Mutasi ke Pusat (HQ)
+                                </button>
+                            </li>
+                            <li className="border-b border-slate-200 hover:bg-slate-100 dark:border-slate-500 dark:hover:bg-slate-500 ">
+                                <button className="w-full text-sm text-left py-2 px-4" onClick={() => setIsModalCreateExpenseOpen(true)}>
+                                    B. Operasional
+                                </button>
+                            </li>
+                            <li className="hover:bg-slate-100 dark:hover:bg-slate-500">
+                                <button className="w-full text-sm text-left py-2 px-4" onClick={() => setIsModalCreateBankAdminFeeOpen(true)}>
+                                    B. Admin Bank
+                                </button>
+                            </li>
+                        </ul>
+                    </Dropdown>
+                </div>
             </div>
             <Modal
                 isOpen={isModalCreateTransferOpen}
@@ -174,7 +182,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
                             isTransferActive ? "bg-lime-500 text-white scale-105 text-sm" : "bg-slate-400 text-slate-300 text-xs"
                         } w-full py-1 cursor-pointer hover:text-sm transition-all duration-100 ease-in`}
                     >
-                        Transfer Uang
+                        Transfer
                     </button>
                     <button
                         onClick={() => {
@@ -185,7 +193,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
                             isCashWithdrawalActive ? "bg-lime-500 text-white scale-105 text-sm" : "bg-slate-400 text-slate-300 text-xs"
                         } w-full py-1 cursor-pointer hover:text-sm transition-all duration-100 ease-in`}
                     >
-                        Tarik Tunai
+                        Tarik
                     </button>
                 </div>
                 {isTransferActive && (
@@ -293,6 +301,17 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
                 <CreateMutationToHq
                     cashBank={cashBank}
                     isModalOpen={setIsModalCreateMutationToHqOpen}
+                    notification={setNotification}
+                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                    user={user}
+                    accountBalance={accountBalance}
+                    openingCash={openingCash}
+                />
+            </Modal>
+            <Modal isOpen={isModalCreateMutationOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Mutasi Antar Bank">
+                <CreateMutation
+                    cashBank={cashBank}
+                    isModalOpen={setIsModalCreateMutationOpen}
                     notification={setNotification}
                     fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                     user={user}

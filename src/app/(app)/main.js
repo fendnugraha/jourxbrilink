@@ -173,7 +173,7 @@ const MainPage = ({ children, headerTitle }) => {
 
                 <div className="flex items-center justify-end sm:gap-4">
                     {WarehouseRank > 0 && (
-                        <div className="text-lg sm:text-md drop-shadow-xs bg-none sm:bg-white dark:sm:bg-slate-800 sm:drop-shadow rounded-full px-4 sm:ps-1 sm:pe-6 py-1 flex flex-col justify-end items-end">
+                        <div className="text-lg sm:text-md drop-shadow-xs bg-none sm:bg-white dark:border dark:border-slate-50/20 dark:sm:bg-slate-700 sm:drop-shadow rounded-full px-4 sm:ps-1 sm:pe-6 py-1 flex flex-col justify-end items-end">
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => mutate("/api/get-rank-by-profit")}

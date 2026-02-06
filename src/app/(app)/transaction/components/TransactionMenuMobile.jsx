@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { ArrowDownIcon, ArrowUpIcon, ChevronRightIcon, HandCoinsIcon, ShoppingBagIcon } from "lucide-react";
+import { ArrowDownIcon, ArrowUpDown, ArrowUpIcon, ChevronRightIcon, HandCoinsIcon, ShoppingBagIcon } from "lucide-react";
 import CreateTransfer from "./CreateTransfer";
 import CreateCashWithdrawal from "./CreateCashWithdrawal";
 import CreateVoucher from "./CreateVoucher";
@@ -9,6 +9,8 @@ import CreateMutationToHq from "./CreateMutationToHq";
 import CreateBankAdminFee from "./CreateBankAdminFee";
 import CreateExpense from "./CreateExpense";
 import Modal from "@/components/Modal";
+import CreateMutation from "./CreateMutation";
+import { set } from "date-fns";
 
 const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance, setNotification, cashBank, warehouseCashId, warehouse }) => {
     const [isVoucherMenuOpen, setIsVoucherMenuOpen] = useState(false);
@@ -21,6 +23,7 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
     const [isModalCreateExpenseOpen, setIsModalCreateExpenseOpen] = useState(false);
     const [isModalCreateBankAdminFeeOpen, setIsModalCreateBankAdminFeeOpen] = useState(false);
     const [isModalCreateMutationToHqOpen, setIsModalCreateMutationToHqOpen] = useState(false);
+    const [isModalCreateMutationOpen, setIsModalCreateMutationOpen] = useState(false);
 
     const [isTransferActive, setIsTransferActive] = useState(false);
     const [isCashWithdrawalActive, setIsCashWithdrawalActive] = useState(false);
@@ -43,6 +46,7 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
         setIsModalCreateExpenseOpen(false);
         setIsVoucherMenuOpen(false);
         setIsExpenseMenuOpen(false);
+        setIsModalCreateMutationOpen(false);
     };
 
     const calculateFee = (amount) => {
@@ -101,10 +105,10 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                         onClick={() => setIsModalCreateVoucherOpen(true)}
                         className="w-full text-slate-700 p-2 border-b border-slate-300 hover:bg-slate-200"
                     >
-                        Penjualan Voucher
+                        SP & Voucher
                     </button>
                     <button onClick={() => setIsModalCreateDepositOpen(true)} className="w-full text-slate-700 p-2 hover:bg-slate-200">
-                        Input Deposit
+                        Deposit
                     </button>
                 </div>
             </div>
@@ -114,16 +118,16 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                         onClick={() => setIsModalCreateMutationToHqOpen(true)}
                         className="w-full text-slate-700 p-2 border-b border-slate-300 hover:bg-slate-200"
                     >
-                        Pengembalian Saldo
+                        Mutasi ke Pusat (HQ)
                     </button>
                     <button
                         onClick={() => setIsModalCreateExpenseOpen(true)}
                         className="w-full text-slate-700 p-2 border-b border-slate-300 hover:bg-slate-200"
                     >
-                        Biaya Operasional
+                        B. Operasional
                     </button>
                     <button onClick={() => setIsModalCreateBankAdminFeeOpen(true)} className="w-full text-slate-700 p-2 hover:bg-slate-200">
-                        Biaya Admin Bank
+                        B. Admin Bank
                     </button>
                 </div>
             </div>
@@ -149,11 +153,24 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                     </button>
                     <button
                         onClick={() => {
+                            setIsModalCreateMutationOpen(true);
+                            setIsExpenseMenuOpen(false);
+                            setIsVoucherMenuOpen(false);
+                            setIsTransferActive(false);
+                            setIsCashWithdrawalActive(false);
+                        }}
+                        className="w-full flex flex-col items-center justify-center py-4 text-xs gap-1"
+                    >
+                        <ArrowUpDown className="w-7 h-7" /> Mutasi
+                    </button>
+                    <button
+                        onClick={() => {
                             setIsModalCreateTransferOpen(true);
                             setIsExpenseMenuOpen(false);
                             setIsVoucherMenuOpen(false);
                             setIsTransferActive(true);
                             setIsCashWithdrawalActive(false);
+                            setIsModalCreateMutationOpen(false);
                         }}
                         className="w-full flex flex-col items-center justify-center py-4 text-xs gap-1"
                     >
@@ -166,6 +183,7 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                             setIsVoucherMenuOpen(false);
                             setIsTransferActive(false);
                             setIsCashWithdrawalActive(true);
+                            setIsModalCreateMutationOpen(false);
                         }}
                         className="w-full flex flex-col items-center justify-center py-4 text-xs gap-1"
                     >
@@ -300,6 +318,17 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                 <CreateMutationToHq
                     cashBank={cashBank}
                     isModalOpen={setIsModalCreateMutationToHqOpen}
+                    notification={setNotification}
+                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                    user={user}
+                    accountBalance={accountBalance}
+                    openingCash={openingCash}
+                />
+            </Modal>
+            <Modal isOpen={isModalCreateMutationOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Mutasi Antar Bank">
+                <CreateMutation
+                    cashBank={cashBank}
+                    isModalOpen={setIsModalCreateMutationOpen}
                     notification={setNotification}
                     fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                     user={user}

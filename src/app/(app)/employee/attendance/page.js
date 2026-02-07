@@ -17,6 +17,7 @@ import AttendanceTableMonthly from "./AttendanceTableMonthly";
 import CreateAttendance from "./CreateAttendance";
 import Notification from "@/components/Notification";
 import { useAuth } from "@/libs/auth";
+import AttendanceSummary from "./AttendanceSummary";
 
 const AttendancePage = () => {
     const { user } = useAuth({ middleware: "auth" });
@@ -178,12 +179,19 @@ const AttendancePage = () => {
                         >
                             {dateToMonthYear(startDate)}
                         </button>
+                        <button
+                            className={`${selectPage === "summary" ? "bg-slate-800 text-white" : "text-slate-600"} px-4 py-1 rounded-lg min-w-32`}
+                            onClick={() => setSelectPage("summary")}
+                        >
+                            Summary
+                        </button>
                     </div>
                     <div className="grid grid-cols-1 gap-4">
                         {selectPage === "daily" && <AttendanceTable selectedZone={selectedZone} warehouses={warehouses} fetchWarehouses={fetchWarehouses} />}
                         {selectPage === "monthly" && (
                             <AttendanceTableMonthly selectedZone={selectedZone} dateString={startDate} warehouseMonthly={warehouseMonthly} />
                         )}
+                        {selectPage === "summary" && <AttendanceSummary dateString={startDate} />}
                     </div>
                 </div>
             </div>

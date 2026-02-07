@@ -25,6 +25,7 @@ const EmployeeTable = ({ employees, fetchContacts, notification }) => {
     const [search, setSearch] = useState("");
 
     const findedEmployee = employees.find((emp) => emp.id === selectedEmployee) || null;
+
     return (
         <div className="card p-4">
             <h1 className="card-title mb-4">Daftar Karyawan</h1>

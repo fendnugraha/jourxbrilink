@@ -139,7 +139,7 @@ const DeliveryPage = () => {
                                     </div>
                                 ))
                         ) : (
-                            <div className="card p-4 mb-4 h-full flex justify-center items-center">
+                            <div className="h-full flex justify-center items-center">
                                 <h1 className="text-xs">Belum ada mutasi kas.</h1>
                             </div>
                         )}

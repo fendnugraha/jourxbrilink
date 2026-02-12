@@ -1,10 +1,13 @@
 "use client";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
+import { useAuth } from "@/libs/auth";
 import axios from "@/libs/axios";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, use } from "react";
 
 const UpdateUser = ({ isModalOpen, notification, fetchUsers, findSelectedAccountId }) => {
+    const { user } = useAuth;
+    const userRole = user?.role?.role;
     const [loading, setLoading] = useState(true);
     const [updateUserData, setUpdateUserData] = useState({
         name: findSelectedAccountId?.name,
@@ -89,6 +92,7 @@ const UpdateUser = ({ isModalOpen, notification, fetchUsers, findSelectedAccount
                     <option value="Administrator">Administrator</option>
                     <option value="Kasir">Kasir</option>
                     <option value="Courier">Kurir</option>
+                    {userRole === "Super Admin" && <option value="Super Admin">Super Admin</option>}
                 </select>
             </div>
             <div className="flex justify-end gap-2">

@@ -6,7 +6,7 @@ import axios from "@/libs/axios";
 import { useState, useEffect, useCallback, use } from "react";
 
 const UpdateUser = ({ isModalOpen, notification, fetchUsers, findSelectedAccountId }) => {
-    const { user } = useAuth;
+    const { user } = useAuth({ middleware: "auth" });
     const userRole = user?.role?.role;
     const [loading, setLoading] = useState(true);
     const [updateUserData, setUpdateUserData] = useState({

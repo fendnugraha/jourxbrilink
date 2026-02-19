@@ -11,6 +11,7 @@ export const useGetDailyDashboard = (warehouse, startDate, endDate) => {
         data: dailyDashboard,
         error,
         isValidating,
+        mutate,
     } = useSWR(shouldFetch ? ["/api/daily-dashboard", { warehouse, startDate, endDate }] : null, fetcher, {
         fallbackData: [],
         revalidateOnFocus: true,
@@ -20,5 +21,5 @@ export const useGetDailyDashboard = (warehouse, startDate, endDate) => {
     if (error) return { error: error.response?.data?.errors };
     if (!dailyDashboard && !isValidating) return { loading: true };
 
-    return { dailyDashboard, loading: isValidating, error };
+    return { dailyDashboard, loading: isValidating, error, mutateDailyDashboard: mutate };
 };

@@ -17,6 +17,7 @@ import Button from "@/components/Button";
 import { add, set } from "date-fns";
 import getAddress from "@/libs/getAddress";
 import AttendanceCalendar from "../../employee/attendance/AttendanceCalendar";
+import { useGetDailyDashboard } from "@/libs/getDailyDashboard";
 
 const getCurrentDate = () => {
     const nowUTC = new Date();
@@ -65,7 +66,9 @@ const TransactionContent = () => {
 
     const [endDate, setEndDate] = useState(getCurrentDate());
     const [selectedWarehouseId, setSelectedWarehouseId] = useState(warehouse);
-    const { accountBalance, error: accountBalanceError, loading: isValidating } = useCashBankBalance(selectedWarehouseId, endDate);
+    const { dailyDashboard, loading: isLoading, error: dailyDashboardError } = useGetDailyDashboard(warehouse, getCurrentDate(), getCurrentDate());
+    const { accountBalance, error: accountBalanceError, loading: isValidating, mutateCashBankBalance } = useCashBankBalance(selectedWarehouseId, endDate);
+
     const fetchJournalsByWarehouse = useCallback(async (selectedWarehouse = warehouse, startDate = getCurrentDate(), endDate = getCurrentDate()) => {
         setLoading(true);
         try {
@@ -84,7 +87,8 @@ const TransactionContent = () => {
     }, [fetchJournalsByWarehouse]); // Include startDate and endDate in the dependency array
 
     useEffect(() => {
-        mutate(`/api/get-cash-bank-balance/${selectedWarehouseId}/${endDate}`);
+        // mutate(`/api/get-cash-bank-balance/${selectedWarehouseId}/${endDate}`);
+        mutateCashBankBalance();
     }, [journalsByWarehouse]);
 
     const [selectTable, setSelectTable] = useState("transaksi");
@@ -102,7 +106,7 @@ const TransactionContent = () => {
                 setLoading(false);
             }
         },
-        [selectedWarehouseId, endDate]
+        [selectedWarehouseId, endDate],
     );
 
     useEffect(() => {
@@ -161,6 +165,7 @@ const TransactionContent = () => {
                             user={user}
                             fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                             accountBalance={accountBalance}
+                            mutateCashBankBalance={mutateCashBankBalance}
                             setNotification={setNotification}
                             cashBank={cashBank}
                         />
@@ -185,12 +190,12 @@ const TransactionContent = () => {
                             >
                                 Mutasi Kas{" "}
                                 {journalsByWarehouse.data?.filter(
-                                    (journal) => Number(journal.debt_code) === warehouseCashId && journal.trx_type === "Mutasi Kas"
+                                    (journal) => Number(journal.debt_code) === warehouseCashId && journal.trx_type === "Mutasi Kas",
                                 ).length > 0 && (
                                     <span className="bg-green-500 dark:bg-green-600 text-xs rounded-full px-2 py-0.5 ml-2">
                                         {
                                             journalsByWarehouse.data?.filter(
-                                                (journal) => Number(journal.debt_code) === warehouseCashId && journal.trx_type === "Mutasi Kas"
+                                                (journal) => Number(journal.debt_code) === warehouseCashId && journal.trx_type === "Mutasi Kas",
                                             ).length
                                         }
                                     </span>
@@ -256,7 +261,15 @@ const TransactionContent = () => {
                                 {loading ? "Updating..." : "Update Lokasi Cabang"}
                             </Button>
                         )}
-                        <CashBankBalance warehouse={warehouse} accountBalance={accountBalance} isValidating={isValidating} user={user} />
+                        <CashBankBalance
+                            warehouse={warehouse}
+                            dailyDashboard={dailyDashboard}
+                            isLoading={isLoading}
+                            accountBalance={accountBalance}
+                            mutateCashBankBalance={mutateCashBankBalance}
+                            isValidating={isValidating}
+                            user={user}
+                        />
                         <div className="mt-4 hidden sm:block">
                             <VoucherSalesTable
                                 warehouse={warehouse}
@@ -274,6 +287,7 @@ const TransactionContent = () => {
                 user={user}
                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                 accountBalance={accountBalance}
+                mutateCashBankBalance={mutateCashBankBalance}
                 setNotification={setNotification}
                 cashBank={cashBank}
                 warehouseCashId={warehouseCashId}

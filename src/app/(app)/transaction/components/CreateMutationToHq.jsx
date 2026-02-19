@@ -5,7 +5,7 @@ import Label from "@/components/Label";
 import formatNumber from "@/libs/formatNumber";
 import { DateTimeNow } from "@/libs/format";
 
-const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, user, accountBalance, openingCash }) => {
+const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, user, accountBalance, mutateCashBankBalance, openingCash }) => {
     const { today } = DateTimeNow();
     const [formData, setFormData] = useState({
         date_issued: today,
@@ -75,6 +75,26 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
 
     const initBalances = JSON.parse(localStorage.getItem("initBalances")) ?? {};
     const selectedBranchAccount = accountBalance?.data?.chartOfAccounts?.find((account) => Number(account.id) === Number(formData.cred_code));
+
+    const updateDiffAmount = async (id) => {
+        const selectedAccount = accountBalance?.data?.chartOfAccounts?.find((acc) => Number(acc.id) === Number(id));
+
+        if (selectedAccount.account_id !== 1) return;
+
+        const initBalance = initBalances[id] ?? 0;
+        const balanceDifference = (selectedAccount?.balance ?? 0) - initBalance;
+
+        try {
+            await axios.put(`/api/update-account-limit/${id}`, {
+                // limit: balance,
+                diff: balanceDifference, // kalau backend kamu wajib diff
+            });
+
+            mutateCashBankBalance();
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const cashAccountBalance = accountBalance?.data?.chartOfAccounts?.find(
         (account) => Number(account.id) === Number(user?.role?.warehouse?.chart_of_account_id),

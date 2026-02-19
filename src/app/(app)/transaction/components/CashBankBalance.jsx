@@ -1,8 +1,9 @@
 "use client";
 import Dropdown from "@/components/Dropdown";
 import Modal from "@/components/Modal";
+import axios from "@/libs/axios";
+import { formatDateTime } from "@/libs/format";
 import formatNumber from "@/libs/formatNumber";
-import { useGetDailyDashboard } from "@/libs/getDailyDashboard";
 import { ChevronDown, CircleAlertIcon, CopyIcon, LoaderCircle, RefreshCcwIcon, ScanQrCodeIcon, SettingsIcon, XCircleIcon } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useState } from "react";
@@ -16,7 +17,7 @@ const getCurrentDate = () => {
     return `${year}-${month}-${day}`;
 };
 
-const CashBankBalance = ({ accountBalance, isValidating, user }) => {
+const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidating, mutateCashBankBalance, user }) => {
     const summarizeBalance = accountBalance?.data?.chartOfAccounts?.reduce((total, account) => total + account.balance, 0);
     const [showBalanceReport, setShowBalanceReport] = useState(true);
     const [showCashBankBalance, setShowCashBankBalance] = useState(true);
@@ -24,42 +25,52 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
     const [isModalSettingInitBalancesOpen, setIsModalSettingInitBalancesOpen] = useState(false);
     const [initBalances, setInitBalances] = useState({});
     const [loaded, setLoaded] = useState(false);
-
-    // Load data saat pertama kali mount
-    useEffect(() => {
-        const stored = localStorage.getItem("initBalances");
-        if (stored) {
-            setInitBalances(JSON.parse(stored));
-        }
-        setLoaded(true);
-    }, []);
-
-    // Simpan data hanya setelah load selesai
-    useEffect(() => {
-        if (loaded) {
-            localStorage.setItem("initBalances", JSON.stringify(initBalances));
-        }
-        setOpeningCash(initBalances[warehouseCashId]);
-    }, [initBalances, loaded]);
-
-    // Fungsi untuk update
-    const addToInitBalances = (id, balance) => {
-        setInitBalances((prevBalances) => ({
-            ...prevBalances,
-            [id]: balance,
-        }));
-    };
-
+    const [limits, setLimits] = useState({});
     const warehouse = Number(user?.role?.warehouse_id);
     const warehouseName = user?.role?.warehouse?.name;
     const warehouseCashId = Number(user?.role?.warehouse?.chart_of_account_id);
     const [isCopied, setIsCopied] = useState(false);
-    const [openingCash, setOpeningCash] = useState(initBalances[warehouseCashId]);
+    const [openingCash, setOpeningCash] = useState(0);
+
+    // Load data saat pertama kali mount
+    useEffect(() => {
+        if (accountBalance?.data?.chartOfAccounts) {
+            const formatted = accountBalance.data.chartOfAccounts.reduce((acc, account) => {
+                acc[account.id] = account.limit?.limit_amount ?? 0;
+                return acc;
+            }, {});
+
+            setInitBalances(formatted);
+            localStorage.setItem("initBalances", JSON.stringify(formatted));
+        }
+    }, [accountBalance]);
+
+    // Fungsi untuk update
+    const addToInitBalances = async (id, balance) => {
+        // setInitBalances((prevBalances) => ({ // ...prevBalances, // [id]: balance, // }));
+        try {
+            await axios.put(`/api/update-account-limit/${id}`, {
+                limit: balance,
+                diff: 0, // kalau backend kamu wajib diff
+            });
+
+            // notification({
+            //     type: "success",
+            //     message: response.data.message,
+            // });
+
+            mutateCashBankBalance();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        setOpeningCash(initBalances[warehouseCashId] ?? 0);
+    }, [initBalances]);
 
     const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
-
-    const { dailyDashboard, loading: isLoading, error: dailyDashboardError } = useGetDailyDashboard(warehouse, getCurrentDate(), getCurrentDate());
 
     const closeModal = () => {
         setIsModalSettingInitBalancesOpen(false);
@@ -91,7 +102,7 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
 
         const lines = dailyReportData.map(({ name, value }) => `${name}: ${value}`);
 
-        return `Report ${warehouseName}:\n\n${lines.join("\n")}\n\nTotal Setoran: ${formatNumber(
+        return `${formatDateTime(getCurrentDate())}\nReport ${warehouseName}:\n\n${lines.join("\n")}\n\nTotal Setoran: ${formatNumber(
             dailyDashboard?.data?.totalCash > openingCash ? totalSetoran - openingCash : totalSetoran,
         )}`;
     };
@@ -109,14 +120,27 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
             <Modal isOpen={isModalSettingInitBalancesOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Set Saldo Awal Kas & Bank">
                 {accountBalance?.data?.chartOfAccounts?.map((account) => (
                     <div className="group p-2" key={account.id}>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <h1 className="text-xs">{account.acc_name}</h1>
-                            <input
-                                type="number"
-                                className="form-control block w-full p-2.5"
-                                value={initBalances[account.id] || ""}
-                                onChange={(e) => addToInitBalances(account.id, Number(e.target.value))}
-                            />
+                            <div className="flex items-center gap-1">
+                                <input
+                                    type="number"
+                                    className="form-control block w-full p-2.5"
+                                    value={limits[account.id] ?? account.limit?.limit_amount ?? ""}
+                                    onChange={(e) =>
+                                        setLimits((prev) => ({
+                                            ...prev,
+                                            [account.id]: Number(e.target.value),
+                                        }))
+                                    }
+                                />
+                                <button
+                                    onClick={() => addToInitBalances(account.id, limits[account.id])}
+                                    className="text-xs bg-blue-500 text-white p-2 rounded-lg"
+                                >
+                                    Set
+                                </button>
+                            </div>
                         </div>
                     </div>
                 ))}
@@ -174,11 +198,11 @@ const CashBankBalance = ({ accountBalance, isValidating, user }) => {
                                     </h1>
                                     <h2
                                         className={`text-xs ${
-                                            account.balance - initBalances[account.id] > 0 ? "text-green-200" : "text-red-200"
+                                            account.balance - account.limit?.limit_amount > 0 ? "text-green-200" : "text-red-200"
                                         } group-hover:scale-105 transition delay-100 duration-150 ease-out`}
-                                        hidden={!initBalances[account.id]}
+                                        hidden={!account.limit?.limit_amount}
                                     >
-                                        {formatNumber(account.balance - initBalances[account.id])}
+                                        {formatNumber(account.balance - account.limit?.limit_amount)}
                                     </h2>
                                 </div>
                             </div>

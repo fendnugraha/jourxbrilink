@@ -13,7 +13,7 @@ import CreateBankAdminFee from "./CreateBankAdminFee";
 import CreateExpense from "./CreateExpense";
 import CreateMutation from "./CreateMutation";
 
-const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNotification, cashBank }) => {
+const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, mutateCashBankBalance, setNotification, cashBank }) => {
     const warehouse = Number(user?.role?.warehouse_id);
     const warehouseCashId = Number(user?.role?.warehouse?.chart_of_account_id);
 
@@ -305,6 +305,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, setNo
                     fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                     user={user}
                     accountBalance={accountBalance}
+                    mutateCashBankBalance={mutateCashBankBalance}
                     openingCash={openingCash}
                 />
             </Modal>

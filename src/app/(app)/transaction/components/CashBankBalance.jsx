@@ -213,7 +213,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                                     <h1 className="group-hover:scale-105 text-sm text-slate-700 dark:text-lime-400 font-bold transition delay-100 duration-150 ease-out">
                                         {formatNumber(account.balance)}
                                     </h1>
-                                    {account.balance - account.limit?.limit_amount !== 0 ? (
+                                    {account.balance - account.limit?.limit_amount !== 0 && (
                                         <h2
                                             className={`text-xs ${
                                                 account.balance - account.limit?.limit_amount > 0
@@ -224,8 +224,6 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                                         >
                                             {formatNumber(account.balance - account.limit?.limit_amount)}
                                         </h2>
-                                    ) : (
-                                        <span className="text-xs text-slate-400">-</span>
                                     )}
                                 </div>
                             </div>

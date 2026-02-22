@@ -7,6 +7,7 @@ import DailyDashboard from "./DailyDashboard";
 import CashBankMutation from "./CashBankMutation";
 import VoucherSalesTable from "./VoucherSalesTable";
 import ExpenseTable from "./ExpenseTable";
+import BankAccountDiff from "./BankAccountDiff";
 
 const DashboardContent = () => {
     const { user } = useAuth({ middleware: "auth" });
@@ -30,6 +31,7 @@ const DashboardContent = () => {
                 <CashBankMutation warehouse={warehouse} warehouses={warehouses} userRole={userRole} notification={setNotification} />
                 <VoucherSalesTable warehouse={warehouse} warehouseName={warehouseName} warehouses={warehouses} userRole={userRole} />
                 <ExpenseTable warehouse={warehouse} warehouses={warehouses} userRole={userRole} />
+                {/* <BankAccountDiff /> */}
             </div>
         </>
     );

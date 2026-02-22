@@ -47,7 +47,7 @@ const Account = () => {
                 setLoading(false);
             }
         },
-        [searchTerm]
+        [searchTerm],
     );
 
     useEffect(() => {
@@ -151,14 +151,15 @@ const Account = () => {
                         <tbody>
                             {account?.data?.length === 0 ? (
                                 <tr>
-                                    <td colSpan="6">No products found</td>
+                                    <td colSpan="6">No Accounts found</td>
                                 </tr>
                             ) : (
                                 account?.data?.map((coa) => (
                                     <tr key={coa.id}>
                                         <td>
                                             <span className="font-bold text-blue-800 dark:text-blue-400">
-                                                ID: {coa.id}. {coa.acc_name} {coa.is_locked === 1 && <LockIcon size={16} className="inline" />}
+                                                ID: {coa.id}. {coa.acc_name} {coa.account_group ?? ""}{" "}
+                                                {coa.is_locked === 1 && <LockIcon size={16} className="inline" />}
                                             </span>
                                             <br />
                                             <span className="text-slate-600 dark:text-slate-400">

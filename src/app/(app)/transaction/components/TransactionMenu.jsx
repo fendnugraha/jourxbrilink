@@ -307,6 +307,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, mutat
                     accountBalance={accountBalance}
                     mutateCashBankBalance={mutateCashBankBalance}
                     openingCash={openingCash}
+                    cashId={warehouseCashId}
                 />
             </Modal>
             <Modal isOpen={isModalCreateMutationOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Mutasi Antar Bank">

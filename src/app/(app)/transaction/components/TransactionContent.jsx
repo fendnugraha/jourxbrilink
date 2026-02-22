@@ -290,8 +290,8 @@ const TransactionContent = () => {
                 mutateCashBankBalance={mutateCashBankBalance}
                 setNotification={setNotification}
                 cashBank={cashBank}
-                warehouseCashId={warehouseCashId}
                 warehouse={warehouse}
+                cashId={warehouseCashId}
             />
         </>
     );

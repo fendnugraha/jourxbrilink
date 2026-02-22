@@ -88,7 +88,7 @@ const CreateMutation = ({ isModalOpen, cashBank, notification, fetchJournalsByWa
                             });
                         }}
                         value={formData.cred_code}
-                        className="form-control"
+                        className="form-select"
                         required
                     >
                         <option value="">--Pilih sumber dana--</option>
@@ -112,7 +112,7 @@ const CreateMutation = ({ isModalOpen, cashBank, notification, fetchJournalsByWa
                             })
                         }
                         value={formData.debt_code}
-                        className="form-control"
+                        className="form-select"
                         disabled={!formData.cred_code}
                         required
                     >

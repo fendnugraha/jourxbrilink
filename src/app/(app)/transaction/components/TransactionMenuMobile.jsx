@@ -12,7 +12,7 @@ import Modal from "@/components/Modal";
 import CreateMutation from "./CreateMutation";
 import { set } from "date-fns";
 
-const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance, setNotification, cashBank, warehouseCashId, warehouse }) => {
+const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance, setNotification, mutateCashBankBalance, cashBank, cashId, warehouse }) => {
     const [isVoucherMenuOpen, setIsVoucherMenuOpen] = useState(false);
     const [isExpenseMenuOpen, setIsExpenseMenuOpen] = useState(false);
 
@@ -24,6 +24,7 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
     const [isModalCreateBankAdminFeeOpen, setIsModalCreateBankAdminFeeOpen] = useState(false);
     const [isModalCreateMutationToHqOpen, setIsModalCreateMutationToHqOpen] = useState(false);
     const [isModalCreateMutationOpen, setIsModalCreateMutationOpen] = useState(false);
+    const [selectedBankAccount, setSelectedBankAccount] = useState("");
 
     const [isTransferActive, setIsTransferActive] = useState(false);
     const [isCashWithdrawalActive, setIsCashWithdrawalActive] = useState(false);
@@ -32,7 +33,7 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
     useEffect(() => {
         const initBalances = JSON.parse(localStorage.getItem("initBalances"));
         if (initBalances) {
-            setOpeningCash(initBalances[warehouseCashId]);
+            setOpeningCash(initBalances[cashId]);
         }
     });
 
@@ -287,6 +288,8 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                         calculateFee={calculateFee}
                         setPersonalSetting={setPersonalSetting}
                         feeAdminAuto={personalSetting.feeAdminAuto}
+                        selectedBankAccount={selectedBankAccount}
+                        setSelectedBankAccount={setSelectedBankAccount}
                     />
                 )}
                 {isCashWithdrawalActive && (
@@ -299,6 +302,8 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                         calculateFee={calculateFee}
                         setPersonalSetting={setPersonalSetting}
                         feeAdminAuto={personalSetting.feeAdminAuto}
+                        selectedBankAccount={selectedBankAccount}
+                        setSelectedBankAccount={setSelectedBankAccount}
                     />
                 )}
             </Modal>
@@ -322,7 +327,9 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                     fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                     user={user}
                     accountBalance={accountBalance}
+                    mutateCashBankBalance={mutateCashBankBalance}
                     openingCash={openingCash}
+                    cashId={cashId}
                 />
             </Modal>
             <Modal isOpen={isModalCreateMutationOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Mutasi Antar Bank">

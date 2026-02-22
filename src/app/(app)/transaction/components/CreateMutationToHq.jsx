@@ -5,7 +5,17 @@ import Label from "@/components/Label";
 import formatNumber from "@/libs/formatNumber";
 import { DateTimeNow } from "@/libs/format";
 
-const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, user, accountBalance, mutateCashBankBalance, openingCash }) => {
+const CreateMutationToHq = ({
+    isModalOpen,
+    cashBank,
+    notification,
+    fetchJournalsByWarehouse,
+    user,
+    accountBalance,
+    mutateCashBankBalance,
+    openingCash,
+    cashId,
+}) => {
     const { today } = DateTimeNow();
     const [formData, setFormData] = useState({
         date_issued: today,
@@ -41,6 +51,8 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
         }
     }, [formData.cred_code, cashBank]);
 
+    const initBalances = JSON.parse(localStorage.getItem("initBalances")) ?? {};
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -63,6 +75,13 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                 description: "",
             });
             fetchJournalsByWarehouse();
+
+            if (formData.cred_code === cashId) {
+                await updateAllDiffAmounts();
+            }
+
+            isModalOpen(false);
+            setErrors([]);
         } catch (error) {
             setErrors(error.response?.data?.errors);
             notification({ type: "error", message: error.response?.data?.message || "Something went wrong." });
@@ -73,7 +92,6 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
         }
     };
 
-    const initBalances = JSON.parse(localStorage.getItem("initBalances")) ?? {};
     const selectedBranchAccount = accountBalance?.data?.chartOfAccounts?.find((account) => Number(account.id) === Number(formData.cred_code));
 
     const updateDiffAmount = async (id) => {
@@ -84,13 +102,39 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
         const initBalance = initBalances[id] ?? 0;
         const balanceDifference = (selectedAccount?.balance ?? 0) - initBalance;
 
+        if (balanceDifference === 0) return;
+
         try {
             await axios.put(`/api/update-account-limit/${id}`, {
                 // limit: balance,
                 diff: balanceDifference, // kalau backend kamu wajib diff
             });
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-            mutateCashBankBalance();
+    const updateAllDiffAmounts = async () => {
+        const accounts = accountBalance?.data?.chartOfAccounts ?? [];
+
+        const payload = accounts
+            // .filter((acc) => acc.account_id === 2)
+            .map((acc) => {
+                const initBalance = initBalances[acc.id] ?? 0;
+                const diff = (acc.balance ?? 0) - initBalance;
+
+                return { id: acc.id, diff };
+            })
+            .filter(Boolean);
+
+        if (payload.length === 0) return;
+
+        try {
+            await axios.put(`/api/update-account-limit-batch`, {
+                accounts: payload,
+            });
+
+            mutateCashBankBalance(); // 1x saja
         } catch (error) {
             console.log(error);
         }
@@ -139,7 +183,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                             });
                         }}
                         value={formData.cred_code}
-                        className="form-control"
+                        className="form-select"
                         required
                     >
                         <option value="">--Pilih sumber dana--</option>
@@ -163,7 +207,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
                             })
                         }
                         value={formData.debt_code}
-                        className="form-control"
+                        className="form-select"
                         required
                     >
                         <option value="">--Pilih tujuan mutasi--</option>
@@ -194,7 +238,7 @@ const CreateMutationToHq = ({ isModalOpen, cashBank, notification, fetchJournals
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label></Label>
                 <div className="col-span-1 sm:col-span-2">
-                    <h1 className="text-sm sm:text-sm font-bold">
+                    <h1 className="text-sm sm:text-sm font-bold text-teal-500 dark:text-teal-400">
                         {formData.cred_code && (
                             <>
                                 {formatNumber(selectedBranchAccount?.balance)} - {formatNumber(formData.amount)} ={" "}

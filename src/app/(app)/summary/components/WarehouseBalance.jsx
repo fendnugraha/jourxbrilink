@@ -43,6 +43,7 @@ const WarehouseBalance = () => {
     // useEffect(() => {
     //     fetchWarehouseBalance();
     // }, [fetchWarehouseBalance]);
+
     return (
         <div className="card relative">
             <div className="p-4 flex justify-between gap-2">
@@ -81,7 +82,7 @@ const WarehouseBalance = () => {
                             </tr>
                         ) : (
                             warehouseBalance.warehouse?.map((w, i) => (
-                                <tr className="" key={i}>
+                                <tr key={i}>
                                     <td className="">
                                         <Link className="hover:underline" href={`/summary/warehouse/${w.id}`}>
                                             {i + 1}. {w.name.replace(/^konter\s*/i, "")}
@@ -89,7 +90,9 @@ const WarehouseBalance = () => {
                                     </td>
                                     <td className="text-end">{formatNumber(w.cash)}</td>
                                     <td className="text-end">{formatNumber(w.bank)}</td>
-                                    <td className="text-end font-bold">{formatNumber(w.cash + w.bank)}</td>
+                                    <td className={`text-end font-bold ${w.cash + w.bank - w.total_limit !== 0 && w.id !== 1 && "text-red-300"}`}>
+                                        {formatNumber(w.cash + w.bank)}
+                                    </td>
                                     <td className="text-center w-12">
                                         {w.id > 1 && (
                                             <span className="bg-green-300 text-green-800 p-1 rounded">{getStorePerformanceRating(w.average_profit)}</span>

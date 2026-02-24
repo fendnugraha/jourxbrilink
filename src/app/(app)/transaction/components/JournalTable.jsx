@@ -285,12 +285,16 @@ const JournalTable = ({
                                                     <>
                                                         {journal.cred?.account_group}{" "}
                                                         {journal.cred?.warehouse?.id !== warehouse && (
-                                                            <span className="text-slate-500 dark:text-slate-300">({journal.cred?.warehouse?.name})</span>
+                                                            <span className="text-slate-500 dark:text-slate-300">
+                                                                ({journal.cred?.warehouse?.name.replace(/^konter\s*/i, "")})
+                                                            </span>
                                                         )}
                                                         {" → "}
                                                         {journal.debt?.account_group}{" "}
                                                         {journal.debt?.warehouse?.id !== warehouse && (
-                                                            <span className="text-slate-500 dark:text-slate-300">({journal.debt?.warehouse?.name})</span>
+                                                            <span className="text-slate-500 dark:text-slate-300">
+                                                                ({journal.debt?.warehouse?.name.replace(/^konter\s*/i, "")})
+                                                            </span>
                                                         )}
                                                     </>
                                                 ) : Number(journal.debt_code) === warehouseCash ? (

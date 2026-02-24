@@ -137,6 +137,8 @@ const JournalTable = ({
 
     const sumTransfer = sumByTrxType(filteredJournals, "Transfer Uang");
     const sumWithdrawal = sumByTrxType(filteredJournals, "Tarik Tunai");
+
+    console.log(filteredJournals);
     return (
         <>
             <div className="flex gap-2 px-4">
@@ -268,8 +270,7 @@ const JournalTable = ({
                                     <tr key={index} className="group hover:bg-slate-500 hover:text-white">
                                         <td>
                                             <span className="text-xs text-blue-700 dark:text-blue-300 group-hover:dark:text-blue-200 group-hover:text-blue-400 block">
-                                                #{journal.id} <span className="font-bold hidden sm:inline">{journal.invoice}</span>{" "}
-                                                {formatDateTime(journal.date_issued)}
+                                                #{journal.id} {formatDateTime(journal.date_issued)}
                                             </span>
                                             <span className="font-bold text-xs block text-lime-600 dark:text-lime-300 group-hover:text-lime-700 group-hover:dark:text-lime-400">
                                                 {journal.trx_type === "Voucher & SP" || journal.trx_type === "Accessories" ? (
@@ -281,19 +282,26 @@ const JournalTable = ({
                                                         ))}
                                                     </ul>
                                                 ) : journal.trx_type === "Mutasi Kas" ? (
-                                                    journal.cred.acc_name + " -> " + journal.debt.acc_name
+                                                    <>
+                                                        {journal.cred?.account_group}{" "}
+                                                        {journal.cred?.warehouse?.id !== warehouse && (
+                                                            <span className="text-slate-500 dark:text-slate-300">({journal.cred?.warehouse?.name})</span>
+                                                        )}
+                                                        {" → "}
+                                                        {journal.debt?.account_group}{" "}
+                                                        {journal.debt?.warehouse?.id !== warehouse && (
+                                                            <span className="text-slate-500 dark:text-slate-300">({journal.debt?.warehouse?.name})</span>
+                                                        )}
+                                                    </>
                                                 ) : Number(journal.debt_code) === warehouseCash ? (
-                                                    journal.cred.acc_name
+                                                    journal.cred.account_group
                                                 ) : (
-                                                    journal.debt.acc_name
+                                                    journal.debt.account_group
                                                 )}
-                                                .{" "}
-                                                <span className="font-normal hidden sm:inline text-slate-500 dark:text-slate-300">
-                                                    Note: {journal.description}
-                                                </span>
+                                                . <span className="font-normal text-slate-500 dark:text-slate-300">Note: {journal.description}</span>
                                             </span>
                                             <span className="text-xs hidden sm:block text-slate-500 dark:text-slate-400">
-                                                Last update at <TimeAgo timestamp={journal.updated_at} /> by {journal.user?.name}
+                                                Updated at <TimeAgo timestamp={journal.updated_at} /> by {journal.user?.name}
                                             </span>
                                             <div className="flex mt-1 gap-3 sm:hidden">
                                                 <button

@@ -27,12 +27,12 @@ const TransactionTable = ({
 
     const totalDebt = (filteredJournals || []).reduce(
         (total, journal) => total + (Number(journal.debt_code) === Number(selectedAccount) ? journal.amount : 0),
-        0
+        0,
     );
 
     const totalCredit = (filteredJournals || []).reduce(
         (total, journal) => total + (Number(journal.cred_code) === Number(selectedAccount) ? journal.amount : 0),
-        0
+        0,
     );
 
     return (
@@ -79,11 +79,31 @@ const TransactionTable = ({
                                                     ))}
                                                 </ul>
                                             ) : journal.trx_type === "Mutasi Kas" ? (
-                                                journal.cred.acc_name + " -> " + journal.debt.acc_name
+                                                <>
+                                                    {journal.cred?.account_group}{" "}
+                                                    <span className="text-slate-500 dark:text-slate-300">
+                                                        ({journal.cred?.warehouse?.name.replace(/^konter\s*/i, "")})
+                                                    </span>
+                                                    {" → "}
+                                                    {journal.debt?.account_group}{" "}
+                                                    <span className="text-slate-500 dark:text-slate-300">
+                                                        ({journal.debt?.warehouse?.name.replace(/^konter\s*/i, "")})
+                                                    </span>
+                                                </>
                                             ) : Number(journal.debt_code) === selectedarehouseCashId ? (
-                                                journal.cred.acc_name
+                                                <>
+                                                    {journal.cred?.account_group}{" "}
+                                                    <span className="text-slate-500 dark:text-slate-300">
+                                                        ({journal.cred?.warehouse?.name.replace(/^konter\s*/i, "")})
+                                                    </span>
+                                                </>
                                             ) : (
-                                                journal.debt.acc_name
+                                                <>
+                                                    {journal.debt?.account_group}{" "}
+                                                    <span className="text-slate-500 dark:text-slate-300">
+                                                        ({journal.debt?.warehouse?.name.replace(/^konter\s*/i, "")})
+                                                    </span>
+                                                </>
                                             )}
                                             <span className="font-normal hidden sm:block text-slate-500 dark:text-slate-300">Note: {journal.description}</span>
                                         </span>
@@ -118,7 +138,7 @@ const TransactionTable = ({
                                                     (prev) =>
                                                         prev.includes(journal.id)
                                                             ? prev.filter((id) => id !== journal.id) // kalau ada → hapus
-                                                            : [...prev, journal.id] // kalau tidak ada → tambah
+                                                            : [...prev, journal.id], // kalau tidak ada → tambah
                                                 )
                                             }
                                             hidden={

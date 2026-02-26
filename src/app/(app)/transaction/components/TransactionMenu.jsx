@@ -55,7 +55,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, mutat
             return "";
         }
 
-        if (amount < 100000) {
+        if (amount <= 100000) {
             return 3000;
         }
 
@@ -154,12 +154,12 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, mutat
                             </li>
                             <li className="border-b border-slate-200 hover:bg-slate-100 dark:border-slate-500 dark:hover:bg-slate-500 ">
                                 <button className="w-full text-sm text-left py-2 px-4" onClick={() => setIsModalCreateExpenseOpen(true)}>
-                                    B. Operasional
+                                    By. Operasional
                                 </button>
                             </li>
                             <li className="hover:bg-slate-100 dark:hover:bg-slate-500">
                                 <button className="w-full text-sm text-left py-2 px-4" onClick={() => setIsModalCreateBankAdminFeeOpen(true)}>
-                                    B. Admin Bank
+                                    By. Admin Bank
                                 </button>
                             </li>
                         </ul>

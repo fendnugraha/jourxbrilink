@@ -51,7 +51,11 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
     };
 
     const calculateFee = (amount) => {
-        if (amount < 100000) {
+        if (amount < 10000 || amount === "") {
+            return "";
+        }
+
+        if (amount <= 100000) {
             return 3000;
         }
 
@@ -125,10 +129,10 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                         onClick={() => setIsModalCreateExpenseOpen(true)}
                         className="w-full text-slate-700 p-2 border-b border-slate-300 hover:bg-slate-200"
                     >
-                        B. Operasional
+                        Biaya Operasional
                     </button>
                     <button onClick={() => setIsModalCreateBankAdminFeeOpen(true)} className="w-full text-slate-700 p-2 hover:bg-slate-200">
-                        B. Admin Bank
+                        Biaya Admin Bank
                     </button>
                 </div>
             </div>

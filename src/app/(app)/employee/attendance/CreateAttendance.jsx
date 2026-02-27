@@ -11,7 +11,9 @@ const CreateAttendance = ({ isModalOpen, notification, fetchWarehouses }) => {
         date: todayDate(),
         time_in: "",
         warehouse_id: "",
+        approval_status: "",
     });
+
     const { warehouses, warehousesError } = useGetWarehouses();
     const [loading, setLoading] = useState(true);
     const [employees, setEmployees] = useState([]);
@@ -122,6 +124,20 @@ const CreateAttendance = ({ isModalOpen, notification, fetchWarehouses }) => {
                                 {warehouse.name}
                             </option>
                         ))}
+                    </select>
+                </div>
+                <div>
+                    <label>Status</label>
+                    <select
+                        className="form-select"
+                        value={formData.approval_status}
+                        onChange={(e) => setFormData({ ...formData, approval_status: e.target.value })}
+                    >
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Good">Good</option>
+                        <option value="Late">Terlambat</option>
+                        <option value="Overtime">Lembur</option>
                     </select>
                 </div>
                 <div className="flex justify-end">

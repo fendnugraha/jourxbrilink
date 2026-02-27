@@ -4,8 +4,13 @@ import ReceivableLog from "./ReceivableLog";
 import ReceivableTable from "./ReceivableTable";
 import axios from "@/libs/axios";
 import Notification from "@/components/Notification";
+import { todayDate } from "@/libs/format";
 
 const ReceivableContent = () => {
+    const [startDate, setStartDate] = useState(todayDate());
+    const [endDate, setEndDate] = useState(todayDate());
+    const [perPage, setPerPage] = useState(10);
+
     const [finance, setFinance] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedContactId, setSelectedContactId] = useState("All");
@@ -19,7 +24,13 @@ const ReceivableContent = () => {
         async (url = `/api/finance-by-type/${selectedContactId}/${type}`) => {
             setLoading(true);
             try {
-                const response = await axios.get(url);
+                const response = await axios.get(url, {
+                    params: {
+                        start: startDate,
+                        end: endDate,
+                        per_page: perPage,
+                    },
+                });
                 setFinance(response.data.data);
             } catch (error) {
                 console.log(error);
@@ -27,7 +38,7 @@ const ReceivableContent = () => {
                 setLoading(false);
             }
         },
-        [selectedContactId, type]
+        [selectedContactId, type, startDate, endDate, perPage],
     );
 
     useEffect(() => {
@@ -49,7 +60,18 @@ const ReceivableContent = () => {
                     type={type}
                     setType={setType}
                 />
-                <ReceivableLog selectedContactId={selectedContactId} financeLog={finance.finance} fetchFinance={fetchFinance} notification={setNotification} />
+                <ReceivableLog
+                    selectedContactId={selectedContactId}
+                    financeLog={finance.finance}
+                    fetchFinance={fetchFinance}
+                    notification={setNotification}
+                    startDate={startDate}
+                    setStartDate={setStartDate}
+                    endDate={endDate}
+                    setEndDate={setEndDate}
+                    perPage={perPage}
+                    setPerPage={setPerPage}
+                />
             </div>
         </>
     );

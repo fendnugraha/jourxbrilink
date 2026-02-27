@@ -174,7 +174,7 @@ const TransactionContent = () => {
                                 onClick={() => setSelectTable("transaksi")}
                                 className={`${
                                     selectTable === "transaksi"
-                                        ? "bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
+                                        ? "bg-white dark:bg-gray-900 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
                                         : "bg-slate-100 dark:bg-slate-700"
                                 } px-3 py-1 cursor-pointer mr-2 text-sm`}
                             >
@@ -184,7 +184,7 @@ const TransactionContent = () => {
                                 onClick={() => setSelectTable("mutasi")}
                                 className={`${
                                     selectTable === "mutasi"
-                                        ? "bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
+                                        ? "bg-white dark:bg-gray-900 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
                                         : "bg-slate-100 dark:bg-slate-700"
                                 } px-3 py-1 cursor-pointer mr-2 text-sm`}
                             >
@@ -205,7 +205,7 @@ const TransactionContent = () => {
                                 onClick={() => setSelectTable("koreksi")}
                                 className={`${
                                     selectTable === "koreksi"
-                                        ? "bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
+                                        ? "bg-white dark:bg-gray-900 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
                                         : "bg-slate-100 dark:bg-slate-700"
                                 } px-3 py-1 cursor-pointer text-sm mr-2`}
                             >
@@ -218,7 +218,7 @@ const TransactionContent = () => {
                                 onClick={() => setSelectTable("attendance")}
                                 className={`${
                                     selectTable === "attendance"
-                                        ? "bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
+                                        ? "bg-white dark:bg-gray-900 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
                                         : "bg-slate-100 dark:bg-slate-700"
                                 } px-3 py-1 cursor-pointer mr-2 text-sm`}
                             >

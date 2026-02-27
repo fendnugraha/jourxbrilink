@@ -1,13 +1,14 @@
+import Input from "@/components/Input";
+import Label from "@/components/Label";
 import Modal from "@/components/Modal";
 import Paginator from "@/components/Paginator";
 import axios from "@/libs/axios";
-import { formatDateTime, formatNumber, todayDate } from "@/libs/format";
+import { formatDateTime, formatNumber } from "@/libs/format";
 import { ArrowBigDown, ArrowBigUp, Filter, MessageCircleWarningIcon, XCircleIcon } from "lucide-react";
 import { useState } from "react";
 
-const ReceivableLog = ({ financeLog, notification, fetchFinance }) => {
-    const [startDate, setStartDate] = useState(todayDate());
-    const [endDate, setEndDate] = useState(todayDate());
+const ReceivableLog = ({ financeLog, notification, fetchFinance, startDate, setStartDate, endDate, setEndDate, perPage, setPerPage }) => {
+    const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
 
     const [isModalDeleteFinanceOpen, setIsModalDeleteFinanceOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -15,6 +16,7 @@ const ReceivableLog = ({ financeLog, notification, fetchFinance }) => {
 
     const closeModal = () => {
         setIsModalDeleteFinanceOpen(false);
+        setIsModalFilterDataOpen(false);
         setSelectedFinanceId(null);
     };
 
@@ -38,9 +40,31 @@ const ReceivableLog = ({ financeLog, notification, fetchFinance }) => {
                     History Piutang
                     <span className="card-subtitle">Nama:-</span>
                 </h1>
-                <button className="small-button h-fit">
-                    <Filter size={14} />
-                </button>
+                <div className="flex gap-1 h-fit">
+                    <select value={perPage} onChange={(e) => setPerPage(e.target.value)} className="form-select !p-1">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="20">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <button className="small-button h-fit" onClick={() => setIsModalFilterDataOpen(true)}>
+                        <Filter size={14} />
+                    </button>
+                </div>
+                <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
+                    <div className="mb-4">
+                        <Label className="font-bold">Tanggal</Label>
+                        <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="form-control" />
+                    </div>
+                    <div className="mb-4">
+                        <Label className="font-bold">s/d</Label>
+                        <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="form-control" />
+                    </div>
+                    {/* <button onClick={() => fetchFinance()} className="btn-primary">
+                        Submit
+                    </button> */}
+                </Modal>
             </div>
             <div className="overflow-x-auto">
                 <table className="table w-full text-xs">

@@ -236,6 +236,8 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                         calculateFee={calculateFee}
                         setPersonalSetting={setPersonalSetting}
                         feeAdminAuto={personalSetting.feeAdminAuto}
+                        selectedBankAccount={selectedBankAccount}
+                        setSelectedBankAccount={setSelectedBankAccount}
                     />
                 )}
                 {isCashWithdrawalActive && (
@@ -248,6 +250,8 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                         calculateFee={calculateFee}
                         setPersonalSetting={setPersonalSetting}
                         feeAdminAuto={personalSetting.feeAdminAuto}
+                        selectedBankAccount={selectedBankAccount}
+                        setSelectedBankAccount={setSelectedBankAccount}
                     />
                 )}
             </Modal>

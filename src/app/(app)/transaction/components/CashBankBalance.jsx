@@ -115,7 +115,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                 </div>
             )}
             <button onClick={() => setIsModalSettingInitBalancesOpen(true)} className="absolute top-2 right-4 cursor-pointer z-99">
-                <SettingsIcon className="w-4 h-4 inline text-white hover:rotate-90 transition-transform delay-150 duration-300" />
+                <SettingsIcon className="w-4 h-4 inline text-slate-400 hover:rotate-90 transition-transform delay-150 duration-300" />
             </button>
             <Modal isOpen={isModalSettingInitBalancesOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Set Saldo Awal Kas & Bank">
                 {accountBalance?.data?.chartOfAccounts?.map((account) => (
@@ -145,22 +145,24 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                     </div>
                 ))}
             </Modal>
-            <div className="flex justify-center items-center flex-col bg-gray-600 dark:bg-black/40 backdrop-blur-sm pt-4 rounded-t-3xl text-white shadow-lg">
-                {accountBalance?.data?.chartOfAccounts?.length > 0 ? (
-                    <>
-                        <h1 className="text-xs">Total Saldo</h1>
-                        <h1 className="text-2xl text-yellow-200 font-black">{formatRupiah(summarizeBalance ?? 0)}</h1>
-                        {warehouse !== 1 && (
-                            <h1 className={`text-xs ${summarizeBalance - limitSummary === 0 ? "text-green-400" : "text-red-200"}`}>
-                                {summarizeBalance - limitSummary === 0 ? "Complete" : formatNumber(summarizeBalance - limitSummary)}
-                            </h1>
-                        )}
-                    </>
-                ) : (
-                    <span className="font-normal text-sm">Loading...</span>
-                )}
+            <div className="bg-gray-600 dark:bg-black/40 rounded-t-3xl p-2">
+                <div className="flex justify-center items-center bg-slate-200 dark:bg-slate-600 flex-col backdrop-blur-sm rounded-2xl py-4 text-white shadow-lg">
+                    {accountBalance?.data?.chartOfAccounts?.length > 0 ? (
+                        <>
+                            <h1 className="text-xs text-slate-600 dark:text-white">Total Saldo</h1>
+                            <h1 className="text-2xl text-slate-600 dark:text-white font-black">{formatRupiah(summarizeBalance ?? 0)}</h1>
+                            {warehouse !== 1 && (
+                                <h1 className={`text-xs ${summarizeBalance - limitSummary === 0 ? "text-green-500" : "text-red-600 dark:text-red-300"}`}>
+                                    {summarizeBalance - limitSummary === 0 ? "Complete" : formatNumber(summarizeBalance - limitSummary)}
+                                </h1>
+                            )}
+                        </>
+                    ) : (
+                        <span className="font-normal text-sm">Loading...</span>
+                    )}
+                </div>
             </div>
-            <div className="bg-gray-600 dark:bg-black/40 backdrop-blur-sm pt-2 px-12 sm:px-4">
+            <div className="bg-gray-600 dark:bg-black/40 backdrop-blur-sm px-12 sm:px-4">
                 <div className="flex justify-between items-center text-white dark:text-lime-800 bg-slate-300 dark:bg-gray-400 p-0.5 rounded-3xl">
                     <button
                         onClick={() => {
@@ -328,13 +330,13 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
 
                         <h1 className="text-xs text-end text-red-400">
                             {dailyDashboard?.data?.totalCash < openingCash && (
-                                <div className="flex items-center text-red-100 text-xs">
+                                <div className="flex items-center text-red-400 text-xs">
                                     <CircleAlertIcon className="w-3 h-3 mr-1" />
                                     <span>Kas kurang dari uang awal</span>
                                 </div>
                             )}
                         </h1>
-                        <h1 className="text-xs text-end text-red-200">
+                        <h1 className="text-xs text-end text-red-400">
                             {formatNumber(openingCash > 0 && dailyDashboard?.data?.totalCash > openingCash ? -openingCash : 0)}
                         </h1>
                         <h1 className="text-lg font-bold text-end text-teal-500 dark:text-teal-300">

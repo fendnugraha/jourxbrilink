@@ -75,7 +75,7 @@ const CreateBankAdminFee = ({ isModalOpen, filteredCashBankByWarehouse, notifica
                                 .filter((cashBank) => Number(cashBank.account_id === 2))
                                 .map((cashBank) => (
                                     <option key={cashBank.id} value={cashBank.id}>
-                                        {cashBank.acc_name}
+                                        {cashBank.account_group}
                                     </option>
                                 ))}
                         </select>

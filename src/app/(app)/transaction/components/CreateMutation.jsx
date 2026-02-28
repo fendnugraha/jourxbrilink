@@ -20,7 +20,7 @@ const CreateMutation = ({ isModalOpen, cashBank, notification, fetchJournalsByWa
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
 
-    const branchAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === Number(user.role?.warehouse_id));
+    const branchAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === Number(user.role?.warehouse_id) && Number(cashBank.account_id) === 2);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -73,7 +73,7 @@ const CreateMutation = ({ isModalOpen, cashBank, notification, fetchJournalsByWa
                 </div>
             </div>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
-                <Label>Dari (Cabang)</Label>
+                <Label>Dari</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <select
                         onChange={(e) => {
@@ -94,7 +94,7 @@ const CreateMutation = ({ isModalOpen, cashBank, notification, fetchJournalsByWa
                         <option value="">--Pilih sumber dana--</option>
                         {branchAccount.map((br) => (
                             <option key={br.id} value={br.id}>
-                                {br.acc_name}
+                                {br.account_group}
                             </option>
                         ))}
                     </select>
@@ -102,7 +102,7 @@ const CreateMutation = ({ isModalOpen, cashBank, notification, fetchJournalsByWa
                 </div>
             </div>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
-                <Label>Ke (Pusat)</Label>
+                <Label>Ke</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <select
                         onChange={(e) =>
@@ -121,7 +121,7 @@ const CreateMutation = ({ isModalOpen, cashBank, notification, fetchJournalsByWa
                             .filter((acc) => acc.id !== formData.cred_code)
                             .map((hq) => (
                                 <option key={hq.id} value={hq.id}>
-                                    {hq.acc_name}
+                                    {hq.account_group}
                                 </option>
                             ))}
                     </select>

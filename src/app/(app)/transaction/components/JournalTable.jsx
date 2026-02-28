@@ -236,9 +236,11 @@ const JournalTable = ({
                 <div className="flex justify-between items-center">
                     <h4 className="text-xs text-slate-500 dark:text-slate-200">
                         {warehouses?.data?.find((w) => w.id === Number(selectedWarehouse))?.name},{" "}
-                        {startDate === endDate ? formatLongDate(endDate) : `${formatLongDate(startDate)} s/d ${formatLongDate(endDate)}`} | Transfer:{" "}
-                        {formatNumber(sumTransfer.sum)} ({formatNumber(sumTransfer.count)}), Tarik Tunai: {formatNumber(sumWithdrawal.sum)} (
-                        {sumWithdrawal.count})
+                        {startDate === endDate ? formatLongDate(endDate) : `${formatLongDate(startDate)} s/d ${formatLongDate(endDate)}`}
+                        <span className="block">
+                            Transfer: {formatNumber(sumTransfer.sum)} ({formatNumber(sumTransfer.count)}), Tarik Tunai: {formatNumber(sumWithdrawal.sum)} (
+                            {sumWithdrawal.count})
+                        </span>
                     </h4>
                     {["Super Admin"].includes(userRole) && (
                         <Link href="/transaction/inspection" className="text-xs hover:underline text-slate-500 dark:text-slate-200">

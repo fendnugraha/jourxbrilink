@@ -22,11 +22,9 @@ const AttendanceTableMonthly = ({ selectedZone, warehouseMonthly }) => {
         return !selectedZone || zoneMatch;
     });
 
-    console.log(filteredWarehouses);
-
     return (
         <>
-            {filteredWarehouses.map((employee) => (
+            {filteredWarehouses?.map((employee) => (
                 <div key={employee?.id} className="mb-2 border border-slate-500 p-1 rounded-sm">
                     <h3 className="text-sm font-bold">{employee?.name}</h3>
                     {/* Kotak tanggal berjajar */}

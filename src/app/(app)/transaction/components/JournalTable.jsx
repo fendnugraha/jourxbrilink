@@ -138,7 +138,6 @@ const JournalTable = ({
     const sumTransfer = sumByTrxType(filteredJournals, "Transfer Uang");
     const sumWithdrawal = sumByTrxType(filteredJournals, "Tarik Tunai");
 
-    console.log(filteredJournals);
     return (
         <>
             <div className="flex gap-2 px-4">

@@ -67,7 +67,6 @@ const AttendancePage = () => {
         try {
             const response = await axios.get(`/api/get-attendance-monthly/${startDate}`);
             setWarehouseMonthly(response.data);
-            console.log(response);
         } catch (error) {
             console.log(error);
         }

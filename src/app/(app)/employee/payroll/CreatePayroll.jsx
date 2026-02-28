@@ -343,7 +343,9 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                                         </td>
                                         <td className="text-right">
                                             {formatNumber(
-                                                employee.deductions.reduce((total, deduction) => total + deduction.amount, 0) + employee.employee_receivable,
+                                                employee.deductions.reduce((total, deduction) => total + deduction.amount, 0) +
+                                                    employee.employee_receivable +
+                                                    employee.installment_receivable,
                                             )}
                                         </td>
                                         <td className="text-right font-bold">{calculateTotalItem(employee)}</td>
@@ -535,6 +537,48 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                     </div>
                     <div>
                         <h1 className="font-bold">Detail Potongan</h1>
+                        <ul className="text-sm mb-2">
+                            <li
+                                className="flex justify-between"
+                                hidden={processData.find((emp) => emp.employee_id === selectedEmployee)?.employee_receivable === 0}
+                            >
+                                <span className="">Kasbon</span>
+                                <div className="flex gap-2 items-center">
+                                    <span>Rp {formatNumber(processData.find((emp) => emp.employee_id === selectedEmployee)?.employee_receivable)}</span>
+                                    <button
+                                        onClick={() =>
+                                            setProcessData(
+                                                processData.map((emp) => (emp.employee_id === selectedEmployee ? { ...emp, employee_receivable: 0 } : emp)),
+                                            )
+                                        }
+                                        className="hover:underline bg-red-500 hover:bg-red-400 text-white p-0.5 rounded-full"
+                                        hidden={processData.find((emp) => emp.employee_id === selectedEmployee)?.employee_receivable === 0}
+                                        disabled
+                                    >
+                                        <Minus size={12} />
+                                    </button>
+                                </div>
+                            </li>
+                            <li
+                                className="flex justify-between"
+                                hidden={processData.find((emp) => emp.employee_id === selectedEmployee)?.installment_receivable === 0}
+                            >
+                                <span className="">Cicilan</span>
+                                <div className="flex gap-2 items-center">
+                                    <span>Rp {formatNumber(processData.find((emp) => emp.employee_id === selectedEmployee)?.installment_receivable)}</span>
+                                    <button
+                                        onClick={() =>
+                                            setProcessData(
+                                                processData.map((emp) => (emp.employee_id === selectedEmployee ? { ...emp, installment_receivable: 0 } : emp)),
+                                            )
+                                        }
+                                        className="hover:underline bg-red-500 hover:bg-red-400 text-white p-0.5 rounded-full"
+                                    >
+                                        <Minus size={12} />
+                                    </button>
+                                </div>
+                            </li>
+                        </ul>
                         <ul className="text-sm">
                             {processData
                                 .find((emp) => emp.employee_id === selectedEmployee)

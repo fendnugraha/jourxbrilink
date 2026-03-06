@@ -15,6 +15,7 @@ const CreateTransfer = ({
     calculateFee,
     setPersonalSetting,
     feeAdminAuto,
+    altFee,
     selectedBankAccount,
     setSelectedBankAccount,
 }) => {
@@ -121,7 +122,11 @@ const CreateTransfer = ({
                                     setFormData({
                                         ...formData,
                                         amount: e.target.value,
-                                        fee_amount: feeAdminAuto ? calculateFee(e.target.value) : formData.fee_amount,
+                                        fee_amount: feeAdminAuto
+                                            ? altFee
+                                                ? calculateFee(e.target.value, 2000000, 5000)
+                                                : calculateFee(e.target.value)
+                                            : formData.fee_amount,
                                     })
                                 }
                                 required
@@ -186,16 +191,29 @@ const CreateTransfer = ({
                         />
                         {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                     </div>
-                    <input
-                        type="checkbox"
-                        id="feeAdminAuto"
-                        className="mt-2 mr-2"
-                        checked={feeAdminAuto}
-                        onChange={(e) => setPersonalSetting((prev) => ({ ...prev, feeAdminAuto: e.target.checked }))}
-                    />
-                    <label htmlFor="feeAdminAuto" className={`text-sm ${feeAdminAuto ? "text-green-600" : ""}`}>
-                        Fee Admin Auto
-                    </label>
+                    <div className="flex gap-2 items-center mt-2">
+                        <input
+                            type="checkbox"
+                            id="feeAdminAuto"
+                            className=""
+                            checked={feeAdminAuto}
+                            onChange={(e) => setPersonalSetting((prev) => ({ ...prev, feeAdminAuto: e.target.checked }))}
+                        />
+                        <label htmlFor="feeAdminAuto" className={`text-sm ${feeAdminAuto ? "text-green-600" : ""}`}>
+                            Fee Admin Auto
+                        </label>
+                        <input
+                            type="checkbox"
+                            id="feeAlternative"
+                            className=""
+                            checked={altFee}
+                            onChange={(e) => setPersonalSetting((prev) => ({ ...prev, altFee: e.target.checked }))}
+                            disabled={!feeAdminAuto}
+                        />
+                        <label htmlFor="feeAlternative" className={`text-sm ${altFee ? "text-green-600" : ""}`}>
+                            Fee Alternatif
+                        </label>
+                    </div>
                 </div>
                 <div className="flex justify-end gap-2">
                     <button

@@ -16,6 +16,7 @@ const CreateCashWithdrawal = ({
     calculateFee,
     setPersonalSetting,
     feeAdminAuto,
+    altFee,
     selectedBankAccount,
     setSelectedBankAccount,
 }) => {
@@ -78,7 +79,7 @@ const CreateCashWithdrawal = ({
     useEffect(() => {
         setFormData((prev) => ({
             ...prev,
-            fee_amount: isFee ? prev.amount : feeAdminAuto ? calculateFee(prev.amount) : prev.fee_amount,
+            fee_amount: isFee ? prev.amount : feeAdminAuto ? (altFee ? calculateFee(prev.amount, 2000000, 5000) : calculateFee(prev.amount)) : prev.fee_amount,
             trx_type: isFee ? "Bank Fee" : "Tarik Tunai",
         }));
     }, [isFee, feeAdminAuto]);
@@ -86,6 +87,7 @@ const CreateCashWithdrawal = ({
     useEffect(() => {
         setIsFee(formData.amount && formData.amount === Number(formData.fee_amount));
     }, [formData.amount, formData.fee_amount]);
+
     return (
         <>
             <form onSubmit={handleSubmit}>
@@ -157,7 +159,8 @@ const CreateCashWithdrawal = ({
                                     setFormData({
                                         ...formData,
                                         amount: value,
-                                        fee_amount: feeAdminAuto && !isFee ? calculateFee(value) : formData.fee_amount,
+                                        fee_amount:
+                                            feeAdminAuto && !isFee ? (altFee ? calculateFee(value, 2000000, 5000) : calculateFee(value)) : formData.fee_amount,
                                     });
                                 }}
                                 required
@@ -221,6 +224,17 @@ const CreateCashWithdrawal = ({
                         />
                         {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                     </div>
+                    <input
+                        type="checkbox"
+                        id="feeAlternative"
+                        className=""
+                        checked={altFee}
+                        onChange={(e) => setPersonalSetting((prev) => ({ ...prev, altFee: e.target.checked }))}
+                        disabled={!feeAdminAuto}
+                    />
+                    <label htmlFor="feeAlternative" className={`text-sm ${altFee ? "text-green-600" : ""}`}>
+                        Fee Alternatif
+                    </label>
                 </div>
 
                 <div className="flex justify-end gap-2">

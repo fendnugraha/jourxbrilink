@@ -50,7 +50,7 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
         setIsModalCreateMutationOpen(false);
     };
 
-    const calculateFee = (amount) => {
+    const calculateFee = (amount, chunk = 2500000, feePerChunk = 5000) => {
         if (amount < 10000 || amount === "") {
             return "";
         }
@@ -59,11 +59,11 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
             return 3000;
         }
 
-        const chunkSize = 2500000;
-        const feePerChunk = 5000;
+        const chunkSize = chunk;
+        const fee = feePerChunk;
 
         const chunkCount = Math.ceil(amount / chunkSize);
-        return chunkCount * feePerChunk;
+        return chunkCount * fee;
     };
 
     const menuRef = useRef(null);
@@ -86,6 +86,7 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
     const filteredCashBankByWarehouse = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === warehouse);
     const [personalSetting, setPersonalSetting] = useState({
         feeAdminAuto: false,
+        altFee: false,
     });
     const [loaded, setLoaded] = useState(false);
 
@@ -236,6 +237,7 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                         calculateFee={calculateFee}
                         setPersonalSetting={setPersonalSetting}
                         feeAdminAuto={personalSetting.feeAdminAuto}
+                        altFee={personalSetting.altFee}
                         selectedBankAccount={selectedBankAccount}
                         setSelectedBankAccount={setSelectedBankAccount}
                     />
@@ -250,6 +252,7 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                         calculateFee={calculateFee}
                         setPersonalSetting={setPersonalSetting}
                         feeAdminAuto={personalSetting.feeAdminAuto}
+                        altFee={personalSetting.altFee}
                         selectedBankAccount={selectedBankAccount}
                         setSelectedBankAccount={setSelectedBankAccount}
                     />
@@ -296,6 +299,7 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                         calculateFee={calculateFee}
                         setPersonalSetting={setPersonalSetting}
                         feeAdminAuto={personalSetting.feeAdminAuto}
+                        altFee={personalSetting.altFee}
                         selectedBankAccount={selectedBankAccount}
                         setSelectedBankAccount={setSelectedBankAccount}
                     />
@@ -310,6 +314,7 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                         calculateFee={calculateFee}
                         setPersonalSetting={setPersonalSetting}
                         feeAdminAuto={personalSetting.feeAdminAuto}
+                        altFee={personalSetting.altFee}
                         selectedBankAccount={selectedBankAccount}
                         setSelectedBankAccount={setSelectedBankAccount}
                     />

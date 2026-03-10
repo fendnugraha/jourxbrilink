@@ -37,7 +37,7 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
 
     const findedEmployee = employees.find((emp) => emp.id === selectedEmployee);
 
-    const AddToProcessData = (employees, month, year) => {
+    const AddToProcessData = (employees, month, year, payroll = true) => {
         const payload = employees
             .filter((employee) => employee.status === "active")
             .map((employee) => {
@@ -62,23 +62,25 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                         : []),
                 ];
 
-                const totalSavings = deductions.filter((d) => d.name === "Simpanan Wajib").reduce((sum, d) => sum + d.amount, 0);
+                const totalSavings = deductions?.filter((d) => d.name === "Simpanan Wajib").reduce((sum, d) => sum + d.amount, 0);
 
                 return {
                     employee_id: employee.id,
                     contact_id: employee.contact_id,
                     name: employee.contact?.name,
-                    basic_salary: employee.salary,
-                    commission: employee.commission,
-                    overtime: overtimeCount > 0 ? overtimeCount * 100000 : 0,
-                    employee_receivable: receivable > 0 ? receivable : 0,
-                    installment_receivable: 0,
+                    ...(payroll && {
+                        basic_salary: employee.salary,
+                        commission: employee.commission,
+                        overtime: overtimeCount > 0 ? overtimeCount * 100000 : 0,
+                        employee_receivable: receivable > 0 ? receivable : 0,
+                        installment_receivable: 0,
+                        attendances: employee.attendances,
+                        total_savings: totalSavings,
+                        deductions,
+                    }),
                     month,
                     year,
-                    attendances: employee.attendances,
                     bonuses: [],
-                    deductions,
-                    total_savings: totalSavings,
                 };
             });
 
@@ -86,26 +88,37 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
         localStorage.setItem("processData", JSON.stringify(payload));
     };
 
-    const totalSalary = processData.reduce((total, item) => total + Number(item.basic_salary), 0);
-    const totalCommission = processData.reduce((total, item) => total + Number(item.commission), 0);
+    const totalSalary = processData.reduce((total, item) => total + Number(item.basic_salary || 0), 0);
+    const totalCommission = processData.reduce((total, item) => total + Number(item.commission || 0), 0);
     const totalBonus =
-        processData.reduce((total, item) => total + item.bonuses.reduce((total, bonus) => total + bonus.amount, 0), 0) +
-        processData.reduce((total, item) => total + Number(item.overtime), 0);
+        processData.reduce((total, item) => total + item.bonuses.reduce((total, bonus) => total + bonus.amount || 0, 0), 0) +
+        processData.reduce((total, item) => total + Number(item.overtime || 0), 0);
     const totalReceivable =
-        processData.reduce((total, item) => total + Number(item.employee_receivable), 0) +
-        processData.reduce((total, item) => total + Number(item.installment_receivable), 0);
-    const totalDeduction = processData.reduce((total, item) => total + item.deductions.reduce((total, deduction) => total + deduction.amount, 0), 0);
-    const totalSavingSum = processData.reduce((total, item) => total + item.total_savings, 0);
+        processData.reduce((total, item) => total + Number(item.employee_receivable || 0), 0) +
+        processData.reduce((total, item) => total + Number(item.installment_receivable || 0), 0);
+    const totalDeduction = processData.reduce((total, item) => {
+        const deductions = item.deductions || [];
+
+        const deductionTotal = deductions?.reduce((t, deduction) => t + Number(deduction.amount || 0), 0);
+
+        return total + deductionTotal;
+    }, 0);
+    const totalSavingSum = processData.reduce((total, item) => total + item.total_savings || 0, 0);
 
     const calculateTotalItem = (item) => {
-        const total =
-            Number(item.basic_salary) +
-            Number(item.commission) +
-            Number(item.overtime) +
-            item.bonuses.reduce((total, bonus) => total + bonus.amount, 0) -
-            item.deductions.reduce((total, deduction) => total + deduction.amount, 0) -
-            Number(item.employee_receivable) -
-            Number(item.installment_receivable);
+        const basicSalary = Number(item.basic_salary) || 0;
+        const commission = Number(item.commission) || 0;
+        const overtime = Number(item.overtime) || 0;
+
+        const bonuses = item.bonuses?.reduce((t, b) => t + Number(b.amount || 0), 0) || 0;
+
+        const deductions = item.deductions?.reduce((t, d) => t + Number(d.amount || 0), 0) || 0;
+
+        const receivable = Number(item.employee_receivable) || 0;
+        const installment = Number(item.installment_receivable) || 0;
+
+        const total = basicSalary + commission + overtime + bonuses - deductions - receivable - installment;
+
         return formatNumber(total);
     };
 
@@ -173,9 +186,9 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
             const updated = prev.map((item) => {
                 if (item.employee_id !== employeeId) return item;
 
-                const updatedDeductions = item.deductions.filter((_, i) => i !== index);
+                const updatedDeductions = item.deductions?.filter((_, i) => i !== index);
 
-                const totalSavings = updatedDeductions.filter((d) => d.name === "Simpanan Wajib").reduce((sum, d) => sum + d.amount, 0);
+                const totalSavings = updatedDeductions?.filter((d) => d.name === "Simpanan Wajib").reduce((sum, d) => sum + d.amount, 0);
 
                 return {
                     ...item,
@@ -257,6 +270,8 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
             setLoading(false);
         }
     };
+
+    console.log(processData);
     return (
         <div>
             <div className="flex gap-2 w-fit">
@@ -285,9 +300,28 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                     <option value={2030}>2030</option>
                 </select>
                 {processData.length === 0 ? (
-                    <Button buttonType="success" className="" onClick={() => AddToProcessData(employees, month, year)}>
-                        Buat
-                    </Button>
+                    // <Button buttonType="success" className="" onClick={() => AddToProcessData(employees, month, year)}>
+                    //     Buat
+                    // </Button>
+                    <DropdownMenu
+                        title={`Buat Baru`}
+                        position="bottom end"
+                        className={"small-button text-sm !font-normal !bg-green-400 text-white"}
+                        items={[
+                            {
+                                type: "button",
+                                label: "Gaji",
+                                onClick: () => AddToProcessData(employees, month, year),
+                            },
+                            {
+                                type: "button",
+                                label: "Bonus",
+                                onClick: () => {
+                                    // AddToProcessData(employees, month, year, false);
+                                },
+                            },
+                        ]}
+                    />
                 ) : (
                     <Button buttonType="danger" className="" onClick={() => clearProcessData()}>
                         Reset
@@ -336,16 +370,17 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="text-right">{formatNumber(employee.basic_salary)}</td>
-                                        <td className="text-right">{formatNumber(employee.commission)}</td>
+                                        <td className="text-right">{formatNumber(employee.basic_salary ?? 0)}</td>
+                                        <td className="text-right">{formatNumber(employee.commission ?? 0)}</td>
                                         <td className="text-right">
-                                            {formatNumber(employee.bonuses.reduce((total, bonus) => total + bonus.amount, 0) + employee.overtime)}
+                                            {formatNumber(employee.bonuses.reduce((total, bonus) => total + bonus.amount, 0) ?? 0 + employee.overtime ?? 0)}
                                         </td>
                                         <td className="text-right">
                                             {formatNumber(
-                                                employee.deductions.reduce((total, deduction) => total + deduction.amount, 0) +
-                                                    employee.employee_receivable +
-                                                    employee.installment_receivable,
+                                                employee?.deductions?.reduce((total, deduction) => total + deduction.amount, 0) ||
+                                                    0 + employee.employee_receivable ||
+                                                    0 + employee.installment_receivable ||
+                                                    0,
                                             )}
                                         </td>
                                         <td className="text-right font-bold">{calculateTotalItem(employee)}</td>
@@ -582,7 +617,7 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                         <ul className="text-sm">
                             {processData
                                 .find((emp) => emp.employee_id === selectedEmployee)
-                                ?.deductions.map((deduction, index) => (
+                                ?.deductions?.map((deduction, index) => (
                                     <li className="flex justify-between" key={index}>
                                         <span className="">{deduction.name}</span>
                                         <div className="flex gap-2 items-center">

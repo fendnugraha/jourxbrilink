@@ -2,12 +2,13 @@ import { formatNumber } from "@/libs/format";
 
 const PayrollDetail = ({ employee }) => {
     const totalIncome =
-        Number(employee?.basic_salary) +
-        Number(employee?.commission) +
-        employee?.bonuses?.reduce((total, item) => total + item?.amount, 0) +
-        Number(employee?.overtime);
-    const totalDeduction = employee?.deductions?.reduce((total, item) => total + item?.amount, 0);
-    const receivable = Number(employee?.employee_receivable) + Number(employee?.installment_receivable);
+        Number(employee?.basic_salary || 0) +
+        Number(employee?.commission || 0) +
+        employee?.bonuses?.reduce((total, item) => total + item?.amount || 0, 0) +
+        Number(employee?.overtime || 0);
+    const totalDeduction = employee?.deductions?.reduce((t, d) => t + Number(d?.amount || 0), 0) || 0;
+
+    const receivable = (Number(employee?.employee_receivable) || 0) + (Number(employee?.installment_receivable) || 0);
     return (
         <div>
             <h1 className="mb-4 font-bold">{employee?.name}</h1>
@@ -16,16 +17,16 @@ const PayrollDetail = ({ employee }) => {
                 <tbody>
                     <tr>
                         <td className="font-semibold p-1">Gaji Pokok</td>
-                        <td className="text-right">Rp {formatNumber(employee?.basic_salary)}</td>
+                        <td className="text-right">Rp {formatNumber(employee?.basic_salary || 0)}</td>
                     </tr>
                     <tr>
                         <td className="font-semibold p-1">Tunjangan/Komisi</td>
-                        <td className="text-right">Rp {formatNumber(employee?.commission)}</td>
+                        <td className="text-right">Rp {formatNumber(employee?.commission || 0)}</td>
                     </tr>
                     {employee?.overtime > 0 && (
                         <tr>
                             <td className="font-semibold p-1">Lembur</td>
-                            <td className="text-right">Rp {formatNumber(employee?.overtime)}</td>
+                            <td className="text-right">Rp {formatNumber(employee?.overtime || 0)}</td>
                         </tr>
                     )}
                     {employee?.bonuses.length > 0 && (
@@ -51,12 +52,12 @@ const PayrollDetail = ({ employee }) => {
                 <tbody>
                     <tr>
                         <td className="font-semibold p-1">Kasbon</td>
-                        <td className="text-right">{formatNumber(employee?.employee_receivable)}</td>
+                        <td className="text-right">{formatNumber(employee?.employee_receivable || 0)}</td>
                     </tr>
                     {employee?.installment_receivable > 0 && (
                         <tr>
                             <td className="font-semibold p-1">Cicilan</td>
-                            <td className="text-right">{formatNumber(employee?.installment_receivable)}</td>
+                            <td className="text-right">{formatNumber(employee?.installment_receivable || 0)}</td>
                         </tr>
                     )}
                     <tr>
@@ -66,7 +67,7 @@ const PayrollDetail = ({ employee }) => {
                     {employee?.deductions?.map((item, index) => (
                         <tr key={index}>
                             <td className="px-4 py-1">{item?.name}</td>
-                            <td className="text-right">Rp {formatNumber(item?.amount)}</td>
+                            <td className="text-right">Rp {formatNumber(item?.amount || 0)}</td>
                         </tr>
                     ))}
                     <tr className="border-t border-slate-300">

@@ -28,21 +28,18 @@ const WarehouseBalance = () => {
         setIsModalFilterDataOpen(false);
     };
 
-    // const fetchWarehouseBalance = useCallback(async () => {
-    //     setLoading(true);
-    //     try {
-    //         const response = await axios.get(`/api/get-warehouse-balance/${endDate}`);
-    //         setWarehouseBalance(response.data.data);
-    //     } catch (error) {
-    //         setNotification(error.response?.data?.message || "Something went wrong.");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // }, [endDate]);
+    const calculateLimitPercentage = (limit, value) => {
+        const result = ((value / (limit * 2.1)) * 100).toFixed(2);
+        if (result > 100) return 100;
 
-    // useEffect(() => {
-    //     fetchWarehouseBalance();
-    // }, [fetchWarehouseBalance]);
+        return ((value / (limit * 2.1)) * 100).toFixed(2);
+    };
+
+    const getLimitColor = (percent) => {
+        if (percent >= 80) return "bg-green-500";
+        if (percent >= 40) return "bg-yellow-400";
+        return "bg-red-500";
+    };
 
     return (
         <div className="card relative">
@@ -88,7 +85,26 @@ const WarehouseBalance = () => {
                                             {i + 1}. {w.name.replace(/^konter\s*/i, "")}
                                         </Link>
                                     </td>
-                                    <td className="text-end">{formatNumber(w.cash)}</td>
+                                    <td className="w-50">
+                                        {(() => {
+                                            const percent = w.id !== 1 && calculateLimitPercentage(w.total_cash_limit, w.cash);
+                                            const color = getLimitColor(percent);
+
+                                            return (
+                                                <div>
+                                                    {w.id !== 1 && (
+                                                        <div className="bg-slate-200 dark:bg-slate-700 rounded h-0.5 w-full overflow-hidden">
+                                                            <div className={`${color} h-0.5 transition-all duration-500`} style={{ width: `${percent}%` }} />
+                                                        </div>
+                                                    )}
+
+                                                    <div className="flex justify-between text-xs mt-1">
+                                                        <span>{formatNumber(w.cash)}</span>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })()}
+                                    </td>
                                     <td className="text-end">{formatNumber(w.bank)}</td>
                                     <td className={`text-end font-bold ${w.cash + w.bank - w.total_limit !== 0 && w.id !== 1 && "text-red-300"}`}>
                                         {formatNumber(w.cash + w.bank)}

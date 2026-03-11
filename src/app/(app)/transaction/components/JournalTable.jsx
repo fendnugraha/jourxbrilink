@@ -14,6 +14,7 @@ import TimeAgo from "@/libs/formatDateDistance";
 import EditMutationJournal from "./EditMutationJournal";
 import EditDeposit from "./EditDeposit";
 import Link from "next/link";
+import { JournalTableMobile } from "./JournalTableMobile";
 
 const getCurrentDate = () => {
     const nowUTC = new Date();
@@ -250,7 +251,7 @@ const JournalTable = ({
                 </div>
             </div>
             <div className="pb-4 mt-2">
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto hidden sm:flex">
                     <table className="table w-full table-auto text-xs">
                         <thead>
                             <tr>
@@ -306,7 +307,7 @@ const JournalTable = ({
                                                 . <span className="font-normal text-slate-500 dark:text-slate-300">Note: {journal.description}</span>
                                             </span>
                                             <span className="text-xs hidden sm:block text-slate-500 dark:text-slate-400">
-                                                Updated at <TimeAgo timestamp={journal.updated_at} /> by {journal.user?.name}
+                                                Updated <TimeAgo timestamp={journal.updated_at} /> by {journal.user?.name}
                                             </span>
                                             <div className="flex mt-1 gap-3 sm:hidden">
                                                 <button
@@ -420,6 +421,29 @@ const JournalTable = ({
                             )}
                         </tbody>
                     </table>
+                </div>
+                <div className="flex sm:hidden">
+                    <JournalTableMobile
+                        currentItems={currentItems}
+                        currentPage={currentPage}
+                        itemsPerPage={itemsPerPage}
+                        setCurrentPage={setCurrentPage}
+                        warehouse={warehouse}
+                        warehouses={warehouses}
+                        notification={notification}
+                        fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                        user={user}
+                        loading={loading}
+                        hqCashBank={hqCashBank}
+                        selectedAccount={selectedAccount}
+                        warehouseCash={warehouseCash}
+                        hqCashBankIds={hqCashBankIds}
+                        setIsModalEditDepositOpen={setIsModalEditDepositOpen}
+                        setIsModalEditJournalOpen={setIsModalEditJournalOpen}
+                        setIsModalEditMutationJournalOpen={setIsModalEditMutationJournalOpen}
+                        setSelectedJournalId={setSelectedJournalId}
+                        setIsModalDeleteJournalOpen={setIsModalDeleteJournalOpen}
+                    />
                 </div>
 
                 {totalPages > 1 && (

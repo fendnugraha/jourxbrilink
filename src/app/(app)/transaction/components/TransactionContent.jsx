@@ -186,13 +186,13 @@ const TransactionContent = () => {
                                     selectTable === "mutasi"
                                         ? "bg-white dark:bg-gray-900 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
                                         : "bg-slate-100 dark:bg-slate-700"
-                                } px-3 py-1 cursor-pointer mr-2 text-sm`}
+                                } relative px-3 py-1 cursor-pointer mr-2 text-sm`}
                             >
-                                Mutasi Kas{" "}
+                                Mutasi{" "}
                                 {journalsByWarehouse.data?.filter(
                                     (journal) => Number(journal.debt_code) === warehouseCashId && journal.trx_type === "Mutasi Kas",
                                 ).length > 0 && (
-                                    <span className="bg-green-500 dark:bg-green-600 text-xs rounded-full px-2 py-0.5 ml-2">
+                                    <span className="absolute -top-2 -right-2 bg-green-500 dark:bg-green-600 text-xs rounded-full w-5 h-5 flex items-center justify-center ml-2">
                                         {
                                             journalsByWarehouse.data?.filter(
                                                 (journal) => Number(journal.debt_code) === warehouseCashId && journal.trx_type === "Mutasi Kas",

@@ -93,7 +93,6 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
 
     const [mutationMode, setMutationMode] = useState("single");
 
-    console.log("accountBalance:", accountBalance);
     return (
         <>
             <div className="w-full flex justify-end gap-2 mb-2 sm:mb-0">

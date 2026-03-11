@@ -16,6 +16,8 @@ const DropdownMenu = ({ title = "Opsi", position = "bottom start", className, it
                         ) : (
                             <button
                                 className="flex items-center gap-1 text-sm w-full data-focus:bg-slate-100 dark:data-focus:bg-slate-800"
+                                type="button"
+                                {...item.attributes}
                                 onClick={item.onClick}
                             >
                                 {item.icon}

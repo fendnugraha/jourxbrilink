@@ -22,6 +22,7 @@ export const JournalTableMobile = ({
     setIsModalEditMutationJournalOpen,
     setIsModalDeleteJournalOpen,
     setSelectedJournalId,
+    userRole,
 }) => {
     return (
         <div className="px-2 w-full space-y-2">
@@ -118,7 +119,9 @@ export const JournalTableMobile = ({
                                 {
                                     type: "button",
                                     attributes: {
-                                        hidden: !["Mutasi Kas"].includes(journal.trx_type) || hqCashBankIds.includes(journal.cred_code),
+                                        disabled:
+                                            ["Voucher & SP", "Accessories", null].includes(journal.trx_type) ||
+                                            (userRole !== "Administrator" && hqCashBankIds.includes(journal.cred_code)),
                                     },
                                     label: "Hapus",
                                     onClick: () => {

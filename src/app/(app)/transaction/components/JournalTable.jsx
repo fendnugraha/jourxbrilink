@@ -443,6 +443,7 @@ const JournalTable = ({
                         setIsModalEditMutationJournalOpen={setIsModalEditMutationJournalOpen}
                         setSelectedJournalId={setSelectedJournalId}
                         setIsModalDeleteJournalOpen={setIsModalDeleteJournalOpen}
+                        userRole={userRole}
                     />
                 </div>
 

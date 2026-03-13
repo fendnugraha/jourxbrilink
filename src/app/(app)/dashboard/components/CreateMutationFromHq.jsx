@@ -5,6 +5,7 @@ import Label from "@/components/Label";
 import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
 import { DateTimeNow } from "@/libs/format";
+import { Clock } from "lucide-react";
 
 const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, warehouses, accountBalance = [] }) => {
     const { today } = DateTimeNow();
@@ -95,13 +96,18 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Tanggal</Label>
                 <div className="col-span-1">
-                    <input
-                        className="form-control"
-                        type="datetime-local"
-                        value={formData.date_issued}
-                        onChange={(e) => setFormData({ ...formData, date_issued: e.target.value })}
-                        required
-                    />
+                    <div className="flex gap-2">
+                        <input
+                            className="form-control"
+                            type="datetime-local"
+                            value={formData.date_issued}
+                            onChange={(e) => setFormData({ ...formData, date_issued: e.target.value })}
+                            required
+                        />
+                        <button type="button" className="small-button !bg-green-500" onClick={() => setFormData({ ...formData, date_issued: today })}>
+                            <Clock size={14} />
+                        </button>
+                    </div>
                     {errors?.date_issued && <span className="text-red-500 text-xs">{errors?.date_issued}</span>}
                 </div>
 

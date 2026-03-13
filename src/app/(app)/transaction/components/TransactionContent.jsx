@@ -159,16 +159,16 @@ const TransactionContent = () => {
                 <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
             )}
             <div className="py-4 sm:py-8 px-4 sm:px-12 mb-28 sm:mb-0">
+                <TransactionMenu
+                    user={user}
+                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                    accountBalance={accountBalance}
+                    mutateCashBankBalance={mutateCashBankBalance}
+                    setNotification={setNotification}
+                    cashBank={cashBank}
+                />
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                     <div className="card py-4 col-span-1 sm:col-span-3 order-2 sm:order-1 drop-shadow-sm h-fit">
-                        <TransactionMenu
-                            user={user}
-                            fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                            accountBalance={accountBalance}
-                            mutateCashBankBalance={mutateCashBankBalance}
-                            setNotification={setNotification}
-                            cashBank={cashBank}
-                        />
                         <div className="flex mb-4 px-4">
                             <button
                                 onClick={() => setSelectTable("transaksi")}
@@ -192,7 +192,7 @@ const TransactionContent = () => {
                                 {journalsByWarehouse.data?.filter(
                                     (journal) => Number(journal.debt_code) === warehouseCashId && journal.trx_type === "Mutasi Kas",
                                 ).length > 0 && (
-                                    <span className="absolute -top-2 -right-2 bg-green-500 dark:bg-green-600 text-xs rounded-full w-5 h-5 flex items-center justify-center ml-2">
+                                    <span className="absolute -top-2 -right-2 bg-green-500 dark:bg-green-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center ml-2">
                                         {
                                             journalsByWarehouse.data?.filter(
                                                 (journal) => Number(journal.debt_code) === warehouseCashId && journal.trx_type === "Mutasi Kas",

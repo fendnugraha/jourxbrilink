@@ -150,7 +150,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                     {accountBalance?.data?.chartOfAccounts?.length > 0 ? (
                         <>
                             <h1 className="text-xs text-slate-600 dark:text-white">Total Saldo</h1>
-                            <h1 className="text-2xl text-slate-600 dark:text-white font-black">{formatRupiah(summarizeBalance ?? 0)}</h1>
+                            <h1 className="text-2xl text-slate-600 dark:text-white font-black">{formatNumber(summarizeBalance ?? 0)}</h1>
                             {warehouse !== 1 && (
                                 <h1 className={`text-xs ${summarizeBalance - limitSummary === 0 ? "text-green-500" : "text-red-600 dark:text-red-300"}`}>
                                     {summarizeBalance - limitSummary === 0 ? "Complete" : formatNumber(summarizeBalance - limitSummary)}
@@ -198,7 +198,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
             <div
                 className={`bg-slate-200 dark:bg-black/40 backdrop-blur-sm rounded-3xl transform ${
                     showBalanceReport ? "opacity-100 scale-y-100 max-h-[700px]" : "opacity-0 scale-y-0 max-h-0 "
-                } origin-top transition-all duration-300 ease-in-out`}
+                } origin-top transition-all duration-300 ease-in-out drop-shadow-sm`}
             >
                 <div hidden={!showCashBankBalance} className="max-h-[calc(60px*7)] mt-2 overflow-y-scroll">
                     {accountBalance?.data?.chartOfAccounts?.map((account) => (

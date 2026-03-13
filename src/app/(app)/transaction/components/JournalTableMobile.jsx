@@ -25,7 +25,7 @@ export const JournalTableMobile = ({
     userRole,
 }) => {
     return (
-        <div className="px-2 w-full space-y-2">
+        <div className="w-full space-y-2">
             {currentItems.map((journal, index) => (
                 <div key={index} className="bg-slate-100 dark:bg-slate-700 flex justify-between items-center px-3 py-2 rounded-lg">
                     <div className="font-bold text-xs block group-hover:text-lime-700 group-hover:dark:text-lime-400">

@@ -5,7 +5,7 @@ import formatDateTime from "@/libs/formatDateTime";
 import axios from "@/libs/axios";
 import { useState } from "react";
 import Pagination from "@/components/PaginateList";
-import { CheckCheck, CheckIcon, FilterIcon, MessageCircleWarningIcon, PencilIcon, SearchIcon, TrashIcon, XIcon } from "lucide-react";
+import { CheckCheck, CheckIcon, Ellipsis, FilterIcon, MessageCircleWarningIcon, PencilIcon, SearchIcon, TrashIcon, XIcon } from "lucide-react";
 import Modal from "@/components/Modal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
@@ -15,6 +15,7 @@ import EditMutationJournal from "./EditMutationJournal";
 import EditDeposit from "./EditDeposit";
 import Link from "next/link";
 import { JournalTableMobile } from "./JournalTableMobile";
+import DropdownMenu from "@/components/DropdownMenu";
 
 const getCurrentDate = () => {
     const nowUTC = new Date();
@@ -142,9 +143,13 @@ const JournalTable = ({
     return (
         <>
             <div className="flex gap-2 px-4">
-                <button className="small-button" onClick={() => setShowSearch(!showSearch)}>
-                    <SearchIcon size={20} />
-                </button>
+                <input
+                    type="search"
+                    placeholder="Cari"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="form-control block w-full p-2.5"
+                />
                 <select
                     onChange={(e) => {
                         setSelectedAccount(e.target.value);
@@ -174,7 +179,7 @@ const JournalTable = ({
                     <option value={100}>100</option>
                 </select>
                 <button onClick={() => setIsModalFilterJournalOpen(true)} className="small-button">
-                    <FilterIcon size={20} />
+                    <FilterIcon size={18} />
                 </button>
                 <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                     {["Administrator", "Super Admin"].includes(userRole) && (
@@ -223,15 +228,6 @@ const JournalTable = ({
                     </button>
                 </Modal>
             </div>
-            <input
-                type="search"
-                className={`transform transition-all duration-500 ease-in-out origin-top-left 
-                            ${showSearch ? "px-4 form-control !w-1/2 !py-1 opacity-100 scale-100 mt-1 drop-shadow-sm" : "opacity-0 scale-0 h-0 p-0"}
-                        `}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search..."
-            />
 
             <div className="pt-1 px-4">
                 <div className="flex justify-between items-center">
@@ -250,16 +246,16 @@ const JournalTable = ({
                     )}
                 </div>
             </div>
-            <div className="pb-4 mt-2">
-                <div className="overflow-x-auto hidden sm:flex">
+            <div className="mt-2 px-4">
+                <div className="bg-slate-100 dark:bg-slate-800 rounded-xl py-2 hidden sm:flex">
                     <table className="table w-full table-auto text-xs">
-                        <thead>
+                        {/* <thead>
                             <tr>
                                 <th>Deskripsi</th>
                                 <th className="">Jumlah</th>
                                 <th className="hidden sm:table-cell">Action</th>
                             </tr>
-                        </thead>
+                        </thead> */}
                         <tbody>
                             {currentItems.length === 0 ? (
                                 <tr>
@@ -274,7 +270,7 @@ const JournalTable = ({
                                             <span className="text-xs text-blue-700 dark:text-blue-300 group-hover:dark:text-blue-200 group-hover:text-blue-400 block">
                                                 #{journal.id} {formatDateTime(journal.date_issued)}
                                             </span>
-                                            <span className="font-bold text-xs block text-lime-600 dark:text-lime-300 group-hover:text-lime-700 group-hover:dark:text-lime-400">
+                                            <span className="font-bold text-xs block group-hover:text-lime-700 group-hover:dark:text-lime-400">
                                                 {journal.trx_type === "Voucher & SP" || journal.trx_type === "Accessories" ? (
                                                     <ul className="list-disc font-normal scale-95">
                                                         {journal.transaction.map((trx) => (
@@ -287,16 +283,15 @@ const JournalTable = ({
                                                     <>
                                                         {journal.cred?.account_group}{" "}
                                                         {journal.cred?.warehouse?.id !== warehouse && (
-                                                            <span className="text-slate-500 dark:text-slate-300">
-                                                                ({journal.cred?.warehouse?.name.replace(/^konter\s*/i, "")})
-                                                            </span>
+                                                            <span className="text-yellow-600 dark:text-yellow-300">({journal.cred?.warehouse?.code})</span>
                                                         )}
-                                                        {" → "}
-                                                        {journal.debt?.account_group}{" "}
+                                                        <span className="text-green-600 dark:text-green-300">
+                                                            {" "}
+                                                            {" → "}
+                                                            {journal.debt?.account_group}
+                                                        </span>{" "}
                                                         {journal.debt?.warehouse?.id !== warehouse && (
-                                                            <span className="text-slate-500 dark:text-slate-300">
-                                                                ({journal.debt?.warehouse?.name.replace(/^konter\s*/i, "")})
-                                                            </span>
+                                                            <span className="text-yellow-600 dark:text-yellow-300">({journal.debt?.warehouse?.code})</span>
                                                         )}
                                                     </>
                                                 ) : Number(journal.debt_code) === warehouseCash ? (
@@ -369,52 +364,60 @@ const JournalTable = ({
                                                 </span>
                                             )}
                                         </td>
-                                        <td className="hidden sm:table-cell">
-                                            <div className="flex justify-center gap-3">
-                                                <button
-                                                    className=" hover:scale-125 transtition-all duration-200"
-                                                    hidden={!["Deposit"].includes(journal.trx_type)}
-                                                    onClick={() => {
-                                                        setSelectedJournalId(journal.id);
-                                                        setIsModalEditDepositOpen(true);
-                                                    }}
-                                                >
-                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:dark:text-white group-hover:text-slate-600" />
-                                                </button>
-                                                <button
-                                                    className=" hover:scale-125 transtition-all duration-200"
-                                                    hidden={!["Transfer Uang", "Tarik Tunai"].includes(journal.trx_type)}
-                                                    onClick={() => {
-                                                        setSelectedJournalId(journal.id);
-                                                        setIsModalEditJournalOpen(true);
-                                                    }}
-                                                >
-                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:dark:text-white group-hover:text-slate-600" />
-                                                </button>
-                                                <button
-                                                    className=" hover:scale-125 transtition-all duration-200"
-                                                    hidden={!["Mutasi Kas"].includes(journal.trx_type) || hqCashBankIds.includes(journal.cred_code)}
-                                                    onClick={() => {
-                                                        setSelectedJournalId(journal.id);
-                                                        setIsModalEditMutationJournalOpen(true);
-                                                    }}
-                                                >
-                                                    <PencilIcon className="size-4 text-indigo-700 dark:text-indigo-300 group-hover:dark:text-white group-hover:text-slate-600" />
-                                                </button>
-                                                <button
-                                                    onClick={() => {
-                                                        setSelectedJournalId(journal.id);
-                                                        setIsModalDeleteJournalOpen(true);
-                                                    }}
-                                                    disabled={
-                                                        ["Voucher & SP", "Accessories", "Correction", null].includes(journal.trx_type) ||
-                                                        (!["Administrator", "Super Admin"].includes(userRole) && hqCashBankIds.includes(journal.cred_code))
-                                                    }
-                                                    className="disabled:text-slate-300 disabled:cursor-not-allowed text-red-600 dark:text-red-400 hover:scale-125 transition-all group-hover:dark:text-white group-hover:text-slate-600 duration-200"
-                                                >
-                                                    <TrashIcon className="size-4" />
-                                                </button>
-                                            </div>
+                                        <td className="font-bold text-end text-slate-600 dark:text-slate-300 ">
+                                            <DropdownMenu
+                                                title={<Ellipsis size={14} />}
+                                                position="bottom end"
+                                                className={""}
+                                                items={[
+                                                    {
+                                                        type: "button",
+                                                        attributes: {
+                                                            hidden: !["Deposit"].includes(journal.trx_type),
+                                                        },
+                                                        label: "Edit",
+                                                        onClick: () => {
+                                                            setSelectedJournalId(journal.id);
+                                                            setIsModalEditDepositOpen(true);
+                                                        },
+                                                    },
+                                                    {
+                                                        type: "button",
+                                                        attributes: {
+                                                            hidden: !["Transfer Uang", "Tarik Tunai"].includes(journal.trx_type),
+                                                        },
+                                                        label: "Edit",
+                                                        onClick: () => {
+                                                            setSelectedJournalId(journal.id);
+                                                            setIsModalEditJournalOpen(true);
+                                                        },
+                                                    },
+                                                    {
+                                                        type: "button",
+                                                        attributes: {
+                                                            hidden: !["Mutasi Kas"].includes(journal.trx_type) || hqCashBankIds.includes(journal.cred_code),
+                                                        },
+                                                        label: "Edit",
+                                                        onClick: () => {
+                                                            setSelectedJournalId(journal.id);
+                                                            setIsModalEditMutationJournalOpen(true);
+                                                        },
+                                                    },
+                                                    {
+                                                        type: "button",
+                                                        attributes: {
+                                                            disabled:
+                                                                ["Voucher & SP", "Accessories", null].includes(journal.trx_type) ||
+                                                                (userRole !== "Administrator" && hqCashBankIds.includes(journal.cred_code)),
+                                                        },
+                                                        label: "Hapus",
+                                                        onClick: () => {
+                                                            setSelectedJournalId(journal.id);
+                                                            setIsModalDeleteJournalOpen(true);
+                                                        },
+                                                    },
+                                                ]}
+                                            />
                                         </td>
                                     </tr>
                                 ))
@@ -449,7 +452,7 @@ const JournalTable = ({
 
                 {totalPages > 1 && (
                     <Pagination
-                        className="w-full px-4"
+                        className="w-full"
                         totalItems={totalItems}
                         itemsPerPage={itemsPerPage}
                         currentPage={currentPage}

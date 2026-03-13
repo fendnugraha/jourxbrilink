@@ -90,7 +90,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, mutat
     const [selectedBankAccount, setSelectedBankAccount] = useState("");
     return (
         <>
-            <div className="hidden sm:flex gap-2 mb-4 px-4 justify-between">
+            <div className="hidden sm:flex gap-2 justify-between">
                 <div className="flex gap-2">
                     <Button
                         buttonType="primary"

@@ -62,45 +62,43 @@ const MutationTable = ({ journalsByWarehouse, user }) => {
                     <option value={100}>100</option>
                 </select>
             </div>
-            <div>
-                <h1 className="text-lg font-bold mb-2 px-4">
+            <div className="px-4">
+                <h1 className="text-lg font-bold mb-2">
                     <span className="font-normal text-sm">Total Mutasi:</span> Rp.{" "}
                     {formatNumber(filteredJournals?.reduce((total, journal) => total + journal.amount, 0))}
                 </h1>
-                <div className="overflow-x-auto">
-                    <table className="table-auto table w-full text-xs">
-                        <thead>
-                            <tr>
-                                <th className="">Waktu</th>
-                                <th className="">Jumlah</th>
-                                <th className="">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {currentItems.map((journal) => (
-                                <tr key={journal.id}>
-                                    <td className="">
-                                        <span className="block font-bold text-yellow-500 dark:text-yellow-300">{journal.invoice}</span>
-                                        <span className="text-xs flex gap-1">
-                                            <Bike size={14} className="bg-yellow-500 p-0.5 rounded-full" /> {formatDateTime(journal.date_issued)}
-                                            <CheckCheck size={14} className="ml-1 bg-green-500 p-0.5 rounded-full" />{" "}
-                                            {journal.status === 0 ? "-" : formatDateTime(journal.updated_at)}{" "}
-                                            {journal.status === 1 && (
-                                                <span className="italic">({formatDurationTime(journal.updated_at, journal.date_issued)})</span>
-                                            )}
-                                        </span>
-                                    </td>
-                                    <td className="text-right text-lg font-bold">{formatNumber(journal.amount)}</td>
-                                    <td className="text-center">
-                                        <StatusBadge
-                                            status={journal.status === 0 ? "In Progress" : "Completed"}
-                                            statusText={journal.status === 0 ? "Dalam Pengiriman" : "Sudah Diterima"}
-                                        />
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                <div className="bg-slate-100 dark:bg-slate-800 rounded-xl">
+                    {currentItems.map((journal) => (
+                        <div
+                            className="flex justify-between px-4 py-2 text-xs items-end sm:items-center border-b border-slate-200 dark:border-slate-600 last:border-b-0"
+                            key={journal.id}
+                        >
+                            <div className="flex flex-col gap-1">
+                                <span className="block font-bold text-yellow-500 dark:text-yellow-300">{journal.invoice}</span>
+                                <div>
+                                    <span className="text-xs flex gap-1">
+                                        <Bike size={14} className="bg-yellow-500 p-0.5 rounded-full" /> {formatDateTime(journal.date_issued)}
+                                    </span>
+                                    <span className="text-xs flex gap-1">
+                                        <CheckCheck size={14} className="bg-green-500 p-0.5 rounded-full" />{" "}
+                                        {journal.status === 0 ? "-" : formatDateTime(journal.updated_at)}{" "}
+                                        {journal.status === 1 && (
+                                            <span className="italic">({formatDurationTime(journal.updated_at, journal.date_issued)})</span>
+                                        )}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="flex items-end flex-col sm:flex-row sm:gap-4">
+                                <div className="text-base sm:text-xl font-bold">{formatNumber(journal.amount)}</div>
+                                <div className="">
+                                    <StatusBadge
+                                        status={journal.status === 0 ? "In Progress" : "Completed"}
+                                        statusText={journal.status === 0 ? "On Delivery" : "Delivered"}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </>

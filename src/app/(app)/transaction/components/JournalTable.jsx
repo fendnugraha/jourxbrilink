@@ -283,7 +283,9 @@ const JournalTable = ({
                                                     <>
                                                         {journal.cred?.account_group}{" "}
                                                         {journal.cred?.warehouse?.id !== warehouse && (
-                                                            <span className="text-yellow-600 dark:text-yellow-300">({journal.cred?.warehouse?.code})</span>
+                                                            <span className="text-yellow-600 dark:text-yellow-300">
+                                                                ({journal.cred?.warehouse?.name.replace(/^konter\s*/i, "")})
+                                                            </span>
                                                         )}
                                                         <span className="text-green-600 dark:text-green-300">
                                                             {" "}
@@ -291,7 +293,9 @@ const JournalTable = ({
                                                             {journal.debt?.account_group}
                                                         </span>{" "}
                                                         {journal.debt?.warehouse?.id !== warehouse && (
-                                                            <span className="text-yellow-600 dark:text-yellow-300">({journal.debt?.warehouse?.code})</span>
+                                                            <span className="text-yellow-600 dark:text-yellow-300">
+                                                                ({journal.debt?.warehouse?.name.replace(/^konter\s*/i, "")})
+                                                            </span>
                                                         )}
                                                     </>
                                                 ) : Number(journal.debt_code) === warehouseCash ? (

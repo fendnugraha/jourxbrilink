@@ -114,11 +114,6 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, mutat
                     >
                         Tarik Tunai <ArrowDownIcon size={18} className="inline group-hover:scale-125 delay-300 transition-transform duration-200" />
                     </Button>
-                </div>
-                <div className="flex gap-2">
-                    <Button buttonType="secondary" className="mb-4 group" onClick={() => setIsModalCreateMutationOpen(true)}>
-                        Mutasi <ArrowUpDown size={18} className="inline group-hover:scale-125 delay-300 transition-transform duration-200" />
-                    </Button>
                     <Dropdown
                         trigger={
                             <Button buttonType="success" className={"group text-nowrap"}>
@@ -141,6 +136,11 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, mutat
                             </li>
                         </ul>
                     </Dropdown>
+                </div>
+                <div className="flex gap-2">
+                    <Button buttonType="secondary" className="mb-4 group" onClick={() => setIsModalCreateMutationOpen(true)}>
+                        Mutasi <ArrowUpDown size={18} className="inline group-hover:scale-125 delay-300 transition-transform duration-200" />
+                    </Button>
                     <Dropdown
                         trigger={
                             <Button buttonType="danger" className={"group text-nowrap"}>

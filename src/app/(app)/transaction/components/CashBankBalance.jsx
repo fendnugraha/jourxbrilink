@@ -197,11 +197,11 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                 <ChevronDown className={`w-4 h-4 inline ${showBalanceReport ? "rotate-180" : ""} transition delay-500 ease-in-out`} />
             </button>
             <div
-                className={`bg-slate-200 dark:bg-black/40 backdrop-blur-sm rounded-3xl transform ${
+                className={`bg-slate-200 dark:bg-black/40 backdrop-blur-sm mt-2 rounded-3xl transform ${
                     showBalanceReport ? "opacity-100 scale-y-100 " : "opacity-0 scale-y-0 max-h-0 "
                 } origin-top transition-all duration-300 ease-in-out drop-shadow-sm ${showAllAccounts ? "h-fit" : "max-h-[700px] overflow-y-auto"}`}
             >
-                <div hidden={!showCashBankBalance} className="max-h-[calc(60px*7)] mt-2 overflow-y-scroll">
+                <div hidden={!showCashBankBalance} className="max-h-[calc(60px*7)]">
                     {accountBalance?.data?.chartOfAccounts?.map((account) => (
                         <div
                             className="group px-4 py-2 border-b border-slate-300 dark:border-slate-700 first:mt-1 last:border-b-0 rounded-3xl"
@@ -232,13 +232,8 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                             </div>
                         </div>
                     ))}
-                    <button
-                        className="w-full flex justify-center items-center py-1 text-slate-600 dark:text-slate-400"
-                        onClick={() => setShowAllAccounts(!showAllAccounts)}
-                    >
-                        <ChevronDown size={14} className={`${showAllAccounts ? "rotate-180" : ""} transition delay-500 ease-in-out`} />
-                    </button>
                 </div>
+
                 <div hidden={!showDailyReport} className="p-3 text-slate-600 dark:text-white mt-2">
                     <div className="flex justify-between items-start mb-2">
                         <Dropdown
@@ -352,6 +347,12 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                     </div>
                 </div>
             </div>
+            <button
+                className="w-full flex justify-center items-center py-1 text-slate-600 dark:text-slate-400"
+                onClick={() => setShowAllAccounts(!showAllAccounts)}
+            >
+                <ChevronDown size={14} className={`${showAllAccounts ? "rotate-180" : ""} transition delay-500 ease-in-out`} />
+            </button>
         </div>
     );
 };

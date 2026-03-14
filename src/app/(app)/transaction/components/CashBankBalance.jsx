@@ -198,8 +198,10 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
             </button>
             <div
                 className={`bg-slate-200 dark:bg-black/40 backdrop-blur-sm mt-2 rounded-3xl transform ${
-                    showBalanceReport ? "opacity-100 scale-y-100 " : "opacity-0 scale-y-0 max-h-0 "
-                } origin-top transition-all duration-300 ease-in-out drop-shadow-sm ${showAllAccounts ? "h-fit" : "max-h-[700px] overflow-y-auto"}`}
+                    showBalanceReport
+                        ? `opacity-100 scale-y-100 ${showAllAccounts ? "h-fit" : "max-h-[700px] overflow-y-auto"}`
+                        : "opacity-0 scale-y-0 max-h-0 "
+                } origin-top transition-all duration-300 ease-in-out drop-shadow-sm`}
             >
                 <div hidden={!showCashBankBalance} className="max-h-[calc(60px*7)]">
                     {accountBalance?.data?.chartOfAccounts?.map((account) => (
@@ -348,6 +350,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                 </div>
             </div>
             <button
+                hidden={!showBalanceReport}
                 className="w-full flex justify-center items-center py-1 text-slate-600 dark:text-slate-400"
                 onClick={() => setShowAllAccounts(!showAllAccounts)}
             >

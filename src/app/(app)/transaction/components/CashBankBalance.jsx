@@ -199,7 +199,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
             <div
                 className={`bg-slate-200 dark:bg-black/40 backdrop-blur-sm rounded-3xl transform ${
                     showBalanceReport ? "opacity-100 scale-y-100 " : "opacity-0 scale-y-0 max-h-0 "
-                } origin-top transition-all duration-300 ease-in-out drop-shadow-sm ${showAllAccounts ? "h-fit" : "max-h-[200px] overflow-y-auto"}`}
+                } origin-top transition-all duration-300 ease-in-out drop-shadow-sm ${showAllAccounts ? "h-fit" : "max-h-[700px] overflow-y-auto"}`}
             >
                 <div hidden={!showCashBankBalance} className="max-h-[calc(60px*7)] mt-2 overflow-y-scroll">
                     {accountBalance?.data?.chartOfAccounts?.map((account) => (

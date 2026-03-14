@@ -137,7 +137,7 @@ export const DateTimeNow = () => {
             minute: "2-digit",
             second: "2-digit",
             hour12: false,
-        }).format(new Date())
+        }).format(new Date()),
     );
 
     const pad = (n) => n.toString().padStart(2, "0");
@@ -179,7 +179,7 @@ export const calculateFee = (amount, chunkSize = 2500000, feePerChunk = 5000, mi
         return "";
     }
 
-    if (amount < minAmount) {
+    if (amount <= minAmount) {
         return minFee;
     }
 

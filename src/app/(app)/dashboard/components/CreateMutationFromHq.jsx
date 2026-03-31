@@ -96,7 +96,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
                 <Label>Tanggal</Label>
                 <div className="col-span-1">
-                    <div className="flex gap-2">
+                    <div className="flex gap-1">
                         <input
                             className="form-control"
                             type="datetime-local"

@@ -85,11 +85,13 @@ const PaymentForm = ({ contactId, notification, fetchFinance, isModalOpen }) => 
                         className="form-select"
                     >
                         <option value="">Select Invoice</option>
-                        {financeData.map((finance, index) => (
-                            <option key={index} value={finance.invoice} hidden={finance.sisa <= 0}>
-                                {finance.invoice}, Total Tagihan : {formatNumber(finance.sisa)}
-                            </option>
-                        ))}
+                        {financeData
+                            .filter((finance) => finance.sisa > 0)
+                            .map((finance, index) => (
+                                <option key={index} value={finance.invoice}>
+                                    {finance.invoice}, Total Tagihan : {formatNumber(finance.sisa)}
+                                </option>
+                            ))}
                     </select>
                     <h1 className="text-sm">Tagihan: RP. {selectedInvoice && formatNumber(filterDataByInvoice[0]?.sisa)}</h1>
                 </div>

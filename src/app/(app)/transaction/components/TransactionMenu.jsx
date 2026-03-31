@@ -2,7 +2,7 @@
 import Button from "@/components/Button";
 import Dropdown from "@/components/Dropdown";
 import Modal from "@/components/Modal";
-import { ArrowDownIcon, ArrowUpDown, ArrowUpIcon, ChevronRightIcon, HandCoinsIcon, ShoppingBagIcon } from "lucide-react";
+import { AlignVerticalJustifyStart, ArrowDownIcon, ArrowUpDown, ArrowUpIcon, ChevronRightIcon, HandCoinsIcon, ShoppingBagIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import CreateTransfer from "./CreateTransfer";
 import CreateCashWithdrawal from "./CreateCashWithdrawal";

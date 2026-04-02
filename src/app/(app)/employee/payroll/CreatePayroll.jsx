@@ -377,10 +377,9 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                                         </td>
                                         <td className="text-right">
                                             {formatNumber(
-                                                employee?.deductions?.reduce((total, deduction) => total + deduction.amount, 0) ||
-                                                    0 + employee.employee_receivable ||
-                                                    0 + employee.installment_receivable ||
-                                                    0,
+                                                employee?.deductions?.reduce((total, deduction) => total + deduction.amount, 0) +
+                                                    Number(employee.employee_receivable) +
+                                                    Number(employee.installment_receivable),
                                             )}
                                         </td>
                                         <td className="text-right font-bold">{calculateTotalItem(employee)}</td>

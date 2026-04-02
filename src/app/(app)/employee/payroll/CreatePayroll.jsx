@@ -373,7 +373,7 @@ const CreatePayroll = ({ employees, fetchContacts, notification, month, year, se
                                         <td className="text-right">{formatNumber(employee.basic_salary ?? 0)}</td>
                                         <td className="text-right">{formatNumber(employee.commission ?? 0)}</td>
                                         <td className="text-right">
-                                            {formatNumber(employee.bonuses.reduce((total, bonus) => total + bonus.amount, 0) ?? 0 + employee.overtime ?? 0)}
+                                            {formatNumber(employee.bonuses.reduce((total, bonus) => total + bonus.amount, 0) + employee.overtime)}
                                         </td>
                                         <td className="text-right">
                                             {formatNumber(

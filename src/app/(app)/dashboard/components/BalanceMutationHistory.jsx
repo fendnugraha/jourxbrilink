@@ -5,7 +5,7 @@ import StatusBadge from "@/components/StatusBadge";
 import { MessageCircleWarningIcon, MoveRightIcon, PencilIcon, TrashIcon } from "lucide-react";
 import { useState } from "react";
 import EditMutationJournal from "../../transaction/components/EditMutationJournal";
-import { formatDateTime, formatDateTimeColumn, formatNumber } from "@/libs/format";
+import { formatDateTime, formatDateTimeColumn, formatNumber, formatTime } from "@/libs/format";
 import axios from "@/libs/axios";
 
 const BalanceMutationHistory = ({
@@ -114,62 +114,66 @@ const BalanceMutationHistory = ({
                 </div>
                 {currentItems?.length > 0 &&
                     currentItems.map((journal, index) => (
-                        <div
-                            key={index}
-                            className="flex justify-between text-xs p-2 bg-white dark:bg-black/40 hover:dark:bg-green-500/30 backdrop-blur-sm rounded-xl mb-2 hover:shadow-md"
-                        >
-                            <div>
-                                <h1 className="font-bold overflow-x-hidden text-blue-600 dark:text-yellow-200">
-                                    {journal.debt?.warehouse_id === Number(selectedWarehouse)
-                                        ? journal.cred?.warehouse?.name?.replace(/^konter\s*/i, "")
-                                        : journal.debt?.warehouse?.name?.replace(/^konter\s*/i, "")}
-                                </h1>
-                                <h1>{formatDateTime(journal.date_issued)}</h1>
-                                <span
-                                    className={`${journal.cred?.warehouse_id === Number(selectedWarehouse) ? "font-bold text-teal-500 dark:text-teal-300" : ""}`}
-                                >
-                                    {journal.cred?.account_group ?? journal.cred?.acc_name}
-                                </span>{" "}
-                                {"->"}{" "}
-                                <span
-                                    className={`${journal.debt?.warehouse_id === Number(selectedWarehouse) ? "font-bold text-teal-500 dark:text-teal-300" : ""}`}
-                                >
-                                    {journal.debt?.account_group ?? journal.debt?.acc_name}
-                                </span>
-                            </div>
-                            <div className="text-right flex flex-col justify-between">
-                                <h1
-                                    className={`font-bold text-[1.2rem] text-nowrap ${
-                                        journal.debt?.warehouse_id === Number(selectedWarehouse)
-                                            ? "text-green-500 dark:text-green-300"
-                                            : "text-red-500 dark:text-red-300"
-                                    }`}
-                                >
-                                    {journal.debt?.warehouse_id === Number(selectedWarehouse) ? "+" : "-"}
-                                    {formatNumber(journal.amount)}
-                                </h1>
-                                <div className="flex justify-end gap-2">
-                                    <button
-                                        onClick={() => {
-                                            setIsModalEditMutationJournalOpen(true);
-                                            setSelectedJournalId(journal.id);
-                                        }}
-                                        className="hover:underline"
-                                        hidden={!["Administrator", "Super Admin"].includes(userRole)}
+                        <div className="relative " key={index}>
+                            <h1 className="absolute w-full h-full flex justify-center items-center z-1 font-black text-3xl pointer-events-none select-none text-nowrap overflow-hidden text-slate-500/10 dark:text-slate-500/10">
+                                {journal.debt?.warehouse_id === Number(selectedWarehouse)
+                                    ? journal.cred?.warehouse?.name?.replace(/^konter\s*/i, "")
+                                    : journal.debt?.warehouse?.name?.replace(/^konter\s*/i, "")}
+                            </h1>
+                            <div className="flex justify-between text-xs p-2 bg-white dark:bg-black/40 hover:dark:bg-green-500/30 backdrop-blur-sm rounded-xl mb-2 hover:shadow-md">
+                                <div>
+                                    <h1>{formatDateTime(journal.date_issued)}</h1>
+                                    <h1 className="font-bold overflow-x-hidden text-blue-600 dark:text-yellow-200 text-sm">
+                                        {journal.debt?.warehouse_id === Number(selectedWarehouse)
+                                            ? journal.cred?.warehouse?.name?.replace(/^konter\s*/i, "")
+                                            : journal.debt?.warehouse?.name?.replace(/^konter\s*/i, "")}
+                                    </h1>
+                                    <span
+                                        className={`${journal.cred?.warehouse_id === Number(selectedWarehouse) ? "font-bold text-teal-500 dark:text-teal-300" : ""}`}
                                     >
-                                        Edit
-                                    </button>
-                                    <button
-                                        className="text-red-500 hover:underline"
-                                        hidden={!["Administrator", "Super Admin"].includes(userRole)}
-                                        disabled={!hqCashBankIds.includes(journal.cred_code)}
-                                        onClick={() => {
-                                            setIsModalDeleteJournalOpen(true);
-                                            setSelectedJournalId(journal.id);
-                                        }}
+                                        {journal.cred?.account_group ?? journal.cred?.acc_name}
+                                    </span>{" "}
+                                    {"->"}{" "}
+                                    <span
+                                        className={`${journal.debt?.warehouse_id === Number(selectedWarehouse) ? "font-bold text-teal-500 dark:text-teal-300" : ""}`}
                                     >
-                                        Delete
-                                    </button>
+                                        {journal.debt?.account_group ?? journal.debt?.acc_name}
+                                    </span>
+                                </div>
+                                <div className="text-right flex flex-col justify-between">
+                                    <h1
+                                        className={`font-bold text-[1.2rem] text-nowrap ${
+                                            journal.debt?.warehouse_id === Number(selectedWarehouse)
+                                                ? "text-green-500 dark:text-green-300"
+                                                : "text-red-500 dark:text-red-300"
+                                        }`}
+                                    >
+                                        {journal.debt?.warehouse_id === Number(selectedWarehouse) ? "+" : "-"}
+                                        {formatNumber(journal.amount)}
+                                    </h1>
+                                    <div className="flex justify-end gap-2">
+                                        <button
+                                            onClick={() => {
+                                                setIsModalEditMutationJournalOpen(true);
+                                                setSelectedJournalId(journal.id);
+                                            }}
+                                            className="hover:underline"
+                                            hidden={!["Administrator", "Super Admin"].includes(userRole)}
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            className="text-red-500 hover:underline"
+                                            hidden={!["Administrator", "Super Admin"].includes(userRole)}
+                                            disabled={!hqCashBankIds.includes(journal.cred_code)}
+                                            onClick={() => {
+                                                setIsModalDeleteJournalOpen(true);
+                                                setSelectedJournalId(journal.id);
+                                            }}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

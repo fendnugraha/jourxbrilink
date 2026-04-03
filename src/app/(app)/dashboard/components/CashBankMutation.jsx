@@ -4,7 +4,7 @@ import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
 import Modal from "@/components/Modal";
 import CreateMutationFromHq from "./CreateMutationFromHq";
-import { ArrowUpRight, FilterIcon, LoaderCircleIcon, PlusCircleIcon, RefreshCcwIcon } from "lucide-react";
+import { ArrowUpRight, EyeClosedIcon, EyeIcon, EyeOffIcon, FilterIcon, LoaderCircleIcon, PlusCircleIcon, RefreshCcwIcon } from "lucide-react";
 import CreateJournal from "./CreateJournal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
@@ -13,6 +13,7 @@ import { mutate } from "swr";
 import CreateMutationFromHqMultiple from "./CreateMutationFromHqMultiple";
 import Link from "next/link";
 import BalanceMutationHistory from "./BalanceMutationHistory";
+import StatusBadge from "@/components/StatusBadge";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -31,6 +32,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
     const [isModalCreateJournalOpen, setIsModalCreateJournalOpen] = useState(false);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
+    const [showLimit, setShowLimit] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const closeModal = () => {
         setIsModalCreateMutationFromHqOpen(false);
@@ -95,49 +97,24 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
 
     return (
         <>
-            <div className="w-full flex justify-end gap-2 mb-2 sm:mb-0">
+            <div className="w-full flex gap-2 mb-2 sm:mb-0">
                 {["Administrator", "Super Admin"].includes(userRole) && (
                     <>
                         <button
                             onClick={() => setIsModalCreateJournalOpen(true)}
-                            className="bg-indigo-500 text-sm sm:text-xs min-w-36 hover:bg-indigo-600 text-white py-4 sm:py-2 px-2 sm:px-6 rounded-lg"
+                            className="bg-slate-500 text-sm sm:text-xs min-w-36 hover:bg-slate-600 text-white py-4 sm:py-2 px-2 sm:px-6 rounded-lg"
                         >
                             Jurnal Umum <PlusCircleIcon className="size-4 inline" />
                         </button>
                         <button
                             onClick={() => setIsModalCreateMutationFromHqOpen(true)}
-                            className="bg-indigo-500 text-sm sm:text-xs min-w-36 hover:bg-indigo-600 text-white py-4 sm:py-2 px-2 sm:px-6 rounded-lg"
+                            className="bg-indigo-500 text-sm sm:text-xs min-w-48 hover:bg-indigo-600 text-white py-4 sm:py-2 px-2 sm:px-6 rounded-lg"
                         >
                             Mutasi Saldo <PlusCircleIcon className="size-4 inline" />
                         </button>
-                        <select
-                            value={selectedWarehouse}
-                            onChange={(e) => {
-                                setSelectedWarehouse(e.target.value);
-                                setCurrentPage(1);
-                            }}
-                            className="form-select block w-fit p-2.5"
-                        >
-                            {warehouses?.data?.map((warehouse) => (
-                                <option key={warehouse.id} value={warehouse.id}>
-                                    {warehouse.name}
-                                </option>
-                            ))}
-                        </select>
                     </>
                 )}
-                <button
-                    onClick={() => {
-                        mutateCashBankBalance();
-                        fetchJournalsByWarehouse();
-                    }}
-                    className="small-button"
-                >
-                    <RefreshCcwIcon className="size-4" />
-                </button>
-                <button onClick={() => setIsModalFilterDataOpen(true)} className="small-button">
-                    <FilterIcon className="size-4" />
-                </button>
+
                 {/* <Link href={`/dashboard/mutation`} className="small-button">
                     <ArrowUpRight className="size-4" />
                 </Link> */}
@@ -211,10 +188,43 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="mb-4 card p-4 sm:col-span-2 h-fit">
                     {loading || (isValidating && <LoaderCircleIcon size={20} className="animate-spin absolute top-2 text-slate-400 left-2" />)}
-                    <h1 className="card-title">
-                        Mutasi Saldo
-                        <span className="card-subtitle text-nowrap">Periode: {endDate}</span>
-                    </h1>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <h1 className="card-title">
+                            Mutasi Saldo
+                            <span className="card-subtitle text-nowrap">Periode: {endDate}</span>
+                        </h1>
+                        <div className="flex gap-1 justify-end sm:col-span-2">
+                            <select
+                                value={selectedWarehouse}
+                                onChange={(e) => {
+                                    setSelectedWarehouse(e.target.value);
+                                    setCurrentPage(1);
+                                }}
+                                className="form-select block h-fit p-2.5"
+                            >
+                                {warehouses?.data?.map((warehouse) => (
+                                    <option key={warehouse.id} value={warehouse.id}>
+                                        {warehouse.name}
+                                    </option>
+                                ))}
+                            </select>
+                            <button
+                                onClick={() => {
+                                    mutateCashBankBalance();
+                                    fetchJournalsByWarehouse();
+                                }}
+                                className="small-button h-fit"
+                            >
+                                <RefreshCcwIcon className="size-4" />
+                            </button>
+                            <button onClick={() => setShowLimit(!showLimit)} className="small-button h-fit">
+                                {showLimit ? <EyeIcon className="size-4" /> : <EyeClosedIcon className="size-4" />}
+                            </button>
+                            <button onClick={() => setIsModalFilterDataOpen(true)} className="small-button h-fit">
+                                <FilterIcon className="size-4" />
+                            </button>
+                        </div>
+                    </div>
                     <div className="overflow-x-auto">
                         <table className="table w-full text-xs">
                             <thead>
@@ -236,6 +246,18 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                         </td>
                                         <td className="text-end text-sm text-blue-500 dark:text-yellow-200 font-bold hidden sm:table-cell">
                                             {formatNumber(account.balance ?? 0)}
+                                            {account.balance - account.limit?.limit_amount < 0 && (
+                                                <h2
+                                                    className={`text-xs ${
+                                                        account.balance - account.limit?.limit_amount > 0
+                                                            ? "text-green-600 dark:text-green-400"
+                                                            : "text-red-600 dark:text-red-400"
+                                                    } group-hover:scale-105 transition delay-100 duration-150 ease-out`}
+                                                    hidden={!account.limit?.limit_amount || !showLimit}
+                                                >
+                                                    {formatNumber(account.balance - account.limit?.limit_amount)}
+                                                </h2>
+                                            )}
                                         </td>
                                         <td className="text-end hidden sm:table-cell">{formatNumber(mutationInSumById(account.id) ?? 0)}</td>
                                         <td className="text-end hidden sm:table-cell">{formatNumber(mutationOutSumById(account.id) ?? 0)}</td>
@@ -267,7 +289,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                                             const remaining = mutationInSum - mutationOutSum;
 
                                             if (remaining === 0) {
-                                                return <span className="text-green-600">Completed</span>;
+                                                return <StatusBadge status="Completed">Completed</StatusBadge>;
                                             }
 
                                             if (loading || isValidating) {

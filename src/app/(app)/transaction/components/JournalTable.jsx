@@ -358,7 +358,7 @@ const JournalTable = ({
                                             <span
                                                 className={`${Number(journal.debt_code) === Number(selectedAccount) ? "text-green-500 dark:text-green-400" : ""}
                                     ${Number(journal.cred_code) === Number(selectedAccount) ? "text-red-500 dark:text-red-400" : ""}
-                                        text-sm group-hover:text-sky-400 group-hover:dark:text-yellow-400 sm:text-base xl:text-lg`}
+                                        text-sm group-hover:text-sky-400 group-hover:dark:text-yellow-400 sm:text-xl`}
                                             >
                                                 {formatNumber(journal.amount)}
                                             </span>
@@ -412,7 +412,8 @@ const JournalTable = ({
                                                         attributes: {
                                                             disabled:
                                                                 ["Voucher & SP", "Accessories", null].includes(journal.trx_type) ||
-                                                                (userRole !== "Administrator" && hqCashBankIds.includes(journal.cred_code)),
+                                                                (!["Administrator", "Super Admin"].includes(userRole) &&
+                                                                    hqCashBankIds.includes(journal.cred_code)),
                                                         },
                                                         label: "Hapus",
                                                         onClick: () => {

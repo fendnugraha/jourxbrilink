@@ -197,26 +197,24 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                 <ChevronDown className={`w-4 h-4 inline ${showBalanceReport ? "rotate-180" : ""} transition delay-500 ease-in-out`} />
             </button>
             <div
-                className={`bg-slate-200 dark:bg-black/40 backdrop-blur-sm mt-2 rounded-3xl transform ${
-                    showBalanceReport
-                        ? `opacity-100 scale-y-100 ${showAllAccounts ? "h-fit" : "max-h-[700px] overflow-y-auto"}`
-                        : "opacity-0 scale-y-0 max-h-0 "
+                className={`bg-slate-50 dark:bg-black/40 backdrop-blur-sm mt-2 rounded-3xl transform ${
+                    showBalanceReport ? `opacity-100 scale-y-100 ${showAllAccounts ? "h-fit" : "max-h-175 overflow-y-auto"}` : "opacity-0 scale-y-0 max-h-0 "
                 } origin-top transition-all duration-300 ease-in-out drop-shadow-sm`}
             >
-                <div hidden={!showCashBankBalance} className="max-h-[calc(60px*7)]">
+                <div hidden={!showCashBankBalance} className="max-h-105">
                     {accountBalance?.data?.chartOfAccounts?.map((account) => (
                         <div
-                            className="group px-4 py-2 border-b border-slate-300 dark:border-slate-700 first:mt-1 last:border-b-0 rounded-3xl"
+                            className="group px-4 py-2 border-b border-slate-200 dark:border-slate-700 first:mt-1 last:border-b-0 rounded-3xl"
                             key={account.id}
                         >
                             <div className="flex justify-between items-center">
-                                <h1 className="text-xs group-hover:text-base text-nowrap text-slate-600 dark:text-slate-400 font-bold transition-all delay-100 duration-150 ease-out">
+                                <h1 className="text-xs group-hover:text-base text-nowrap text-slate-600 dark:text-slate-400 font-semibold transition-all delay-100 duration-150 ease-out">
                                     {account.account_group}
                                 </h1>
 
                                 <div className="flex flex-col items-end justify-between">
-                                    <h1 className="group-hover:scale-105 text-sm text-slate-700 dark:text-lime-400 font-bold transition delay-100 duration-150 ease-out">
-                                        {formatNumber(account.balance)}
+                                    <h1 className="group-hover:scale-105 text-sm text-sky-700 dark:text-lime-400 font-bold transition delay-100 duration-150 ease-out">
+                                        {account.balance === 0 ? "-" : formatNumber(account.balance)}
                                     </h1>
                                     {account.balance - account.limit?.limit_amount !== 0 && (
                                         <h2

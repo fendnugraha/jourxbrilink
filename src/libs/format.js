@@ -188,17 +188,11 @@ export const calculateFee = (amount, chunkSize = 2500000, feePerChunk = 5000, mi
 };
 
 export const formatTime = (time) => {
-    const date = new Date(time)
-        .toLocaleTimeString("id-ID", {
-            hour: "2-digit",
-            minute: "2-digit",
-            // second: "2-digit",
-        })
-        .split(":")
-        .map((part) => part.padStart(2, "0"))
-        .join(":");
-
-    return date;
+    const date = new Date(time);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    return `${hours}:${minutes}:${seconds}`;
 };
 
 export function diffTimeHuman(t1, t2) {

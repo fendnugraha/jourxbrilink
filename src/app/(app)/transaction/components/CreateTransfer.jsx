@@ -32,6 +32,7 @@ const CreateTransfer = ({
     });
     const [errors, setErrors] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [showAddNotes, setShowAddNotes] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -111,7 +112,24 @@ const CreateTransfer = ({
                 </div>
                 <div className="mb-2 sm:mb-4 grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
                     <div className=" col-span-1 sm:col-span-2">
-                        <Label>Jumlah transfer</Label>
+                        <Label className={"flex gap-2 justify-between"}>
+                            Jumlah Transfer
+                            <button
+                                onClick={() => setPersonalSetting((prev) => ({ ...prev, feeAdminAuto: !prev.feeAdminAuto }))}
+                                type="button"
+                                className={`w-8 h-4 rounded-full bg-slate-600 text-white flex items-center transition-all duration-300 ease-in-out ${
+                                    !feeAdminAuto ? "justify-start" : "justify-end"
+                                }`}
+                            >
+                                <div
+                                    className={`w-4 h-4 rounded-full transition-all duration-300 ease-in-out ${
+                                        !feeAdminAuto ? "bg-slate-400" : "bg-green-500"
+                                    }`}
+                                >
+                                    {feeAdminAuto ? "A" : "M"}
+                                </div>
+                            </button>
+                        </Label>
                         <div>
                             <input
                                 className="form-control"
@@ -180,8 +198,10 @@ const CreateTransfer = ({
                     </div>
                 </div>
                 <div className="mb-2 sm:mb-4">
-                    <Label>Keterangan</Label>
-                    <div className="col-span-1 sm:col-span-2">
+                    <button type="button" className="text-xs underline" onClick={() => setShowAddNotes(!showAddNotes)}>
+                        {"+"} Add Notes
+                    </button>
+                    <div className="col-span-1 sm:col-span-2" hidden={!showAddNotes}>
                         <textarea
                             className="form-control"
                             type="text"
@@ -191,7 +211,7 @@ const CreateTransfer = ({
                         />
                         {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                     </div>
-                    <div className="flex gap-2 items-center mt-2">
+                    <div className="flex gap-2 items-center mt-2" hidden>
                         <input
                             type="checkbox"
                             id="feeAdminAuto"

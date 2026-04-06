@@ -34,6 +34,7 @@ const CreateCashWithdrawal = ({
     const [errors, setErrors] = useState([]);
     const [loading, setLoading] = useState(false);
     const [isFee, setIsFee] = useState(false);
+    const [showAddNotes, setShowAddNotes] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -128,7 +129,7 @@ const CreateCashWithdrawal = ({
                         {errors.debt_code && <span className="text-red-500 text-xs">{errors.debt_code}</span>}
                     </div>
                 </div>
-                <div className="mb-2 sm:mb-4 grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
                     <div className=" col-span-1 sm:col-span-2">
                         <Label className={"flex gap-2 justify-between"}>
                             Jumlah Penarikan
@@ -200,21 +201,25 @@ const CreateCashWithdrawal = ({
                         </div>
                     </div>
                 </div>
-                <input
-                    type="checkbox"
-                    id="isFee"
-                    className="mb-2 mr-2"
-                    checked={isFee}
-                    onChange={(e) => {
-                        setIsFee(e.target.checked);
-                    }}
-                />
-                <label htmlFor="isFee" className={`text-sm `}>
-                    Fee/Bunga Bank
-                </label>
+                <div className="">
+                    <input
+                        type="checkbox"
+                        id="isFee"
+                        className="mb-2 mr-2"
+                        checked={isFee}
+                        onChange={(e) => {
+                            setIsFee(e.target.checked);
+                        }}
+                    />
+                    <label htmlFor="isFee" className={`text-sm `}>
+                        Fee/Bunga Bank
+                    </label>
+                </div>
                 <div className="mb-2 sm:mb-4">
-                    <Label>Keterangan</Label>
-                    <div className="col-span-1 sm:col-span-2">
+                    <button type="button" className="text-xs underline" onClick={() => setShowAddNotes(!showAddNotes)}>
+                        {"+"} Add Notes
+                    </button>
+                    <div className="col-span-1 sm:col-span-2" hidden={!showAddNotes}>
                         <textarea
                             className="form-control"
                             type="text"
@@ -224,7 +229,7 @@ const CreateCashWithdrawal = ({
                         />
                         {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                     </div>
-                    <input
+                    {/* <input
                         type="checkbox"
                         id="feeAlternative"
                         className=""
@@ -234,7 +239,7 @@ const CreateCashWithdrawal = ({
                     />
                     <label htmlFor="feeAlternative" className={`text-sm ${altFee ? "text-green-600" : ""}`}>
                         Fee Alternatif
-                    </label>
+                    </label> */}
                 </div>
 
                 <div className="flex justify-end gap-2">

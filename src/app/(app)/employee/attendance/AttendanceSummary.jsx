@@ -35,26 +35,25 @@ const AttendanceSummary = ({ dateString }) => {
                 {employees
                     .filter((employee) => employee.contact?.name.toLowerCase().includes(search.toLowerCase()))
                     .map((employee) => (
-                        <div
-                            key={employee.id}
-                            className="px-4 py-2 relative border drop-shadow-sm border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-4xl"
-                        >
-                            <span className="absolute top-2 right-3 bg-yellow-300 text-lime-700 w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold">
-                                {formatNumber(employee.attendance_rating?.rating ?? 0)}
-                            </span>
-                            <h2 className="font-semibold mb-2 text-center">{employee.contact?.name}</h2>
-                            <div className="grid grid-cols-2 gap-2 text-sm">
-                                <div className="flex flex-col justify-center items-center">
-                                    <div>
-                                        <Star fill="orange" strokeWidth={2} className="text-yellow-600" size={20} />
+                        <div key={employee.id} className="px-4 py-2 border drop-shadow-sm border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-4xl">
+                            <div className="flex flex-col items-center gap-2">
+                                <h2 className="font-semibold text-center">{employee.contact?.name}</h2>
+                                <span className="bg-yellow-300 text-lime-700 w-10 h-10 rounded-full flex items-center justify-center font-black">
+                                    {formatNumber(employee.attendance_rating?.rating ?? 0)}
+                                </span>
+                                <div className="grid grid-cols-2 gap-6 text-sm">
+                                    <div className="flex flex-col justify-center items-center">
+                                        <div>
+                                            <Star fill="orange" strokeWidth={2} className="text-yellow-600" size={20} />
+                                        </div>
+                                        <div className="font-medium">{employee.attendance_rating?.good ?? 0}</div>
                                     </div>
-                                    <div className="font-medium">{employee.attendance_rating?.good ?? 0}</div>
-                                </div>
-                                <div className="flex flex-col justify-center items-center">
-                                    <div>
-                                        <Clock fill="red" strokeWidth={2} className="text-red-300" size={20} />
+                                    <div className="flex flex-col justify-center items-center">
+                                        <div>
+                                            <Clock fill="red" strokeWidth={2} className="text-red-300" size={20} />
+                                        </div>
+                                        <div className="font-medium">{employee.attendance_rating?.late ?? 0}</div>
                                     </div>
-                                    <div className="font-medium">{employee.attendance_rating?.late ?? 0}</div>
                                 </div>
                             </div>
                         </div>

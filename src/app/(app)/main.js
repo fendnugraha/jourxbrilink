@@ -1,5 +1,5 @@
 "use client";
-import { CirclePowerIcon, GemIcon, LoaderIcon, MenuIcon, Star, Trophy, XIcon } from "lucide-react";
+import { ChessQueen, CirclePowerIcon, GemIcon, LoaderIcon, MenuIcon, Star, Trophy, XIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import ResponsiveNavLink, { ResponsiveNavButton } from "@/components/ResponsiveNavLink";
 import { usePathname } from "next/navigation";
@@ -135,7 +135,7 @@ const MainPage = ({ children, headerTitle }) => {
                         >
                             <h1 className={`${index + 1 === WarehouseRank ? "font-bold -ml-10 bg-amber-300 px-2" : ""} py-2 w-8 mr-2`}>
                                 {index + 1 === 1 ? (
-                                    <Trophy size={18} fill="yellow" />
+                                    <ChessQueen size={18} fill="yellow" />
                                 ) : (
                                     <>
                                         {index + 1}

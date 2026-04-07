@@ -83,7 +83,7 @@ const MainPage = ({ children, headerTitle }) => {
 
     // range waktu
     const start = 6 * 60; // 06:00  -> 360 menit
-    const end = 10 * 60 + 30; // 09:30  -> 570 menit
+    const end = 11 * 60 + 30; // 11:30  -> 690 menit
 
     const isWithinTime = currentMinutes >= start && currentMinutes <= end;
 
@@ -103,7 +103,7 @@ const MainPage = ({ children, headerTitle }) => {
     }, []);
     return (
         <>
-            {!attCheck?.approval_status && isWithinTime && userWarehouseId !== 1 && userRole !== "Super Admin" && (
+            {!attCheckLoading && !attCheck?.approval_status && isWithinTime && userWarehouseId !== 1 && userRole !== "Super Admin" && (
                 <div className="p-4 fixed h-screen overflow-hidden z-9999 bg-slate-800/50 backdrop-blur-sm w-screen text-white flex flex-col items-center justify-center">
                     <AttendanceForm attCheckMutate={attCheckMutate} openMessage={setAttSuccessMessageOpen} />
                 </div>

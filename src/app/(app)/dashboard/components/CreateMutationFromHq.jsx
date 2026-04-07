@@ -26,6 +26,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
 
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
+    const [showAddNotes, setShowAddNotes] = useState(false);
 
     const hqAccount = cashBank?.filter((cashBank) => Number(cashBank.warehouse_id) === 1);
     const branchAccount = cashBank?.filter((cashBank) => Number(cashBank.warehouse_id) === Number(selectedWarehouseId));
@@ -105,7 +106,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                             required
                         />
                         <button type="button" className="small-button !bg-green-500" onClick={() => setFormData({ ...formData, date_issued: today })}>
-                            <Clock size={14} />
+                            <Clock className="text-white" size={14} />
                         </button>
                     </div>
                     {errors?.date_issued && <span className="text-red-500 text-xs">{errors?.date_issued}</span>}
@@ -133,7 +134,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                     </select>
                 </div>
             </div>
-            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
+            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-start">
                 <Label>Dari (Pusat)</Label>
                 <div className="col-span-1 sm:col-span-2">
                     <select
@@ -176,7 +177,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                 </div>
             </div>
             <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
-                <Label>Jumlah transfer</Label>
+                <Label>Jumlah</Label>
                 <div className="col-span-1">
                     <input
                         className="form-control"
@@ -206,9 +207,11 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
 
                 {formData.admin_fee > 0 && <h1 className="text-sm sm:text-lg font-bold">{formatNumber(formData.admin_fee)}</h1>}
             </div>
-            <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 sm:gap-4 items-center">
-                <Label>Keterangan</Label>
-                <div className="col-span-1 sm:col-span-2">
+            <div className="mb-2 sm:mb-4">
+                <button type="button" className="text-xs underline" onClick={() => setShowAddNotes(!showAddNotes)}>
+                    {"+"} Add Notes
+                </button>
+                <div className="col-span-1 sm:col-span-2" hidden={!showAddNotes}>
                     <textarea
                         className="form-control"
                         type="text"
@@ -216,17 +219,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     />
-                    {errors?.description && <span className="text-red-500 text-xs">{errors?.description}</span>}
-                    <input
-                        type="checkbox"
-                        id="confrmation"
-                        className="mt-2 mr-2"
-                        checked={formData.confirmation === 0}
-                        onChange={(e) => setFormData({ ...formData, confirmation: e.target.checked ? 0 : 1 })}
-                    />
-                    <label htmlFor="confrmation" className={`text-sm ${formData.confirmation === 0 ? "text-green-600" : ""}`}>
-                        Pakai Konfirmasi
-                    </label>
+                    {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                 </div>
             </div>
 

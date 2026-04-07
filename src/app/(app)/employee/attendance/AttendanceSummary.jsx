@@ -35,11 +35,16 @@ const AttendanceSummary = ({ dateString }) => {
                 {employees
                     .filter((employee) => employee.contact?.name.toLowerCase().includes(search.toLowerCase()))
                     .map((employee) => (
-                        <div key={employee.id} className="px-4 py-2 border drop-shadow-sm border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-4xl">
+                        <div
+                            key={employee.id}
+                            className="p-4 border drop-shadow-sm border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-4xl"
+                            hidden={employee.attendance_rating?.rating === 0}
+                        >
                             <div className="flex flex-col items-center gap-2">
                                 <h2 className="font-semibold text-center">{employee.contact?.name}</h2>
-                                <span className="bg-yellow-300 text-lime-700 w-10 h-10 rounded-full flex items-center justify-center font-black">
+                                <span className="text-3xl font-black">
                                     {formatNumber(employee.attendance_rating?.rating ?? 0)}
+                                    <sub className="font-normal text-xs">/10</sub>
                                 </span>
                                 <div className="grid grid-cols-2 gap-6 text-sm">
                                     <div className="flex flex-col justify-center items-center">

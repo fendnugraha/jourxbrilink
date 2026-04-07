@@ -23,7 +23,7 @@ export default function Modal({
                     } rounded-4xl shadow-lg duration-300 ease-out data-closed:scale-95 data-closed:opacity-0`}
                 >
                     {/* Modal Header */}
-                    <div className="flex justify-between items-center py-4 px-6 border-b border-slate-200 dark:border-slate-600">
+                    <div className="flex justify-between items-center py-4 px-8 border-b border-slate-200 dark:border-slate-600">
                         <DialogTitle className="text-xl font-bold">{modalTitle}</DialogTitle>
                         <button onClick={onClose} aria-label="Close Modal">
                             <svg

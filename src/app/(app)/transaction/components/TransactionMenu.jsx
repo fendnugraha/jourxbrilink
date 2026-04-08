@@ -185,7 +185,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, mutat
                             isTransferActive ? "bg-lime-500 text-white scale-105 text-sm" : "bg-slate-400 text-slate-300 text-xs"
                         } w-full py-1 cursor-pointer hover:text-sm transition-all duration-100 ease-in`}
                     >
-                        Transfer
+                        TRANSFER
                     </button>
                     <button
                         onClick={() => {
@@ -196,7 +196,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, mutat
                             isCashWithdrawalActive ? "bg-lime-500 text-white scale-105 text-sm" : "bg-slate-400 text-slate-300 text-xs"
                         } w-full py-1 cursor-pointer hover:text-sm transition-all duration-100 ease-in`}
                     >
-                        Tarik
+                        TARIK TUNAI
                     </button>
                 </div>
                 {isTransferActive && (
@@ -247,7 +247,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, mutat
                             isTransferActive ? "bg-lime-500 text-white scale-105 text-sm" : "bg-slate-400 text-slate-300 text-xs"
                         } w-full py-1 cursor-pointer hover:text-sm transition-all duration-100 ease-in`}
                     >
-                        Transfer Uang
+                        TRANSFER
                     </button>
                     <button
                         onClick={() => {
@@ -258,7 +258,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, mutat
                             isCashWithdrawalActive ? "bg-lime-500 text-white scale-105 text-sm" : "bg-slate-400 text-slate-300 text-xs"
                         } w-full py-1 cursor-pointer hover:text-sm transition-all duration-100 ease-in`}
                     >
-                        Tarik Tunai
+                        TARIK TUNAI
                     </button>
                 </div>
                 {isTransferActive && (

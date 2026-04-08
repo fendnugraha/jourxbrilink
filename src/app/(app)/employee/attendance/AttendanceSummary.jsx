@@ -1,6 +1,6 @@
 import axios from "@/libs/axios";
 import { formatNumber } from "@/libs/format";
-import { ArrowBigDown, ArrowBigUp, Clock, Star } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp, Clock, Gift, Star } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 const AttendanceSummary = ({ dateString }) => {
@@ -48,24 +48,38 @@ const AttendanceSummary = ({ dateString }) => {
                     .map((employee) => (
                         <div
                             key={employee.id}
-                            className="p-4 border drop-shadow-sm border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-4xl"
+                            className="group p-4 border drop-shadow-sm border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-4xl"
                             hidden={employee.attendance_rating?.rating === 0}
                         >
-                            <div className="flex flex-col items-center gap-2">
-                                <h2 className="font-semibold text-center">{employee.contact?.name}</h2>
-                                <span className="text-3xl font-black">
+                            <div className="flex flex-col items-center gap-2 mt-4">
+                                <span className="text-5xl font-black mb-1">
                                     {formatNumber(employee.attendance_rating?.rating ?? 0)}
                                     <sub className="font-normal text-xs">/10</sub>
                                 </span>
+                                <h2 className="font-semibold text-center mb-4 text-sm">{employee.contact?.name}</h2>
                                 {checkUpOrDown(employee.attendance_rating?.rating ?? 0, employee.attendance_rating_last_month?.rating ?? 0)}
-                                <div className="grid grid-cols-2 gap-6 text-sm">
-                                    <div className="flex flex-col justify-center items-center">
+                                {employee.attendance_rating?.good > 0 && employee.attendance_rating?.late === 0 ? (
+                                    <div className="absolute top-4 right-4">
+                                        <Gift
+                                            fill="yellow"
+                                            strokeWidth={2}
+                                            className="text-orange-600 group-hover:rotate-12 transform duration-300"
+                                            size={24}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className="absolute top-4 right-4">
+                                        <Gift strokeWidth={2} className="text-slate-300 dark:text-slate-600" size={24} />
+                                    </div>
+                                )}
+                                <div className="flex gap-4 w-full">
+                                    <div className="flex gap-1 justify-center items-center">
                                         <div>
                                             <Star fill="orange" strokeWidth={2} className="text-yellow-600" size={20} />
                                         </div>
                                         <div className="font-medium">{employee.attendance_rating?.good ?? 0}</div>
                                     </div>
-                                    <div className="flex flex-col justify-center items-center">
+                                    <div className="flex gap-1 justify-center items-center">
                                         <div>
                                             <Clock fill="red" strokeWidth={2} className="text-red-300" size={20} />
                                         </div>

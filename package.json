@@ -1,6 +1,6 @@
 {
   "name": "jourxbrilink",
-  "version": "1.11.40",
+  "version": "1.11.41",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",

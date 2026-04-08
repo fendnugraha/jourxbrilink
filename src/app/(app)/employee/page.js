@@ -1,8 +1,12 @@
+"use client";
 import Link from "next/link";
 import MainPage from "../main";
 import { BookUser, Receipt } from "lucide-react";
+import { useAuth } from "@/libs/auth";
 
 const EmployeesPage = () => {
+    const { user } = useAuth({ middleware: "auth" });
+    const userRole = user?.role?.role;
     return (
         <MainPage headerTitle="Employees">
             <div className="py-4 sm:py-8 px-4 sm:px-12">
@@ -15,7 +19,7 @@ const EmployeesPage = () => {
                             </button>
                         </li>
                     </Link>
-                    <Link href="/employee/payroll">
+                    <Link href="/employee/payroll" hidden={!["Administrator", "Super Admin"].includes(userRole)}>
                         <li className="border-b p-2 border-slate-300 dark:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-600">
                             <button className="px-4 w-full text-start py-2 cursor-pointer flex items-center gap-2">
                                 <Receipt size={20} />

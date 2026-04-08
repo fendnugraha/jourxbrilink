@@ -101,6 +101,7 @@ const MainPage = ({ children, headerTitle }) => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
     return (
         <>
             {!attCheck?.approval_status && isWithinTime && userWarehouseId !== 1 && userRole !== "Super Admin" && (

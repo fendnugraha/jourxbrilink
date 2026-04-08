@@ -1,6 +1,6 @@
 import axios from "@/libs/axios";
 import { formatNumber } from "@/libs/format";
-import { Clock, Star } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp, Clock, Star } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 const AttendanceSummary = ({ dateString }) => {
@@ -26,6 +26,17 @@ const AttendanceSummary = ({ dateString }) => {
         fetchEmployees({ month, year });
     }, [month, year, fetchEmployees]);
 
+    console.log(employees);
+    const checkUpOrDown = (rating, lastRating) => {
+        if (rating > lastRating) {
+            return <ArrowBigUp fill="green" strokeWidth={2} className="text-green-600 absolute bottom-4 right-4" size={28} />;
+        } else if (rating < lastRating) {
+            return <ArrowBigDown fill="red" strokeWidth={2} className="text-red-600 absolute bottom-4 right-4" size={28} />;
+        } else {
+            return "";
+        }
+    };
+
     return (
         <>
             <div>
@@ -46,6 +57,7 @@ const AttendanceSummary = ({ dateString }) => {
                                     {formatNumber(employee.attendance_rating?.rating ?? 0)}
                                     <sub className="font-normal text-xs">/10</sub>
                                 </span>
+                                {checkUpOrDown(employee.attendance_rating?.rating ?? 0, employee.attendance_rating_last_month?.rating ?? 0)}
                                 <div className="grid grid-cols-2 gap-6 text-sm">
                                     <div className="flex flex-col justify-center items-center">
                                         <div>

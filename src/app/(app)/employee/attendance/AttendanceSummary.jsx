@@ -1,6 +1,6 @@
 import axios from "@/libs/axios";
-import { formatNumber } from "@/libs/format";
-import { ArrowBigDown, ArrowBigUp, Clock, Gift, Star } from "lucide-react";
+import { formatNumber, toOrdinal } from "@/libs/format";
+import { ArrowBigDown, ArrowBigUp, ChessQueen, Clock, Gift, Star } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 const AttendanceSummary = ({ dateString }) => {
@@ -42,10 +42,11 @@ const AttendanceSummary = ({ dateString }) => {
             <div>
                 <input type="search" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} className="form-control" />
             </div>
-            <div className="grid grid-cols-3 sm:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
                 {employees
                     .filter((employee) => employee.contact?.name.toLowerCase().includes(search.toLowerCase()))
-                    .map((employee) => (
+                    .sort((a, b) => b.attendance_rating?.rating - a.attendance_rating?.rating)
+                    .map((employee, index) => (
                         <div
                             key={employee.id}
                             className="group p-4 border drop-shadow-sm border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-4xl"
@@ -72,6 +73,9 @@ const AttendanceSummary = ({ dateString }) => {
                                         <Gift strokeWidth={2} className="text-slate-300 dark:text-slate-600" size={24} />
                                     </div>
                                 )}
+                                <h1 className="absolute top-4 left-4 font-bold">
+                                    {index + 1 === 1 ? <ChessQueen size={24} fill="yellow" /> : <>{toOrdinal(index + 1)}</>}
+                                </h1>
                                 <div className="flex gap-4 w-full">
                                     <div className="flex gap-1 justify-center items-center">
                                         <div>

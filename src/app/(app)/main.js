@@ -1,5 +1,5 @@
 "use client";
-import { ChessQueen, CirclePowerIcon, GemIcon, LoaderIcon, MenuIcon, Star, Trophy, XIcon } from "lucide-react";
+import { Bike, ChessQueen, CirclePowerIcon, GemIcon, LoaderIcon, MenuIcon, Power, Star, Trophy, XIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import ResponsiveNavLink, { ResponsiveNavButton } from "@/components/ResponsiveNavLink";
 import { usePathname } from "next/navigation";
@@ -17,6 +17,9 @@ import AttendanceForm from "./employee/attendance/attendanceForm";
 import ShareAttendance from "./employee/attendance/ShareAttendance";
 import Image from "next/image";
 import { formatDate, formatDuration, formatRupiah } from "@/libs/format";
+import PopoverMenu from "@/components/Popover";
+import useGetMutationJournal from "@/libs/getMutationJournal";
+import StatusBadge from "@/components/StatusBadge";
 
 const MainPage = ({ children, headerTitle }) => {
     const { user, logout } = useAuth({ middleware: "auth" });
@@ -102,6 +105,9 @@ const MainPage = ({ children, headerTitle }) => {
         };
     }, []);
 
+    const { journals, error: journalError, isValidating } = useGetMutationJournal(todayJakarta, todayJakarta);
+    const filteredJournals = journals?.filter((journal) => journal?.status === 0);
+    console.log(filteredJournals);
     return (
         <>
             {!attCheck?.approval_status && isWithinTime && userWarehouseId !== 1 && userRole !== "Super Admin" && (
@@ -207,6 +213,28 @@ const MainPage = ({ children, headerTitle }) => {
                             </div>
                         </div>
                     )}
+                    {userWarehouseId === 1 && (
+                        <PopoverMenu title={<Bike size={20} className={`${filteredJournals?.length > 0 ? "animate-bounce text-yellow-400" : ""}`} />}>
+                            <div className="p-2 min-w-72">
+                                {filteredJournals?.map((item, index) => (
+                                    <div
+                                        className="flex flex-col justify-between text-xs border-b last:border-0 border-slate-200/50 dark:border-slate-300/50 p-2"
+                                        key={index}
+                                    >
+                                        <span className="font-bold">{item?.debt?.warehouse?.name}</span>
+                                        <div className="flex justify-between items-center">
+                                            <span className="font-bold">{formatRupiah(item?.amount)}</span>
+                                            <StatusBadge
+                                                status={item?.status === 0 ? "In Progress" : "Completed"}
+                                                statusText={item?.status === 0 ? "On Delivery" : "Delivered"}
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </PopoverMenu>
+                    )}
+
                     <button className="sm:hidden" onClick={() => setIsOpen(!isOpen)}>
                         {userPhoto ? (
                             isOpen ? (

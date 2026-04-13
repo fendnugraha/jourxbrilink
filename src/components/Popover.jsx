@@ -10,7 +10,7 @@ const PopoverMenu = ({ children, title, anchor = "bottom", ...props }) => {
             <PopoverPanel
                 transition
                 anchor={anchor}
-                className="divide-y divide-black/5 rounded-xl bg-black/10 dark:divide-white/5 dark:bg-white/40 text-sm/6 transition duration-200 ease-in-out [--anchor-gap:--spacing(5)] data-closed:-translate-y-1 data-closed:opacity-0"
+                className="divide-y divide-black/5 backdrop-blur-sm rounded-xl bg-slate-600/10 dark:divide-white/5 dark:bg-white/40 text-sm/6 transition duration-200 ease-in-out [--anchor-gap:--spacing(5)] data-closed:-translate-y-1 data-closed:opacity-0"
                 // className="divide-y divide-white/5 rounded-xl bg-white/5 text-sm/6 transition duration-200 ease-in-out [--anchor-gap:--spacing(5)] data-closed:-translate-y-1 data-closed:opacity-0"
             >
                 {children}

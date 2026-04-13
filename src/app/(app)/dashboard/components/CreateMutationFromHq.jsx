@@ -2,10 +2,9 @@
 import { useState, useEffect, use } from "react";
 import axios from "@/libs/axios";
 import Label from "@/components/Label";
-import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
 import { DateTimeNow } from "@/libs/format";
-import { Clock } from "lucide-react";
+import { Clock, Power } from "lucide-react";
 
 const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, warehouses, accountBalance = [] }) => {
     const { today } = DateTimeNow();
@@ -98,6 +97,9 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                 <Label>Tanggal</Label>
                 <div className="col-span-1">
                     <div className="flex gap-1">
+                        <button type="button" className="small-button !bg-green-500" onClick={() => setFormData({ ...formData, date_issued: today })}>
+                            <Clock className="text-white" size={14} />
+                        </button>
                         <input
                             className="form-control"
                             type="datetime-local"
@@ -105,11 +107,18 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                             onChange={(e) => setFormData({ ...formData, date_issued: e.target.value })}
                             required
                         />
-                        <button type="button" className="small-button !bg-green-500" onClick={() => setFormData({ ...formData, date_issued: today })}>
-                            <Clock className="text-white" size={14} />
-                        </button>
                     </div>
                     {errors?.date_issued && <span className="text-red-500 text-xs">{errors?.date_issued}</span>}
+                </div>
+                <div className="flex justify-end items-center gap-2">
+                    <h1 className="text-xs">Auto Confirm</h1>
+                    <button
+                        type="button"
+                        className={`text-xs p-0.5 rounded-full active:scale-90 ${formData.confirmation === 1 ? "bg-green-200" : "bg-slate-200 shadow-sm"}`}
+                        onClick={() => setFormData({ ...formData, confirmation: formData.confirmation === 1 ? 0 : 1 })}
+                    >
+                        <Power size={14} className="text-green-700" />
+                    </button>
                 </div>
 
                 {formData.date_issued > 0 && <h1 className="text-sm sm:text-lg font-bold">{formatNumber(formData.date_issued)}</h1>}

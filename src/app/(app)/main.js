@@ -16,7 +16,7 @@ import useAttendanceCheck from "@/libs/attendanceCheck";
 import AttendanceForm from "./employee/attendance/attendanceForm";
 import ShareAttendance from "./employee/attendance/ShareAttendance";
 import Image from "next/image";
-import { formatDate, formatDuration, formatRupiah } from "@/libs/format";
+import { formatDate, formatDuration, formatRupiah, formatTime } from "@/libs/format";
 import PopoverMenu from "@/components/Popover";
 import useGetMutationJournal from "@/libs/getMutationJournal";
 import StatusBadge from "@/components/StatusBadge";
@@ -107,7 +107,6 @@ const MainPage = ({ children, headerTitle }) => {
 
     const { journals, error: journalError, isValidating } = useGetMutationJournal(todayJakarta, todayJakarta);
     const filteredJournals = journals?.filter((journal) => journal?.status === 0);
-    console.log(filteredJournals);
     return (
         <>
             {!attCheck?.approval_status && isWithinTime && userWarehouseId !== 1 && userRole !== "Super Admin" && (
@@ -181,6 +180,39 @@ const MainPage = ({ children, headerTitle }) => {
                 </h1>
 
                 <div className="flex items-center justify-end sm:gap-4">
+                    {/* {userWarehouseId === 1 && ( */}
+                    <PopoverMenu
+                        title={
+                            <Bike
+                                size={22}
+                                className={`${filteredJournals?.length > 0 ? "animate-bounce text-yellow-500 dark:text-yellow-400 -rotate-45" : ""}`}
+                            />
+                        }
+                    >
+                        <div className="p-2 min-w-72">
+                            {filteredJournals?.map((item, index) => (
+                                <div
+                                    className="flex flex-col gap-2 justify-between text-xs text-slate-600 dark:text-slate-100 border-b last:border-0 border-slate-400/50 dark:border-slate-300/50 p-2"
+                                    key={index}
+                                >
+                                    <div className="flex justify-between items-start">
+                                        <span className="font-bold">{item?.debt?.warehouse?.name}</span>
+                                        <span className="">{formatTime(item?.date_issued)}</span>
+                                    </div>
+                                    <div className="flex justify-between items-end">
+                                        <span className="font-bold">{formatRupiah(item?.amount)}</span>
+
+                                        <StatusBadge
+                                            status={item?.status === 0 ? "In Progress" : "Completed"}
+                                            statusText={item?.status === 0 ? "O.D" : "D"}
+                                            noText
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </PopoverMenu>
+                    {/* )} */}
                     {WarehouseRank > 0 && (
                         <div className="text-lg sm:text-md drop-shadow-xs bg-none sm:bg-white dark:border dark:border-slate-50/20 dark:sm:bg-slate-700 sm:drop-shadow rounded-full px-4 sm:ps-1 sm:pe-6 py-1 flex flex-col justify-end items-end">
                             <div className="flex items-center gap-2">
@@ -212,32 +244,6 @@ const MainPage = ({ children, headerTitle }) => {
                                 </h1>
                             </div>
                         </div>
-                    )}
-                    {userWarehouseId === 1 && (
-                        <PopoverMenu
-                            title={
-                                <Bike size={20} className={`${filteredJournals?.length > 0 ? "animate-bounce text-yellow-500 dark:text-yellow-400" : ""}`} />
-                            }
-                        >
-                            <div className="p-2 min-w-72">
-                                {filteredJournals?.map((item, index) => (
-                                    <div
-                                        className="flex flex-col justify-between text-xs text-slate-600 dark:text-slate-100 border-b last:border-0 border-slate-400/50 dark:border-slate-300/50 p-2"
-                                        key={index}
-                                    >
-                                        <div className="flex justify-between items-start">
-                                            <span className="font-bold">{item?.debt?.warehouse?.name}</span>
-                                            <StatusBadge
-                                                status={item?.status === 0 ? "In Progress" : "Completed"}
-                                                statusText={item?.status === 0 ? "O.D" : "D"}
-                                                noText
-                                            />
-                                        </div>
-                                        <span className="font-bold">{formatRupiah(item?.amount)}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </PopoverMenu>
                     )}
 
                     <button className="sm:hidden" onClick={() => setIsOpen(!isOpen)}>

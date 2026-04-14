@@ -37,7 +37,7 @@ const AttendanceTableMonthly = ({ selectedZone, warehouseMonthly }) => {
                                 <div
                                     key={day}
                                     className={`
-                                min-w-10 h-10 rounded-lg 
+                                min-w-9 h-9 rounded-lg 
                                 flex items-center justify-center 
                                 text-white text-xs font-semibold
                                 ${getColor(att?.status).style}

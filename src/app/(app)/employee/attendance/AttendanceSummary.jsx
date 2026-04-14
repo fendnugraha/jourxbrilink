@@ -1,6 +1,6 @@
 import axios from "@/libs/axios";
 import { formatNumber, toOrdinal } from "@/libs/format";
-import { ArrowBigDown, ArrowBigUp, ChessQueen, Clock, Gift, Star } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp, ChartNoAxesColumn, ChessQueen, Clock, Gift, Star } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 const AttendanceSummary = ({ dateString }) => {
@@ -39,7 +39,10 @@ const AttendanceSummary = ({ dateString }) => {
 
     return (
         <>
-            <div>
+            <div className="flex items-center gap-2">
+                {/* <button className="small-button">
+                    <ChartNoAxesColumn strokeWidth={2} size={18} />
+                </button> */}
                 <input type="search" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} className="form-control" />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
@@ -59,20 +62,14 @@ const AttendanceSummary = ({ dateString }) => {
                                 </span>
                                 <h2 className="font-semibold text-center mb-4 text-sm">{employee.contact?.name}</h2>
                                 {checkUpOrDown(employee.attendance_rating?.rating ?? 0, employee.attendance_rating_last_month?.rating ?? 0)}
-                                {employee.attendance_rating?.good > 0 && employee.attendance_rating?.late === 0 ? (
-                                    <div className="absolute top-4 right-4">
-                                        <Gift
-                                            fill="yellow"
-                                            strokeWidth={2}
-                                            className="text-orange-600 group-hover:rotate-12 transform duration-300"
-                                            size={24}
-                                        />
-                                    </div>
-                                ) : (
-                                    <div className="absolute top-4 right-4">
-                                        <Gift strokeWidth={2} className="text-slate-300 dark:text-slate-600" size={24} />
-                                    </div>
-                                )}
+                                <div className="absolute top-4 right-4">
+                                    <Gift
+                                        fill={employee.attendance_rating?.good > 0 && employee.attendance_rating?.late === 0 ? "yellow" : "none"}
+                                        strokeWidth={2}
+                                        className={`${employee.attendance_rating?.good > 0 && employee.attendance_rating?.late === 0 ? "text-yellow-600" : "text-slate-300 dark:text-slate-600"} text-orange-600 group-hover:rotate-12 transform duration-300`}
+                                        size={24}
+                                    />
+                                </div>
                                 <h1 className="absolute top-4 left-4 font-bold">
                                     {index + 1 === 1 ? <ChessQueen size={24} fill="yellow" /> : <>{toOrdinal(index + 1)}</>}
                                 </h1>

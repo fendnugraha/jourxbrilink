@@ -185,7 +185,7 @@ const AttendancePage = () => {
                             Summary
                         </button>
                     </div>
-                    <div className="grid grid-cols-1 gap-4">
+                    <div className="grid grid-cols-1 gap-2">
                         {selectPage === "daily" && <AttendanceTable selectedZone={selectedZone} warehouses={warehouses} fetchWarehouses={fetchWarehouses} />}
                         {selectPage === "monthly" && (
                             <AttendanceTableMonthly selectedZone={selectedZone} dateString={startDate} warehouseMonthly={warehouseMonthly} />

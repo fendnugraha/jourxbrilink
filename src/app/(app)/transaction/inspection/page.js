@@ -73,7 +73,7 @@ const InspectionPage = () => {
                 setLoading(false);
             }
         },
-        [selectedWarehouseId, startDate, endDate, sortMode]
+        [selectedWarehouseId, startDate, endDate, sortMode],
     );
 
     useEffect(() => {
@@ -161,7 +161,7 @@ const InspectionPage = () => {
                 setLoading(false);
             }
         },
-        [selectedWarehouseId, endDate, startDate]
+        [selectedWarehouseId, endDate, startDate],
     );
 
     useEffect(() => {
@@ -338,7 +338,7 @@ const InspectionPage = () => {
                                     setSelectedAccount("");
                                 }}
                                 value={selectedWarehouseId}
-                                className="form-control"
+                                className="form-select"
                             >
                                 <option value="Semua">Semua Akun</option>
                                 {warehouses?.data?.map((w) => (

@@ -120,7 +120,7 @@ const TransactionTable = ({
                                             <h1 className="text-xs text-yellow-600 group-hover:text-slate-600 group-hover:dark:text-white block">
                                                 {formatNumber(journal.fee_amount ?? 0)}{" "}
                                                 {["Transfer Uang", "Tarik Tunai"].includes(journal.trx_type) ? (
-                                                    journal.fee_amount >= calculateFee(journal.amount ?? 0) ? (
+                                                    journal.fee_amount === calculateFee(journal.amount ?? 0) ? (
                                                         <span className="text-green-600 font-bold dark:text-green-400">OK</span>
                                                     ) : (
                                                         <span className="text-red-500 dark:text-red-400 font-normal animate-pulse">Check!!</span>

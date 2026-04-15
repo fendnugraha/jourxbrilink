@@ -16,7 +16,7 @@ import useAttendanceCheck from "@/libs/attendanceCheck";
 import AttendanceForm from "./employee/attendance/attendanceForm";
 import ShareAttendance from "./employee/attendance/ShareAttendance";
 import Image from "next/image";
-import { formatDate, formatDuration, formatRupiah, formatTime } from "@/libs/format";
+import { formatDate, formatDuration, formatRupiah, formatTime, TimeAgo } from "@/libs/format";
 import PopoverMenu from "@/components/Popover";
 import useGetMutationJournal from "@/libs/getMutationJournal";
 import StatusBadge from "@/components/StatusBadge";
@@ -192,21 +192,23 @@ const MainPage = ({ children, headerTitle }) => {
                         <div className="p-2 min-w-72">
                             {filteredJournals?.map((item, index) => (
                                 <div
-                                    className="flex flex-col gap-2 justify-between text-xs text-slate-600 dark:text-slate-100 border-b last:border-0 border-slate-400/50 dark:border-slate-300/50 p-2"
+                                    className="flex flex-col gap-1 justify-between text-xs text-slate-600 dark:text-slate-100 border-b last:border-0 border-slate-400/50 dark:border-slate-300/50 p-2"
                                     key={index}
                                 >
                                     <div className="flex justify-between items-start">
                                         <span className="font-bold">{item?.debt?.warehouse?.name}</span>
-                                        <span className="">{formatTime(item?.date_issued)}</span>
-                                    </div>
-                                    <div className="flex justify-between items-end">
-                                        <span className="font-bold">{formatRupiah(item?.amount)}</span>
-
                                         <StatusBadge
                                             status={item?.status === 0 ? "In Progress" : "Completed"}
                                             statusText={item?.status === 0 ? "O.D" : "D"}
                                             noText
                                         />
+                                    </div>
+                                    <div className="flex justify-between items-end">
+                                        <span className="font-bold">{formatRupiah(item?.amount)}</span>
+
+                                        <span className="">
+                                            <TimeAgo timestamp={item?.date_issued} />
+                                        </span>
                                     </div>
                                 </div>
                             ))}

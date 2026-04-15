@@ -85,7 +85,7 @@ const WarehouseBalance = () => {
                                             {i + 1}. {w.name.replace(/^konter\s*/i, "")}
                                         </Link>
                                     </td>
-                                    <td className="w-50">
+                                    <td className="w-75">
                                         {(() => {
                                             const percent = w.id !== 1 && calculateLimitPercentage(w.total_cash_limit, w.cash);
                                             const color = getLimitColor(percent);

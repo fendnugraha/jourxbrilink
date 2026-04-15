@@ -179,7 +179,7 @@ const MainPage = ({ children, headerTitle }) => {
                     </span>
                 </h1>
 
-                <div className="flex items-center justify-end sm:gap-4">
+                <div className="flex items-center justify-end gap-4">
                     {/* {userWarehouseId === 1 && ( */}
                     <PopoverMenu
                         title={
@@ -190,28 +190,32 @@ const MainPage = ({ children, headerTitle }) => {
                         }
                     >
                         <div className="p-2 min-w-72">
-                            {filteredJournals?.map((item, index) => (
-                                <div
-                                    className="flex flex-col gap-1 justify-between text-xs text-slate-600 dark:text-slate-100 border-b last:border-0 border-slate-400/50 dark:border-slate-300/50 p-2"
-                                    key={index}
-                                >
-                                    <div className="flex justify-between items-start">
-                                        <span className="font-bold">{item?.debt?.warehouse?.name}</span>
-                                        <StatusBadge
-                                            status={item?.status === 0 ? "In Progress" : "Completed"}
-                                            statusText={item?.status === 0 ? "O.D" : "D"}
-                                            noText
-                                        />
-                                    </div>
-                                    <div className="flex justify-between items-end">
-                                        <span className="font-bold">{formatRupiah(item?.amount)}</span>
+                            {filteredJournals?.length > 0 ? (
+                                filteredJournals?.map((item, index) => (
+                                    <div
+                                        className="flex flex-col gap-1 justify-between text-xs text-slate-600 dark:text-slate-100 border-b last:border-0 border-slate-400/50 dark:border-slate-300/50 p-2"
+                                        key={index}
+                                    >
+                                        <div className="flex justify-between items-start">
+                                            <span className="font-bold">{item?.debt?.warehouse?.name}</span>
+                                            <StatusBadge
+                                                status={item?.status === 0 ? "In Progress" : "Completed"}
+                                                statusText={item?.status === 0 ? "O.D" : "D"}
+                                                noText
+                                            />
+                                        </div>
+                                        <div className="flex justify-between items-end">
+                                            <span className="font-bold">{formatRupiah(item?.amount)}</span>
 
-                                        <span className="">
-                                            <TimeAgo timestamp={item?.date_issued} />
-                                        </span>
+                                            <span className="">
+                                                <TimeAgo timestamp={item?.date_issued} />
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))
+                            ) : (
+                                <p className="p-2 text-center text-slate-600 dark:text-slate-100">No delivery</p>
+                            )}
                         </div>
                     </PopoverMenu>
                     {/* )} */}

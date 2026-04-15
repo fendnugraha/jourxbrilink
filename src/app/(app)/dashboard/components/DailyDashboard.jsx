@@ -53,7 +53,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                     {selectedWarehouse === "all"
                         ? "Semua Cabang"
                         : warehouses?.data?.find((warehouse) => Number(warehouse.id) === Number(selectedWarehouse))?.name}
-                    {!isLoading && (
+                    {!isLoading && selectedWarehouse !== "all" && Number(selectedWarehouse) !== 1 && (
                         <span className="font-normal ml-2 inline-flex items-center">
                             <Star size={14} fill="yellow" className="inline" /> {getStorePerformanceRating(dailyDashboard?.data?.averageProfit)}
                         </span>
@@ -113,7 +113,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                 <div className="bg-lime-200/80 dark:bg-lime-500 text-green-900 dark:text-lime-800 p-3 sm:p-5 rounded-2xl sm:rounded-3xl drop-shadow-xs flex flex-col gap-2 sm:gap-4 items-start justify-between col-span-1 sm:col-span-2 row-span-1 sm:row-span-2">
                     <div className={`flex flex-col`}>
                         <h4 className="text-lg">Kas Tunai</h4>
-                        <h1 className="text-2xl sm:text-4xl font-bold text-lime-700 dark:text-orange-600 dark:text-shadow-2xs">
+                        <h1 className="text-2xl sm:text-5xl font-bold text-lime-700 dark:text-orange-600 dark:text-shadow-2xs">
                             {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumber(Number(dailyDashboard?.data?.totalCash))}
                         </h1>
                     </div>
@@ -142,7 +142,7 @@ const DailyDashboard = ({ notification, warehouse, warehouses, userRole }) => {
                         <h4 className="text-lg">
                             <GemIcon size={20} className="inline" /> Laba (Net Profit)
                         </h4>
-                        <h1 className="text-2xl sm:text-4xl font-bold text-slate-500 dark:text-teal-800">
+                        <h1 className="text-2xl sm:text-5xl font-bold text-slate-500 dark:text-teal-800">
                             {isLoading ? <LoaderIcon className="animate-spin" /> : formatNumber(Number(dailyDashboard?.data?.profit))}
                         </h1>
                     </div>

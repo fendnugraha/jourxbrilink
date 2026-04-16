@@ -43,7 +43,7 @@ const AttendanceSummary = ({ dateString }) => {
                 {/* <button className="small-button">
                     <ChartNoAxesColumn strokeWidth={2} size={18} />
                 </button> */}
-                <input type="search" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} className="form-control" />
+                <input type="search" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} className="form-control !w-1/2" />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
                 {employees

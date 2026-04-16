@@ -28,7 +28,7 @@ const AttendanceTableMonthly = ({ selectedZone, warehouseMonthly }) => {
                 <div key={employee?.id} className="">
                     <h3 className="text-sm font-bold">{employee?.name}</h3>
                     {/* Kotak tanggal berjajar */}
-                    <div className="border border-slate-200 p-1.5 rounded-xl flex flex-wrap justify-between gap-1 overflow-x-auto">
+                    <div className="border border-slate-200 dark:border-slate-600 p-1.5 rounded-xl flex flex-wrap justify-between gap-1 overflow-x-auto">
                         {days.map((day) => {
                             const att = employee?.attendance_by_date[day];
                             const dateNum = day.split("-")[2];

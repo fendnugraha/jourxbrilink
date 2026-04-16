@@ -6,7 +6,7 @@ export default function Home() {
         <div
             className="min-h-screen flex flex-col justify-between bg-white text-gray-800"
             style={{
-                backgroundImage: "url('/bg.jpg')",
+                backgroundImage: "url('/bg-new.png')",
                 backgroundColor: "rgba(222 ,222 ,222 ,.5)",
                 backgroundSize: "cover",
                 backgroundRepeat: "no-repeat",
@@ -26,7 +26,7 @@ export default function Home() {
             </header>
 
             {/* Main Content */}
-            <main className="flex-grow flex flex-col items-center justify-center gap-6 px-4">
+            <main className="grow flex flex-col items-center justify-center gap-6 px-4">
                 <h1 className="text-slate-600/50 text-shadow-sm text-4xl sm:text-8xl font-bold">
                     THREE<span className="font-light">KOMUNIKA</span>
                 </h1>

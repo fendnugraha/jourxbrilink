@@ -38,7 +38,7 @@ const Login = () => {
         await login({ email, password, setErrors, setStatus, setMessage, setLoading });
     };
     return (
-        <div className="w-fit flex items-center flex-col bg-slate-100/90 dark:bg-slate-500/50 backdrop-blur-sm p-6 rounded-xl">
+        <div className="w-fit flex items-center flex-col bg-slate-100/90 dark:bg-slate-500/50 backdrop-blur-sm p-6 rounded-xl shadow-lg">
             <h1 className="text-3xl/9 sm:text-4xl font-bold text-slate-500 dark:text-slate-100 mb-4">
                 THREE<span className="text-orange-500/50 dark:text-orange-500 font-light">KOMUNIKA</span>
             </h1>

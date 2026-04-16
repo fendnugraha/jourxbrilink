@@ -2,8 +2,8 @@ const AuthLayout = ({ children }) => {
     return (
         <div
             style={{
-                backgroundImage: "url('/bgr.png')",
-                backgroundColor: "rgba(222 ,222 ,222 ,.5)",
+                backgroundImage: "url('/bg-new.png')",
+                backgroundColor: "rgba(222 ,222 ,222 ,1)",
                 backgroundSize: "cover",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",

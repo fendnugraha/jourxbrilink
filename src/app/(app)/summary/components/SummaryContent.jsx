@@ -40,8 +40,8 @@ const SummaryContent = () => {
             <div className="grid grid-cols-1 gap-4">
                 <WarehouseBalance />
                 <RevenueReport />
-                <MutationHistory account={account} notification={(type, message) => setNotification({ type, message })} user={user} />
                 <LogActivity warehouses={warehouses} />
+                <MutationHistory account={account} notification={(type, message) => setNotification({ type, message })} user={user} />
             </div>
         </>
     );

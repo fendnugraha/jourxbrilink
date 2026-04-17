@@ -9,6 +9,7 @@ import Button from "@/components/Button";
 import useAttendanceCheck from "@/libs/attendanceCheck";
 import { useAuth } from "@/libs/auth";
 import { CameraIcon, LocateIcon, MapPin, Trash2Icon, Undo } from "lucide-react";
+import { set } from "date-fns";
 
 export default function AttendanceForm({ attCheckMutate, openMessage }) {
     const { user, authLoading, logout } = useAuth({ middleware: "auth" });
@@ -24,6 +25,7 @@ export default function AttendanceForm({ attCheckMutate, openMessage }) {
     const [timeIn, setTimeIn] = useState(null);
     // 🔥 Ambil lokasi otomatis saat komponen tampil
     const [locationLoading, setLocationLoading] = useState(false);
+    const [fileLoading, setFileLoading] = useState(false);
 
     const getLocationPromise = () =>
         new Promise((resolve, reject) => {
@@ -74,24 +76,39 @@ export default function AttendanceForm({ attCheckMutate, openMessage }) {
 
     // Handle Foto + Compress
     const handleFileChange = async (e) => {
-        const imageFile = e.target.files[0];
-        setPreview(URL.createObjectURL(imageFile));
+        const imageFile = e.target.files?.[0];
+        if (!imageFile) return;
 
-        const compressed = await imageCompression(imageFile, {
-            maxSizeMB: 0.5,
-            maxWidthOrHeight: 1280,
-            useWebWorker: true,
-        });
+        // validasi sederhana
+        if (!imageFile.type.startsWith("image/")) {
+            alert("File harus berupa gambar");
+            return;
+        }
 
-        setFile(compressed);
-        setTimeIn(formatTime(new Date()));
+        // revoke preview lama
+        if (preview) {
+            URL.revokeObjectURL(preview);
+        }
+
+        const objectUrl = URL.createObjectURL(imageFile);
+        setPreview(objectUrl);
+
+        setFileLoading(true);
+        try {
+            const compressed = await imageCompression(imageFile, {
+                maxSizeMB: 0.5,
+                maxWidthOrHeight: 1280,
+                useWebWorker: true,
+            });
+
+            setFile(compressed);
+            setTimeIn(formatTime(new Date()));
+        } catch (error) {
+            console.error("Compression error:", error);
+        } finally {
+            setFileLoading(false);
+        }
     };
-
-    useEffect(() => {
-        return () => {
-            if (preview) URL.revokeObjectURL(preview);
-        };
-    }, [preview]);
 
     async function getAddress(lat, lng) {
         const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`, {
@@ -241,9 +258,13 @@ export default function AttendanceForm({ attCheckMutate, openMessage }) {
                 Submit Absensi
             </Button>
 
-            <button className="mt-2 hover:underline" onClick={logout}>
-                Logout
-            </button>
+            {fileLoading ? (
+                <p className="text-sm text-center">Loading...</p>
+            ) : (
+                <button className="mt-2 hover:underline" onClick={logout}>
+                    Logout
+                </button>
+            )}
         </>
     );
 }

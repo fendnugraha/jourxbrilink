@@ -25,52 +25,86 @@ export default function ShareAttendanceButton({ attendance, style = "px-4 py-5 w
         }
     };
 
+    const shareMessage = `
+        Absensi Berhasil!
+Nama: ${attendance?.contact?.name ?? "-"}
+Tanggal: ${getDayName(attendance?.date) ?? "-"}, ${formatLongDate(attendance?.date) ?? "-"}
+Jam Masuk: ${attendance?.time_in ?? "-"}
+Status: ${status ?? "-"}
+Lokasi: ${attendance?.latitude ?? "-"}, ${attendance?.longitude ?? "-"}
+
+Foto: ${attendance?.photo_url ?? "-"}
+`.trim();
+
     const handleShare = async () => {
         if (!attendance) return;
-        const short = await shortUrl(attendance.photo_url);
 
-        const shareMessage = `Absensi Berhasil!
+        const short = await shortUrl(attendance.photo_url);
+        const photoLink = short ?? attendance.photo_url;
+
+        const message = `Absensi Berhasil!
 Nama: ${attendance?.contact?.name ?? "-"}
 Tanggal: ${getDayName(attendance?.date) ?? "-"}, ${formatLongDate(attendance?.date) ?? "-"}
 Jam Masuk: ${attendance?.time_in ?? "-"}
 Status: ${status}
 Lokasi: ${attendance?.latitude ?? "-"}, ${attendance?.longitude ?? "-"}
 
-Foto: ${short ?? "-"}
-`;
+Foto: ${photoLink}`;
 
         try {
             const response = await fetch(attendance.photo_url);
             const blob = await response.blob();
             const file = new File([blob], "attendance.jpg", { type: blob.type });
 
-            // Jika device support Web Share API dengan file → kirim file
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 await navigator.share({
                     title: "Absensi Berhasil",
-                    text: shareMessage,
+                    text: message,
                     files: [file],
                 });
             } else {
-                // Fallback: kirim pesan dengan URL foto di baris pertama → WA show preview
-                const waText = `${attendance.photo_url}
-
-                ${shareMessage}`;
-                window.open(`https://wa.me/?text=${encodeURIComponent(waText)}`, "_blank");
+                window.open(`https://wa.me/?text=${encodeURIComponent(`${photoLink}\n\n${message}`)}`, "_blank");
             }
         } catch (error) {
             console.error("Share failed:", error);
 
-            // Jika gagal → tetap kirim pesan + URL gambar
-            const waText = `${shareMessage}\n${short}`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(waText)}`, "_blank");
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
         }
     };
 
-    const copyToClipboard = () => {
-        navigator.clipboard.writeText(shareMessage);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 1500);
+    const copyToClipboard = async () => {
+        if (!attendance) return;
+
+        const short = await shortUrl(attendance.photo_url);
+        const photoLink = short ?? attendance.photo_url;
+
+        const message = `Absensi Berhasil!
+Nama: ${attendance?.contact?.name ?? "-"}
+Tanggal: ${getDayName(attendance?.date) ?? "-"}, ${formatLongDate(attendance?.date) ?? "-"}
+Jam Masuk: ${attendance?.time_in ?? "-"}
+Status: ${status}
+Lokasi: ${attendance?.latitude ?? "-"}, ${attendance?.longitude ?? "-"}
+
+Foto: ${photoLink}`;
+
+        try {
+            await navigator.clipboard.writeText(message);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1500);
+        } catch (err) {
+            console.error("Copy gagal:", err);
+
+            // fallback jadul (biar tetap bisa di browser lama)
+            const textarea = document.createElement("textarea");
+            textarea.value = message;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1500);
+        }
     };
 
     return (

@@ -36,8 +36,6 @@ const AttendanceSummary = ({ dateString, selectedZone }) => {
         }
     };
 
-    console.log(employees);
-
     return (
         <>
             <div className="flex items-center gap-2">

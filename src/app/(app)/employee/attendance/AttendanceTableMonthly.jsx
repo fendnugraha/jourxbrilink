@@ -12,7 +12,11 @@ const AttendanceTableMonthly = ({ selectedZone, warehouseMonthly }) => {
                 icon: <Star size={26} strokeWidth={2} className="text-orange-700 rotate-45" fill="orange" />,
             };
         if (status === "Late") return { style: "bg-red-500 dark:bg-red-600 text-white", icon: <Clock size={20} /> };
-        if (status === "Overtime") return { style: "bg-violet-500 dark:bg-violet-600 text-white", icon: <AlarmClockPlus size={20} /> };
+        if (status === "Overtime")
+            return {
+                style: "bg-violet-300 text-white",
+                icon: <AlarmClockPlus size={22} className="text-violet-600" fill="orange" />,
+            };
         if (status === "Alpha") return { style: "bg-red-500 dark:bg-red-600 text-white", icon: <X size={20} /> };
         return { style: "bg-gray-500 dark:bg-gray-700", icon: null };
     };
@@ -37,7 +41,7 @@ const AttendanceTableMonthly = ({ selectedZone, warehouseMonthly }) => {
                                 <div
                                     key={day}
                                     className={`
-                                min-w-9 h-9 rounded-lg 
+                                min-w-10 h-10 rounded-lg 
                                 flex items-center justify-center 
                                 text-white text-xs font-semibold
                                 ${getColor(att?.status).style}

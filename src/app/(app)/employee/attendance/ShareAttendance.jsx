@@ -25,19 +25,19 @@ export default function ShareAttendanceButton({ attendance, style = "px-4 py-5 w
         }
     };
 
-    const shareMessage = `
-        Absensi Berhasil!
+    const handleShare = async () => {
+        if (!attendance) return;
+        const short = await shortUrl(attendance.photo_url);
+
+        const shareMessage = `Absensi Berhasil!
 Nama: ${attendance?.contact?.name ?? "-"}
 Tanggal: ${getDayName(attendance?.date) ?? "-"}, ${formatLongDate(attendance?.date) ?? "-"}
 Jam Masuk: ${attendance?.time_in ?? "-"}
-Status: ${status ?? "-"}
+Status: ${status}
 Lokasi: ${attendance?.latitude ?? "-"}, ${attendance?.longitude ?? "-"}
 
-Foto: ${shortUrl(attendance?.photo_url) ?? "-"}
-`.trim();
-
-    const handleShare = async () => {
-        if (!attendance) return;
+Foto: ${short ?? "-"}
+`;
 
         try {
             const response = await fetch(attendance.photo_url);
@@ -62,7 +62,7 @@ Foto: ${shortUrl(attendance?.photo_url) ?? "-"}
             console.error("Share failed:", error);
 
             // Jika gagal → tetap kirim pesan + URL gambar
-            const waText = `${shareMessage}\n${attendance.photo_url}`;
+            const waText = `${shareMessage}\n${short}`;
             window.open(`https://wa.me/?text=${encodeURIComponent(waText)}`, "_blank");
         }
     };

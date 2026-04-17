@@ -7,6 +7,24 @@ export default function ShareAttendanceButton({ attendance, style = "px-4 py-5 w
     const [copied, setCopied] = useState(false);
     const status = attendance?.approval_status === "Late" ? `Telat` : `OK`;
 
+    const shortUrl = async (url) => {
+        try {
+            const res = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(url)}`);
+
+            const text = await res.text();
+
+            if (!res.ok) {
+                console.error("TinyURL error:", res.status, text);
+                throw new Error("Gagal membuat short URL");
+            }
+
+            return text;
+        } catch (error) {
+            console.error("Short URL failed:", error);
+            return url;
+        }
+    };
+
     const shareMessage = `
         Absensi Berhasil!
 Nama: ${attendance?.contact?.name ?? "-"}
@@ -15,7 +33,7 @@ Jam Masuk: ${attendance?.time_in ?? "-"}
 Status: ${status ?? "-"}
 Lokasi: ${attendance?.latitude ?? "-"}, ${attendance?.longitude ?? "-"}
 
-Foto: ${attendance?.photo_url ?? "-"}
+Foto: ${shortUrl(attendance?.photo_url) ?? "-"}
 `.trim();
 
     const handleShare = async () => {

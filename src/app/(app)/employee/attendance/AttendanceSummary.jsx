@@ -3,7 +3,7 @@ import { formatNumber, toOrdinal } from "@/libs/format";
 import { ArrowBigDown, ArrowBigUp, ChartNoAxesColumn, ChessQueen, Clock, Gift, Star } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
-const AttendanceSummary = ({ dateString }) => {
+const AttendanceSummary = ({ dateString, selectedZone }) => {
     const [search, setSearch] = useState("");
     const date = new Date(dateString);
 
@@ -26,7 +26,6 @@ const AttendanceSummary = ({ dateString }) => {
         fetchEmployees({ month, year });
     }, [month, year, fetchEmployees]);
 
-    console.log(employees);
     const checkUpOrDown = (rating, lastRating) => {
         if (rating > lastRating) {
             return <ArrowBigUp fill="green" strokeWidth={2} className="text-green-600 absolute bottom-4 right-4" size={28} />;
@@ -47,14 +46,18 @@ const AttendanceSummary = ({ dateString }) => {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
                 {employees
-                    .filter((employee) => employee.contact?.name.toLowerCase().includes(search.toLowerCase()))
-                    .sort((a, b) => b.attendance_rating?.rating - a.attendance_rating?.rating)
+                    .filter((employee) => {
+                        const matchSearch = employee.contact?.name?.toLowerCase().includes(search.toLowerCase());
+
+                        const matchZone = selectedZone === "" || Number(employee.warehouse?.warehouse_zone_id) === Number(selectedZone);
+
+                        const hasRating = (employee.attendance_rating?.rating ?? 0) > 0;
+
+                        return matchSearch && matchZone && hasRating;
+                    })
+                    .sort((a, b) => (b.attendance_rating?.rating ?? 0) - (a.attendance_rating?.rating ?? 0))
                     .map((employee, index) => (
-                        <div
-                            key={employee.id}
-                            className="group p-4 border drop-shadow-sm border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-4xl"
-                            hidden={employee.attendance_rating?.rating === 0}
-                        >
+                        <div key={employee.id} className="group p-4 border drop-shadow-sm border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-4xl">
                             <div className="flex flex-col items-center gap-2 mt-4">
                                 <span className="text-5xl font-black mb-1">
                                     {formatNumber(employee.attendance_rating?.rating ?? 0)}

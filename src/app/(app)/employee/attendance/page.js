@@ -190,7 +190,7 @@ const AttendancePage = () => {
                         {selectPage === "monthly" && (
                             <AttendanceTableMonthly selectedZone={selectedZone} dateString={startDate} warehouseMonthly={warehouseMonthly} />
                         )}
-                        {selectPage === "summary" && <AttendanceSummary dateString={startDate} />}
+                        {selectPage === "summary" && <AttendanceSummary dateString={startDate} selectedZone={selectedZone} />}
                     </div>
                 </div>
             </div>

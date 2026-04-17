@@ -259,7 +259,7 @@ export default function AttendanceForm({ attCheckMutate, openMessage }) {
             </Button>
 
             {fileLoading ? (
-                <p className="text-sm text-center">Loading...</p>
+                <p className="text-sm text-center">Compressing image...</p>
             ) : (
                 <button className="mt-2 hover:underline" onClick={logout}>
                     Logout

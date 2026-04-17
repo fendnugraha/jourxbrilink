@@ -54,7 +54,7 @@ const AttendanceSummary = ({ dateString, selectedZone }) => {
                         const matchZone =
                             selectedZone === "" ||
                             Number(employee.warehouse?.warehouse_zone_id) === Number(selectedZone) ||
-                            Number(employee.warehouse_zone?.id) === Number(selectedZone);
+                            Number(employee.contact?.zone?.id) === Number(selectedZone);
 
                         const hasRating = (employee.attendance_rating?.rating ?? 0) > 0;
 

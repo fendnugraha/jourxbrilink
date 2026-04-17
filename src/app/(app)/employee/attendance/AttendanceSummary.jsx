@@ -36,6 +36,8 @@ const AttendanceSummary = ({ dateString, selectedZone }) => {
         }
     };
 
+    console.log(employees);
+
     return (
         <>
             <div className="flex items-center gap-2">
@@ -49,7 +51,10 @@ const AttendanceSummary = ({ dateString, selectedZone }) => {
                     .filter((employee) => {
                         const matchSearch = employee.contact?.name?.toLowerCase().includes(search.toLowerCase());
 
-                        const matchZone = selectedZone === "" || Number(employee.warehouse?.warehouse_zone_id) === Number(selectedZone);
+                        const matchZone =
+                            selectedZone === "" ||
+                            Number(employee.warehouse?.warehouse_zone_id) === Number(selectedZone) ||
+                            Number(employee.warehouse_zone?.id) === Number(selectedZone);
 
                         const hasRating = (employee.attendance_rating?.rating ?? 0) > 0;
 

@@ -77,7 +77,7 @@ const AttendanceSummary = ({ dateString, selectedZone }) => {
                                     />
                                 </div>
                                 <h1 className="absolute top-4 left-4 font-bold">
-                                    {index + 1 === 1 ? <ChessQueen size={24} fill="yellow" /> : <>{toOrdinal(index + 1)}</>}
+                                    {index + 1 === 1 ? <ChessQueen size={36} fill="yellow" /> : <>{toOrdinal(index + 1)}</>}
                                 </h1>
                                 <div className="flex gap-4 w-full">
                                     <div className="flex gap-1 justify-center items-center">

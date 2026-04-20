@@ -7,6 +7,7 @@ import Input from "@/components/Input";
 import Link from "next/link";
 import { getStorePerformanceRating } from "@/libs/GetStorePerformanceRating";
 import { useGetWarehouseBalance } from "@/libs/getWarehouseBalance";
+import { TimeAgo } from "@/libs/format";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -66,9 +67,10 @@ const WarehouseBalance = () => {
                     <thead className="">
                         <tr className="">
                             <th className="text-center">Cabang (Konter)</th>
-                            <th className="text-center">Kas Tunai</th>
+                            <th className="text-center">Kas (Tunai)</th>
                             <th className="text-center">Saldo Bank</th>
                             <th className="text-center">Jumlah</th>
+                            <th className="text-center">Last Update</th>
                             <th className="text-center w-12">Rate</th>
                         </tr>
                     </thead>
@@ -106,9 +108,12 @@ const WarehouseBalance = () => {
                                         })()}
                                     </td>
                                     <td className="text-end">{formatNumber(w.bank)}</td>
-                                    <td className={`text-end font-bold ${w.cash + w.bank - w.total_limit !== 0 && w.id !== 1 && "text-red-300"}`}>
+                                    <td
+                                        className={`text-end font-bold ${w.cash + w.bank - w.total_limit !== 0 && w.id !== 1 && "text-red-500 dark:text-red-400"}`}
+                                    >
                                         {formatNumber(w.cash + w.bank)}
                                     </td>
+                                    <td className="text-center text-slate-500">{<TimeAgo timestamp={w.updated_at} />}</td>
                                     <td className="text-center w-12">
                                         {w.id > 1 && (
                                             <span className="bg-green-300 text-green-800 p-1 rounded">{getStorePerformanceRating(w.average_profit)}</span>
@@ -129,6 +134,7 @@ const WarehouseBalance = () => {
                                 <th className="text-right">{formatNumber(warehouseBalance.totalCash)}</th>
                                 <th className="text-right">{formatNumber(warehouseBalance.totalBank)}</th>
                                 <th className="text-right">{formatNumber(warehouseBalance.totalCash + warehouseBalance.totalBank)}</th>
+                                <th></th>
                                 <th></th>
                             </tr>
                         )}

@@ -1,4 +1,5 @@
 import { differenceInDays, differenceInMinutes, formatDistanceToNow, getMonth, getYear, parse } from "date-fns";
+import { enUS, id } from "date-fns/locale";
 
 /**
  * Format angka dengan separator ribuan.
@@ -85,8 +86,12 @@ export const todayDate = () => {
     return `${year}-${month}-${day}`;
 };
 
-export const TimeAgo = ({ timestamp }) => {
-    return <span>{formatDistanceToNow(new Date(timestamp), { addSuffix: true })}</span>;
+export const TimeAgo = ({ timestamp, suffix = true, locale = "en" }) => {
+    const localeMap = {
+        id: id,
+        en: enUS,
+    };
+    return <span>{formatDistanceToNow(new Date(timestamp), { addSuffix: suffix, locale: localeMap[locale] })}</span>;
 };
 
 export function formatNumberToK(num) {

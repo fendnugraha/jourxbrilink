@@ -50,7 +50,7 @@ const AttendanceTable = ({ selectedZone, warehouses, fetchWarehouses }) => {
                         {filteredWarehouses?.map((warehouse) => (
                             <tr key={warehouse?.id}>
                                 <td className="font-bold">
-                                    <div className="flex items-center">
+                                    <div className="flex items-start">
                                         {warehouse?.attendance?.[0]?.approval_status ? (
                                             <img src={warehouse?.attendance?.[0]?.photo_url} alt={warehouse?.name} className="w-8 h-8 rounded-full mr-2" />
                                         ) : (

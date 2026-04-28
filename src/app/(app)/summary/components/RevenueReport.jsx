@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import formatNumber from "@/libs/formatNumber";
 import { DownloadIcon, FilterIcon, RefreshCcwIcon } from "lucide-react";
 import Modal from "@/components/Modal";
@@ -9,6 +9,7 @@ import Label from "@/components/Label";
 import Link from "next/link";
 import exportToExcel from "@/libs/exportToExcel";
 import useGetRevenueReport from "@/libs/getRevenueReport";
+import axios from "@/libs/axios";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -20,16 +21,31 @@ const getCurrentDate = () => {
 
 const RevenueReport = () => {
     // const [revenue, setRevenue] = useState([]);
-    const [notification, setNotification] = useState("");
+    // const [notification, setNotification] = useState("");
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
     const { revenue, revenueError, isValidating, mutateRevenue } = useGetRevenueReport(startDate, endDate);
     const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
+    const [zones, setZones] = useState([]);
+    const [selectedZone, setSelectedZone] = useState("");
 
     const closeModal = () => {
         setIsModalFilterDataOpen(false);
     };
+
+    const fetchWarehouseZone = async () => {
+        try {
+            const response = await axios.get("/api/zones");
+            setZones(response.data.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchWarehouseZone();
+    }, []);
 
     // const fetchRevenueReport = async () => {
     //     setLoading(true);
@@ -48,9 +64,11 @@ const RevenueReport = () => {
     // }, [startDate, endDate]);
 
     const sumByTrxType = (trxType) => {
-        return revenue.revenue?.reduce((total, item) => {
-            return total + Number(item[trxType]);
-        }, 0);
+        return revenue.revenue
+            ?.filter((item) => selectedZone === "" || Number(item.zone_id) === Number(selectedZone))
+            .reduce((total, item) => {
+                return total + Number(item[trxType]);
+            }, 0);
         // console.log(revenue.revenue?.[0][trxType]);
     };
 
@@ -77,6 +95,14 @@ const RevenueReport = () => {
                     </span>
                 </h4>
                 <div className="flex gap-1 justify-end h-fit">
+                    <select onChange={(e) => setSelectedZone(e.target.value)} className="form-select" value={selectedZone} disabled={zones.length === 0}>
+                        <option value="">Semua Cabang</option>
+                        {zones.map((zone) => (
+                            <option value={zone.id} key={zone.id}>
+                                {zone.zone_name}
+                            </option>
+                        ))}
+                    </select>
                     <button onClick={() => mutateRevenue()} className="small-button">
                         <RefreshCcwIcon className="size-4" />
                     </button>
@@ -127,30 +153,32 @@ const RevenueReport = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {loading ? (
+                        {isValidating ? (
                             <tr>
                                 <td colSpan={11}>Loading...</td>
                             </tr>
                         ) : (
-                            revenue.revenue?.map((item, index) => (
-                                <tr key={index} className="hover:bg-orange-100 dark:hover:bg-slate-700">
-                                    <td className="">
-                                        <Link className="hover:underline" href={`/summary/warehouse/${item.warehouseId}`}>
-                                            {item.warehouse.replace(/^konter\s*/i, "")}
-                                        </Link>
-                                    </td>
-                                    <td className="text-end">{formatNumber(item.transfer)}</td>
-                                    <td className="text-end">{formatNumber(item.tarikTunai)}</td>
-                                    <td className="text-end">{formatNumber(item.voucher)}</td>
-                                    <td className="text-end">{formatNumber(item.accessories)}</td>
-                                    <td className="text-end">{formatNumber(item.deposit)}</td>
-                                    <td className="text-end">{formatNumber(item.trx)}</td>
-                                    <td className="text-end">{formatNumber(item.bank_fee)}</td>
-                                    <td className="text-end font-bold text-red-500 dark:text-red-400">{formatNumber(item.expense)}</td>
-                                    <td className="text-end font-bold text-green-500 dark:text-green-400">{formatNumber(item.fee)}</td>
-                                    <td className="text-end">{formatNumber(item.cash)}</td>
-                                </tr>
-                            ))
+                            revenue.revenue
+                                ?.filter((item) => selectedZone === "" || Number(item.zone_id) === Number(selectedZone))
+                                .map((item, index) => (
+                                    <tr key={index} className="hover:bg-orange-100 dark:hover:bg-slate-700">
+                                        <td className="">
+                                            <Link className="hover:underline" href={`/summary/warehouse/${item.warehouseId}`}>
+                                                {item.warehouse.replace(/^konter\s*/i, "")}
+                                            </Link>
+                                        </td>
+                                        <td className="text-end">{formatNumber(item.transfer)}</td>
+                                        <td className="text-end">{formatNumber(item.tarikTunai)}</td>
+                                        <td className="text-end">{formatNumber(item.voucher)}</td>
+                                        <td className="text-end">{formatNumber(item.accessories)}</td>
+                                        <td className="text-end">{formatNumber(item.deposit)}</td>
+                                        <td className="text-end">{formatNumber(item.trx)}</td>
+                                        <td className="text-end">{formatNumber(item.bank_fee)}</td>
+                                        <td className="text-end font-bold text-red-500 dark:text-red-400">{formatNumber(item.expense)}</td>
+                                        <td className="text-end font-bold text-green-500 dark:text-green-400">{formatNumber(item.fee)}</td>
+                                        <td className="text-end">{formatNumber(item.cash)}</td>
+                                    </tr>
+                                ))
                         )}
                     </tbody>
                     <tfoot>

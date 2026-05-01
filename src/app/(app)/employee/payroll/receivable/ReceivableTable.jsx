@@ -56,7 +56,7 @@ const ReceivableTable = ({ notification, finance, fetchFinance, selectedContactI
             </div>
             <div className="flex gap-2">
                 <select
-                    className="form-control"
+                    className="form-select"
                     value={type}
                     onChange={(e) => {
                         (setType(e.target.value), setCurrentPage(1));
@@ -66,7 +66,7 @@ const ReceivableTable = ({ notification, finance, fetchFinance, selectedContactI
                     <option value="InstallmentReceivable">Cicilan (Installment Payment)</option>
                 </select>
                 <select
-                    className="form-control !w-fit"
+                    className="form-select !w-fit"
                     value={paymentStatus}
                     onChange={(e) => {
                         (setPaymentStatus(e.target.value), setCurrentPage(1));
@@ -76,7 +76,7 @@ const ReceivableTable = ({ notification, finance, fetchFinance, selectedContactI
                     <option value="Unpaid">Belum</option>
                 </select>
                 <select
-                    className="form-control !w-fit"
+                    className="form-select !w-fit"
                     value={itemsPerPage}
                     onChange={(e) => {
                         (setItemsPerPage(e.target.value), setCurrentPage(1));

@@ -81,7 +81,7 @@ const CreateReceivable = ({ isModalOpen, fetchFinance, notification }) => {
                         <select
                             value={formData.contact_id}
                             onChange={(e) => setFormData({ ...formData, contact_id: e.target.value })}
-                            className={`form-control ${errors.contact_id ? "border-red-500" : ""}`}
+                            className={`form-select ${errors.contact_id ? "border-red-500" : ""}`}
                         >
                             <option value="">--Pilih Contact--</option>
                             {contacts.map((contact) => (
@@ -98,7 +98,7 @@ const CreateReceivable = ({ isModalOpen, fetchFinance, notification }) => {
                         <select
                             value={formData.type}
                             onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                            className={`form-control ${errors.type ? "border-red-500" : ""}`}
+                            className={`form-select ${errors.type ? "border-red-500" : ""}`}
                         >
                             <option value="EmployeeReceivable">Kasbon (Full Payment)</option>
                             <option value="InstallmentReceivable">Cicilan (Installment Payment)</option>

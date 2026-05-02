@@ -16,6 +16,7 @@ const EmployeeTable = ({ employees, fetchContacts, notification }) => {
     const [isModalAddWarningOpen, setIsModalAddWarningOpen] = useState(false);
     const [isModalEditEmployeeOpen, setIsModalEditEmployeeOpen] = useState(false);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
+    const [empStatus, setEmpStatus] = useState("active");
     const closeModal = () => {
         setIsModalAddEmployeeOpen(false);
         setIsModalAddWarningOpen(false);
@@ -35,7 +36,12 @@ const EmployeeTable = ({ employees, fetchContacts, notification }) => {
             <Modal isOpen={isModalAddEmployeeOpen} onClose={closeModal} modalTitle="Tambah Karyawan" maxWidth="max-w-md">
                 <AddEmployee isModalOpen={setIsModalAddEmployeeOpen} fetchContacts={fetchContacts} notification={notification} />
             </Modal>
-            <div>
+            <div className="flex gap-2 mb-4">
+                <select onChange={(e) => setEmpStatus(e.target.value)} className="form-select !w-fit" value={empStatus} name="empStatus" id="empStatus">
+                    <option value="">Semua</option>
+                    <option value="active">Aktif</option>
+                    <option value="inactive">Tidak Aktif</option>
+                </select>
                 <input type="search" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} className="form-control" />
             </div>
             <div className="overflow-x-auto">
@@ -54,7 +60,10 @@ const EmployeeTable = ({ employees, fetchContacts, notification }) => {
                     </thead>
                     <tbody>
                         {employees
-                            .filter((employee) => employee.contact?.name.toLowerCase().includes(search.toLowerCase()))
+                            .filter(
+                                (employee) =>
+                                    employee.contact?.name.toLowerCase().includes(search.toLowerCase()) && (empStatus === "" || employee.status === empStatus),
+                            )
                             .map((employee, index) => (
                                 <tr key={employee.id}>
                                     <td className="text-center">{index + 1}</td>

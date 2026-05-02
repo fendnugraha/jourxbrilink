@@ -120,7 +120,7 @@ const BalanceMutationHistory = ({
                                     ? journal.cred?.warehouse?.name?.replace(/^konter\s*/i, "")
                                     : journal.debt?.warehouse?.name?.replace(/^konter\s*/i, "")}
                             </h1>
-                            <div className="flex justify-between text-xs p-2 bg-white dark:bg-black/40 hover:dark:bg-green-500/30 backdrop-blur-sm rounded-xl mb-2 hover:shadow-md">
+                            <div className="flex justify-between text-xs p-4 bg-white dark:bg-black/40 hover:dark:bg-green-500/30 backdrop-blur-sm rounded-3xl mb-2 hover:shadow-md">
                                 <div>
                                     <h1>{formatDateTime(journal.date_issued)}</h1>
                                     <h1 className="font-bold overflow-x-hidden text-blue-600 dark:text-yellow-200 text-sm">
@@ -142,7 +142,7 @@ const BalanceMutationHistory = ({
                                 </div>
                                 <div className="text-right flex flex-col justify-between">
                                     <h1
-                                        className={`font-bold text-[1.2rem] text-nowrap ${
+                                        className={`font-bold text-[1.5rem] text-nowrap ${
                                             journal.debt?.warehouse_id === Number(selectedWarehouse)
                                                 ? "text-green-500 dark:text-green-300"
                                                 : "text-red-500 dark:text-red-300"

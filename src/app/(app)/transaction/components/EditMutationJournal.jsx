@@ -186,10 +186,15 @@ const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse
                     </div>
                 </div>
                 <div className="flex justify-end">
-                    <button className="rounded-xl px-8 py-3 text-red-300 hover:border-red-300 hover:border mr-1" onClick={() => isModalOpen(false)}>
+                    <button
+                        type="button"
+                        className="rounded-xl px-8 py-3 text-red-300 hover:border-red-300 hover:border mr-1"
+                        onClick={() => isModalOpen(false)}
+                    >
                         Cancel
                     </button>
                     <button
+                        type="submit"
                         className="bg-green-500 hover:bg-green-600 rounded-xl px-8 py-3 text-white disabled:bg-slate-300 disabled:cursor-not-allowed"
                         disabled={loading}
                     >

@@ -120,7 +120,7 @@ const WarehouseReport = ({ params }) => {
                                 revenue?.revenue,
                                 headersRevenue,
                                 `Summary Report by Warehouse ${filterWarehouse?.name} ${getMonthName(month)} ${year}.xlsx`,
-                                `Summary Report by Warehouse ${filterWarehouse?.name} ${getMonthName(month)} ${year}`
+                                `Summary Report by Warehouse ${filterWarehouse?.name} ${getMonthName(month)} ${year}`,
                             )
                         }
                         className="small-button"
@@ -153,6 +153,8 @@ const WarehouseReport = ({ params }) => {
                                 <option value="">Pilih Tahun</option>
                                 <option value="2024">2024</option>
                                 <option value="2025">2025</option>
+                                <option value="2026">2026</option>
+                                <option value="2027">2027</option>
                             </select>
                         </div>
                         <button onClick={() => setIsModalFilterDataOpen(false)} className="btn-primary">

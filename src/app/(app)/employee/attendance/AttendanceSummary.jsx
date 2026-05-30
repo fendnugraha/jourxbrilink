@@ -60,7 +60,7 @@ const AttendanceSummary = ({ dateString, selectedZone }) => {
 
                         return matchSearch && matchZone && hasRating;
                     })
-                    .sort((a, b) => b.attendance_rating?.score - a.attendance_rating?.score)
+                    .sort((a, b) => b.attendance_rating?.rating - a.attendance_rating?.rating)
                     .map((employee, index) => (
                         <div key={employee.id} className="group p-4 border drop-shadow-sm border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-4xl">
                             <div className="flex flex-col items-center gap-2 mt-4">

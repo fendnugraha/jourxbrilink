@@ -36,6 +36,8 @@ const AttendanceSummary = ({ dateString, selectedZone }) => {
         }
     };
 
+    console.log(employees);
+
     return (
         <>
             <div className="flex items-center gap-2">
@@ -58,7 +60,7 @@ const AttendanceSummary = ({ dateString, selectedZone }) => {
 
                         return matchSearch && matchZone && hasRating;
                     })
-                    .sort((a, b) => (b.attendance_rating?.rating ?? 0) - (a.attendance_rating?.rating ?? 0))
+                    .sort((a, b) => b.attendance_rating?.score - a.attendance_rating?.score)
                     .map((employee, index) => (
                         <div key={employee.id} className="group p-4 border drop-shadow-sm border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-4xl">
                             <div className="flex flex-col items-center gap-2 mt-4">
@@ -66,7 +68,10 @@ const AttendanceSummary = ({ dateString, selectedZone }) => {
                                     {formatNumber(employee.attendance_rating?.rating ?? 0)}
                                     <sub className="font-normal text-xs">/10</sub>
                                 </span>
-                                <h2 className="font-semibold text-center mb-4 text-sm">{employee.contact?.name}</h2>
+                                <h2 className="font-semibold text-center mb-4 text-sm">
+                                    {employee.contact?.name}
+                                    <span className="block text-xs font-normal">Total Score: {formatNumber(employee.attendance_rating?.score ?? 0)}</span>
+                                </h2>
                                 {checkUpOrDown(employee.attendance_rating?.rating ?? 0, employee.attendance_rating_last_month?.rating ?? 0)}
                                 <div className="absolute top-4 right-4">
                                     <Gift

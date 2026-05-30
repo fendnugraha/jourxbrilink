@@ -201,11 +201,11 @@ const CreateCashWithdrawal = ({
                         </div>
                     </div>
                 </div>
-                <div className="">
+                <div className=" flex justify-start items-center gap-2">
                     <input
                         type="checkbox"
                         id="isFee"
-                        className="mb-2 mr-2"
+                        className=""
                         checked={isFee}
                         onChange={(e) => {
                             setIsFee(e.target.checked);
@@ -213,6 +213,17 @@ const CreateCashWithdrawal = ({
                     />
                     <label htmlFor="isFee" className={`text-sm `}>
                         Fee/Bunga Bank
+                    </label>
+                    <input
+                        type="checkbox"
+                        id="feeAlternative"
+                        className=""
+                        checked={altFee}
+                        onChange={(e) => setPersonalSetting((prev) => ({ ...prev, altFee: e.target.checked }))}
+                        disabled={!feeAdminAuto}
+                    />
+                    <label htmlFor="feeAlternative" className={`text-sm ${altFee ? "text-green-600" : ""}`}>
+                        Fee Alternatif
                     </label>
                 </div>
                 <div className="mb-2 sm:mb-4">
@@ -229,17 +240,6 @@ const CreateCashWithdrawal = ({
                         />
                         {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
                     </div>
-                    {/* <input
-                        type="checkbox"
-                        id="feeAlternative"
-                        className=""
-                        checked={altFee}
-                        onChange={(e) => setPersonalSetting((prev) => ({ ...prev, altFee: e.target.checked }))}
-                        disabled={!feeAdminAuto}
-                    />
-                    <label htmlFor="feeAlternative" className={`text-sm ${altFee ? "text-green-600" : ""}`}>
-                        Fee Alternatif
-                    </label> */}
                 </div>
 
                 <div className="flex justify-end gap-2">

@@ -111,7 +111,9 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                     {errors?.date_issued && <span className="text-red-500 text-xs">{errors?.date_issued}</span>}
                 </div>
                 <div className="flex justify-end items-center gap-2">
-                    <h1 className="text-xs">Auto Confirm</h1>
+                    <h1 className={`text-xs ${formData.confirmation === 1 ? "text-green-500 font-bold" : "text-slate-600 dark:text-slate-400"}`}>
+                        Auto Confirm
+                    </h1>
                     <button
                         type="button"
                         className={`text-xs p-0.5 rounded-full active:scale-90 ${formData.confirmation === 1 ? "bg-green-200" : "bg-slate-200 shadow-sm"}`}

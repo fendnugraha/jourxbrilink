@@ -190,7 +190,10 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                     {loading || (isValidating && <LoaderCircleIcon size={20} className="animate-spin absolute top-2 text-slate-400 left-2" />)}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <h1 className="card-title">
-                            Mutasi Saldo
+                            Mutasi Saldo{" "}
+                            <Link href="/dashboard/mutation" hidden={true}>
+                                <ArrowUpRight size={20} className="inline" />
+                            </Link>
                             <span className="card-subtitle text-nowrap">Periode: {endDate}</span>
                         </h1>
                         <div className="flex gap-1 justify-end sm:col-span-2">

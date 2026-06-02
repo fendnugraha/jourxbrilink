@@ -1,11 +1,11 @@
 import MainPage from "../../main";
-import BalanceMutation from "../components/BalanceMutation";
+import MutationContent from "./MutationContent";
 
 const MutationPage = () => {
     return (
         <MainPage headerTitle="Mutation">
             <div className="py-4 sm:py-8 px-4 sm:px-12 overflow-x-auto">
-                <BalanceMutation />
+                <MutationContent />
             </div>
         </MainPage>
     );

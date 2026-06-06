@@ -1,0 +1,258 @@
+"use client";
+import { ArrowUpDown, Search, SearchIcon, WalletMinimal, X } from "lucide-react";
+import { DateTimeNow, formatNumber } from "@/libs/format";
+import { useEffect, useState } from "react";
+import axios from "@/libs/axios";
+const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWarehouse, accountBalance }) => {
+    const [switchTab, setSwitchTab] = useState(false);
+    const [selectedWarehouse, setSelectedWarehouse] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState([]);
+
+    const { today } = DateTimeNow();
+    const [formData, setFormData] = useState({
+        date_issued: today,
+        debt_code: "",
+        cred_code: "",
+        amount: "",
+        fee_amount: 0,
+        is_confirmed: true,
+        confirmation: 0,
+        trx_type: "Mutasi Kas",
+        description: "",
+        admin_fee: "" || 0,
+        warehouse_id: 1,
+    });
+
+    const filteredWarehouses = warehouses?.data?.filter((warehouse) => warehouse.name.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    const selectedWarehouseId = selectedWarehouse?.id;
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const response = await axios.post("/api/create-mutation", formData);
+            const successMessage =
+                response.data.journal.cred.acc_name + " ke " + response.data.journal.debt.acc_name + " sebesar " + formatNumber(response.data.journal.amount);
+            setNotification({
+                type: "success",
+                message: response.data.message + " " + successMessage,
+            });
+            fetchJournalsByWarehouse();
+            setFormData({
+                date_issued: today,
+                debt_code: "",
+                cred_code: formData.cred_code,
+                amount: "",
+                fee_amount: 0,
+                is_confirmed: true,
+                confirmation: 0,
+                trx_type: "Mutasi Kas",
+                description: "",
+                admin_fee: "" || 0,
+                warehouse_id: 1,
+            });
+            setErrors([]);
+            setSwitchTab(false);
+        } catch (error) {
+            setNotification({
+                type: "error",
+                message: error.response?.data?.message || "Something went wrong.",
+            });
+            setErrors(error.response?.data?.errors);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleCancel = () => {
+        setFormData({
+            date_issued: today,
+            debt_code: "",
+            cred_code: "",
+            amount: "",
+            fee_amount: 0,
+            is_confirmed: true,
+            confirmation: 0,
+            trx_type: "Mutasi Kas",
+            description: "",
+            admin_fee: "" || 0,
+            warehouse_id: 1,
+        });
+        setErrors([]);
+    };
+
+    // useEffect(() => {
+    //     if (!formData.cred_code || !accounts?.data?.length || selectedWarehouseId === 1) return;
+
+    //     // Ambil account_group berdasarkan cred_code
+    //     const selectedCred = accounts?.data?.find((acc) => Number(acc.id) === Number(formData.cred_code));
+
+    //     if (!selectedCred) return;
+
+    //     // Cari akun lain dengan group yang sama (misalnya di cabang HQ)
+    //     const matchingDebt = accounts?.data?.find(
+    //         (acc) => acc.account_group === selectedCred.account_group && Number(acc.warehouse_id) === Number(selectedWarehouseId),
+    //     );
+
+    //     // Update debt_code hanya kalau ditemukan
+    //     if (matchingDebt) {
+    //         setFormData((prev) => ({
+    //             ...prev,
+    //             debt_code: matchingDebt.id,
+    //         }));
+    //     }
+    // }, [formData.cred_code, accounts?.data, selectedWarehouseId]);
+
+    const fiindAccount = accountBalance?.data?.chartOfAccounts?.find((acc) => acc.warehouse_id === 1 && acc.id === Number(formData.cred_code));
+    return (
+        <form onSubmit={handleSubmit}>
+            <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2 bg-white dark:bg-slate-600 rounded-2xl p-4 drop-shadow">
+                    <label className="text-xs">Cabang</label>
+                    <div className="flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 rounded-full p-2">
+                        <SearchIcon size={20} className="text-slate-600 dark:text-slate-100" />
+                        <input
+                            type="search"
+                            className="w-full outline-none disabled:cursor-not-allowed disabled:text-slate-400"
+                            placeholder="Cari Cabang"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            // disabled={selectedWarehouse}
+                        />
+                    </div>
+                    <div className="flex flex-col gap-2 max-h-fit bg-amber-100 dark:bg-slate-700 rounded-2xl p-2" hidden={!searchTerm && !selectedWarehouse}>
+                        {selectedWarehouse && (
+                            <div className="flex items-center gap-2 justify-between bg-amber-300 dark:bg-slate-800 rounded-xl p-2">
+                                <button className="text-start text-xs">{selectedWarehouse.name}</button>
+                                <button
+                                    className="bg-red-500 rounded-full w-5 h-5 flex justify-center items-center text-start text-xs"
+                                    onClick={() => {
+                                        setSelectedWarehouse(null);
+                                        setSearchTerm("");
+                                        setFormData({ ...formData, cred_code: "", debt_code: "" });
+                                    }}
+                                >
+                                    <X size={14} className="text-slate-100" />
+                                </button>
+                            </div>
+                        )}
+                        {searchTerm &&
+                            filteredWarehouses?.map((warehouse) => (
+                                <button
+                                    key={warehouse.id}
+                                    className="hover:bg-amber-300 dark:hover:bg-slate-800 rounded-lg p-2 text-start text-xs"
+                                    onClick={() => {
+                                        setSelectedWarehouse(warehouse);
+                                        setSearchTerm("");
+                                    }}
+                                >
+                                    {warehouse.name}
+                                </button>
+                            ))}
+                    </div>
+                </div>
+                <div className="flex flex-col gap-2 ">
+                    <div className={`flex flex-col gap-2 bg-white dark:bg-slate-600 rounded-2xl p-4`}>
+                        <label className="text-xs">Sumber Dana</label>
+                        <select
+                            className="bg-slate-300 dark:bg-slate-700 rounded-2xl p-2 disabled:cursor-not-allowed disabled:text-slate-400 text-sm"
+                            value={formData.cred_code}
+                            onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })}
+                            disabled={!selectedWarehouse}
+                        >
+                            <option value="">Pilih Sumber Dana</option>
+                            {accounts?.data
+                                ?.filter((account) => (!switchTab ? account.warehouse_id === 1 : account.warehouse_id === selectedWarehouseId))
+                                .map((account) => (
+                                    <option key={account.id} value={account.id}>
+                                        {account.acc_name}
+                                    </option>
+                                ))}
+                        </select>
+                    </div>
+                    <div className="relative">
+                        <div className={`flex flex-col gap-2 bg-white dark:bg-slate-600 rounded-2xl p-4`}>
+                            <label className="text-xs">Tujuan</label>
+                            <select
+                                className="bg-slate-300 dark:bg-slate-700 rounded-2xl p-2 disabled:cursor-not-allowed disabled:text-slate-400 text-sm"
+                                value={formData.debt_code}
+                                onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })}
+                                disabled={formData.cred_code === ""}
+                            >
+                                <option value="">Pilih Tujuan</option>
+                                {accounts?.data
+                                    ?.filter((account) => (!switchTab ? account.warehouse_id === selectedWarehouseId : account.warehouse_id === 1))
+                                    .map((account) => (
+                                        <option key={account.id} value={account.id}>
+                                            {account.acc_name}
+                                        </option>
+                                    ))}
+                            </select>
+                        </div>
+                        <div className="absolute -top-5 w-full flex items-center justify-start -left-4 drop-shadow-2xl">
+                            <button
+                                className="bg-slate-900 rounded-full outline-slate-600 outline-4 p-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                type="button"
+                                onClick={() => {
+                                    setSwitchTab(!switchTab);
+                                    setFormData({ ...formData, debt_code: formData.cred_code, cred_code: formData.debt_code });
+                                }}
+                                disabled={formData.cred_code == "" && formData.debt_code == ""}
+                            >
+                                <ArrowUpDown size={14} className={`text-slate-100 ${switchTab ? "rotate-180" : ""} transform duration-300`} />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex flex-col gap-2 bg-white dark:bg-slate-600 rounded-2xl p-4">
+                    <label className="text-xs">Jumlah</label>
+                    <div className="flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 rounded-full p-2">
+                        <WalletMinimal size={20} className="text-slate-500 dark:text-slate-300" />
+                        <input
+                            type="number"
+                            className="w-full outline-none"
+                            placeholder="Jumlah"
+                            value={formData.amount}
+                            onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                            disabled={formData.cred_code == "" && formData.debt_code == ""}
+                        />
+                    </div>
+                    <label className="text-xs">Admin Bank</label>
+                    <div className="flex items-center gap-2 w-1/3 bg-slate-300 dark:bg-slate-700 rounded-full p-2">
+                        <WalletMinimal size={20} className="text-slate-500 dark:text-slate-300" />
+                        <input
+                            type="number"
+                            className="w-full outline-none"
+                            placeholder="Admin Bank"
+                            value={formData.admin_fee}
+                            onChange={(e) => setFormData({ ...formData, admin_fee: e.target.value })}
+                            disabled={formData.cred_code == "" && formData.debt_code == ""}
+                        />
+                    </div>
+                    <span className="text-xs text-right">Saldo: {formData.cred_code && formatNumber(fiindAccount?.balance || 0)}</span>
+                    <h1 className="text-3xl font-semibold text-right">
+                        <sup className="text-sm">Rp</sup> {formatNumber(formData.amount)}
+                        <span className="text-sm block">{formatNumber(formData.admin_fee)}</span>
+                    </h1>
+                </div>
+                <div className="flex gap-4">
+                    <button
+                        type="button"
+                        className="w-full bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-100 py-4 rounded-2xl"
+                        onClick={handleCancel}
+                    >
+                        Batal
+                    </button>
+                    <button type="submit" className="w-full bg-blue-800 hover:bg-blue-700 text-slate-100 py-4 rounded-2xl" disabled={loading}>
+                        {loading ? "Menyimpan..." : "Simpan"}
+                    </button>
+                </div>
+            </div>
+        </form>
+    );
+};
+
+export default MutationForm;

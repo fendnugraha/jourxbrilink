@@ -1,42 +1,74 @@
-import { ArrowUpDown } from "lucide-react";
+"use client";
+import Notification from "@/components/Notification";
+import MutationForm from "./MutationForm";
+import { useEffect, useState } from "react";
+
+import useGetAllAccounts from "@/libs/getAllAccounts";
+import useGetWarehouses from "@/libs/getAllWarehouse";
+import { DateTimeNow } from "@/libs/format";
+import axios from "@/libs/axios";
+import MutationTable from "./MutationTable";
+import { useAuth } from "@/libs/auth";
+import useCashBankBalance from "@/libs/cashBankBalance";
 
 const MutationContent = () => {
+    const { user } = useAuth({ middleware: "auth" });
+    const userRole = user?.role?.role;
+    const warehouse = user?.role?.warehouse_id;
+    const warehouseName = user?.role?.warehouse?.name;
+    const { today } = DateTimeNow();
+    const [endDate, setEndDate] = useState(today);
+    const [loading, setLoading] = useState(false);
+    const { accounts, accountsError } = useGetAllAccounts();
+    const { warehouses, warehousesError } = useGetWarehouses();
+    const [selectedWarehouse, setSelectedWarehouse] = useState(1);
+    const [journalsByWarehouse, setJournalsByWarehouse] = useState([]);
+    const [notification, setNotification] = useState({
+        type: "",
+        message: "",
+    });
+    const { accountBalance, accountBalanceError, isValidating, mutateCashBankBalance } = useCashBankBalance(selectedWarehouse, endDate);
+
+    const fetchJournalsByWarehouse = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.get(`/api/get-journal-by-warehouse/${selectedWarehouse}/${endDate}/${endDate}`);
+            setJournalsByWarehouse(response.data);
+        } catch (error) {
+            console.error(error);
+            setNotification({
+                type: "error",
+                message: error.response?.data?.message || "Something went wrong.",
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchJournalsByWarehouse();
+    }, [selectedWarehouse, endDate]);
     return (
         <div className="grid grid-cols-3 gap-4">
-            <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-2 bg-slate-600 rounded-4xl p-4">
-                    <label className="text-sm">Cabang</label>
-                    <select className="bg-slate-700 rounded-2xl p-2">
-                        <option value="1"> Cabang 1</option>
-                        <option value="2"> Cabang 2</option>
-                        <option value="3"> Cabang 3</option>
-                    </select>
-                    {/* <input type="number" className="bg-slate-700 rounded-2xl p-2" /> */}
-                </div>
-                <div className="flex flex-col gap-4 relative">
-                    <div className="flex flex-col gap-2 bg-slate-600 rounded-4xl p-4">
-                        <label className="text-sm">Sumber Dana</label>
-                        <select className="bg-slate-700 rounded-2xl p-2">
-                            <option value="1"> Sumber Dana 1</option>
-                            <option value="2"> Sumber Dana 2</option>
-                            <option value="3"> Sumber Dana 3</option>
-                        </select>
-                        {/* <input type="number" className="bg-slate-700 rounded-2xl p-2" /> */}
-                    </div>
-                    <div className="flex flex-col gap-2 bg-slate-600 rounded-4xl p-4">
-                        <label className="text-sm">Tujuan</label>
-                        <select className="bg-slate-700 rounded-2xl p-2">
-                            <option value="1"> Tujuan 1</option>
-                            <option value="2"> Tujuan 2</option>
-                            <option value="3"> Tujuan 3</option>
-                        </select>
-                        {/* <input type="number" className="bg-slate-700 rounded-2xl p-2" /> */}
-                    </div>
-                    <button className="bg-slate-900 rounded-4xl p-4 absolute -right-4 -top-2" type="button">
-                        <ArrowUpDown size={14} />
-                    </button>
-                </div>
-            </div>
+            {notification.message && (
+                <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
+            )}
+            <MutationForm
+                setNotification={setNotification}
+                accounts={accounts}
+                warehouses={warehouses}
+                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                accountBalance={accountBalance}
+            />
+            <MutationTable
+                journals={journalsByWarehouse}
+                warehouse={warehouse}
+                warehouses={warehouses}
+                userRole={userRole}
+                cashBank={accounts}
+                notification={setNotification}
+                fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+            />
         </div>
     );
 };

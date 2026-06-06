@@ -1,11 +1,16 @@
-const InputGroup = ({ InputIcon, maxWidth, className, ...props }) => {
+import { Search } from "lucide-react";
+
+const InputGroup = ({ icon = Search, type = "text", maxWidth = "w-full", className, ...props }) => {
     return (
-        <div className="relative w-full max-w-sm">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">{InputIcon}</div>
+        <div className={`flex items-center gap-2 ${maxWidth} bg-slate-300 dark:bg-slate-700 rounded-full px-3 py-2`}>
+            {icon}
             <input
-                type="text"
-                className={`block ${maxWidth} pl-10 pr-4 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white border border-gray-300 ${className} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
-                {...props}
+                type={type}
+                className="w-full outline-none disabled:cursor-not-allowed disabled:text-slate-400"
+                placeholder={props.placeholder}
+                value={props.value}
+                onChange={props.onChange}
+                // disabled={selectedWarehouse}
             />
         </div>
     );

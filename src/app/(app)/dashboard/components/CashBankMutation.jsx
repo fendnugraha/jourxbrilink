@@ -191,7 +191,7 @@ const CashBankMutation = ({ warehouse, warehouses, userRole, notification }) => 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <h1 className="card-title">
                             Mutasi Saldo{" "}
-                            <Link href="/dashboard/mutation" hidden={true}>
+                            <Link href="/dashboard/mutation" hidden={false}>
                                 <ArrowUpRight size={20} className="inline" />
                             </Link>
                             <span className="card-subtitle text-nowrap">Periode: {endDate}</span>

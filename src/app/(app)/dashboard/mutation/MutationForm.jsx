@@ -87,6 +87,7 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
     };
 
     useEffect(() => {
+        if (switchTab) return;
         if (!formData.cred_code || !accounts?.data?.length || selectedWarehouseId === 1) return;
 
         // Ambil account_group berdasarkan cred_code
@@ -106,9 +107,23 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                 debt_code: matchingDebt.id,
             }));
         }
-    }, [formData.cred_code, accounts?.data, selectedWarehouseId]);
+    }, [formData.cred_code, accounts?.data, selectedWarehouseId, switchTab]);
 
     const findAccount = accountBalance?.data?.chartOfAccounts?.find((acc) => acc.warehouse_id === 1 && acc.id === Number(formData.cred_code));
+    useEffect(() => {
+        if (switchTab) {
+            setFormData({
+                ...formData,
+                warehouse_id: selectedWarehouseId,
+            });
+        } else {
+            setFormData({
+                ...formData,
+                warehouse_id: 1,
+            });
+        }
+    }, [switchTab]);
+
     return (
         <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-4">
@@ -201,7 +216,12 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                                 type="button"
                                 onClick={() => {
                                     setSwitchTab(!switchTab);
-                                    setFormData({ ...formData, debt_code: formData.cred_code, cred_code: formData.debt_code, date_issued: today });
+                                    setFormData({
+                                        ...formData,
+                                        debt_code: formData.cred_code,
+                                        cred_code: formData.debt_code,
+                                        date_issued: today,
+                                    });
                                 }}
                                 disabled={formData.cred_code == "" && formData.debt_code == ""}
                             >

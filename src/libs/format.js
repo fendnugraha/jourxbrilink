@@ -66,6 +66,44 @@ export const formatDateTime = (dateString, withDayName = false) => {
     });
 };
 
+export const formatDateVertical = (dateString) => {
+    const date = new Date(dateString);
+
+    const day = date.toLocaleString("en-US", {
+        day: "numeric",
+        timeZone: "Asia/Jakarta",
+    });
+
+    const month = date.toLocaleString("en-US", {
+        month: "short",
+        timeZone: "Asia/Jakarta",
+    });
+
+    const year = date.toLocaleString("en-US", {
+        year: "2-digit",
+        timeZone: "Asia/Jakarta",
+    });
+
+    const time = date.toLocaleString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+        timeZone: "Asia/Jakarta",
+    });
+
+    return (
+        <div>
+            <div>{day}</div>
+
+            <span className="block">
+                {month} {year}
+            </span>
+
+            <span className="block text-sm">{time}</span>
+        </div>
+    );
+};
+
 export const getDayName = (date) => {
     const d = new Date(date);
     return d.toLocaleDateString("id-ID", { weekday: "long" });
@@ -193,11 +231,11 @@ export const calculateFee = (amount, chunkSize = 2500000, feePerChunk = 5000, mi
 };
 
 export const formatTime = (time) => {
-    const date = new Date(time);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const seconds = date.getSeconds();
-    return `${hours}:${minutes}:${seconds}`;
+    return new Date(time).toLocaleTimeString("id-ID", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+    });
 };
 
 export function diffTimeHuman(t1, t2) {

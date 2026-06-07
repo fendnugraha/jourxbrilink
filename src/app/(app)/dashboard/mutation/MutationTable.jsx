@@ -1,7 +1,7 @@
 import Modal from "@/components/Modal";
 import SimplePagination from "@/components/SimplePagination";
-import { formatDateTime, formatNumber } from "@/libs/format";
-import { ArrowBigRight, ArrowRight, MessageCircleWarning, Pencil, Search, Trash2 } from "lucide-react";
+import { formatDateTime, formatDateVertical, formatNumber, formatTime } from "@/libs/format";
+import { ArrowBigRight, ArrowRight, MessageCircleWarning, Pencil, RefreshCcw, Search, Trash2 } from "lucide-react";
 import { useState } from "react";
 import EditMutationJournal from "../../transaction/components/EditMutationJournal";
 import InputGroup from "@/components/InputGroup";
@@ -104,6 +104,12 @@ const MutationTable = ({ journals, warehouse, warehouses, userRole, cashBank, no
                     <option value={50}>50</option>
                     <option value={100}>100</option>
                 </select>
+                <button
+                    onClick={fetchJournalsByWarehouse}
+                    className="bg-slate-300 dark:bg-slate-700 rounded-2xl p-2.5 disabled:cursor-not-allowed disabled:text-slate-400"
+                >
+                    <RefreshCcw size={20} />
+                </button>
             </div>
             <div className="overflow-x-auto bg-white dark:bg-gray-700 rounded-2xl border border-gray-200 dark:border-gray-600">
                 <table className="w-full text-xs">
@@ -122,7 +128,7 @@ const MutationTable = ({ journals, warehouse, warehouses, userRole, cashBank, no
                                     key={journal?.id}
                                     className="bg-white border-b dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                                 >
-                                    <td className="text-center p-3">{formatDateTime(journal?.date_issued)}</td>
+                                    <td className="text-center p-3">{formatTime(journal?.date_issued)}</td>
                                     <td className="p-3 font-bold">
                                         {journal?.cred?.account_group}{" "}
                                         {journal.cred?.warehouse?.id !== warehouse && (

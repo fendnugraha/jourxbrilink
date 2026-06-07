@@ -158,7 +158,7 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                     <div className={`flex flex-col gap-2 bg-white dark:bg-slate-600 rounded-2xl p-4`}>
                         <label className="text-xs">Sumber Dana</label>
                         <select
-                            className="bg-slate-300 dark:bg-slate-700 rounded-2xl p-2 disabled:cursor-not-allowed disabled:text-slate-400 text-sm"
+                            className="bg-slate-300 dark:bg-slate-700 rounded-2xl p-2 disabled:cursor-not-allowed disabled:text-slate-400 text-sm appearance-none"
                             value={formData.cred_code}
                             onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })}
                             disabled={!selectedWarehouse}
@@ -177,7 +177,7 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                         <div className={`flex flex-col gap-2 bg-white dark:bg-slate-600 rounded-2xl p-4`}>
                             <label className="text-xs">Tujuan</label>
                             <select
-                                className="bg-slate-300 dark:bg-slate-700 rounded-2xl p-2 disabled:cursor-not-allowed disabled:text-slate-400 text-sm"
+                                className="bg-slate-300 dark:bg-slate-700 rounded-2xl p-2 disabled:cursor-not-allowed disabled:text-slate-400 text-sm appearance-none"
                                 value={formData.debt_code}
                                 onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })}
                                 disabled={formData.cred_code === ""}

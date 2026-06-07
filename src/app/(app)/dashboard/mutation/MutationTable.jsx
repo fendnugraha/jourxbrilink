@@ -80,7 +80,7 @@ const MutationTable = ({ journals, warehouse, warehouses, userRole, cashBank, no
                             setCurrentPage(1);
                         }}
                         value={selectedWarehouseId}
-                        className="bg-slate-300 dark:bg-slate-700 rounded-2xl p-2.5 disabled:cursor-not-allowed disabled:text-slate-400 text-sm"
+                        className="bg-slate-300 dark:bg-slate-700 rounded-2xl p-2.5 disabled:cursor-not-allowed disabled:text-slate-400 text-sm appearance-none"
                     >
                         <option value={""}>Semua</option>
                         {warehouses?.data?.map((warehouse) => (
@@ -96,7 +96,7 @@ const MutationTable = ({ journals, warehouse, warehouses, userRole, cashBank, no
                         setCurrentPage(1);
                     }}
                     value={itemsPerPage}
-                    className="bg-slate-300 dark:bg-slate-700 rounded-2xl p-2.5 disabled:cursor-not-allowed disabled:text-slate-400 text-sm"
+                    className="bg-slate-300 dark:bg-slate-700 rounded-2xl p-2.5 disabled:cursor-not-allowed disabled:text-slate-400 text-sm appearance-none"
                 >
                     <option value={5}>5</option>
                     <option value={10}>10</option>
@@ -124,11 +124,31 @@ const MutationTable = ({ journals, warehouse, warehouses, userRole, cashBank, no
                                 >
                                     <td className="text-center p-3">{formatDateTime(journal?.date_issued)}</td>
                                     <td className="p-3 font-bold">
-                                        {journal?.cred?.account_group} ({journal.cred?.warehouse?.name?.replace(/^konter\s*/i, "")}){" "}
-                                        <ArrowRight size={14} className="inline-block" /> {journal?.debt?.account_group} (
-                                        {journal.debt?.warehouse?.name?.replace(/^konter\s*/i, "")})
+                                        {journal?.cred?.account_group}{" "}
+                                        {journal.cred?.warehouse?.id !== warehouse && (
+                                            <span className="text-yellow-600 dark:text-yellow-300">
+                                                ({journal.cred?.warehouse?.name.replace(/^konter\s*/i, "")})
+                                            </span>
+                                        )}{" "}
+                                        <ArrowRight size={14} className="inline-block" /> {journal?.debt?.account_group}{" "}
+                                        {journal.debt?.warehouse?.id !== warehouse && (
+                                            <span className="text-yellow-600 dark:text-yellow-300">
+                                                ({journal.debt?.warehouse?.name.replace(/^konter\s*/i, "")})
+                                            </span>
+                                        )}
                                     </td>
-                                    <td className="text-right p-3 text-xl font-bold">{formatNumber(journal?.amount)}</td>
+                                    <td className="text-right p-3 text-xl font-bold">
+                                        <h1
+                                            className={`font-bold text-nowrap ${
+                                                journal.debt?.warehouse_id === Number(selectedWarehouse)
+                                                    ? "text-green-500 dark:text-green-300"
+                                                    : "text-red-500 dark:text-red-300"
+                                            }`}
+                                        >
+                                            {journal.debt?.warehouse_id === Number(selectedWarehouse) ? "+" : "-"}
+                                            {formatNumber(journal.amount)}
+                                        </h1>
+                                    </td>
                                     <td className="text-center p-3 flex gap-2 items-center justify-center">
                                         <button
                                             onClick={() => {
@@ -202,7 +222,7 @@ const MutationTable = ({ journals, warehouse, warehouses, userRole, cashBank, no
                         isModalOpen={setIsModalEditMutationJournalOpen}
                         selectedWarehouse={selectedWarehouse}
                         journal={filterSelectedJournalId}
-                        cashBank={cashBank}
+                        cashBank={cashBank?.data}
                         notification={notification}
                         fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                     />

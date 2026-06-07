@@ -1,5 +1,5 @@
 "use client";
-import { ArrowUpDown, Search, SearchIcon, WalletMinimal, X } from "lucide-react";
+import { ArrowUpDown, Calendar, Hourglass, Search, SearchIcon, WalletMinimal, X } from "lucide-react";
 import { DateTimeNow, formatNumber } from "@/libs/format";
 import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
@@ -208,6 +208,17 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                     </div>
                 </div>
                 <div className="flex flex-col gap-2 bg-white dark:bg-slate-600 rounded-2xl p-4">
+                    <label className="text-xs">Tanggal</label>
+                    <div className="flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 rounded-full p-2">
+                        <Calendar size={20} className="text-slate-500 dark:text-slate-300" />
+                        <input
+                            type="datetime-local"
+                            className="w-full outline-none"
+                            placeholder="Tanggal"
+                            value={formData.date_issued}
+                            onChange={(e) => setFormData({ ...formData, date_issued: e.target.value })}
+                        />
+                    </div>
                     <label className="text-xs">Jumlah</label>
                     <div className="flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 rounded-full p-2">
                         <WalletMinimal size={20} className="text-slate-500 dark:text-slate-300" />

@@ -228,6 +228,12 @@ const MutationTable = ({ journals, warehouse, warehouses, userRole, cashBank, no
                     />
                 </Modal>
             </div>
+            {/* <div className="fixed bottom-12 right-12 bg-amber-200 px-4 py-2 text-sm">
+                <div>
+                    <h1>BCA (CABANG 1)</h1>
+                    <h1>Rp 10.000.000</h1>
+                </div>
+            </div> */}
         </div>
     );
 };

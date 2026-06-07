@@ -147,6 +147,7 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                                     onClick={() => {
                                         setSelectedWarehouse(warehouse);
                                         setSearchTerm("");
+                                        setFormData({ ...formData, date_issued: today });
                                     }}
                                 >
                                     {warehouse.name}
@@ -179,7 +180,7 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                             <select
                                 className="bg-slate-300 dark:bg-slate-700 rounded-2xl p-2 disabled:cursor-not-allowed disabled:text-slate-400 text-sm appearance-none"
                                 value={formData.debt_code}
-                                onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })}
+                                onChange={(e) => setFormData({ ...formData, debt_code: e.target.value, date_issued: today })}
                                 disabled={formData.cred_code === ""}
                             >
                                 <option value="">Pilih Tujuan</option>
@@ -198,7 +199,7 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                                 type="button"
                                 onClick={() => {
                                     setSwitchTab(!switchTab);
-                                    setFormData({ ...formData, debt_code: formData.cred_code, cred_code: formData.debt_code });
+                                    setFormData({ ...formData, debt_code: formData.cred_code, cred_code: formData.debt_code, date_issued: today });
                                 }}
                                 disabled={formData.cred_code == "" && formData.debt_code == ""}
                             >
@@ -219,29 +220,29 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                             onChange={(e) => setFormData({ ...formData, date_issued: e.target.value })}
                         />
                     </div>
-                    <label className="text-xs">Jumlah</label>
-                    <div className="flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 rounded-full p-2">
-                        <WalletMinimal size={20} className="text-slate-500 dark:text-slate-300" />
-                        <input
-                            type="number"
-                            className="w-full outline-none"
-                            placeholder="Jumlah"
-                            value={formData.amount}
-                            onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                            disabled={formData.cred_code == "" && formData.debt_code == ""}
-                        />
-                    </div>
-                    <label className="text-xs">Admin Bank</label>
-                    <div className="flex items-center gap-2 w-1/3 bg-slate-300 dark:bg-slate-700 rounded-full p-2">
-                        <WalletMinimal size={20} className="text-slate-500 dark:text-slate-300" />
-                        <input
-                            type="number"
-                            className="w-full outline-none"
-                            placeholder="Admin Bank"
-                            value={formData.admin_fee}
-                            onChange={(e) => setFormData({ ...formData, admin_fee: e.target.value })}
-                            disabled={formData.cred_code == "" && formData.debt_code == ""}
-                        />
+                    <div className="flex gap-2">
+                        <div className="flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 rounded-full p-2">
+                            <WalletMinimal size={20} className="text-slate-500 dark:text-slate-300" />
+                            <input
+                                type="number"
+                                className="w-full outline-none"
+                                placeholder="Jumlah"
+                                value={formData.amount}
+                                onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                                disabled={formData.cred_code == "" && formData.debt_code == ""}
+                            />
+                        </div>
+                        <div className="flex items-center gap-2 w-1/3 bg-slate-300 dark:bg-slate-700 rounded-full p-2">
+                            <WalletMinimal size={20} className="text-slate-500 dark:text-slate-300" />
+                            <input
+                                type="number"
+                                className="w-full outline-none"
+                                placeholder="Admin Bank"
+                                value={formData.admin_fee}
+                                onChange={(e) => setFormData({ ...formData, admin_fee: e.target.value })}
+                                disabled={formData.cred_code == "" && formData.debt_code == ""}
+                            />
+                        </div>
                     </div>
                     <span className="text-xs text-right">Saldo: {formData.cred_code && formatNumber(fiindAccount?.balance || 0)}</span>
                     <h1 className="text-3xl font-semibold text-right">
@@ -257,7 +258,11 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                     >
                         Batal
                     </button>
-                    <button type="submit" className="w-full bg-blue-800 hover:bg-blue-700 text-slate-100 py-4 rounded-2xl" disabled={loading}>
+                    <button
+                        type="submit"
+                        className="w-full bg-blue-800 hover:bg-blue-700 text-slate-100 py-4 rounded-2xl"
+                        disabled={loading || formData.cred_code == "" || formData.debt_code == ""}
+                    >
                         {loading ? "Menyimpan..." : "Simpan"}
                     </button>
                 </div>

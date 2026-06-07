@@ -1,7 +1,7 @@
 import Modal from "@/components/Modal";
 import SimplePagination from "@/components/SimplePagination";
 import { formatDateTime, formatNumber } from "@/libs/format";
-import { ArrowRight, MessageCircleWarning, Pencil, Search, Trash2 } from "lucide-react";
+import { ArrowBigRight, ArrowRight, MessageCircleWarning, Pencil, Search, Trash2 } from "lucide-react";
 import { useState } from "react";
 import EditMutationJournal from "../../transaction/components/EditMutationJournal";
 import InputGroup from "@/components/InputGroup";
@@ -130,7 +130,7 @@ const MutationTable = ({ journals, warehouse, warehouses, userRole, cashBank, no
                                                 ({journal.cred?.warehouse?.name.replace(/^konter\s*/i, "")})
                                             </span>
                                         )}{" "}
-                                        <ArrowRight size={14} className="inline-block" /> {journal?.debt?.account_group}{" "}
+                                        <ArrowBigRight size={14} className="inline-block" fill="yellow" /> {journal?.debt?.account_group}{" "}
                                         {journal.debt?.warehouse?.id !== warehouse && (
                                             <span className="text-yellow-600 dark:text-yellow-300">
                                                 ({journal.debt?.warehouse?.name.replace(/^konter\s*/i, "")})

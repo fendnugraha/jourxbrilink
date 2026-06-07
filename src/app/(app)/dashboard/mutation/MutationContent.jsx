@@ -59,6 +59,7 @@ const MutationContent = () => {
                 warehouses={warehouses}
                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                 accountBalance={accountBalance}
+                mutateCashBankBalance={mutateCashBankBalance}
             />
             <MutationTable
                 journals={journalsByWarehouse}

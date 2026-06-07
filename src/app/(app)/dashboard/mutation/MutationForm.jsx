@@ -3,7 +3,7 @@ import { ArrowUpDown, Calendar, Hourglass, Search, SearchIcon, WalletMinimal, X 
 import { DateTimeNow, formatNumber } from "@/libs/format";
 import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
-const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWarehouse, accountBalance }) => {
+const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWarehouse, accountBalance, mutateCashBankBalance }) => {
     const [switchTab, setSwitchTab] = useState(false);
     const [selectedWarehouse, setSelectedWarehouse] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
@@ -40,6 +40,7 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                 type: "success",
                 message: response.data.message + " " + successMessage,
             });
+            mutateCashBankBalance();
             fetchJournalsByWarehouse();
             setFormData({
                 date_issued: today,
@@ -68,6 +69,7 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
     };
 
     const handleCancel = () => {
+        selectedWarehouse && setSelectedWarehouse(null);
         setFormData({
             date_issued: today,
             debt_code: "",
@@ -84,29 +86,29 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
         setErrors([]);
     };
 
-    // useEffect(() => {
-    //     if (!formData.cred_code || !accounts?.data?.length || selectedWarehouseId === 1) return;
+    useEffect(() => {
+        if (!formData.cred_code || !accounts?.data?.length || selectedWarehouseId === 1) return;
 
-    //     // Ambil account_group berdasarkan cred_code
-    //     const selectedCred = accounts?.data?.find((acc) => Number(acc.id) === Number(formData.cred_code));
+        // Ambil account_group berdasarkan cred_code
+        const selectedCred = accounts?.data?.find((acc) => Number(acc.id) === Number(formData.cred_code));
 
-    //     if (!selectedCred) return;
+        if (!selectedCred) return;
 
-    //     // Cari akun lain dengan group yang sama (misalnya di cabang HQ)
-    //     const matchingDebt = accounts?.data?.find(
-    //         (acc) => acc.account_group === selectedCred.account_group && Number(acc.warehouse_id) === Number(selectedWarehouseId),
-    //     );
+        // Cari akun lain dengan group yang sama (misalnya di cabang HQ)
+        const matchingDebt = accounts?.data?.find(
+            (acc) => acc.account_group === selectedCred.account_group && Number(acc.warehouse_id) === Number(selectedWarehouseId),
+        );
 
-    //     // Update debt_code hanya kalau ditemukan
-    //     if (matchingDebt) {
-    //         setFormData((prev) => ({
-    //             ...prev,
-    //             debt_code: matchingDebt.id,
-    //         }));
-    //     }
-    // }, [formData.cred_code, accounts?.data, selectedWarehouseId]);
+        // Update debt_code hanya kalau ditemukan
+        if (matchingDebt) {
+            setFormData((prev) => ({
+                ...prev,
+                debt_code: matchingDebt.id,
+            }));
+        }
+    }, [formData.cred_code, accounts?.data, selectedWarehouseId]);
 
-    const fiindAccount = accountBalance?.data?.chartOfAccounts?.find((acc) => acc.warehouse_id === 1 && acc.id === Number(formData.cred_code));
+    const findAccount = accountBalance?.data?.chartOfAccounts?.find((acc) => acc.warehouse_id === 1 && acc.id === Number(formData.cred_code));
     return (
         <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-4">
@@ -244,10 +246,13 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                             />
                         </div>
                     </div>
-                    <span className="text-xs text-right">Saldo: {formData.cred_code && formatNumber(fiindAccount?.balance || 0)}</span>
+                    <span className="text-xs text-right">Saldo: {formData.cred_code && formatNumber(findAccount?.balance || 0)}</span>
                     <h1 className="text-3xl font-semibold text-right">
                         <sup className="text-sm">Rp</sup> {formatNumber(formData.amount)}
-                        <span className="text-sm block">{formatNumber(formData.admin_fee)}</span>
+                        <span className="text-sm" hidden={formData.admin_fee == 0}>
+                            /{formatNumber(formData.admin_fee)}
+                        </span>
+                        <span className="text-xs block">{formatNumber(findAccount?.balance - formData.amount - formData.admin_fee || 0)}</span>
                     </h1>
                 </div>
                 <div className="flex gap-4">
@@ -256,7 +261,7 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                         className="w-full bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-100 py-4 rounded-2xl"
                         onClick={handleCancel}
                     >
-                        Batal
+                        Reset
                     </button>
                     <button
                         type="submit"

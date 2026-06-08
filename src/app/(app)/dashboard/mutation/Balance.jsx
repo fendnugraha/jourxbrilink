@@ -22,22 +22,22 @@ const Balance = ({ accountBalance, journalsByWarehouse }) => {
     return (
         <div className="space-y-2">
             {accountBalance?.data?.chartOfAccounts?.map((account) => (
-                <div className="bg-slate-700 p-3 rounded-3xl" key={account?.id} hidden={account?.balance === 0}>
+                <div className="card p-3" key={account?.id} hidden={account?.balance === 0}>
                     <div className="flex justify-between items-start gap-4">
-                        <span className="flex items-center justify-center gap-2 bg-slate-500 rounded-full w-8 h-8">
+                        <span className="flex items-center justify-center gap-2 bg-amber-500 dark:bg-amber-600 text-white rounded-full w-8 h-8">
                             <Landmark size={16} />
                         </span>
                         <div className="flex flex-col justify-end items-end overflow-x-hidden flex-1">
                             {/* <h1 className="text-xs font-bold text-nowrap">{account?.account_group}</h1> */}
-                            <h1 className="text-xs text-nowrap">{account?.acc_name}</h1>
-                            <h1 className="text-sm font-bold text-right">{formatNumber(account?.balance)}</h1>
-                            <div className="flex w-full justify-between bg-slate-800 mt-2 py-1 px-2 rounded-lg">
+                            <h1 className="text-xs text-nowrap text-green-600 dark:text-green-300">{account?.acc_name}</h1>
+                            <h1 className="text-md font-semibold text-right">{formatNumber(account?.balance)}</h1>
+                            <div className="flex w-full justify-between bg-gray-300/50 dark:bg-gray-300/20 mt-2 py-1 px-2 rounded-lg">
                                 <div className="flex items-center gap-1">
-                                    <ArrowUp size={16} className="inline-block text-green-500" />
+                                    <ArrowDown size={16} className="inline-block text-green-500" />
                                     <h1 className="text-xs">{formatNumber(mutationInSumById(account.id) ?? 0)}</h1>
                                 </div>
                                 <div className="flex items-center gap-1">
-                                    <ArrowDown size={16} className="inline-block text-red-500" />
+                                    <ArrowUp size={16} className="inline-block text-red-500" />
                                     <h1 className="text-xs">{formatNumber(mutationOutSumById(account.id) ?? 0)}</h1>
                                 </div>
                             </div>

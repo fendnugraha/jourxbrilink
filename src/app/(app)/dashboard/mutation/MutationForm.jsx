@@ -9,7 +9,7 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
     const [searchTerm, setSearchTerm] = useState("");
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
-
+    const [isConfirmAuto, setIsConfirmAuto] = useState(false);
     const { today } = DateTimeNow();
     const [formData, setFormData] = useState({
         date_issued: today,
@@ -34,8 +34,11 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
         setLoading(true);
         try {
             const response = await axios.post("/api/create-mutation", formData);
-            const successMessage =
-                response.data.journal.cred.acc_name + " ke " + response.data.journal.debt.acc_name + " sebesar " + formatNumber(response.data.journal.amount);
+            const successMessage = `
+            ${response.data.journal.cred.account_group} ke ${response.data.journal.debt.account_group} ${response.data.journal.debt.warehouse?.name}
+            sebesar ${formatNumber(response.data.journal.amount)}
+            `;
+            console.log(response.data);
             setNotification({
                 type: "success",
                 message: response.data.message + " " + successMessage,
@@ -123,6 +126,20 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
             });
         }
     }, [switchTab]);
+
+    useEffect(() => {
+        if (isConfirmAuto) {
+            setFormData({
+                ...formData,
+                confirmation: 1,
+            });
+        } else {
+            setFormData({
+                ...formData,
+                confirmation: 0,
+            });
+        }
+    }, [isConfirmAuto]);
 
     return (
         <form onSubmit={handleSubmit}>
@@ -230,7 +247,7 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col gap-2 bg-white dark:bg-slate-600 rounded-2xl p-4">
+                <div className="relative flex flex-col gap-2 bg-white dark:bg-slate-600 rounded-2xl p-4">
                     <label className="text-xs">Tanggal</label>
                     <div className="flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 rounded-full p-2">
                         <Calendar size={20} className="text-slate-500 dark:text-slate-300" />
@@ -274,6 +291,13 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                         </span>
                         <span className="text-xs block">{formatNumber(findAccount?.balance - formData.amount - formData.admin_fee || 0)}</span>
                     </h1>
+                    <button
+                        type="button"
+                        className={`bottom-2 left-2 absolute text-[10px] border border-slate-800 py-1 px-2 rounded-2xl ${isConfirmAuto ? "bg-green-500 text-slate-100" : "text-slate-300"}`}
+                        onClick={() => setIsConfirmAuto(!isConfirmAuto)}
+                    >
+                        Auto Confirm
+                    </button>
                 </div>
                 <div className="flex gap-4">
                     <button
@@ -285,7 +309,7 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                     </button>
                     <button
                         type="submit"
-                        className="w-full bg-blue-800 hover:bg-blue-700 text-slate-100 py-4 rounded-2xl"
+                        className="w-full bg-blue-800 hover:bg-blue-700 text-slate-100 py-4 rounded-2xl disabled:cursor-not-allowed disabled:opacity-50"
                         disabled={loading || formData.cred_code == "" || formData.debt_code == ""}
                     >
                         {loading ? "Menyimpan..." : "Simpan"}

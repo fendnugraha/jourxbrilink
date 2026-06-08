@@ -55,7 +55,7 @@ const FinanceContent = () => {
                 setLoading(false);
             }
         },
-        [selectedContactId, financeType]
+        [selectedContactId, financeType],
     );
 
     useEffect(() => {
@@ -139,7 +139,7 @@ const FinanceContent = () => {
                             className="form-control !w-fit"
                             value={itemsPerPage}
                             onChange={(e) => {
-                                setItemsPerPage(e.target.value), setCurrentPage(1);
+                                (setItemsPerPage(e.target.value), setCurrentPage(1));
                             }}
                         >
                             <option value="5">5</option>
@@ -186,7 +186,7 @@ const FinanceContent = () => {
                                     <th className="">Total</th>
                                     <th className="text-end">
                                         {formatNumber(
-                                            filteredFinance.filter((f) => f.finance_type === financeType).reduce((total, item) => total + Number(item.sisa), 0)
+                                            filteredFinance.filter((f) => f.finance_type === financeType).reduce((total, item) => total + Number(item.sisa), 0),
                                         )}
                                     </th>
                                     <th></th>
@@ -205,14 +205,10 @@ const FinanceContent = () => {
                     <CreatePayable isModalOpen={setIsModalCreatePayableOpen} notification={setNotification} fetchFinance={fetchFinance} />
                 </Modal>
                 <Modal isOpen={isModalCreateReceivableOpen} onClose={closeModal} modalTitle="Create Receivable">
-                    <CreateReceivable
-                        isModalOpen={setIsModalCreateReceivableOpen}
-                        notification={(message) => notification(message)}
-                        fetchFinance={fetchFinance}
-                    />
+                    <CreateReceivable isModalOpen={setIsModalCreateReceivableOpen} notification={setNotification} fetchFinance={fetchFinance} />
                 </Modal>
                 <Modal isOpen={isModalCreateContactOpen} onClose={closeModal} modalTitle="Create Contact">
-                    <CreateContact isModalOpen={setIsModalCreateContactOpen} notification={(message) => notification(message)} />
+                    <CreateContact isModalOpen={setIsModalCreateContactOpen} notification={setNotification} />
                 </Modal>
                 <Modal isOpen={isModalDeleteFinanceOpen} onClose={closeModal} modalTitle="Confirm Delete" maxWidth="max-w-md">
                     <div className="flex flex-col items-center justify-center gap-3 mb-4">

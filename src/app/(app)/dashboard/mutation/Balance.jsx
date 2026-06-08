@@ -24,7 +24,7 @@ const Balance = ({ accountBalance, journalsByWarehouse }) => {
     return (
         <div className="space-y-2">
             {accountBalance?.data?.chartOfAccounts?.map((account) => (
-                <div className="bg-white dark:bg-slate-700/90 rounded-3xl p-3" key={account?.id} hidden={account?.balance === 0}>
+                <div className="bg-white dark:bg-slate-700/90 backdrop-blur-sm rounded-3xl p-3" key={account?.id} hidden={account?.balance === 0}>
                     <div className="flex justify-between items-start gap-4">
                         <span className="flex items-center justify-center gap-2 bg-amber-500 dark:bg-amber-600 text-white rounded-full w-8 h-8">
                             <Landmark size={16} />

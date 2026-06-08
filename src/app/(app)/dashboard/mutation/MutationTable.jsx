@@ -115,7 +115,7 @@ const MutationTable = ({ journals, warehouse, warehouses, userRole, cashBank, no
                 <table className="w-full text-xs">
                     <thead className="text-xs text-gray-700 uppercase bg-white dark:bg-gray-700 dark:text-gray-400 rounded-2xl">
                         <tr>
-                            <th className="text-center p-4">Tanggal</th>
+                            <th className="text-center p-4">Waktu</th>
                             <th className="text-center p-4">Deskripsi</th>
                             <th className="text-center p-4">Jumlah</th>
                             <th className="text-center p-4">Aksi</th>

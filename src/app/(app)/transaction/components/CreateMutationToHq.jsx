@@ -32,24 +32,24 @@ const CreateMutationToHq = ({
 
     const hqAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === 1);
     const branchAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === Number(user.role?.warehouse_id));
-    useEffect(() => {
-        if (!formData.cred_code || !cashBank?.length) return;
-        const isCash = cashBank.find((acc) => Number(acc.id) === Number(formData.cred_code)).account_id === 1;
+    // useEffect(() => {
+    //     if (!formData.cred_code || !cashBank?.length) return;
+    //     const isCash = cashBank.find((acc) => Number(acc.id) === Number(formData.cred_code)).account_id === 1;
 
-        if (isCash) return;
-        const selectedCred = cashBank.find((acc) => Number(acc.id) === Number(formData.cred_code));
+    //     if (isCash) return;
+    //     const selectedCred = cashBank.find((acc) => Number(acc.id) === Number(formData.cred_code));
 
-        if (!selectedCred) return;
+    //     if (!selectedCred) return;
 
-        const matchingDebt = cashBank.find((acc) => acc.account_group === selectedCred.account_group);
+    //     const matchingDebt = cashBank.find((acc) => acc.account_group === selectedCred.account_group);
 
-        if (matchingDebt) {
-            setFormData((prev) => ({
-                ...prev,
-                debt_code: matchingDebt.id,
-            }));
-        }
-    }, [formData.cred_code, cashBank]);
+    //     if (matchingDebt) {
+    //         setFormData((prev) => ({
+    //             ...prev,
+    //             debt_code: matchingDebt.id,
+    //         }));
+    //     }
+    // }, [formData.cred_code, cashBank]);
 
     const initBalances = JSON.parse(localStorage.getItem("initBalances")) ?? {};
 
@@ -93,26 +93,6 @@ const CreateMutationToHq = ({
     };
 
     const selectedBranchAccount = accountBalance?.data?.chartOfAccounts?.find((account) => Number(account.id) === Number(formData.cred_code));
-
-    const updateDiffAmount = async (id) => {
-        const selectedAccount = accountBalance?.data?.chartOfAccounts?.find((acc) => Number(acc.id) === Number(id));
-
-        if (selectedAccount.account_id !== 1) return;
-
-        const initBalance = initBalances[id] ?? 0;
-        const balanceDifference = (selectedAccount?.balance ?? 0) - initBalance;
-
-        if (balanceDifference === 0) return;
-
-        try {
-            await axios.put(`/api/update-account-limit/${id}`, {
-                // limit: balance,
-                diff: balanceDifference, // kalau backend kamu wajib diff
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    };
 
     const updateAllDiffAmounts = async () => {
         const accounts = accountBalance?.data?.chartOfAccounts ?? [];
@@ -173,13 +153,13 @@ const CreateMutationToHq = ({
                             setFormData({
                                 ...formData,
                                 cred_code: Number(e.target.value),
-                                amount:
-                                    Number(e.target.value) === Number(user?.role?.warehouse?.chart_of_account_id)
-                                        ? Number(calculateDepositCash)
-                                        : balanceDifference > 0
-                                          ? balanceDifference
-                                          : 0,
-                                debt_code: Number(e.target.value) === Number(user?.role?.warehouse?.chart_of_account_id) ? 2 : "",
+                                // amount:
+                                //     Number(e.target.value) === Number(user?.role?.warehouse?.chart_of_account_id)
+                                //         ? Number(calculateDepositCash)
+                                //         : balanceDifference > 0
+                                //           ? balanceDifference
+                                //           : 0,
+                                // debt_code: Number(e.target.value) === Number(user?.role?.warehouse?.chart_of_account_id) ? 2 : "",
                             });
                         }}
                         value={formData.cred_code}

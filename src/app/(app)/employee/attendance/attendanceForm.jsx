@@ -3,13 +3,11 @@
 import { useEffect, useState } from "react";
 import imageCompression from "browser-image-compression";
 import axios from "@/libs/axios";
-import { formatTime } from "@/libs/format";
 import { LiveClock } from "@/libs/LiveClock";
 import Button from "@/components/Button";
-import useAttendanceCheck from "@/libs/attendanceCheck";
 import { useAuth } from "@/libs/auth";
 import { CameraIcon, LocateIcon, MapPin, Trash2Icon, Undo } from "lucide-react";
-import { set } from "date-fns";
+import { formatTimeWithSecond } from "@/libs/format";
 
 export default function AttendanceForm({ attCheckMutate, openMessage }) {
     const { user, authLoading, logout } = useAuth({ middleware: "auth" });
@@ -102,7 +100,7 @@ export default function AttendanceForm({ attCheckMutate, openMessage }) {
             });
 
             setFile(compressed);
-            setTimeIn(formatTime(new Date()));
+            setTimeIn(formatTimeWithSecond(new Date()));
         } catch (error) {
             console.error("Compression error:", error);
         } finally {

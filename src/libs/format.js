@@ -238,6 +238,15 @@ export const formatTime = (time) => {
     });
 };
 
+export const formatTimeWithSecond = (time) => {
+    return new Date(time).toLocaleTimeString("id-ID", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+    });
+};
+
 export function diffTimeHuman(t1, t2) {
     const time1 = parse(t1, "HH:mm:ss", new Date());
     const time2 = parse(t2, "HH:mm:ss", new Date());

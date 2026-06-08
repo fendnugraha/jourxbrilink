@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "@/libs/axios";
 import Label from "@/components/Label";
 import formatNumber from "@/libs/formatNumber";
-import { DateTimeNow } from "@/libs/format";
+import { DateTimeNow, formatTimeWithSecond } from "@/libs/format";
 
 const CreateMutationToHq = ({
     isModalOpen,

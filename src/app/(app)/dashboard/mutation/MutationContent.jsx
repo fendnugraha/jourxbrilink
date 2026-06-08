@@ -10,6 +10,7 @@ import axios from "@/libs/axios";
 import MutationTable from "./MutationTable";
 import { useAuth } from "@/libs/auth";
 import useCashBankBalance from "@/libs/cashBankBalance";
+import Balance from "./Balance";
 
 const MutationContent = () => {
     const { user } = useAuth({ middleware: "auth" });
@@ -49,7 +50,7 @@ const MutationContent = () => {
         fetchJournalsByWarehouse();
     }, [selectedWarehouse, endDate]);
     return (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-4 gap-4">
             {notification.message && (
                 <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
             )}
@@ -70,6 +71,7 @@ const MutationContent = () => {
                 notification={setNotification}
                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
             />
+            <Balance />
         </div>
     );
 };

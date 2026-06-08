@@ -254,7 +254,7 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                                 disabled={formData.cred_code == "" && formData.debt_code == ""}
                             />
                         </div>
-                        <div className="flex items-center gap-2 w-1/3 bg-slate-300 dark:bg-slate-700 rounded-full p-2">
+                        <div className="flex items-center gap-2 bg-slate-300 dark:bg-slate-700 rounded-full p-2">
                             <WalletMinimal size={20} className="text-slate-500 dark:text-slate-300" />
                             <input
                                 type="number"

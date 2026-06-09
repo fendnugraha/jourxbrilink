@@ -7,7 +7,7 @@ import EditMutationJournal from "../../transaction/components/EditMutationJourna
 import InputGroup from "@/components/InputGroup";
 import axios from "@/libs/axios";
 
-const MutationTable = ({ journals, warehouse, warehouses, userRole, cashBank, notification, fetchJournalsByWarehouse }) => {
+const MutationTable = ({ journals, warehouse, warehouses, userRole, cashBank, notification, fetchJournalsByWarehouse, mutateCashBankBalance }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedJournalId, setSelectedJournalId] = useState(null);
     const [isModalEditMutationJournalOpen, setIsModalEditMutationJournalOpen] = useState(false);
@@ -58,6 +58,7 @@ const MutationTable = ({ journals, warehouse, warehouses, userRole, cashBank, no
             const response = await axios.delete(`/api/journals/${id}`);
             notification({ type: "success", message: response.data.message });
             fetchJournalsByWarehouse();
+            mutateCashBankBalance();
         } catch (error) {
             notification(error.response?.data?.message || "Something went wrong.");
         }

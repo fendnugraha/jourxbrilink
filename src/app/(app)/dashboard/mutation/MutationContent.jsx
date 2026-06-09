@@ -70,6 +70,7 @@ const MutationContent = () => {
                 cashBank={accounts}
                 notification={setNotification}
                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                mutateCashBankBalance={mutateCashBankBalance}
             />
             <Balance accountBalance={accountBalance} journalsByWarehouse={journalsByWarehouse} />
         </div>

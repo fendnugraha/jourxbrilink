@@ -32,24 +32,25 @@ const CreateMutationToHq = ({
 
     const hqAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === 1);
     const branchAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === Number(user.role?.warehouse_id));
-    // useEffect(() => {
-    //     if (!formData.cred_code || !cashBank?.length) return;
-    //     const isCash = cashBank.find((acc) => Number(acc.id) === Number(formData.cred_code)).account_id === 1;
+    useEffect(() => {
+        if (!["Administrator", "Super Admin"].includes(user?.role?.role)) return;
+        if (!formData.cred_code || !cashBank?.length) return;
+        const isCash = cashBank.find((acc) => Number(acc.id) === Number(formData.cred_code)).account_id === 1;
 
-    //     if (isCash) return;
-    //     const selectedCred = cashBank.find((acc) => Number(acc.id) === Number(formData.cred_code));
+        if (isCash) return;
+        const selectedCred = cashBank.find((acc) => Number(acc.id) === Number(formData.cred_code));
 
-    //     if (!selectedCred) return;
+        if (!selectedCred) return;
 
-    //     const matchingDebt = cashBank.find((acc) => acc.account_group === selectedCred.account_group);
+        const matchingDebt = cashBank.find((acc) => acc.account_group === selectedCred.account_group);
 
-    //     if (matchingDebt) {
-    //         setFormData((prev) => ({
-    //             ...prev,
-    //             debt_code: matchingDebt.id,
-    //         }));
-    //     }
-    // }, [formData.cred_code, cashBank]);
+        if (matchingDebt) {
+            setFormData((prev) => ({
+                ...prev,
+                debt_code: matchingDebt.id,
+            }));
+        }
+    }, [formData.cred_code, cashBank]);
 
     const initBalances = JSON.parse(localStorage.getItem("initBalances")) ?? {};
 
@@ -145,6 +146,7 @@ const CreateMutationToHq = ({
                 <div className="col-span-1 sm:col-span-2">
                     <select
                         onChange={(e) => {
+                            const isAdmin = ["Administrator", "Super Admin"].includes(user?.role?.role);
                             const selectedCredCode = Number(e.target.value);
 
                             const selectedAccount = accountBalance?.data?.chartOfAccounts?.find((acc) => Number(acc.id) === selectedCredCode);
@@ -153,13 +155,16 @@ const CreateMutationToHq = ({
                             setFormData({
                                 ...formData,
                                 cred_code: Number(e.target.value),
-                                // amount:
-                                //     Number(e.target.value) === Number(user?.role?.warehouse?.chart_of_account_id)
-                                //         ? Number(calculateDepositCash)
-                                //         : balanceDifference > 0
-                                //           ? balanceDifference
-                                //           : 0,
-                                // debt_code: Number(e.target.value) === Number(user?.role?.warehouse?.chart_of_account_id) ? 2 : "",
+
+                                amount: isAdmin
+                                    ? Number(e.target.value) === Number(user?.role?.warehouse?.chart_of_account_id)
+                                        ? Number(calculateDepositCash)
+                                        : balanceDifference > 0
+                                          ? balanceDifference
+                                          : 0
+                                    : "",
+
+                                debt_code: isAdmin ? (Number(e.target.value) === Number(user?.role?.warehouse?.chart_of_account_id) ? 2 : "") : "",
                             });
                         }}
                         value={formData.cred_code}

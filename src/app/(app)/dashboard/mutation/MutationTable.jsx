@@ -5,6 +5,7 @@ import { ArrowBigRight, ArrowRight, MessageCircleWarning, Pencil, RefreshCcw, Se
 import { useState } from "react";
 import EditMutationJournal from "../../transaction/components/EditMutationJournal";
 import InputGroup from "@/components/InputGroup";
+import axios from "@/libs/axios";
 
 const MutationTable = ({ journals, warehouse, warehouses, userRole, cashBank, notification, fetchJournalsByWarehouse }) => {
     const [searchTerm, setSearchTerm] = useState("");

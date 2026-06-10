@@ -193,7 +193,7 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                     <div className={`flex flex-col gap-2 bg-white dark:bg-slate-600 rounded-2xl p-4`}>
                         <label className="text-xs">Sumber Dana</label>
                         <select
-                            className="bg-slate-300 dark:bg-slate-700 rounded-2xl p-2 disabled:cursor-not-allowed disabled:text-slate-400 text-sm appearance-none"
+                            className="bg-yellow-200 dark:bg-slate-700 rounded-2xl p-2 disabled:cursor-not-allowed disabled:text-slate-400 text-sm appearance-none"
                             value={formData.cred_code}
                             onChange={(e) => setFormData({ ...formData, cred_code: e.target.value })}
                             disabled={!selectedWarehouse}
@@ -212,7 +212,7 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                         <div className={`flex flex-col gap-2 bg-white dark:bg-slate-600 rounded-2xl p-4`}>
                             <label className="text-xs">Tujuan</label>
                             <select
-                                className="bg-slate-300 dark:bg-slate-700 rounded-2xl p-2 disabled:cursor-not-allowed disabled:text-slate-400 text-sm appearance-none"
+                                className="bg-yellow-200 dark:bg-slate-700 rounded-2xl p-2 disabled:cursor-not-allowed disabled:text-slate-400 text-sm appearance-none"
                                 value={formData.debt_code}
                                 onChange={(e) => setFormData({ ...formData, debt_code: e.target.value, date_issued: today })}
                                 disabled={formData.cred_code === ""}
@@ -249,33 +249,33 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                 </div>
                 <div className="relative flex flex-col gap-2 bg-white dark:bg-slate-600 rounded-2xl p-4">
                     <label className="text-xs">Tanggal</label>
-                    <div className="flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 rounded-full p-2">
+                    <div className="flex items-center gap-2 w-full bg-yellow-200 dark:bg-slate-700 rounded-full p-2">
                         <Calendar size={20} className="text-slate-500 dark:text-slate-300" />
                         <input
                             type="datetime-local"
-                            className="w-full outline-none"
+                            className="w-full outline-none text-sm"
                             placeholder="Tanggal"
                             value={formData.date_issued}
                             onChange={(e) => setFormData({ ...formData, date_issued: e.target.value })}
                         />
                     </div>
                     <div className="flex gap-2">
-                        <div className="flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 rounded-full p-2">
+                        <div className="flex items-center gap-2 w-full bg-yellow-200 dark:bg-slate-700 rounded-full p-2">
                             <WalletMinimal size={20} className="text-slate-500 dark:text-slate-300" />
                             <input
                                 type="number"
-                                className="w-full outline-none"
+                                className="w-full outline-none text-sm "
                                 placeholder="Jumlah"
                                 value={formData.amount}
                                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                                 disabled={formData.cred_code == "" && formData.debt_code == ""}
                             />
                         </div>
-                        <div className="flex items-center gap-2 bg-slate-300 dark:bg-slate-700 rounded-full p-2">
+                        <div className="flex items-center gap-2 bg-yellow-200 dark:bg-slate-700 rounded-full p-2">
                             <WalletMinimal size={20} className="text-slate-500 dark:text-slate-300" />
                             <input
                                 type="number"
-                                className="w-full outline-none"
+                                className="w-full outline-none text-sm"
                                 placeholder="Admin Bank"
                                 value={formData.admin_fee}
                                 onChange={(e) => setFormData({ ...formData, admin_fee: e.target.value })}

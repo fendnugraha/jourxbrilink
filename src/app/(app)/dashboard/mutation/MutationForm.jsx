@@ -248,17 +248,6 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                     </div>
                 </div>
                 <div className="relative flex flex-col gap-2 bg-white dark:bg-slate-600 rounded-2xl p-4">
-                    <label className="text-xs">Tanggal</label>
-                    <div className="flex items-center gap-2 w-full bg-yellow-200 dark:bg-slate-700 rounded-full p-2">
-                        <Calendar size={20} className="text-slate-500 dark:text-slate-300" />
-                        <input
-                            type="datetime-local"
-                            className="w-full outline-none text-sm"
-                            placeholder="Tanggal"
-                            value={formData.date_issued}
-                            onChange={(e) => setFormData({ ...formData, date_issued: e.target.value })}
-                        />
-                    </div>
                     <div className="flex gap-2">
                         <div className="flex items-center gap-2 w-full bg-yellow-200 dark:bg-slate-700 rounded-full p-2">
                             <WalletMinimal size={20} className="text-slate-500 dark:text-slate-300" />
@@ -283,6 +272,17 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                             />
                         </div>
                     </div>
+                    <label className="text-xs">Tanggal</label>
+                    <div className="flex items-center gap-2 w-full bg-yellow-200 dark:bg-slate-700 rounded-full p-2">
+                        <Calendar size={20} className="text-slate-500 dark:text-slate-300" />
+                        <input
+                            type="datetime-local"
+                            className="w-full outline-none text-sm"
+                            placeholder="Tanggal"
+                            value={formData.date_issued}
+                            onChange={(e) => setFormData({ ...formData, date_issued: e.target.value })}
+                        />
+                    </div>
                     <span className="text-xs text-right">Saldo: {formData.cred_code && formatNumber(findAccount?.balance || 0)}</span>
                     <h1 className="text-3xl font-semibold text-right">
                         <sup className="text-sm">Rp</sup> {formatNumber(formData.amount)}
@@ -293,7 +293,7 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                     </h1>
                     <button
                         type="button"
-                        className={`bottom-2 left-2 absolute text-[10px] border border-slate-800 py-1 px-2 rounded-2xl ${isConfirmAuto ? "bg-green-500 text-slate-100" : "text-slate-300"}`}
+                        className={`bottom-2 left-2 absolute text-[10px] border border-slate-800 py-1 px-2 rounded-2xl ${isConfirmAuto ? "bg-green-500 text-slate-100" : "text-slate-500 dark:text-shadow-slate-300"}`}
                         onClick={() => setIsConfirmAuto(!isConfirmAuto)}
                     >
                         Auto Confirm

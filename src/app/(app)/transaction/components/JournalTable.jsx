@@ -143,20 +143,14 @@ const JournalTable = ({
     return (
         <>
             <div className="flex gap-2 px-4">
-                <input
-                    type="search"
-                    placeholder="Cari"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="form-control block w-full p-2.5"
-                />
+                <input type="search" placeholder="Cari" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="form-control p-2.5" />
                 <select
                     onChange={(e) => {
                         setSelectedAccount(e.target.value);
                         setCurrentPage(1);
                     }}
                     value={selectedAccount}
-                    className="form-select block w-full p-2.5"
+                    className="form-select block !w-fit p-2.5"
                 >
                     <option value="">Semua Akun</option>
                     {branchAccount.map((account, index) => (

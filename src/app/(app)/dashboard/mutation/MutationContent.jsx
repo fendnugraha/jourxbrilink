@@ -71,6 +71,8 @@ const MutationContent = () => {
                 notification={setNotification}
                 fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                 mutateCashBankBalance={mutateCashBankBalance}
+                selectedWarehouse={selectedWarehouse}
+                setSelectedWarehouse={setSelectedWarehouse}
             />
             <Balance accountBalance={accountBalance} journalsByWarehouse={journalsByWarehouse} />
         </div>

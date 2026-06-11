@@ -7,12 +7,22 @@ import EditMutationJournal from "../../transaction/components/EditMutationJourna
 import InputGroup from "@/components/InputGroup";
 import axios from "@/libs/axios";
 
-const MutationTable = ({ journals, warehouse, warehouses, userRole, cashBank, notification, fetchJournalsByWarehouse, mutateCashBankBalance }) => {
+const MutationTable = ({
+    journals,
+    warehouse,
+    warehouses,
+    userRole,
+    cashBank,
+    notification,
+    fetchJournalsByWarehouse,
+    mutateCashBankBalance,
+    selectedWarehouse,
+    setSelectedWarehouse,
+}) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedJournalId, setSelectedJournalId] = useState(null);
     const [isModalEditMutationJournalOpen, setIsModalEditMutationJournalOpen] = useState(false);
     const [isModalDeleteJournalOpen, setIsModalDeleteJournalOpen] = useState(false);
-    const [selectedWarehouse, setSelectedWarehouse] = useState(warehouse);
     const [selectedWarehouseId, setSelectedWarehouseId] = useState(warehouse);
     const selectedAccountIds = cashBank?.data
         ?.filter((cashBank) => selectedWarehouseId && cashBank.warehouse_id === Number(selectedWarehouseId))
@@ -79,6 +89,7 @@ const MutationTable = ({ journals, warehouse, warehouses, userRole, cashBank, no
                     <select
                         onChange={(e) => {
                             setSelectedWarehouseId(e.target.value);
+                            setSelectedWarehouse(e.target.value);
                             setCurrentPage(1);
                         }}
                         value={selectedWarehouseId}
@@ -107,7 +118,11 @@ const MutationTable = ({ journals, warehouse, warehouses, userRole, cashBank, no
                     <option value={100}>100</option>
                 </select>
                 <button
-                    onClick={fetchJournalsByWarehouse}
+                    onClick={() => {
+                        fetchJournalsByWarehouse();
+                        mutateCashBankBalance();
+                        setCurrentPage(1);
+                    }}
                     className="bg-slate-300 dark:bg-slate-700 rounded-2xl p-2.5 disabled:cursor-not-allowed disabled:text-slate-400"
                 >
                     <RefreshCcw size={20} />

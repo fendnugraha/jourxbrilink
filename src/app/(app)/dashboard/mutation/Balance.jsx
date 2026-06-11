@@ -34,7 +34,19 @@ const Balance = ({ accountBalance, journalsByWarehouse }) => {
                                 {showAccountName ? <span className="font-bold">{account?.account_group}</span> : account?.acc_name}
                             </h1>
                             {/* <h1 className="text-[0.6rem] text-nowrap">{account?.acc_name}</h1> */}
-                            <h1 className="text-md font-semibold text-right">{formatNumber(account?.balance)}</h1>
+                            <h1 className="text-md font-semibold text-right">
+                                {formatNumber(account?.balance)}
+                                <span
+                                    className={`text-xs ${
+                                        account.balance - account.limit?.limit_amount > 0
+                                            ? "text-green-600 dark:text-green-400"
+                                            : "text-red-600 dark:text-red-400"
+                                    } group-hover:scale-105 transition delay-100 duration-150 ease-out ml-1`}
+                                    hidden={account.warehouse_id === 1 || account.balance - account.limit?.limit_amount === 0}
+                                >
+                                    ({formatNumber(account.balance - account.limit?.limit_amount)})
+                                </span>
+                            </h1>
                             <div className="flex w-full justify-between bg-gray-300/50 dark:bg-gray-300/20 mt-2 py-1 px-2 rounded-lg">
                                 <div className="flex items-center gap-1">
                                     <ArrowDown size={16} className="inline-block text-green-500" />

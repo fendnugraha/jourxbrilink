@@ -125,7 +125,15 @@ const PaymentForm = ({ contactId, notification, fetchFinance, isModalOpen }) => 
                 <div className="mb-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <Label>Jumlah Bayar (Rp)</Label>
+                            <Label className="flex justify-between">
+                                Jumlah Bayar (Rp){" "}
+                                <span
+                                    className="text-red-500 hover:underline"
+                                    onClick={() => setFormData({ ...formData, amount: filterDataByInvoice[0]?.sisa })}
+                                >
+                                    Bayar Penuh
+                                </span>
+                            </Label>
                             <input
                                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                                 value={formData.amount}

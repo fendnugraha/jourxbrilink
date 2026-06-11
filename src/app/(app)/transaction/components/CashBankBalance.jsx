@@ -201,19 +201,20 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                     showBalanceReport ? `opacity-100 scale-y-100 ${showAllAccounts ? "h-fit" : "max-h-175 overflow-y-auto"}` : "opacity-0 scale-y-0 max-h-0 "
                 } origin-top transition-all duration-300 ease-in-out drop-shadow-sm`}
             >
-                <div hidden={!showCashBankBalance} className="max-h-105">
+                <div hidden={!showCashBankBalance} className={`${showAllAccounts ? "h-fit" : "max-h-105 overflow-y-auto"}`}>
                     {accountBalance?.data?.chartOfAccounts?.map((account) => (
                         <div
                             className="group px-4 py-2 border-b border-slate-200 dark:border-slate-700 first:mt-1 last:border-b-0 rounded-3xl"
                             key={account.id}
                         >
-                            <div className="flex justify-between items-center">
-                                <h1 className="text-xs group-hover:text-base text-nowrap text-slate-600 dark:text-slate-400 font-semibold transition-all delay-100 duration-150 ease-out">
+                            <div className="flex justify-between items-center overflow-x-auto">
+                                <h1 className="text-sm text-nowrap text-slate-600 dark:text-slate-400 font-semibold transition-all delay-100 duration-150 ease-out">
                                     {account.account_group}
+                                    <span className="text-[0.60rem] text-slate-600 dark:text-slate-400 block font-normal">{account.acc_name}</span>
                                 </h1>
 
                                 <div className="flex flex-col items-end justify-between">
-                                    <h1 className="group-hover:scale-105 text-sm text-sky-700 dark:text-lime-400 font-bold transition delay-100 duration-150 ease-out">
+                                    <h1 className="text-sky-700 dark:text-lime-400 font-bold transition delay-100 duration-150 ease-out">
                                         {account.balance === 0 ? "-" : formatNumber(account.balance)}
                                     </h1>
                                     {account.balance - account.limit?.limit_amount !== 0 && (
@@ -222,7 +223,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                                                 account.balance - account.limit?.limit_amount > 0
                                                     ? "text-green-600 dark:text-green-400"
                                                     : "text-red-600 dark:text-red-400"
-                                            } group-hover:scale-105 transition delay-100 duration-150 ease-out`}
+                                            } transition delay-100 duration-150 ease-out`}
                                             hidden={!account.limit?.limit_amount}
                                         >
                                             {formatNumber(account.balance - account.limit?.limit_amount)}
@@ -238,7 +239,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                     <div className="flex justify-between items-start mb-2">
                         <Dropdown
                             trigger={
-                                <button className="cursor-pointer hover:scale-110 transition-transform duration-75 outline-none" onClick={() => copyData()}>
+                                <button className="cursor-pointer transition-transform duration-75 outline-none" onClick={() => copyData()}>
                                     <ScanQrCodeIcon className={`w-5 h-5`} />
                                 </button>
                             }
@@ -250,14 +251,11 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                             </div>
                         </Dropdown>
                         <div className="flex gap-1 items-center">
-                            <button
-                                className="cursor-pointer text-slate-600 dark:text-slate-100 hover:scale-110 transition-transform duration-75"
-                                onClick={() => copyData()}
-                            >
+                            <button className="cursor-pointer text-slate-600 dark:text-slate-100 transition-transform duration-75" onClick={() => copyData()}>
                                 <CopyIcon className={`w-5 h-5 ${isCopied ? "text-green-500" : ""}`} />
                             </button>
                             <button
-                                className="cursor-pointer text-slate-600 dark:text-slate-100 hover:scale-110 transition-transform duration-75"
+                                className="cursor-pointer text-slate-600 dark:text-slate-100 transition-transform duration-75"
                                 onClick={() => mutate(["/api/daily-dashboard", { warehouse, startDate, endDate }])}
                             >
                                 <RefreshCcwIcon className={`w-5 h-5 ${isLoading ? "animate-spin" : ""}`} />

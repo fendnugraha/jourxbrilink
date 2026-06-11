@@ -4,10 +4,15 @@ import Label from "@/components/Label";
 import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import formatNumber from "@/libs/formatNumber";
+import useGetWarehouses from "@/libs/getAllWarehouse";
+import { DateTimeNow } from "@/libs/format";
 
 const CreatePayable = ({ isModalOpen, fetchFinance, notification }) => {
+    const { today } = DateTimeNow();
+    const { warehouses, warehousesError } = useGetWarehouses();
+    const [selectedWarehouseId, setSelectedWarehouseId] = useState("");
     const [formData, setFormData] = useState({
-        date_issued: "",
+        date_issued: today,
         contact_id: "",
         amount: "",
         description: "",
@@ -52,7 +57,9 @@ const CreatePayable = ({ isModalOpen, fetchFinance, notification }) => {
         fetchAccounts({ account_ids: [1, 2, 19, 20] });
     }, []);
 
-    const filterCashAccounts = accounts.filter((account) => account.account_id === 1 || account.account_id === 2);
+    const filterCashAccounts = accounts.filter((account) =>
+        selectedWarehouseId !== "" ? account.warehouse_id === Number(selectedWarehouseId) : account.account_id === 1 || account.account_id === 2,
+    );
 
     const filterPayableAccounts = accounts.filter((account) => account.account_id === 19 || account.account_id === 20);
 
@@ -78,12 +85,25 @@ const CreatePayable = ({ isModalOpen, fetchFinance, notification }) => {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mb-2 sm:mb-2.5 items-center">
                     <Label htmlFor="date_issued">Tanggal</Label>
                     <div className="col-span-2">
-                        <Input type="datetime-local" className="form-control" />
+                        <Input
+                            type="datetime-local"
+                            className="form-control"
+                            value={formData.date_issued}
+                            onChange={(e) => setFormData({ ...formData, date_issued: e.target.value })}
+                        />
                     </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mb-2 sm:mb-2.5 items-center">
                     <Label htmlFor="debt_code">Rekening</Label>
                     <div className="col-span-2">
+                        <select value={selectedWarehouseId} onChange={(e) => setSelectedWarehouseId(e.target.value)} className="form-select mb-2">
+                            <option value="">--Pilih Cabang--</option>
+                            {warehouses.data?.map((w) => (
+                                <option key={w.id} value={w.id}>
+                                    {w.name}
+                                </option>
+                            ))}
+                        </select>
                         <select value={formData.debt_code} onChange={(e) => setFormData({ ...formData, debt_code: e.target.value })} className="form-select">
                             <option value="">--Pilih Rekening--</option>
                             {filterCashAccounts.map((account) => (

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import Label from "@/components/Label";
 import formatNumber from "@/libs/formatNumber";
+import useGetWarehouses from "@/libs/getAllWarehouse";
 
 const PaymentForm = ({ contactId, notification, fetchFinance, isModalOpen }) => {
     const [formData, setFormData] = useState({
@@ -13,6 +14,8 @@ const PaymentForm = ({ contactId, notification, fetchFinance, isModalOpen }) => 
         amount: "",
         notes: "",
     });
+    const { warehouses, warehousesError } = useGetWarehouses();
+    const [selectedWarehouseId, setSelectedWarehouseId] = useState("");
     const [financeData, setFinanceData] = useState([]);
     const [accounts, setAccounts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -97,14 +100,26 @@ const PaymentForm = ({ contactId, notification, fetchFinance, isModalOpen }) => 
                 </div>
                 <div className="mb-4">
                     <Label>Rekening</Label>
-                    <select onChange={(e) => setFormData({ ...formData, account_id: e.target.value })} value={formData.account_id} className="form-select">
-                        <option value="">Select account</option>
-                        {accounts.map((account) => (
-                            <option key={account.id} value={account.id}>
-                                {account.acc_name}
-                            </option>
-                        ))}
-                    </select>
+                    <div className="flex gap-4">
+                        <select onChange={(e) => setSelectedWarehouseId(e.target.value)} value={selectedWarehouseId} className="form-select">
+                            <option value="">Pilih cabang</option>
+                            {warehouses.data?.map((w) => (
+                                <option key={w.id} value={w.id}>
+                                    {w.name}
+                                </option>
+                            ))}
+                        </select>
+                        <select onChange={(e) => setFormData({ ...formData, account_id: e.target.value })} value={formData.account_id} className="form-select">
+                            <option value="">Select account</option>
+                            {accounts
+                                .filter((account) => (selectedWarehouseId !== "" ? account.warehouse_id === Number(selectedWarehouseId) : true))
+                                .map((account) => (
+                                    <option key={account.id} value={account.id}>
+                                        {account.acc_name}
+                                    </option>
+                                ))}
+                        </select>
+                    </div>
                     {errors.account_id && <span className="text-red-500 text-sm">{errors.account_id}</span>}
                 </div>
                 <div className="mb-4">

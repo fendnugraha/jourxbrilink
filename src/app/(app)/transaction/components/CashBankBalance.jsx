@@ -19,6 +19,7 @@ const getCurrentDate = () => {
 
 const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidating, mutateCashBankBalance, user }) => {
     const summarizeBalance = accountBalance?.data?.chartOfAccounts?.reduce((total, account) => total + account.balance, 0);
+    const [showAccName, setShowAccName] = useState(false);
     const [showBalanceReport, setShowBalanceReport] = useState(true);
     const [showCashBankBalance, setShowCashBankBalance] = useState(true);
     const [showDailyReport, setShowDailyReport] = useState(false);
@@ -208,9 +209,18 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                             key={account.id}
                         >
                             <div className="flex justify-between items-center overflow-x-auto">
-                                <h1 className="text-sm text-nowrap text-slate-600 dark:text-slate-400 font-semibold transition-all delay-100 duration-150 ease-out">
+                                <h1
+                                    className="text-sm text-nowrap text-slate-600 dark:text-slate-400 font-semibold transition-all delay-100 duration-150 ease-out"
+                                    onClick={() => setShowAccName(!showAccName)}
+                                >
                                     {account.account_group}
-                                    <span className="text-[0.60rem] text-slate-600 dark:text-slate-400 block font-normal">{account.acc_name}</span>
+                                    <span
+                                        className={`overflow-hidden block text-[0.55rem] text-slate-600 dark:text-slate-400 font-normal
+                                                    transition-all duration-300 ease-out
+                                                    ${showAccName ? "max-h-0 opacity-0" : "max-h-10 opacity-100"}`}
+                                    >
+                                        {account.acc_name}
+                                    </span>
                                 </h1>
 
                                 <div className="flex flex-col items-end justify-between">

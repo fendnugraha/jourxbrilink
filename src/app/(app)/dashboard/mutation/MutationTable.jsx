@@ -24,6 +24,7 @@ const MutationTable = ({
     const [isModalEditMutationJournalOpen, setIsModalEditMutationJournalOpen] = useState(false);
     const [isModalDeleteJournalOpen, setIsModalDeleteJournalOpen] = useState(false);
     const [selectedWarehouseId, setSelectedWarehouseId] = useState(warehouse);
+    const [selectInOut, setSelectInOut] = useState("");
     const selectedAccountIds = cashBank?.data
         ?.filter((cashBank) => selectedWarehouseId && cashBank.warehouse_id === Number(selectedWarehouseId))
         ?.map((cashBank) => cashBank.id);
@@ -47,7 +48,10 @@ const MutationTable = ({
         const matchSelectedIds =
             !selectedAccountIds?.length || selectedAccountIds.includes(journal.debt_code) || selectedAccountIds.includes(journal.cred_code);
 
-        return matchJournalType && matchSearchTerm && matchSelectedIds;
+        const debtOnly = !selectedAccountIds?.length || selectedAccountIds.includes(journal.debt?.id);
+        const credOnly = !selectedAccountIds?.length || selectedAccountIds.includes(journal.cred?.id);
+
+        return matchJournalType && matchSearchTerm && matchSelectedIds && (selectInOut === "in" ? debtOnly : selectInOut === "out" ? credOnly : true);
     });
 
     const filterSelectedJournalId = journals?.data?.find((journal) => journal.id === selectedJournalId);
@@ -129,6 +133,35 @@ const MutationTable = ({
                 </button>
             </div>
             <div className="overflow-x-auto bg-white dark:bg-gray-700 rounded-2xl border border-gray-200 dark:border-gray-600">
+                <div className="flex text-xs p-1 my-2 ml-2 rounded-full bg-slate-300 dark:bg-slate-800 w-fit">
+                    <button
+                        className={`px-4 py-1 rounded-3xl min-w-24 ${selectInOut === "" ? "text-white bg-slate-800 dark:bg-slate-700" : "text-slate-800 dark:text-slate-500"}`}
+                        onClick={() => {
+                            setSelectInOut("");
+                            setCurrentPage(1);
+                        }}
+                    >
+                        Semua
+                    </button>
+                    <button
+                        className={`px-4 py-1 rounded-3xl min-w-24 ${selectInOut === "in" ? "text-white bg-slate-800 dark:bg-slate-700" : "text-slate-800 dark:text-slate-500"}`}
+                        onClick={() => {
+                            setSelectInOut("in");
+                            setCurrentPage(1);
+                        }}
+                    >
+                        Masuk
+                    </button>
+                    <button
+                        className={`px-4 py-1 rounded-3xl min-w-24 ${selectInOut === "out" ? "text-white bg-slate-800 dark:bg-slate-700" : "text-slate-800 dark:text-slate-500"}`}
+                        onClick={() => {
+                            setSelectInOut("out");
+                            setCurrentPage(1);
+                        }}
+                    >
+                        Keluar
+                    </button>
+                </div>
                 <table className="w-full text-xs">
                     <thead className="text-xs text-gray-700 uppercase bg-white dark:bg-gray-700 dark:text-gray-400 rounded-2xl">
                         <tr>

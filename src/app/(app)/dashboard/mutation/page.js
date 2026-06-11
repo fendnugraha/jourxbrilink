@@ -1,6 +1,11 @@
 import MainPage from "../../main";
 import MutationContent from "./MutationContent";
 
+export const metadata = {
+    title: "Jour x BRILink - Mutation",
+    description: "Journal Apps for AgenBRI Link",
+};
+
 const MutationPage = () => {
     return (
         <MainPage headerTitle="Mutation">

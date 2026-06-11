@@ -209,19 +209,21 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                             key={account.id}
                         >
                             <div className="flex justify-between items-center overflow-x-auto">
-                                <h1
-                                    className="text-sm text-nowrap text-slate-600 dark:text-slate-400 font-semibold transition-all delay-100 duration-150 ease-out"
-                                    onClick={() => setShowAccName(!showAccName)}
-                                >
-                                    {account.account_group}
-                                    <span
-                                        className={`overflow-hidden block text-[0.55rem] text-slate-600 dark:text-slate-400 font-normal
+                                <div className="overflow-x-hidden">
+                                    <h1
+                                        className="text-sm text-nowrap text-slate-600 dark:text-slate-400 font-semibold transition-all delay-100 duration-150 ease-out"
+                                        onClick={() => setShowAccName(!showAccName)}
+                                    >
+                                        {account.account_group}
+                                        <span
+                                            className={`overflow-hidden block text-[0.55rem] text-slate-600 dark:text-slate-400 font-normal
                                                     transition-all duration-300 ease-out
                                                     ${showAccName ? "max-h-0 opacity-0" : "max-h-10 opacity-100"}`}
-                                    >
-                                        {account.acc_name}
-                                    </span>
-                                </h1>
+                                        >
+                                            {account.acc_name}
+                                        </span>
+                                    </h1>
+                                </div>
 
                                 <div className="flex flex-col items-end justify-between">
                                     <h1 className="text-sky-700 dark:text-lime-400 font-bold transition delay-100 duration-150 ease-out">

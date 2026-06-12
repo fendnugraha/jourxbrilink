@@ -148,7 +148,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                 ))}
             </Modal>
             <div className="bg-gray-600 dark:bg-black/40 rounded-t-3xl p-2">
-                <div className="flex justify-center items-center bg-slate-200 dark:bg-slate-600 flex-col backdrop-blur-sm rounded-2xl py-4 text-white shadow-lg">
+                <div className="flex justify-center items-center bg-slate-200 dark:bg-slate-600 flex-col backdrop-blur-sm rounded-2xl py-2 text-white shadow-lg">
                     {accountBalance?.data?.chartOfAccounts?.length > 0 ? (
                         <>
                             <h1 className="text-xs text-slate-600 dark:text-white">Total Saldo</h1>
@@ -359,9 +359,10 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
             </div>
             <button
                 hidden={!showBalanceReport}
-                className="w-full flex justify-center items-center py-1 text-slate-600 dark:text-slate-400"
+                className="w-full flex justify-center items-center py-1 text-slate-500 dark:text-slate-400 text-xs"
                 onClick={() => setShowAllAccounts(!showAllAccounts)}
             >
+                {showAllAccounts ? "Show less" : "Show more"}
                 <ChevronDown size={14} className={`${showAllAccounts ? "rotate-180" : ""} transition delay-500 ease-in-out`} />
             </button>
         </div>

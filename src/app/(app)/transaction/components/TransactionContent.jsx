@@ -169,30 +169,26 @@ const TransactionContent = () => {
                 />
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                     <div className="card py-4 col-span-1 sm:col-span-3 order-2 sm:order-1 drop-shadow-sm h-fit">
-                        <div className="flex mb-4 px-4">
+                        <div className="flex ml-4 mb-4 bg-slate-300 p-0.5 rounded-full w-fit">
                             <button
                                 onClick={() => setSelectTable("transaksi")}
                                 className={`${
-                                    selectTable === "transaksi"
-                                        ? "bg-white dark:bg-gray-900 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
-                                        : "bg-slate-100 dark:bg-slate-700"
-                                } px-3 py-1 cursor-pointer mr-2 text-sm`}
+                                    selectTable === "transaksi" ? "bg-white dark:bg-gray-900 rounded-3xl" : "text-slate-600 dark:text-slate-500"
+                                } px-3 py-1 cursor-pointer min-w-21 text-sm`}
                             >
                                 Transaksi
                             </button>
                             <button
                                 onClick={() => setSelectTable("mutasi")}
                                 className={`${
-                                    selectTable === "mutasi"
-                                        ? "bg-white dark:bg-gray-900 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
-                                        : "bg-slate-100 dark:bg-slate-700"
-                                } relative px-3 py-1 cursor-pointer mr-2 text-sm`}
+                                    selectTable === "mutasi" ? "bg-white dark:bg-gray-900 rounded-3xl" : "text-slate-600 dark:text-slate-`300`"
+                                } relative px-3 py-1 cursor-pointer min-w-21 text-sm`}
                             >
                                 Mutasi{" "}
                                 {journalsByWarehouse.data?.filter(
                                     (journal) => Number(journal.debt_code) === warehouseCashId && journal.trx_type === "Mutasi Kas",
                                 ).length > 0 && (
-                                    <span className="absolute -top-2 -right-2 bg-green-500 dark:bg-green-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center ml-2">
+                                    <span className="absolute -top-2 -right-1 bg-green-500 dark:bg-green-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center ml-2">
                                         {
                                             journalsByWarehouse.data?.filter(
                                                 (journal) => Number(journal.debt_code) === warehouseCashId && journal.trx_type === "Mutasi Kas",
@@ -204,10 +200,8 @@ const TransactionContent = () => {
                             <button
                                 onClick={() => setSelectTable("koreksi")}
                                 className={`${
-                                    selectTable === "koreksi"
-                                        ? "bg-white dark:bg-gray-900 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
-                                        : "bg-slate-100 dark:bg-slate-700"
-                                } px-3 py-1 cursor-pointer text-sm mr-2`}
+                                    selectTable === "koreksi" ? "bg-white dark:bg-gray-900 rounded-3xl" : "text-slate-600 dark:text-slate-500"
+                                } px-3 py-1 cursor-pointer min-w-21 text-sm`}
                             >
                                 Koreksi{" "}
                                 {correction.length > 0 && (
@@ -217,10 +211,8 @@ const TransactionContent = () => {
                             <button
                                 onClick={() => setSelectTable("attendance")}
                                 className={`${
-                                    selectTable === "attendance"
-                                        ? "bg-white dark:bg-gray-900 border border-slate-300 dark:border-slate-600 rounded-lg border-b-0 rounded-b-none"
-                                        : "bg-slate-100 dark:bg-slate-700"
-                                } px-3 py-1 cursor-pointer mr-2 text-sm`}
+                                    selectTable === "attendance" ? "bg-white dark:bg-gray-900 rounded-3xl" : "text-slate-600 dark:text-slate-500"
+                                } px-3 py-1 cursor-pointer min-w-21 text-sm`}
                             >
                                 Absensi
                             </button>
@@ -270,7 +262,7 @@ const TransactionContent = () => {
                             isValidating={isValidating}
                             user={user}
                         />
-                        <div className="mt-4 hidden sm:block">
+                        <div className="hidden sm:block">
                             <VoucherSalesTable
                                 warehouse={warehouse}
                                 warehouseName={warehouseName}

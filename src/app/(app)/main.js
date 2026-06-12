@@ -160,21 +160,20 @@ const MainPage = ({ children, headerTitle }) => {
             </div>
 
             <header className="w-full h-20 flex items-center justify-between px-4 sm:px-12 py-2">
-                <h1 className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-white">
+                <h1 className="text-xl sm:text-xl font-bold text-slate-700 dark:text-white">
                     {headerTitle}
-                    <span className="text-xs font-normal p-0 block mt-0.5">
+                    <span className="text-xs font-normal p-0 block mt-1">
                         {userWarehouseId === user.attendances?.[0]?.warehouse_id ? contactLoginName : userWarehouseName}
                         {contactWarningStatus ? (
                             <>
-                                {" | "}
-                                <span className="bg-red-200 rounded-lg text-red-600 pe-0 sm:pe-2">
+                                <span className="ml-2 bg-red-200 rounded-lg text-red-600 pe-0 sm:pe-2">
                                     <span className="bg-red-600 text-white rounded-lg w-fit px-2 py-0.5 font-bold">{contactWarningStatus.level}</span>{" "}
                                     <span className="hidden sm:inline">Exp {formatDate(contactWarningStatus.expired_date)}</span>
                                 </span>
                             </>
                         ) : (
-                            <div className="hidden sm:inline">
-                                {" | "} {dayName}, {date} {time}
+                            <div className="hidden sm:inline ml-2 border border-slate-300 dark:border-slate-600 px-1 py-0.5 rounded-full">
+                                {dayName}, {date} {time}
                             </div>
                         )}
                     </span>

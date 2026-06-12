@@ -142,39 +142,41 @@ const JournalTable = ({
 
     return (
         <>
-            <div className="flex gap-2 px-4">
+            <div className="flex gap-2 px-4 flex-col sm:flex-row">
                 <input type="search" placeholder="Cari" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="form-control p-2.5" />
-                <select
-                    onChange={(e) => {
-                        setSelectedAccount(e.target.value);
-                        setCurrentPage(1);
-                    }}
-                    value={selectedAccount}
-                    className="form-select block !w-fit p-2.5"
-                >
-                    <option value="">Semua Akun</option>
-                    {branchAccount.map((account, index) => (
-                        <option key={index} value={account.id}>
-                            {account.acc_name}
-                        </option>
-                    ))}
-                </select>
-                <select
-                    onChange={(e) => {
-                        setItemsPerPage(Number(e.target.value));
-                        setCurrentPage(1);
-                    }}
-                    className="form-select !w-fit block p-2.5"
-                >
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                    <option value={25}>25</option>
-                    <option value={50}>50</option>
-                    <option value={100}>100</option>
-                </select>
-                <button onClick={() => setIsModalFilterJournalOpen(true)} className="small-button">
-                    <FilterIcon size={18} />
-                </button>
+                <div className="flex gap-2">
+                    <select
+                        onChange={(e) => {
+                            setSelectedAccount(e.target.value);
+                            setCurrentPage(1);
+                        }}
+                        value={selectedAccount}
+                        className="form-select block !w-fit p-2.5 flex-1"
+                    >
+                        <option value="">Semua Akun</option>
+                        {branchAccount.map((account, index) => (
+                            <option key={index} value={account.id}>
+                                {account.account_group}
+                            </option>
+                        ))}
+                    </select>
+                    <select
+                        onChange={(e) => {
+                            setItemsPerPage(Number(e.target.value));
+                            setCurrentPage(1);
+                        }}
+                        className="form-select !w-fit block p-2.5"
+                    >
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                    </select>
+                    <button onClick={() => setIsModalFilterJournalOpen(true)} className="small-button">
+                        <FilterIcon size={18} />
+                    </button>
+                </div>
                 <Modal isOpen={isModalFilterJournalOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
                     {["Administrator", "Super Admin"].includes(userRole) && (
                         <div className="mb-4">
@@ -264,41 +266,7 @@ const JournalTable = ({
                                             <span className="text-xs text-blue-700 dark:text-blue-300 group-hover:dark:text-blue-200 group-hover:text-blue-400 block">
                                                 #{journal.id} {formatDateTime(journal.date_issued)}
                                             </span>
-                                            <span className="font-bold text-xs block group-hover:text-lime-700 group-hover:dark:text-lime-400">
-                                                {journal.trx_type === "Voucher & SP" || journal.trx_type === "Accessories" ? (
-                                                    <ul className="list-disc font-normal scale-95">
-                                                        {journal.transaction.map((trx) => (
-                                                            <li key={trx.id}>
-                                                                {trx.product.name} x {trx.quantity * -1}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                ) : journal.trx_type === "Mutasi Kas" ? (
-                                                    <>
-                                                        {journal.cred?.account_group}{" "}
-                                                        {journal.cred?.warehouse?.id !== warehouse && (
-                                                            <span className="text-yellow-600 dark:text-yellow-300">
-                                                                ({journal.cred?.warehouse?.name.replace(/^konter\s*/i, "")})
-                                                            </span>
-                                                        )}
-                                                        <span className="text-green-600 dark:text-green-300">
-                                                            {" "}
-                                                            {" → "}
-                                                            {journal.debt?.account_group}
-                                                        </span>{" "}
-                                                        {journal.debt?.warehouse?.id !== warehouse && (
-                                                            <span className="text-yellow-600 dark:text-yellow-300">
-                                                                ({journal.debt?.warehouse?.name.replace(/^konter\s*/i, "")})
-                                                            </span>
-                                                        )}
-                                                    </>
-                                                ) : Number(journal.debt_code) === warehouseCash ? (
-                                                    journal.cred.account_group
-                                                ) : (
-                                                    journal.debt.account_group
-                                                )}
-                                                . <span className="font-normal text-slate-500 dark:text-slate-300">Note: {journal.description}</span>
-                                            </span>
+
                                             <span className="text-xs hidden sm:block text-slate-500 dark:text-slate-400">
                                                 Updated <TimeAgo timestamp={journal.updated_at} /> by {journal.user?.name}
                                             </span>
@@ -347,6 +315,41 @@ const JournalTable = ({
                                                     <TrashIcon className="size-4" />
                                                 </button>
                                             </div>
+                                        </td>
+                                        <td className="font-bold text-xs group-hover:text-lime-700 group-hover:dark:text-lime-400">
+                                            {journal.trx_type === "Voucher & SP" || journal.trx_type === "Accessories" ? (
+                                                <ul className="list-disc font-normal scale-95">
+                                                    {journal.transaction.map((trx) => (
+                                                        <li key={trx.id}>
+                                                            {trx.product.name} x {trx.quantity * -1}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            ) : journal.trx_type === "Mutasi Kas" ? (
+                                                <>
+                                                    {journal.cred?.account_group}{" "}
+                                                    {journal.cred?.warehouse?.id !== warehouse && (
+                                                        <span className="text-yellow-600 dark:text-yellow-300">
+                                                            ({journal.cred?.warehouse?.name.replace(/^konter\s*/i, "")})
+                                                        </span>
+                                                    )}
+                                                    <span className="text-green-600 dark:text-green-300">
+                                                        {" "}
+                                                        {" → "}
+                                                        {journal.debt?.account_group}
+                                                    </span>{" "}
+                                                    {journal.debt?.warehouse?.id !== warehouse && (
+                                                        <span className="text-yellow-600 dark:text-yellow-300">
+                                                            ({journal.debt?.warehouse?.name.replace(/^konter\s*/i, "")})
+                                                        </span>
+                                                    )}
+                                                </>
+                                            ) : Number(journal.debt_code) === warehouseCash ? (
+                                                journal.cred.account_group
+                                            ) : (
+                                                journal.debt.account_group
+                                            )}
+                                            <span className="font-normal block text-slate-500 dark:text-slate-300">Note: {journal.description}</span>
                                         </td>
                                         <td className="font-bold text-end text-slate-600 dark:text-slate-300 ">
                                             <span

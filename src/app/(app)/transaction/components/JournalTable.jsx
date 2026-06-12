@@ -5,7 +5,19 @@ import formatDateTime from "@/libs/formatDateTime";
 import axios from "@/libs/axios";
 import { useState } from "react";
 import Pagination from "@/components/PaginateList";
-import { CheckCheck, CheckIcon, Ellipsis, FilterIcon, MessageCircleWarningIcon, PencilIcon, SearchIcon, TrashIcon, XIcon } from "lucide-react";
+import {
+    ArrowDown,
+    ArrowUp,
+    CheckCheck,
+    CheckIcon,
+    Ellipsis,
+    FilterIcon,
+    MessageCircleWarningIcon,
+    PencilIcon,
+    SearchIcon,
+    TrashIcon,
+    XIcon,
+} from "lucide-react";
 import Modal from "@/components/Modal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
@@ -230,10 +242,10 @@ const JournalTable = ({
                     <h4 className="text-xs text-slate-500 dark:text-slate-200">
                         {warehouses?.data?.find((w) => w.id === Number(selectedWarehouse))?.name},{" "}
                         {startDate === endDate ? formatLongDate(endDate) : `${formatLongDate(startDate)} s/d ${formatLongDate(endDate)}`}
-                        <span className="block">
-                            Transfer: {formatNumber(sumTransfer.sum)} ({formatNumber(sumTransfer.count)}), Tarik Tunai: {formatNumber(sumWithdrawal.sum)} (
-                            {sumWithdrawal.count})
-                        </span>
+                    </h4>
+                    <h4 className="text-xs text-slate-500 dark:text-slate-200">
+                        Transfer: {formatNumber(sumTransfer.sum)} ({formatNumber(sumTransfer.count)}), Tarik Tunai: {formatNumber(sumWithdrawal.sum)} (
+                        {sumWithdrawal.count})
                     </h4>
                     {["Super Admin"].includes(userRole) && (
                         <Link href="/transaction/inspection" className="text-xs hover:underline text-slate-500 dark:text-slate-200">
@@ -345,10 +357,18 @@ const JournalTable = ({
                                                     )}
                                                 </>
                                             ) : Number(journal.debt_code) === warehouseCash ? (
-                                                journal.cred.account_group
+                                                <>
+                                                    <ArrowUp className="inline-block text-red-600 dark:text-red-300 mr-1" size={14} />
+                                                    {journal.cred?.account_group}
+                                                </>
                                             ) : (
-                                                journal.debt.account_group
+                                                <>
+                                                    <ArrowDown className="inline-block text-green-600 dark:text-green-300 mr-1" size={14} />
+                                                    {journal.debt?.account_group}
+                                                </>
                                             )}
+                                            {journal.trx_type === "Pengeluaran" && journal.debt_code !== warehouseCash && <>{journal.debt?.acc_name}</>}
+                                            {journal.trx_type === "Deposit" && <>{journal.trx_type}</>}
                                             <span className="font-normal block text-slate-500 dark:text-slate-300">Note: {journal.description}</span>
                                         </td>
                                         <td className="font-bold text-end text-slate-600 dark:text-slate-300 ">

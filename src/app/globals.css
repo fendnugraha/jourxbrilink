@@ -72,7 +72,7 @@ button {
 }
 
 .table tr {
-    @apply border-b border-gray-200 last:border-0 dark:border-gray-600;
+    @apply border-b border-gray-200 last:border-0 dark:border-gray-700;
 }
 
 .form-control {

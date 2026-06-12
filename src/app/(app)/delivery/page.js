@@ -103,8 +103,11 @@ const DeliveryPage = () => {
                 <Notification type={notification.type} notification={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
             )}
             <div className="py-4 sm:py-8 px-4 sm:px-12">
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 ">
-                    <div className="h-auto sm:h-[calc(100vh-80px-64px)] overflow-auto">
+                <div className="flex gap-4">
+                    <div
+                        className="h-auto w-1/4 sm:h-[calc(100vh-80px-64px)] overflow-auto"
+                        hidden={journals?.filter((journal) => journal?.status === 0).length === 0}
+                    >
                         {journals?.filter((journal) => journal?.status === 0).length > 0 ? (
                             journals
                                 ?.filter((journal) => journal?.status === 0)
@@ -144,7 +147,7 @@ const DeliveryPage = () => {
                             </div>
                         )}
                     </div>
-                    <div className="card p-4 sm:col-span-3 h-auto sm:h-[calc(100vh-80px-64px)] overflow-auto relative">
+                    <div className="card p-4 flex-1 h-auto sm:h-[calc(100vh-80px-64px)] overflow-auto relative">
                         {isValidating && (
                             <div className="absolute bottom-2 right-2 flex gap-2 items-center italic bg-white dark:bg-slate-500 py-0.5 px-2 rounded-full text-xs">
                                 <LoaderIcon size={18} className="animate-spin" /> Updating data ...

@@ -183,7 +183,7 @@ const MainPage = ({ children, headerTitle }) => {
                     {/* {userWarehouseId === 1 && ( */}
                     <Link
                         href="/dashboard/mutation"
-                        className="bg-slate-600 hover:bg-slate-500 text-white px-4 py-2 rounded-full flex items-center gap-1"
+                        className="bg-slate-600 hover:bg-slate-500 text-white px-4 py-2 rounded-full hidden sm:flex items-center gap-1"
                         hidden={!["Administrator", "Super Admin"].includes(user?.role?.role)}
                     >
                         <Plus size={20} className="inline" /> Mutasi

@@ -13,6 +13,7 @@ import {
     Ellipsis,
     FilterIcon,
     MessageCircleWarningIcon,
+    NotebookPen,
     PencilIcon,
     SearchIcon,
     TrashIcon,
@@ -275,11 +276,11 @@ const JournalTable = ({
                                 currentItems.map((journal, index) => (
                                     <tr key={index} className="group hover:bg-slate-500 hover:text-white">
                                         <td>
-                                            <span className="text-xs text-blue-700 dark:text-blue-300 group-hover:dark:text-blue-200 group-hover:text-blue-400 block">
-                                                #{journal.id} {formatDateTime(journal.date_issued)}
+                                            <span className="text-sm text-blue-700 dark:text-blue-300 group-hover:dark:text-blue-200 group-hover:text-blue-400 block">
+                                                {formatDateTime(journal.date_issued)}
                                             </span>
 
-                                            <span className="text-xs hidden sm:block text-slate-500 dark:text-slate-400">
+                                            <span className="text-xs hidden sm:block text-slate-500 dark:text-slate-300">
                                                 Updated <TimeAgo timestamp={journal.updated_at} /> by {journal.user?.name}
                                             </span>
                                             <div className="flex mt-1 gap-3 sm:hidden">
@@ -328,7 +329,7 @@ const JournalTable = ({
                                                 </button>
                                             </div>
                                         </td>
-                                        <td className="font-bold text-xs group-hover:text-lime-700 group-hover:dark:text-lime-400">
+                                        <td className="font-bold group-hover:text-lime-700 group-hover:dark:text-lime-400 text-sm">
                                             {journal.trx_type === "Voucher & SP" || journal.trx_type === "Accessories" ? (
                                                 <ul className="list-disc font-normal scale-95">
                                                     {journal.transaction.map((trx) => (
@@ -369,7 +370,9 @@ const JournalTable = ({
                                             )}
                                             {journal.trx_type === "Pengeluaran" && journal.debt_code !== warehouseCash && <>{journal.debt?.acc_name}</>}
                                             {journal.trx_type === "Deposit" && <>{journal.trx_type}</>}
-                                            <span className="font-normal block text-slate-500 dark:text-slate-300">Note: {journal.description}</span>
+                                            <span className="font-normal text-xs text-slate-500 dark:text-slate-300 flex gap-1 items-center">
+                                                <NotebookPen size={12} /> {journal.description}
+                                            </span>
                                         </td>
                                         <td className="font-bold text-end text-slate-600 dark:text-slate-300 ">
                                             <span

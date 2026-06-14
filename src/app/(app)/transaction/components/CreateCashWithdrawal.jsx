@@ -183,7 +183,7 @@ const CreateCashWithdrawal = ({
                             <input
                                 className={`form-control ${feeAdminAuto ? "!bg-green-200 !text-green-700 font-bold" : ""}`}
                                 type="number"
-                                placeholder={feeAdminAuto ? "Rp. (Autofilled)" : "Rp."}
+                                placeholder={`Rp.`}
                                 value={formData.fee_amount}
                                 onChange={(e) => setFormData({ ...formData, fee_amount: e.target.value })}
                                 disabled={isFee}
@@ -214,7 +214,7 @@ const CreateCashWithdrawal = ({
                     <label htmlFor="isFee" className={`text-sm `}>
                         Fee/Bunga Bank
                     </label>
-                    <input
+                    {/* <input
                         type="checkbox"
                         id="feeAlternative"
                         className=""
@@ -224,7 +224,7 @@ const CreateCashWithdrawal = ({
                     />
                     <label htmlFor="feeAlternative" className={`text-sm ${altFee ? "text-green-600" : ""}`}>
                         Fee Alternatif
-                    </label>
+                    </label> */}
                 </div>
                 <div className="mb-2 sm:mb-4">
                     <button type="button" className="text-xs underline" onClick={() => setShowAddNotes(!showAddNotes)}>

@@ -166,7 +166,7 @@ const CreateTransfer = ({
                             <input
                                 className={`form-control ${feeAdminAuto ? "!bg-green-200 !text-green-700 font-bold" : ""}`}
                                 type="number"
-                                placeholder={feeAdminAuto ? "Rp. (Autofilled)" : "Rp."}
+                                placeholder={`Rp.`}
                                 value={formData.fee_amount}
                                 onChange={(e) => setFormData({ ...formData, fee_amount: e.target.value })}
                                 required

@@ -164,7 +164,7 @@ const JournalTable = ({
                             setCurrentPage(1);
                         }}
                         value={selectedAccount}
-                        className="form-select block !w-fit p-2.5 flex-1"
+                        className="form-select block !min-w-[200px] p-2.5 flex-1"
                     >
                         <option value="">Semua Akun</option>
                         {branchAccount.map((account, index) => (
@@ -371,7 +371,7 @@ const JournalTable = ({
                                             {journal.trx_type === "Pengeluaran" && journal.debt_code !== warehouseCash && <>{journal.debt?.acc_name}</>}
                                             {journal.trx_type === "Deposit" && <>{journal.trx_type}</>}
                                             <span className="font-normal text-xs text-slate-500 dark:text-slate-300 flex gap-1 items-center">
-                                                <NotebookPen size={12} /> {journal.description}
+                                                {"->"} {journal.description}
                                             </span>
                                         </td>
                                         <td className="font-bold text-end text-slate-600 dark:text-slate-300 ">

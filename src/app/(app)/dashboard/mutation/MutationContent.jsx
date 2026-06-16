@@ -11,6 +11,7 @@ import MutationTable from "./MutationTable";
 import { useAuth } from "@/libs/auth";
 import useCashBankBalance from "@/libs/cashBankBalance";
 import Balance from "./Balance";
+import ReportForm from "./SendReport";
 
 const MutationContent = () => {
     const { user } = useAuth({ middleware: "auth" });
@@ -75,6 +76,7 @@ const MutationContent = () => {
                 setSelectedWarehouse={setSelectedWarehouse}
             />
             <Balance accountBalance={accountBalance} journalsByWarehouse={journalsByWarehouse} />
+            {/* <ReportForm /> */}
         </div>
     );
 };

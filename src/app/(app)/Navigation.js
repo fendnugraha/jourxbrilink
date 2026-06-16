@@ -1,5 +1,5 @@
 "use client";
-import { ArrowLeftRightIcon, ChartAreaIcon, CogIcon, DollarSignIcon, LayoutDashboardIcon, Menu, PowerIcon, StoreIcon } from "lucide-react";
+import { ArrowLeftRightIcon, ChartAreaIcon, CogIcon, DollarSignIcon, LayoutDashboardIcon, LogOut, Menu, PowerIcon, StoreIcon } from "lucide-react";
 import { useState } from "react";
 import NavLink from "@/components/NavLink";
 import { usePathname } from "next/navigation";
@@ -88,7 +88,7 @@ const Navigation = ({ user }) => {
                 <button onClick={logout} className="flex items-center cursor-pointer">
                     {/* Tombol Toggle */}
                     <span className="w-16 h-14 flex items-center justify-center shrink-0 text-red-500 hover:text-red-400 dark:text-yellow-300 dark:hover:text-yellow-200">
-                        <PowerIcon size={24} strokeWidth={3} />
+                        <LogOut size={24} strokeWidth={3} />
                     </span>
 
                     {/* Logo Text */}

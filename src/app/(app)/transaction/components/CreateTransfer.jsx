@@ -5,6 +5,7 @@ import Label from "@/components/Label";
 import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
 import { DateTimeNow } from "@/libs/format";
+import { sendTelegramAlert } from "@/libs/telegramAlert";
 
 const CreateTransfer = ({
     isModalOpen,
@@ -63,6 +64,15 @@ const CreateTransfer = ({
             fetchJournalsByWarehouse();
             // isModalOpen(false);
             setErrors([]);
+            if (calculateFee(formData.amount) !== formData.fee_amount) {
+                {
+                    sendTelegramAlert({
+                        title: "SALAH INPUT HARGA",
+                        message: `Transfer uang ke ${successMessage} di ${user.role.warehouse.name}`,
+                        source: user.role.warehouse.name,
+                    });
+                }
+            }
         } catch (error) {
             setErrors(error.response.data.errors || ["Something went wrong."]);
             console.log(error);

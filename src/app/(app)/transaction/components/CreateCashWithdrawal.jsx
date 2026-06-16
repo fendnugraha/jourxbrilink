@@ -6,6 +6,7 @@ import Input from "@/components/Input";
 import formatNumber from "@/libs/formatNumber";
 import { set } from "date-fns";
 import { DateTimeNow } from "@/libs/format";
+import { sendTelegramAlert } from "@/libs/telegramAlert";
 
 const CreateCashWithdrawal = ({
     isModalOpen,
@@ -50,7 +51,7 @@ const CreateCashWithdrawal = ({
                 ")";
             setNotification({
                 type: "success",
-                message: "Penarikan uang ke " + successMessage,
+                message: "Penarikan uang dari " + successMessage,
             });
             setFormData({
                 date_issued: today,
@@ -65,6 +66,15 @@ const CreateCashWithdrawal = ({
             fetchJournalsByWarehouse();
             // isModalOpen(false);
             setErrors([]);
+            if (calculateFee(formData.amount) !== formData.fee_amount) {
+                {
+                    sendTelegramAlert({
+                        title: "SALAH INPUT HARGA",
+                        message: `Penarikan uang dari ${successMessage} di ${user.role.warehouse.name}`,
+                        source: user.role.warehouse.name,
+                    });
+                }
+            }
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
             setNotification({

@@ -330,7 +330,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                                     setShowCloseStore(true);
                                     mutate(["/api/daily-dashboard", { warehouse, startDate, endDate }]);
                                 }}
-                                className="text-xs text-slate-600 dark:text-slate-100 active:scale-90 bg-red-500 hover:bg-red-400 px-1 py-0.5 rounded-md flex items-center gap-1"
+                                className="text-xs text-slate-100 active:scale-90 bg-red-500 hover:bg-red-400 px-1 py-0.5 rounded-md flex items-center gap-1"
                                 hidden={!isWithinTime || warehouse === 1}
                             >
                                 Tutup Toko{" "}
@@ -455,20 +455,20 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                     <div className="flex flex-col gap-4 items-center">
                         <QRCodeSVG value={copyDailyReport()} size={150} />
                         <button
-                            className="cursor-pointer text-slate-600 border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1 dark:text-slate-100 transition-transform duration-75 flex items-center gap-1 hover:scale-110"
+                            className="cursor-pointer border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1 text-slate-100 transition-transform duration-75 flex items-center gap-1 hover:scale-110"
                             onClick={() => copyData()}
                         >
                             <CopyIcon size={20} className={`${isCopied ? "text-green-500" : ""}`} /> {isCopied ? "Copied" : "Copy"}
                         </button>
                     </div>
-                    <div className="flex flex-col justify-between">
+                    <div className="flex flex-col justify-between text-white">
                         <div>
                             <h1 className="text-sm font-bold">Total Pendapatan</h1>
                             <h1 className="text-lg font-bold text-end text-teal-500 dark:text-teal-300">{formatNumber(totalSetoran)}</h1>
                             <h1 className="text-sm font-bold">Kas Awal</h1>
-                            <h1 className="text-lg font-bold text-end text-red-500 dark:text-red-300">{formatNumber(openingCash)}</h1>
+                            <h1 className="text-lg font-bold text-end text-red-300 dark:text-red-500">{formatNumber(openingCash)}</h1>
                             <h1 className="text-sm font-bold mt-5">Total Uang Disetor</h1>
-                            <h1 className="text-2xl font-bold text-end text-red-500 dark:text-red-300">
+                            <h1 className="text-2xl font-bold text-end text-red-300 dark:text-red-500">
                                 {formatNumber(dailyDashboard?.data?.totalCash > openingCash ? totalSetoran - openingCash : totalSetoran)}
                             </h1>
                         </div>

@@ -122,7 +122,6 @@ const MainPage = ({ children, headerTitle }) => {
     const { journals, error: journalError, isValidating } = useGetMutationJournal(todayJakarta, todayJakarta);
     const filteredJournals = journals?.filter((journal) => journal?.status === 0);
 
-    // console.log(WarehouseStatus);
     return (
         <>
             {!attCheck?.approval_status && isWithinTime && userWarehouseId !== 1 && userRole !== "Super Admin" && (
@@ -140,7 +139,7 @@ const MainPage = ({ children, headerTitle }) => {
                 </div>
             )}
 
-            {attCheck?.approval_status && WarehouseStatus === 3 && userRole !== "Super Admin" && (
+            {attCheck?.approval_status && Number(WarehouseStatus) === 3 && userRole !== "Super Admin" && (
                 <div className="p-4 fixed top-0 left-0 h-screen overflow-hidden z-9999 bg-black/80 w-screen text-white flex flex-col gap-4 items-center justify-center">
                     <Lock size={250} />
                     <button className="bg-red-700 text-white p-4 rounded-full" onClick={logout}>

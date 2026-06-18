@@ -348,7 +348,7 @@ const TransactionMenu = ({ user, fetchJournalsByWarehouse, accountBalance, mutat
                 {isMutateToHqActive ? (
                     <CreateMutationToHq
                         cashBank={cashBank}
-                        isModalOpen={setIsModalCreateMutationToHqOpen}
+                        isModalOpen={setIsModalCreateMutationOpen}
                         notification={setNotification}
                         fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                         user={user}

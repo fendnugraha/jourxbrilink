@@ -165,6 +165,7 @@ const JournalTable = ({
                             setItemsPerPage(Number(e.target.value));
                             setCurrentPage(1);
                         }}
+                        value={itemsPerPage}
                         className="form-select !w-fit block p-2.5"
                     >
                         <option value={5}>5</option>

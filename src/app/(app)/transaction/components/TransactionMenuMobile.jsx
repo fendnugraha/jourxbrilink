@@ -123,12 +123,12 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
             </div>
             <div className={`text-white ${!isExpenseMenuOpen ? "hidden" : "flex flex-col justify-between items-center px-4"}`}>
                 <div className="rounded-2xl bg-white w-full shadow-xl border border-slate-300">
-                    <button
+                    {/* <button
                         onClick={() => setIsModalCreateMutationToHqOpen(true)}
                         className="w-full text-slate-700 p-2 border-b border-slate-300 hover:bg-slate-200"
                     >
                         Mutasi ke Pusat (HQ)
-                    </button>
+                    </button> */}
                     <button
                         onClick={() => setIsModalCreateExpenseOpen(true)}
                         className="w-full text-slate-700 p-2 border-b border-slate-300 hover:bg-slate-200"
@@ -366,7 +366,7 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                 {isMutateToHqActive ? (
                     <CreateMutationToHq
                         cashBank={cashBank}
-                        isModalOpen={setIsModalCreateMutationToHqOpen}
+                        isModalOpen={setIsModalCreateMutationOpen}
                         notification={setNotification}
                         fetchJournalsByWarehouse={fetchJournalsByWarehouse}
                         user={user}

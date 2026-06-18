@@ -145,17 +145,28 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
         }
     };
 
-    //withinTime
+    // 1. Ambil waktu sekarang
     const now = new Date();
 
-    // Ambil jam & menit WIB
-    const wibTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Jakarta" }));
+    // 2. Gunakan Intl.DateTimeFormat untuk ambil jam & menit khusus timezone Asia/Jakarta
+    const formatter = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Jakarta",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: false, // Pakai format 24 jam agar tidak ada AM/PM
+    });
 
-    const currentMinutes = wibTime.getHours() * 60 + wibTime.getMinutes();
+    // Hasilnya berupa string format 24 jam, misal: "20:30"
+    const parts = formatter.formatToParts(now);
+    const hour = parseInt(parts.find((p) => p.type === "hour").value, 10);
+    const minute = parseInt(parts.find((p) => p.type === "minute").value, 10);
 
-    // range waktu
-    const start = 20 * 60; // 20:00  -> 1200 menit
-    const end = 23 * 60 + 45; // 23:30  -> 1410 menit
+    // 3. Hitung total menit saat ini
+    const currentMinutes = hour * 60 + minute;
+
+    // 4. Range waktu (20:00 - 23:45)
+    const start = 20 * 60; // 1200 menit
+    const end = 23 * 60 + 45; // 1425 menit
 
     const isWithinTime = currentMinutes >= start && currentMinutes <= end;
     return (
@@ -320,7 +331,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                                     mutate(["/api/daily-dashboard", { warehouse, startDate, endDate }]);
                                 }}
                                 className="text-xs text-slate-600 dark:text-slate-100 active:scale-90 bg-red-500 hover:bg-red-400 px-1 py-0.5 rounded-md flex items-center gap-1"
-                                hidden={!isWithinTime}
+                                hidden={!isWithinTime || warehouse === 1}
                             >
                                 Tutup Toko{" "}
                                 <span className="bg-red-300 rounded-full p-0.5 text-white">

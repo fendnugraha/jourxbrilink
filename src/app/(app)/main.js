@@ -82,10 +82,21 @@ const MainPage = ({ children, headerTitle }) => {
 
     const now = new Date();
 
-    // Ambil jam & menit WIB
-    const wibTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Jakarta" }));
+    // 2. Gunakan Intl.DateTimeFormat untuk ambil jam & menit khusus timezone Asia/Jakarta
+    const formatter = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Jakarta",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: false, // Pakai format 24 jam agar tidak ada AM/PM
+    });
 
-    const currentMinutes = wibTime.getHours() * 60 + wibTime.getMinutes();
+    // Hasilnya berupa string format 24 jam, misal: "20:30"
+    const parts = formatter.formatToParts(now);
+    const hour = parseInt(parts.find((p) => p.type === "hour").value, 10);
+    const minute = parseInt(parts.find((p) => p.type === "minute").value, 10);
+
+    // 3. Hitung total menit saat ini
+    const currentMinutes = hour * 60 + minute;
 
     // range waktu
     const start = 6 * 60; // 06:00  -> 360 menit
@@ -129,7 +140,7 @@ const MainPage = ({ children, headerTitle }) => {
                 </div>
             )}
 
-            {attCheck?.approval_status && WarehouseStatus === 3 && (
+            {attCheck?.approval_status && WarehouseStatus === 3 && userRole !== "Super Admin" && (
                 <div className="p-4 fixed top-0 left-0 h-screen overflow-hidden z-9999 bg-black/80 w-screen text-white flex flex-col gap-4 items-center justify-center">
                     <Lock size={250} />
                     <button className="bg-red-700 text-white p-4 rounded-full" onClick={logout}>

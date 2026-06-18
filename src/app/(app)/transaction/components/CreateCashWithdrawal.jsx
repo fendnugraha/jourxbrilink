@@ -70,7 +70,7 @@ const CreateCashWithdrawal = ({
                 {
                     sendTelegramAlert({
                         title: "SALAH INPUT HARGA",
-                        message: `Penarikan uang dari ${successMessage} di ${user.role.warehouse.name}`,
+                        message: `Penarikan uang dari ${successMessage} di ${user.role.warehouse.name}\n\n${response.data.journal.description}`,
                         source: user.role.warehouse.name,
                     });
                 }

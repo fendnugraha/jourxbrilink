@@ -1,8 +1,9 @@
 "use client";
 import { ArrowUpDown, Calendar, Hourglass, Search, SearchIcon, WalletMinimal, X } from "lucide-react";
-import { DateTimeNow, formatNumber } from "@/libs/format";
+import { DateTimeNow, formatDateTime, formatNumber } from "@/libs/format";
 import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
+import { sendTelegramAlert } from "@/libs/telegramAlert";
 const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWarehouse, accountBalance, mutateCashBankBalance }) => {
     const [switchTab, setSwitchTab] = useState(false);
     const [selectedWarehouse, setSelectedWarehouse] = useState(null);
@@ -26,50 +27,7 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
     });
 
     const filteredWarehouses = warehouses?.data?.filter((warehouse) => warehouse.name.toLowerCase().includes(searchTerm.toLowerCase()));
-
     const selectedWarehouseId = selectedWarehouse?.id;
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        try {
-            const response = await axios.post("/api/create-mutation", formData);
-            const successMessage = `
-            ${response.data.journal.cred.account_group} ke ${response.data.journal.debt.account_group} ${response.data.journal.debt.warehouse?.name}
-            sebesar ${formatNumber(response.data.journal.amount)}
-            `;
-            console.log(response.data);
-            setNotification({
-                type: "success",
-                message: response.data.message + " " + successMessage,
-            });
-            mutateCashBankBalance();
-            fetchJournalsByWarehouse();
-            setFormData({
-                date_issued: today,
-                debt_code: "",
-                cred_code: formData.cred_code,
-                amount: "",
-                fee_amount: 0,
-                is_confirmed: true,
-                confirmation: 0,
-                trx_type: "Mutasi Kas",
-                description: "",
-                admin_fee: "" || 0,
-                warehouse_id: 1,
-            });
-            setErrors([]);
-            setSwitchTab(false);
-        } catch (error) {
-            setNotification({
-                type: "error",
-                message: error.response?.data?.message || "Something went wrong.",
-            });
-            setErrors(error.response?.data?.errors);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleCancel = () => {
         selectedWarehouse && setSelectedWarehouse(null);
@@ -140,7 +98,63 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
             });
         }
     }, [isConfirmAuto]);
+    const destWarehouse = warehouses?.data?.find((warehouse) => Number(warehouse.id) === Number(selectedWarehouseId));
+    const selectedDebt = accounts?.data?.find((acc) => Number(acc.id) === Number(formData.debt_code)) ?? {};
+    console.log("selectedDebt", selectedDebt);
+    const messageToCourier =
+        selectedDebt.account_id === 1 && selectedDebt.warehouse_id !== 1
+            ? `${formatDateTime(today)}\n\nTujuan: *${destWarehouse?.name}*\nJumlah: ${formatNumber(formData.amount)}.`
+            : null;
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const response = await axios.post("/api/create-mutation", formData);
+            const successMessage = `
+            ${response.data.journal.cred.account_group} ke ${response.data.journal.debt.account_group} ${response.data.journal.debt.warehouse?.name}
+            sebesar ${formatNumber(response.data.journal.amount)}
+            `;
+            setNotification({
+                type: "success",
+                message: response.data.message + " " + successMessage,
+            });
+            mutateCashBankBalance();
+            fetchJournalsByWarehouse();
+            setFormData({
+                date_issued: today,
+                debt_code: "",
+                cred_code: formData.cred_code,
+                amount: "",
+                fee_amount: 0,
+                is_confirmed: true,
+                confirmation: 0,
+                trx_type: "Mutasi Kas",
+                description: "",
+                admin_fee: "" || 0,
+                warehouse_id: 1,
+            });
+            setErrors([]);
+            setSwitchTab(false);
+            if (messageToCourier) {
+                await sendTelegramAlert({
+                    title: "PERMINTAAN KIRIM UANG",
+                    source: "HQ",
+                    message: messageToCourier,
+                    // forwardChatId: 851552604,
+                    forwardChatId: 8248669682,
+                });
+            }
+        } catch (error) {
+            setNotification({
+                type: "error",
+                message: error.response?.data?.message || "Something went wrong.",
+            });
+            setErrors(error.response?.data?.errors);
+        } finally {
+            setLoading(false);
+        }
+    };
     return (
         <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-4">

@@ -5,20 +5,7 @@ import formatDateTime from "@/libs/formatDateTime";
 import axios from "@/libs/axios";
 import { useState } from "react";
 import Pagination from "@/components/PaginateList";
-import {
-    ArrowDown,
-    ArrowUp,
-    CheckCheck,
-    CheckIcon,
-    Ellipsis,
-    FilterIcon,
-    MessageCircleWarningIcon,
-    NotebookPen,
-    PencilIcon,
-    SearchIcon,
-    TrashIcon,
-    XIcon,
-} from "lucide-react";
+import { ArrowDown, ArrowUp, Ellipsis, FilterIcon, MessageCircleWarningIcon, PencilIcon, TrashIcon } from "lucide-react";
 import Modal from "@/components/Modal";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
@@ -60,7 +47,7 @@ const JournalTable = ({
     const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(5);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
     const [isModalFilterJournalOpen, setIsModalFilterJournalOpen] = useState(false);
     const [isModalDeleteJournalOpen, setIsModalDeleteJournalOpen] = useState(false);
     const [isModalEditJournalOpen, setIsModalEditJournalOpen] = useState(false);

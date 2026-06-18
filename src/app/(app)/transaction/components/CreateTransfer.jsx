@@ -64,11 +64,11 @@ const CreateTransfer = ({
             fetchJournalsByWarehouse();
             // isModalOpen(false);
             setErrors([]);
-            if (calculateFee(formData.amount) !== formData.fee_amount) {
+            if (Number(calculateFee(formData.amount)) !== Number(formData.fee_amount)) {
                 {
                     sendTelegramAlert({
                         title: "SALAH INPUT HARGA",
-                        message: `Transfer uang ke ${successMessage} di ${user.role.warehouse.name}`,
+                        message: `Transfer uang ke ${successMessage} di ${user.role.warehouse.name}\n\n${response.data.journal.description}`,
                         source: user.role.warehouse.name,
                     });
                 }

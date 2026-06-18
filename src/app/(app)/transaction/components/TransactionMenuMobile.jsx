@@ -13,6 +13,8 @@ import CreateMutation from "./CreateMutation";
 import { set } from "date-fns";
 
 const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance, setNotification, mutateCashBankBalance, cashBank, cashId, warehouse }) => {
+    const warehouseCashId = Number(user?.role?.warehouse?.chart_of_account_id);
+
     const [isVoucherMenuOpen, setIsVoucherMenuOpen] = useState(false);
     const [isExpenseMenuOpen, setIsExpenseMenuOpen] = useState(false);
 
@@ -25,6 +27,7 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
     const [isModalCreateMutationToHqOpen, setIsModalCreateMutationToHqOpen] = useState(false);
     const [isModalCreateMutationOpen, setIsModalCreateMutationOpen] = useState(false);
     const [selectedBankAccount, setSelectedBankAccount] = useState("");
+    const [isMutateToHqActive, setIsMutateToHqActive] = useState(false);
 
     const [isTransferActive, setIsTransferActive] = useState(false);
     const [isCashWithdrawalActive, setIsCashWithdrawalActive] = useState(false);
@@ -332,29 +335,57 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                 <CreateDeposit isModalOpen={setIsModalCreateDepositOpen} notification={setNotification} fetchJournalsByWarehouse={fetchJournalsByWarehouse} />
             </Modal>
             {/* Expenses */}
-            <Modal isOpen={isModalCreateMutationToHqOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Pengembalian Saldo Kas & Bank">
-                <CreateMutationToHq
-                    cashBank={cashBank}
-                    isModalOpen={setIsModalCreateMutationToHqOpen}
-                    notification={setNotification}
-                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                    user={user}
-                    accountBalance={accountBalance}
-                    mutateCashBankBalance={mutateCashBankBalance}
-                    openingCash={openingCash}
-                    cashId={cashId}
-                />
-            </Modal>
-            <Modal isOpen={isModalCreateMutationOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Mutasi Antar Bank">
-                <CreateMutation
-                    cashBank={cashBank}
-                    isModalOpen={setIsModalCreateMutationOpen}
-                    notification={setNotification}
-                    fetchJournalsByWarehouse={fetchJournalsByWarehouse}
-                    user={user}
-                    accountBalance={accountBalance}
-                    openingCash={openingCash}
-                />
+            <Modal
+                isOpen={isModalCreateMutationOpen}
+                onClose={closeModal}
+                maxWidth={"max-w-xl"}
+                modalTitle={`${isMutateToHqActive ? "Pengembalian Saldo Kas & Bank" : "Mutasi Saldo Bank"}`}
+            >
+                <div className="flex mb-4 justify-evenly w-full">
+                    <button
+                        onClick={() => {
+                            setIsMutateToHqActive(false);
+                        }}
+                        className={`${
+                            !isMutateToHqActive ? "bg-lime-500 text-white scale-105 text-sm" : "bg-slate-400 text-slate-300 text-xs"
+                        } w-full py-1 cursor-pointer hover:text-sm transition-all duration-100 ease-in`}
+                    >
+                        Ke Akun Sendiri
+                    </button>
+                    <button
+                        onClick={() => {
+                            setIsMutateToHqActive(true);
+                        }}
+                        className={`${
+                            isMutateToHqActive ? "bg-lime-500 text-white scale-105 text-sm" : "bg-slate-400 text-slate-300 text-xs"
+                        } w-full py-1 cursor-pointer hover:text-sm transition-all duration-100 ease-in`}
+                    >
+                        Ke Pusat (Headquarter)
+                    </button>
+                </div>
+                {isMutateToHqActive ? (
+                    <CreateMutationToHq
+                        cashBank={cashBank}
+                        isModalOpen={setIsModalCreateMutationToHqOpen}
+                        notification={setNotification}
+                        fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                        user={user}
+                        accountBalance={accountBalance}
+                        mutateCashBankBalance={mutateCashBankBalance}
+                        openingCash={openingCash}
+                        cashId={warehouseCashId}
+                    />
+                ) : (
+                    <CreateMutation
+                        cashBank={cashBank}
+                        isModalOpen={setIsModalCreateMutationOpen}
+                        notification={setNotification}
+                        fetchJournalsByWarehouse={fetchJournalsByWarehouse}
+                        user={user}
+                        accountBalance={accountBalance}
+                        openingCash={openingCash}
+                    />
+                )}
             </Modal>
             <Modal isOpen={isModalCreateBankAdminFeeOpen} onClose={closeModal} maxWidth={"max-w-xl"} modalTitle="Biaya Administrasi Bank">
                 <CreateBankAdminFee

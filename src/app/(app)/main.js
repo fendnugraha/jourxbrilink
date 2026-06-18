@@ -1,5 +1,5 @@
 "use client";
-import { Bike, ChessQueen, CirclePowerIcon, GemIcon, LoaderIcon, MenuIcon, Plus, Power, Star, Trophy, XIcon } from "lucide-react";
+import { Bike, ChessQueen, CirclePowerIcon, GemIcon, LoaderIcon, Lock, LogOut, MenuIcon, Plus, Power, Star, Trophy, XIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import ResponsiveNavLink, { ResponsiveNavButton } from "@/components/ResponsiveNavLink";
 import { usePathname } from "next/navigation";
@@ -42,6 +42,8 @@ const MainPage = ({ children, headerTitle }) => {
     const WarehouseRank = profit?.data?.revenue?.findIndex((item) => Number(item.warehouse_id) === Number(userWarehouseId)) + 1 || 0;
     const WarehouseRankProfit = profit?.data?.revenue?.find((item) => Number(item.warehouse_id) === Number(userWarehouseId))?.total || 0;
     const WarehouseMonthlyProfit = profit?.data?.totalProfitMonthly?.find((item) => Number(item.warehouse_id) === Number(userWarehouseId))?.average_profit || 0;
+    const WarehouseStatus = user?.role?.warehouse?.status;
+
     const toOrdinal = (number) => {
         const suffixes = ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"];
         const mod = number % 100;
@@ -108,19 +110,30 @@ const MainPage = ({ children, headerTitle }) => {
 
     const { journals, error: journalError, isValidating } = useGetMutationJournal(todayJakarta, todayJakarta);
     const filteredJournals = journals?.filter((journal) => journal?.status === 0);
+
+    // console.log(WarehouseStatus);
     return (
         <>
             {!attCheck?.approval_status && isWithinTime && userWarehouseId !== 1 && userRole !== "Super Admin" && (
-                <div className="p-4 fixed h-screen overflow-hidden z-9999 bg-slate-800/50 backdrop-blur-sm w-screen text-white flex flex-col items-center justify-center">
+                <div className="p-4 fixed top-0 left-0 h-screen overflow-hidden z-9999 bg-slate-800/50 backdrop-blur-sm w-screen text-white flex flex-col items-center justify-center">
                     <AttendanceForm attCheckMutate={attCheckMutate} openMessage={setAttSuccessMessageOpen} />
                 </div>
             )}
             {attSuccessMessageOpen && (
-                <div className="p-4 fixed h-screen overflow-hidden z-9999 bg-slate-800/50 backdrop-blur-sm w-screen text-white flex flex-col items-center justify-center">
+                <div className="p-4 fixed top-0 left-0 h-screen overflow-hidden z-9999 bg-slate-800/50 backdrop-blur-sm w-screen text-white flex flex-col items-center justify-center">
                     <p className="text-lg mb-4">Absensi Berhasil</p>
                     <ShareAttendance attendance={attCheck} warehouseOpeningTime={warehouseOpeningTime} />
                     <button onClick={() => setAttSuccessMessageOpen(false)} className="bg-white text-slate-800 px-4 py-2 rounded-full mt-4">
                         OK
+                    </button>
+                </div>
+            )}
+
+            {attCheck?.approval_status && WarehouseStatus === 3 && (
+                <div className="p-4 fixed top-0 left-0 h-screen overflow-hidden z-9999 bg-black/80 w-screen text-white flex flex-col gap-4 items-center justify-center">
+                    <Lock size={250} />
+                    <button className="bg-red-700 text-white p-4 rounded-full" onClick={logout}>
+                        <LogOut size={25} />
                     </button>
                 </div>
             )}

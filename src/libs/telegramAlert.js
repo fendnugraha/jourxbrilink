@@ -6,12 +6,13 @@ import axios from "axios";
  * @param {string} source - Lokasi/Fitur yang memicu (Contoh: "Halaman Kasir")
  * @param {string} details - Isi pesan lengkap/kronologi
  */
-export const sendTelegramAlert = async ({ title, source, message }) => {
+export const sendTelegramAlert = async ({ title, source, message, forwardChatId }) => {
     try {
         const payload = {
             type: title,
             warehouse: source,
             message: message,
+            forwardChatId: forwardChatId,
         };
 
         // Menembak API internal send-report Next.js Anda

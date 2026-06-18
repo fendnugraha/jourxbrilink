@@ -30,8 +30,8 @@ const CreateMutationToHq = ({
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
 
-    const hqAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === 1);
-    const branchAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === Number(user.role?.warehouse_id));
+    const hqAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === 1 && cashBank.account_id === 2);
+    const branchAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === Number(user.role?.warehouse_id) && cashBank.account_id === 2);
     useEffect(() => {
         if (!["Administrator", "Super Admin"].includes(user?.role?.role)) return;
         if (!formData.cred_code || !cashBank?.length) return;
@@ -155,7 +155,6 @@ const CreateMutationToHq = ({
                             setFormData({
                                 ...formData,
                                 cred_code: Number(e.target.value),
-
                                 amount: isAdmin
                                     ? Number(e.target.value) === Number(user?.role?.warehouse?.chart_of_account_id)
                                         ? Number(calculateDepositCash)
@@ -163,7 +162,6 @@ const CreateMutationToHq = ({
                                           ? balanceDifference
                                           : 0
                                     : "",
-
                                 debt_code: isAdmin ? (Number(e.target.value) === Number(user?.role?.warehouse?.chart_of_account_id) ? 2 : "") : "",
                             });
                         }}

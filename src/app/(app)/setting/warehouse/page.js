@@ -3,7 +3,7 @@ import Notification from "@/components/Notification";
 import { useCallback, useEffect, useState } from "react";
 import MainPage from "../../main";
 import Paginator from "@/components/Paginator";
-import { EyeIcon, MapPinIcon, MessageCircleWarningIcon, PencilIcon, PlusIcon, SearchIcon, TrashIcon } from "lucide-react";
+import { EyeIcon, Lock, MapPinIcon, MessageCircleWarningIcon, PencilIcon, PlusIcon, SearchIcon, TrashIcon, Unlock } from "lucide-react";
 import Link from "next/link";
 import Modal from "@/components/Modal";
 import Button from "@/components/Button";
@@ -31,6 +31,7 @@ const Warehouse = () => {
     const [isModalDeleteWarehouseOpen, setIsModalDeleteWarehouseOpen] = useState(false);
     const [isModalUpdateWarehouseOpen, setIsModalUpdateWarehouseOpen] = useState(false);
     const [selectedWarehouseId, setSelectedWarehouseId] = useState(null);
+    const [lockedWarehouse, setLockedWarehouse] = useState(false);
     const closeModal = () => {
         setIsModalCreateWarehouseOpen(false);
         setIsModalCreateAccountOpen(false);
@@ -130,6 +131,23 @@ const Warehouse = () => {
     }, [fetchZones]);
 
     const headquarter = warehouses.data?.find((warehouse) => warehouse?.id === 1);
+
+    const changeLockStatus = async (id) => {
+        try {
+            const response = await axios.put(`api/change-lock-status/${id}`);
+            setNotification({
+                type: "success",
+                message: response.data.message,
+            });
+            fetchWarehouses();
+        } catch (error) {
+            setErrors(error.response?.data?.errors || ["Something went wrong."]);
+            setNotification({
+                type: "error",
+                message: error.response?.data?.message || "Update failed",
+            });
+        }
+    };
     return (
         <MainPage headerTitle="Warehouse">
             <div className="p-8">
@@ -198,7 +216,20 @@ const Warehouse = () => {
                                     warehouses?.data?.map((warehouse) => (
                                         <tr key={warehouse?.id}>
                                             <td>
-                                                <span className="font-bold text-green-600 dark:text-green-400">{warehouse?.name}</span>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="font-bold text-green-600 dark:text-green-400">{warehouse?.name}</span>
+                                                    <button
+                                                        className="bg-green-100 hover:bg-green-200 p-1 rounded-full"
+                                                        onClick={() => changeLockStatus(warehouse?.id)}
+                                                        hidden={warehouse?.id === 1}
+                                                    >
+                                                        {warehouse?.status === 3 ? (
+                                                            <Lock size={14} strokeWidth={3} className="text-red-600 dark:text-red-500" />
+                                                        ) : (
+                                                            <Unlock size={14} strokeWidth={3} className="text-green-600 dark:text-green-800" />
+                                                        )}
+                                                    </button>
+                                                </div>
                                                 <span className="block text-xs">
                                                     {warehouse?.code}, {warehouse?.chart_of_account.acc_name}, {formatDateTime(warehouse?.created_at)}
                                                 </span>

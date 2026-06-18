@@ -3,8 +3,9 @@ import { useState, useEffect, use } from "react";
 import axios from "@/libs/axios";
 import Label from "@/components/Label";
 import formatNumber from "@/libs/formatNumber";
-import { DateTimeNow } from "@/libs/format";
+import { DateTimeNow, formatDateTime } from "@/libs/format";
 import { Clock, Power } from "lucide-react";
+import { sendTelegramAlert } from "@/libs/telegramAlert";
 
 const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJournalsByWarehouse, warehouses, accountBalance = [] }) => {
     const { today } = DateTimeNow();
@@ -54,6 +55,14 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
 
     const fiindAccount = accountBalance?.data?.chartOfAccounts?.find((acc) => acc.warehouse_id === 1 && acc.id === Number(formData.cred_code));
 
+    const destWarehouse = warehouses?.find((warehouse) => Number(warehouse.id) === Number(selectedWarehouseId));
+    const selectedDebt = branchAccount?.find((acc) => Number(acc.id) === Number(formData.debt_code)) ?? {};
+
+    const messageToCourier =
+        selectedDebt.account_id === 1 && selectedDebt.warehouse_id !== 1
+            ? `${formatDateTime(today)}\n\nTujuan: *${destWarehouse?.name}*\nJumlah: ${formatNumber(formData.amount)}.`
+            : null;
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -81,6 +90,15 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                 warehouse_id: 1,
             });
             setErrors([]);
+            if (messageToCourier) {
+                await sendTelegramAlert({
+                    title: "PERMINTAAN KIRIM UANG",
+                    source: "HQ",
+                    message: messageToCourier,
+                    // forwardChatId: 851552604,
+                    forwardChatId: 8248669682,
+                });
+            }
         } catch (error) {
             notification({
                 type: "error",

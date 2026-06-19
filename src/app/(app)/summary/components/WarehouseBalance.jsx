@@ -162,7 +162,7 @@ const WarehouseBalance = () => {
                                     </td>
                                     <td className="text-center text-slate-500">{<TimeAgo timestamp={w.updated_at} />}</td>
                                     <td className="text-center text-slate-500">
-                                        <button onClick={() => changeLockStatus(w.id)}>
+                                        <button onClick={() => changeLockStatus(w.id)} hidden={w.id === 1}>
                                             {w.status === 1 ? <Unlock size={14} className="text-green-500" /> : <Lock size={14} className="text-red-300" />}
                                         </button>
                                     </td>

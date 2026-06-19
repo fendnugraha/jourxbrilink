@@ -134,7 +134,7 @@ const Warehouse = () => {
 
     const changeLockStatus = async (id) => {
         try {
-            const response = await axios.put(`api/change-lock-status/${id}`);
+            const response = await axios.put(`api/toggle-lock-status-by-id/${id}`);
             setNotification({
                 type: "success",
                 message: response.data.message,

@@ -116,6 +116,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
     const limitSummary = accountBalance?.data?.chartOfAccounts?.reduce((total, account) => total + Number(account.limit?.limit_amount), 0);
 
     const handleClosing = async () => {
+        if (confirm("Anda yakin ingin menutup shift?") === false) return;
         setLoading(true);
         try {
             copyData();
@@ -125,9 +126,9 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                 warehouse: warehouseName,
                 message: copyDailyReport(),
             });
+            changeLockStatus(warehouse);
             alert("Shift berhasil ditutup!");
             setShowCloseStore(false);
-            changeLockStatus(warehouse);
         } catch (error) {
             console.log(error);
             alert("Terjadi kesalahan saat menutup shift.");
@@ -138,7 +139,9 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
 
     const changeLockStatus = async (id) => {
         try {
-            await axios.put(`api/change-lock-status/${id}`);
+            await axios.put(`api/change-lock-status/${id}`, {
+                status: 3,
+            });
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
             console.log(error);
@@ -169,6 +172,8 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
     const end = 23 * 60 + 45; // 1425 menit
 
     const isWithinTime = currentMinutes >= start && currentMinutes <= end;
+
+    console.log(accountBalance);
     return (
         <>
             <div className="relative">
@@ -332,6 +337,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                                 }}
                                 className="text-xs text-slate-100 active:scale-90 bg-red-500 hover:bg-red-400 px-1 py-0.5 rounded-md flex items-center gap-1"
                                 hidden={!isWithinTime || warehouse === 1}
+                                // hidden={warehouse === 1}
                             >
                                 Tutup Toko{" "}
                                 <span className="bg-red-300 rounded-full p-0.5 text-white">
@@ -451,9 +457,11 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
             <div
                 className={`fixed z-100000 top-0 left-0 w-screen ${showCloseStore ? "h-screen" : "h-0 overflow-hidden"} bg-black/80 backdrop-blur-sm flex flex-col gap-6 justify-center items-center transition-all duration-500 ease-in-out`}
             >
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="flex flex-col gap-4 items-center">
-                        <QRCodeSVG value={copyDailyReport()} size={150} />
+                        <div className="bg-white rounded-lg p-4">
+                            <QRCodeSVG value={copyDailyReport()} size={100} />
+                        </div>
                         <button
                             className="cursor-pointer border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1 text-slate-100 transition-transform duration-75 flex items-center gap-1 hover:scale-110"
                             onClick={() => copyData()}
@@ -461,24 +469,31 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                             <CopyIcon size={20} className={`${isCopied ? "text-green-500" : ""}`} /> {isCopied ? "Copied" : "Copy"}
                         </button>
                     </div>
-                    <div className="flex flex-col justify-between text-white">
-                        <div>
-                            <h1 className="text-sm font-bold">Total Pendapatan</h1>
-                            <h1 className="text-lg font-bold text-end text-teal-500 dark:text-teal-300">{formatNumber(totalSetoran)}</h1>
-                            <h1 className="text-sm font-bold">Kas Awal</h1>
-                            <h1 className="text-lg font-bold text-end text-red-300 dark:text-red-500">{formatNumber(openingCash)}</h1>
-                            <h1 className="text-sm font-bold mt-5">Total Uang Disetor</h1>
-                            <h1 className="text-2xl font-bold text-end text-red-300 dark:text-red-500">
-                                {formatNumber(dailyDashboard?.data?.totalCash > openingCash ? totalSetoran - openingCash : totalSetoran)}
-                            </h1>
-                        </div>
+                    <div className="flex flex-col justify-between text-white border border-slate-500 p-4 rounded-2xl sm:col-span-2">
+                        <h1 className="text-sm font-bold">{warehouseName}</h1>
+                        <table className="w-full border-b border-slate-500 text-sm">
+                            <tbody>
+                                <tr>
+                                    <td className="p-1">Total Pendapatan</td>
+                                    <td className="text-end font-bold">{formatNumber(totalSetoran)}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-1">Kas Awal</td>
+                                    <td className="text-end font-bold">{formatNumber(openingCash)}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h1 className="text-sm font-bold mt-5">Total Uang Disetor</h1>
+                        <h1 className="text-xl font-semibold text-end text-yellow-300 dark:text-yellow-500">
+                            {formatRupiah(dailyDashboard?.data?.totalCash > openingCash ? totalSetoran - openingCash : totalSetoran)}
+                        </h1>
 
                         <button
-                            className={`py-2 px-4 bg-amber-500 rounded-lg disabled:bg-slate-500`}
+                            className={`py-2 px-4 bg-amber-500 rounded-lg disabled:bg-slate-500 hover:bg-amber-400 mt-4`}
                             onClick={() => handleClosing()}
-                            disabled={totalSetoran < openingCash}
+                            disabled={totalSetoran < openingCash || loading}
                         >
-                            {loading ? "Loading..." : "Setorkan Kas"}
+                            {loading ? "Now Loading..." : "Setorkan Kas"}
                         </button>
                     </div>
                 </div>

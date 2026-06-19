@@ -21,6 +21,7 @@ export const closingShift = async ({ cred_code, amount, message, warehouse }) =>
             title: "💰 CLOSING SHIFT",
             source: warehouse,
             message: message,
+            forwardChatId: 851552604,
         });
 
         return response;

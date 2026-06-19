@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { ArrowDownIcon, ArrowUpDown, ArrowUpIcon, ChevronRightIcon, HandCoinsIcon, ShoppingBagIcon } from "lucide-react";
+import { ArrowDownIcon, ArrowUpDown, ArrowUpIcon, ChevronRightIcon, HandCoinsIcon, Handshake, ShoppingBagIcon } from "lucide-react";
 import CreateTransfer from "./CreateTransfer";
 import CreateCashWithdrawal from "./CreateCashWithdrawal";
 import CreateVoucher from "./CreateVoucher";
@@ -107,7 +107,7 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
         }
     }, [personalSetting, loaded]);
     return (
-        <div ref={menuRef} className="fixed sm:hidden bottom-0 w-full z-[999]">
+        <div ref={menuRef} className="fixed sm:hidden bottom-0 w-full z-999">
             <div className={`text-white ${!isVoucherMenuOpen ? "hidden" : "flex flex-col justify-between items-center px-4"}`}>
                 <div className="rounded-2xl bg-white w-full shadow-xl border border-slate-300">
                     <button
@@ -141,24 +141,24 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                 </div>
             </div>
             <div className="h-fit p-2">
-                <div className="flex bg-gray-600/50 backdrop-blur-sm shadow-xl border border-slate-300 justify-between items-center rounded-2xl h-full text-white">
+                <div className="flex bg-gray-600/50 backdrop-blur-sm shadow-xl border border-slate-300 justify-between items-center rounded-3xl h-full text-white">
                     <button
                         onClick={() => {
                             setIsVoucherMenuOpen(!isVoucherMenuOpen);
                             setIsExpenseMenuOpen(false);
                         }}
-                        className="w-full flex flex-col items-center justify-center py-4 text-xs gap-1"
+                        className="w-full flex flex-col items-center justify-center py-2.5 text-xs gap-1"
                     >
-                        <ShoppingBagIcon className="w-7 h-7" /> Voucher
+                        <ShoppingBagIcon size={18} /> Voucher
                     </button>
                     <button
                         onClick={() => {
                             setIsExpenseMenuOpen(!isExpenseMenuOpen);
                             setIsVoucherMenuOpen(false);
                         }}
-                        className="w-full flex flex-col items-center justify-center py-4 text-xs gap-1"
+                        className="w-full flex flex-col items-center justify-center py-2.5 text-xs gap-1"
                     >
-                        <HandCoinsIcon className="w-7 h-7" /> Biaya
+                        <Handshake size={18} /> Biaya
                     </button>
                     <button
                         onClick={() => {
@@ -168,9 +168,9 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                             setIsTransferActive(false);
                             setIsCashWithdrawalActive(false);
                         }}
-                        className="w-full flex flex-col items-center justify-center py-4 text-xs gap-1"
+                        className="w-full flex flex-col items-center justify-center py-2.5 text-xs gap-1"
                     >
-                        <ArrowUpDown className="w-7 h-7" /> Mutasi
+                        <ArrowUpDown size={18} /> Mutasi
                     </button>
                     <button
                         onClick={() => {
@@ -181,9 +181,9 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                             setIsCashWithdrawalActive(false);
                             setIsModalCreateMutationOpen(false);
                         }}
-                        className="w-full flex flex-col items-center justify-center py-4 text-xs gap-1"
+                        className="w-full flex flex-col items-center justify-center py-2.5 text-xs gap-1"
                     >
-                        <ArrowUpIcon className="w-7 h-7" /> Transfer
+                        <ArrowUpIcon size={18} /> Transfer
                     </button>
                     <button
                         onClick={() => {
@@ -194,9 +194,9 @@ const TransactionMenuMobile = ({ user, fetchJournalsByWarehouse, accountBalance,
                             setIsCashWithdrawalActive(true);
                             setIsModalCreateMutationOpen(false);
                         }}
-                        className="w-full flex flex-col items-center justify-center py-4 text-xs gap-1"
+                        className="w-full flex flex-col items-center justify-center py-2.5 text-xs gap-1"
                     >
-                        <ArrowDownIcon className="w-7 h-7" /> Tarik Tunai
+                        <ArrowDownIcon size={18} /> Trk Tunai
                     </button>
                 </div>
             </div>

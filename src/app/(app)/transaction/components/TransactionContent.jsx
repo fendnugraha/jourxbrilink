@@ -168,7 +168,7 @@ const TransactionContent = () => {
                     cashBank={cashBank}
                 />
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                    <div className="card py-4 col-span-1 sm:col-span-3 order-2 sm:order-1 drop-shadow-sm h-fit">
+                    <div className="card py-4 col-span-1 sm:col-span-3 order-2 sm:order-1 drop-shadow-sm h-fit overflow-x-auto">
                         <div className="flex ml-4 mb-4 bg-slate-300 p-0.5 rounded-full w-fit">
                             <button
                                 onClick={() => setSelectTable("transaksi")}

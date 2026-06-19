@@ -142,6 +142,7 @@ const MainPage = ({ children, headerTitle }) => {
             {attCheck?.approval_status && Number(WarehouseStatus) === 3 && userRole !== "Super Admin" && (
                 <div className="p-4 fixed top-0 left-0 h-screen overflow-hidden z-9999 bg-black/80 w-screen text-white flex flex-col gap-4 items-center justify-center">
                     <Lock size={250} />
+                    {time}
                     <button className="bg-red-700 text-white p-4 rounded-full" onClick={logout}>
                         <LogOut size={25} />
                     </button>
@@ -195,7 +196,7 @@ const MainPage = ({ children, headerTitle }) => {
                                 </span>
                             </>
                         ) : (
-                            <div className="hidden sm:inline ml-2 border border-slate-300 dark:border-slate-600 px-1 py-0.5 rounded-full">
+                            <div className="hidden sm:inline ml-2 border bg-slate-200 dark:bg-slate-500 border-slate-300 dark:border-slate-600 px-1 py-0.5 rounded-full">
                                 {dayName}, {date} {time}
                             </div>
                         )}

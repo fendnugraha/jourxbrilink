@@ -116,7 +116,8 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
     const limitSummary = accountBalance?.data?.chartOfAccounts?.reduce((total, account) => total + Number(account.limit?.limit_amount), 0);
 
     const handleClosing = async () => {
-        if (confirm("Anda yakin ingin menutup shift?") === false) return;
+        if (confirm("Anda yakin ingin menutup shift, pastikan semua data sudah diinput?\n(Semua input data akan terkunci setelah kas disetor)") === false)
+            return;
         setLoading(true);
         try {
             copyData();
@@ -173,7 +174,6 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
 
     const isWithinTime = currentMinutes >= start && currentMinutes <= end;
 
-    console.log(accountBalance);
     return (
         <>
             <div className="relative">
@@ -336,8 +336,8 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                                     mutate(["/api/daily-dashboard", { warehouse, startDate, endDate }]);
                                 }}
                                 className="text-xs text-slate-100 active:scale-90 bg-red-500 hover:bg-red-400 px-1 py-0.5 rounded-md flex items-center gap-1"
-                                hidden={!isWithinTime || warehouse === 1}
-                                // hidden={warehouse === 1}
+                                // hidden={!isWithinTime || warehouse === 1}
+                                hidden={warehouse === 1}
                             >
                                 Tutup Toko{" "}
                                 <span className="bg-red-300 rounded-full p-0.5 text-white">
@@ -458,15 +458,15 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                 className={`fixed z-100000 top-0 left-0 w-screen ${showCloseStore ? "h-screen" : "h-0 overflow-hidden"} bg-black/80 backdrop-blur-sm flex flex-col gap-6 justify-center items-center transition-all duration-500 ease-in-out`}
             >
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="flex flex-col gap-4 items-center">
+                    <div className="flex flex-col gap-2 items-center">
                         <div className="bg-white rounded-lg p-4">
                             <QRCodeSVG value={copyDailyReport()} size={100} />
                         </div>
                         <button
-                            className="cursor-pointer border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1 text-slate-100 transition-transform duration-75 flex items-center gap-1 hover:scale-110"
+                            className="cursor-pointer text-xs border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1 text-slate-100 transition-transform duration-75 flex items-center gap-1 hover:scale-110"
                             onClick={() => copyData()}
                         >
-                            <CopyIcon size={20} className={`${isCopied ? "text-green-500" : ""}`} /> {isCopied ? "Copied" : "Copy"}
+                            <CopyIcon size={14} className={`${isCopied ? "text-green-500" : ""}`} /> {isCopied ? "Copied" : "Copy"}
                         </button>
                     </div>
                     <div className="flex flex-col justify-between text-white border border-slate-500 p-4 rounded-2xl sm:col-span-2">

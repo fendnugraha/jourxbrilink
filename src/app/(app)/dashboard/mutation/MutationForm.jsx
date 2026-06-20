@@ -174,7 +174,9 @@ const MutationForm = ({ setNotification, warehouses, accounts, fetchJournalsByWa
                     <div className="flex flex-col gap-2 max-h-fit bg-amber-100 dark:bg-slate-700 rounded-2xl p-2" hidden={!searchTerm && !selectedWarehouse}>
                         {selectedWarehouse && (
                             <div className="flex items-center gap-2 justify-between bg-amber-300 dark:bg-slate-800 rounded-xl p-2">
-                                <button className="text-start text-xs">{selectedWarehouse.name}</button>
+                                <button type="button" className="text-start text-xs">
+                                    {selectedWarehouse.name}
+                                </button>
                                 <button
                                     className="bg-red-500 rounded-full w-5 h-5 flex justify-center items-center text-start text-xs"
                                     onClick={() => {

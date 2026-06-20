@@ -9,7 +9,7 @@ export async function POST(request) {
         const text = `
 ${type}
 📍 *Sumber:* ${warehouse}
-📝 *Detail:* ${message}
+📝 *Detail:* \n${message}
         `.trim();
 
         const token = process.env.TELEGRAM_BOT_TOKEN;

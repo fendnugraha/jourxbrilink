@@ -18,7 +18,10 @@ const getCurrentDate = () => {
 };
 const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole, showOnlyQty = false, showOnlyVoucher = false }) => {
     const [transactions, setTransactions] = useState([]);
-    const [notification, setNotification] = useState("");
+    const [notification, setNotification] = useState({
+        type: "",
+        message: "",
+    });
 
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(getCurrentDate());
@@ -42,7 +45,10 @@ const VoucherSalesTable = ({ warehouse, warehouseName, warehouses, userRole, sho
             const response = await axios.get(`/api/get-trx-vcr/${selectedWarehouse}/${startDate}/${endDate}`);
             setTransactions(response.data.data);
         } catch (error) {
-            setNotification(error.response?.data?.message || "Something went wrong.");
+            setNotification({
+                type: "error",
+                message: error.response?.data?.message || "Something went wrong.",
+            });
             console.log(error);
         } finally {
             setLoading(false);

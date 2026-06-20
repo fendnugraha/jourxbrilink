@@ -5,6 +5,7 @@ import axios from "@/libs/axios";
 import { closingShift } from "@/libs/closingShift";
 import { DateTimeNow, formatDateTime, formatRupiah } from "@/libs/format";
 import formatNumber from "@/libs/formatNumber";
+import { sendTelegramAlert } from "@/libs/telegramAlert";
 import { ChevronDown, CircleAlertIcon, CopyIcon, LoaderCircle, Power, RefreshCcwIcon, ScanQrCodeIcon, SettingsIcon, X } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useState } from "react";
@@ -38,6 +39,8 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
     const [isCopied, setIsCopied] = useState(false);
     const [openingCash, setOpeningCash] = useState(0);
     const [showCloseStore, setShowCloseStore] = useState(false);
+    const [transactions, setTransactions] = useState([]);
+    const [statusText, setStatusText] = useState("");
 
     // Load data saat pertama kali mount
     useEffect(() => {
@@ -79,6 +82,54 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
     const [startDate, setStartDate] = useState(getCurrentDate());
     const [endDate, setEndDate] = useState(getCurrentDate());
 
+    const fetchTransaction = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.get(`/api/get-trx-vcr/${warehouse}/${startDate}/${endDate}`);
+            setTransactions(response.data.data);
+        } catch (error) {
+            setNotification({
+                type: "error",
+                message: error.response?.data?.message || "Something went wrong.",
+            });
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchTransaction();
+    }, [warehouse, startDate, endDate]);
+
+    const filterTrxVoucher = transactions.filter((transaction) => transaction.product.category === "Voucher & SP");
+    const filterTrxNonVoucher = transactions.filter((transaction) => transaction.product.category !== "Voucher & SP");
+
+    const formatVoucherText = () => {
+        const voucherQty = {};
+        const nonVoucherQty = {};
+
+        // 1. Hitung total untuk Voucher
+        filterTrxVoucher?.forEach((trx) => {
+            const name = trx.product.name;
+            const qty = Number(trx.quantity) || 0;
+            voucherQty[name] = (voucherQty[name] || 0) + qty;
+        });
+
+        // 2. Hitung total untuk Non-Voucher
+        filterTrxNonVoucher?.forEach((trx) => {
+            const name = trx.product.name;
+            const qty = Number(trx.quantity) || 0;
+            nonVoucherQty[name] = (nonVoucherQty[name] || 0) + qty;
+        });
+
+        // 3. Ubah objek menjadi baris teks (hapus * -1 jika tidak ingin hasilnya minus)
+        const voucherLines = Object.entries(voucherQty).map(([name, qty]) => `${name}: *${qty * -1}* pcs`);
+        const nonVoucherLines = Object.entries(nonVoucherQty).map(([name, qty]) => `${name}: *${qty * -1}* pcs`);
+
+        return `Voucher ${warehouseName}:\n\n${voucherLines.join("\n") || "Tidak ada data"}\n\n\nNon Voucher :\n${nonVoucherLines.join("\n") || "Tidak ada data"}`;
+    };
+
     const closeModal = () => {
         setIsModalSettingInitBalancesOpen(false);
     };
@@ -95,6 +146,12 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
         await navigator.clipboard.writeText(copyDailyReport());
         setIsCopied(true);
         setTimeout(() => setIsCopied(false), 9000);
+    };
+
+    const copySalesVoucher = async () => {
+        await navigator.clipboard.writeText(formatVoucherText());
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 3000);
     };
 
     const copyDailyReport = () => {
@@ -114,18 +171,33 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
         )}`;
     };
     const limitSummary = accountBalance?.data?.chartOfAccounts?.reduce((total, account) => total + Number(account.limit?.limit_amount), 0);
+    const limitPlusSummary = accountBalance?.data?.chartOfAccounts
+        ?.filter((acc) => acc.balance - acc.limit?.limit_amount > 0 && acc.account_id === 2)
+        .reduce((total, account) => total + Number(account.balance - account.limit?.limit_amount), 0);
 
     const handleClosing = async () => {
         if (confirm("Anda yakin ingin menutup shift, pastikan semua data sudah diinput?\n(Semua input data akan terkunci setelah kas disetor)") === false)
             return;
         setLoading(true);
+        setStatusText("Menutup shift...");
         try {
             copyData();
+            setStatusText("Menyalin report...");
             await closingShift({
                 cred_code: warehouseCashId, // Ganti dengan kode kredit yang sesuai
                 amount: dailyDashboard?.data?.totalCash - openingCash,
                 warehouse: warehouseName,
                 message: copyDailyReport(),
+            });
+            fetchTransaction();
+            // copySalesVoucher();
+            setStatusText("Mengirim laporan...");
+            await sendTelegramAlert({
+                title: "PENJUALAN BARANG",
+                source: warehouseName,
+                message: formatVoucherText(),
+                forwardChatId: 986761281,
+                // forwardChatId: 851552604,
             });
             changeLockStatus(warehouse);
             alert("Shift berhasil ditutup!");
@@ -135,6 +207,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
             alert("Terjadi kesalahan saat menutup shift.");
         } finally {
             setLoading(false);
+            setStatusText("");
         }
     };
 
@@ -336,8 +409,8 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                                     mutate(["/api/daily-dashboard", { warehouse, startDate, endDate }]);
                                 }}
                                 className="text-xs text-slate-100 active:scale-90 bg-red-500 hover:bg-red-400 px-1 py-0.5 rounded-md flex items-center gap-1"
-                                // hidden={!isWithinTime || warehouse === 1}
-                                hidden={warehouse === 1}
+                                hidden={!isWithinTime || warehouse === 1 || limitPlusSummary > 0}
+                                // hidden={warehouse === 1}
                             >
                                 Tutup Toko{" "}
                                 <span className="bg-red-300 rounded-full p-0.5 text-white">
@@ -493,7 +566,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                             onClick={() => handleClosing()}
                             disabled={totalSetoran < openingCash || loading}
                         >
-                            {loading ? "Now Loading..." : "Setorkan Kas"}
+                            {loading ? statusText : "Setorkan Kas"}
                         </button>
                     </div>
                 </div>

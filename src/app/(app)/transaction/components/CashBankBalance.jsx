@@ -183,13 +183,14 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
         try {
             copyData();
             setStatusText("Menyalin report...");
+            await fetchTransaction();
+
             await closingShift({
                 cred_code: warehouseCashId, // Ganti dengan kode kredit yang sesuai
                 amount: dailyDashboard?.data?.totalCash - openingCash,
                 warehouse: warehouseName,
                 message: copyDailyReport(),
             });
-            fetchTransaction();
             // copySalesVoucher();
             setStatusText("Mengirim laporan...");
             await sendTelegramAlert({

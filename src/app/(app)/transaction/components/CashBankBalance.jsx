@@ -41,6 +41,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
     const [showCloseStore, setShowCloseStore] = useState(false);
     const [transactions, setTransactions] = useState([]);
     const [statusText, setStatusText] = useState("");
+    const [isClosingComplete, setIsClosingComplete] = useState(false);
 
     // Load data saat pertama kali mount
     useEffect(() => {
@@ -83,47 +84,47 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
     const [endDate, setEndDate] = useState(getCurrentDate());
 
     const fetchTransaction = async () => {
-        setLoading(true);
         try {
             const response = await axios.get(`/api/get-trx-vcr/${warehouse}/${startDate}/${endDate}`);
-            setTransactions(response.data.data);
+            const data = response.data.data;
+
+            setTransactions(data); // Tetap di-set untuk kebutuhan UI/tampilan komponen
+            return data; // 🔥 Kembalikan data untuk kebutuhan proses urutan async
         } catch (error) {
             setNotification({
                 type: "error",
                 message: error.response?.data?.message || "Something went wrong.",
             });
             console.log(error);
-        } finally {
-            setLoading(false);
+            throw error; // 🔥 Lempar error agar jika API gagal, proses closing otomatis stop
         }
     };
-
-    useEffect(() => {
-        fetchTransaction();
-    }, [warehouse, startDate, endDate]);
 
     const filterTrxVoucher = transactions.filter((transaction) => transaction.product.category === "Voucher & SP");
     const filterTrxNonVoucher = transactions.filter((transaction) => transaction.product.category !== "Voucher & SP");
 
-    const formatVoucherText = () => {
+    const formatVoucherText = (latestTransactions) => {
+        // 🔥 Jika ada data dari parameter, pakai itu. Jika tidak, pakai state transactions.
+        const dataToUse = latestTransactions || transactions;
+
         const voucherQty = {};
         const nonVoucherQty = {};
 
-        // 1. Hitung total untuk Voucher
-        filterTrxVoucher?.forEach((trx) => {
-            const name = trx.product.name;
+        // Proses pemisahan voucher dan non-voucher langsung di dalam fungsi menggunakan data terbaru
+        dataToUse?.forEach((trx) => {
+            const name = trx.product?.name || "Produk Tanpa Nama";
             const qty = Number(trx.quantity) || 0;
-            voucherQty[name] = (voucherQty[name] || 0) + qty;
+
+            // Sesuaikan kondisi penanda voucher di bawah ini dengan logika filter Anda sebelumnya
+            // Contoh di bawah berasumsi ada properti 'is_voucher' atau sejenisnya pada produk/transaksi
+            if (trx.product?.is_voucher || trx.is_voucher) {
+                voucherQty[name] = (voucherQty[name] || 0) + qty;
+            } else {
+                nonVoucherQty[name] = (nonVoucherQty[name] || 0) + qty;
+            }
         });
 
-        // 2. Hitung total untuk Non-Voucher
-        filterTrxNonVoucher?.forEach((trx) => {
-            const name = trx.product.name;
-            const qty = Number(trx.quantity) || 0;
-            nonVoucherQty[name] = (nonVoucherQty[name] || 0) + qty;
-        });
-
-        // 3. Ubah objek menjadi baris teks (hapus * -1 jika tidak ingin hasilnya minus)
+        // Ubah objek menjadi baris teks
         const voucherLines = Object.entries(voucherQty).map(([name, qty]) => `${name}: *${qty * -1}* pcs`);
         const nonVoucherLines = Object.entries(nonVoucherQty).map(([name, qty]) => `${name}: *${qty * -1}* pcs`);
 
@@ -154,6 +155,11 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
         setTimeout(() => setIsCopied(false), 3000);
     };
 
+    const closingStatus = () => {
+        setIsClosingComplete(true);
+        setTimeout(() => setIsClosingComplete(false), 300000);
+    };
+
     const copyDailyReport = () => {
         const dailyReportData = [
             { name: "Kas", value: formatNumber(dailyDashboard?.data?.totalCash - openingCash) },
@@ -178,36 +184,43 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
     const handleClosing = async () => {
         if (confirm("Anda yakin ingin menutup shift, pastikan semua data sudah diinput?\n(Semua input data akan terkunci setelah kas disetor)") === false)
             return;
-        setLoading(true);
+
+        setLoading(true); // Cukup satu loading utama di sini untuk mengontrol seluruh alur
         setStatusText("Menutup shift...");
+
         try {
-            copyData();
+            await copyData();
+
             setStatusText("Menyalin report...");
-            await fetchTransaction();
+            // 🔥 Ambil data terbaru langsung dari return fungsi fetch
+            const latestTransactions = await fetchTransaction();
 
             await closingShift({
-                cred_code: warehouseCashId, // Ganti dengan kode kredit yang sesuai
+                cred_code: warehouseCashId,
                 amount: dailyDashboard?.data?.totalCash - openingCash,
                 warehouse: warehouseName,
                 message: copyDailyReport(),
             });
-            // copySalesVoucher();
+
             setStatusText("Mengirim laporan...");
             await sendTelegramAlert({
                 title: "PENJUALAN BARANG",
                 source: warehouseName,
-                message: formatVoucherText(),
+                // 🔥 Oper data transaksi terbaru ke pembuat format teks
+                message: formatVoucherText(latestTransactions),
                 forwardChatId: 986761281,
                 // forwardChatId: 851552604,
             });
+
             changeLockStatus(warehouse);
             alert("Shift berhasil ditutup!");
             setShowCloseStore(false);
+            closingStatus();
         } catch (error) {
             console.log(error);
             alert("Terjadi kesalahan saat menutup shift.");
         } finally {
-            setLoading(false);
+            setLoading(false); // Loading dimatikan HANYA jika semua proses di atas selesai/gagal
             setStatusText("");
         }
     };
@@ -565,7 +578,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                         <button
                             className={`py-2 px-4 bg-amber-500 rounded-lg disabled:bg-slate-500 hover:bg-amber-400 mt-4`}
                             onClick={() => handleClosing()}
-                            disabled={totalSetoran < openingCash || loading}
+                            disabled={totalSetoran < openingCash || loading || isClosingComplete}
                         >
                             {loading ? statusText : "Setorkan Kas"}
                         </button>

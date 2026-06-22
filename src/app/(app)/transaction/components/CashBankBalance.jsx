@@ -6,7 +6,7 @@ import { closingShift } from "@/libs/closingShift";
 import { DateTimeNow, formatDateTime, formatRupiah } from "@/libs/format";
 import formatNumber from "@/libs/formatNumber";
 import { sendTelegramAlert } from "@/libs/telegramAlert";
-import { ChevronDown, CircleAlertIcon, CopyIcon, LoaderCircle, Power, RefreshCcwIcon, ScanQrCodeIcon, SettingsIcon, X } from "lucide-react";
+import { Check, ChevronDown, CircleAlertIcon, CopyIcon, LoaderCircle, Power, RefreshCcwIcon, ScanQrCodeIcon, SettingsIcon, X } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
@@ -100,9 +100,6 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
         }
     };
 
-    const filterTrxVoucher = transactions.filter((transaction) => transaction.product.category === "Voucher & SP");
-    const filterTrxNonVoucher = transactions.filter((transaction) => transaction.product.category !== "Voucher & SP");
-
     const formatVoucherText = (latestTransactions) => {
         // 🔥 Jika ada data dari parameter, pakai itu. Jika tidak, pakai state transactions.
         const dataToUse = latestTransactions || transactions;
@@ -157,7 +154,11 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
 
     const closingStatus = () => {
         setIsClosingComplete(true);
-        setTimeout(() => setIsClosingComplete(false), 300000);
+        setStatusText("Selesai.");
+        setTimeout(() => {
+            setIsClosingComplete(false);
+            setStatusText("");
+        }, 300000);
     };
 
     const copyDailyReport = () => {
@@ -200,6 +201,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                 amount: dailyDashboard?.data?.totalCash - openingCash,
                 warehouse: warehouseName,
                 message: copyDailyReport(),
+                warehouseId: warehouse,
             });
 
             setStatusText("Mengirim laporan...");
@@ -215,13 +217,12 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
             changeLockStatus(warehouse);
             alert("Shift berhasil ditutup!");
             setShowCloseStore(false);
-            closingStatus();
         } catch (error) {
             console.log(error);
             alert("Terjadi kesalahan saat menutup shift.");
         } finally {
             setLoading(false); // Loading dimatikan HANYA jika semua proses di atas selesai/gagal
-            setStatusText("");
+            closingStatus();
         }
     };
 
@@ -424,7 +425,6 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                                 }}
                                 className="text-xs text-slate-100 active:scale-90 bg-red-500 hover:bg-red-400 px-1 py-0.5 rounded-md flex items-center gap-1"
                                 hidden={!isWithinTime || warehouse === 1 || limitPlusSummary > 0}
-                                // hidden={warehouse === 1}
                             >
                                 Tutup Toko{" "}
                                 <span className="bg-red-300 rounded-full p-0.5 text-white">
@@ -547,7 +547,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="flex flex-col gap-2 items-center">
                         <div className="bg-white rounded-lg p-4">
-                            <QRCodeSVG value={copyDailyReport()} size={100} />
+                            <QRCodeSVG value={copyDailyReport()} size={120} />
                         </div>
                         <button
                             className="cursor-pointer text-xs border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1 text-slate-100 transition-transform duration-75 flex items-center gap-1 hover:scale-110"
@@ -575,16 +575,23 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                             {formatRupiah(dailyDashboard?.data?.totalCash > openingCash ? totalSetoran - openingCash : totalSetoran)}
                         </h1>
 
-                        <button
-                            className={`py-2 px-4 bg-amber-500 rounded-lg disabled:bg-slate-500 hover:bg-amber-400 mt-4`}
-                            onClick={() => handleClosing()}
-                            disabled={totalSetoran < openingCash || loading || isClosingComplete}
-                        >
-                            {loading ? statusText : "Setorkan Kas"}
-                        </button>
+                        {isClosingComplete ? (
+                            <span className="text-xs text-slate-300 py-2 flex items-center gap-1">
+                                Setoran selesai <Check size={14} className="text-green-500" />
+                            </span>
+                        ) : (
+                            <button
+                                type="button"
+                                className={`py-2 px-4 bg-amber-500 rounded-lg disabled:bg-slate-500 hover:bg-amber-400 mt-4`}
+                                onClick={() => handleClosing()}
+                                disabled={totalSetoran < openingCash || loading || isClosingComplete}
+                            >
+                                {loading ? statusText : "Setorkan Kas"}
+                            </button>
+                        )}
                     </div>
                 </div>
-                <button className={`p-4 bg-red-500 rounded-full`} onClick={() => setShowCloseStore(false)}>
+                <button type="button" className={`p-4 bg-red-500 rounded-full`} onClick={() => setShowCloseStore(false)}>
                     <X size={20} />
                 </button>
             </div>

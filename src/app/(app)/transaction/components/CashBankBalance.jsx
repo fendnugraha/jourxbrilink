@@ -114,7 +114,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
 
             // Sesuaikan kondisi penanda voucher di bawah ini dengan logika filter Anda sebelumnya
             // Contoh di bawah berasumsi ada properti 'is_voucher' atau sejenisnya pada produk/transaksi
-            if (trx.product?.is_voucher || trx.is_voucher) {
+            if (trx.product?.category === "Vaoucher & SP") {
                 voucherQty[name] = (voucherQty[name] || 0) + qty;
             } else {
                 nonVoucherQty[name] = (nonVoucherQty[name] || 0) + qty;

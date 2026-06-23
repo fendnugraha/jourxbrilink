@@ -21,7 +21,9 @@ const AttendanceSummaryList = ({ employees, search, selectedZone }) => {
                 Number(employee.warehouse?.warehouse_zone_id) === Number(selectedZone) ||
                 Number(employee.contact?.zone?.id) === Number(selectedZone);
 
-            return matchSearch && matchZone;
+            const hasRating = (employee.attendance_rating?.rating ?? 0) > 0;
+
+            return matchSearch && matchZone && hasRating;
         })
         .sort((a, b) => b.attendance_rating?.rating - a.attendance_rating?.rating);
 

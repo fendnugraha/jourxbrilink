@@ -43,6 +43,7 @@ const MainPage = ({ children, headerTitle }) => {
     const WarehouseRankProfit = profit?.data?.revenue?.find((item) => Number(item.warehouse_id) === Number(userWarehouseId))?.total || 0;
     const WarehouseMonthlyProfit = profit?.data?.totalProfitMonthly?.find((item) => Number(item.warehouse_id) === Number(userWarehouseId))?.average_profit || 0;
     const WarehouseStatus = user?.role?.warehouse?.status;
+    const appVersion = process.env.NEXT_PUBLIC_APP_VERSION || process.env.APP_VERSION;
 
     const toOrdinal = (number) => {
         const suffixes = ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"];
@@ -309,7 +310,10 @@ const MainPage = ({ children, headerTitle }) => {
                         <li className="flex items-center justify-between px-4 py-2">
                             <div className="flex items-center gap-2">
                                 <DarkModeToggle />
-                                <h1 className="text-md font-bold">{user?.role?.warehouse?.name}</h1>
+                                <h1 className="text-md font-bold">
+                                    {user?.role?.warehouse?.name}
+                                    <span className="text-xs block text-slate-400">{appVersion}</span>
+                                </h1>
                             </div>
                             <span className="text-sm">{user?.role?.role}</span>
                         </li>

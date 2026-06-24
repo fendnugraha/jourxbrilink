@@ -68,10 +68,10 @@ const AttendanceSummaryList = ({ employees, search, selectedZone }) => {
             </table>
             <div className="p-4">
                 <div className="grid grid-cols-3 gap-2 items-end">
-                    <div className="flex flex-col items-center justify-center bg-amber-400 dark:bg-sky-900 rounded-t-3xl h-64">
-                        <h1 className="font-black">2nd</h1>
-                        <Medal size={50} fill="yellow" className="dark:text-yellow-600" />
-                        <span className="text-3xl font-bold">{filteredSortedEmployees?.[1]?.attendance_rating?.rating ?? 0}</span>
+                    <div className="flex flex-col items-center justify-center text-white bg-gray-700 dark:bg-slate-600 rounded-t-3xl h-64">
+                        <h1 className="font-black">{filteredSortedEmployees?.[1]?.attendance_rating?.rating ?? 0}</h1>
+                        <Medal size={50} fill="silver" className="text-gray-500" />
+                        <span className="text-3xl font-bold">2nd</span>
                         <h1 className="font-bold bg-amber-600 dark:bg-sky-700 text-xs px-2 rounded-full text-white my-2">
                             {filteredSortedEmployees?.[1]?.contact?.name ?? ""}
                         </h1>
@@ -86,10 +86,11 @@ const AttendanceSummaryList = ({ employees, search, selectedZone }) => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col items-center justify-center bg-amber-400 dark:bg-sky-900 rounded-t-3xl h-96">
-                        <h1 className="font-black">1st</h1>
-                        <Trophy size={100} fill="yellow" className="dark:text-yellow-600" />
-                        <span className="text-4xl font-bold">{filteredSortedEmployees?.[0]?.attendance_rating?.rating ?? 0}</span>
+                    <div className="flex flex-col items-center justify-center text-white bg-gray-700 dark:bg-slate-600 rounded-t-3xl h-96">
+                        <Star fill="orange" strokeWidth={2} className="text-yellow-100 dark:text-yellow-300" size={40} />
+                        <h1 className="text-xs font-black">{filteredSortedEmployees?.[0]?.attendance_rating?.rating ?? 0}</h1>
+                        <Trophy size={100} fill="yellow" className="text-yellow-500" />
+                        <span className="text-4xl font-bold">1st</span>
                         <h1 className="font-bold bg-amber-600 dark:bg-sky-700 text-sm px-2 rounded-full text-white my-2">
                             {filteredSortedEmployees?.[0]?.contact?.name ?? ""}
                         </h1>
@@ -104,10 +105,10 @@ const AttendanceSummaryList = ({ employees, search, selectedZone }) => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col items-center justify-center bg-amber-400 dark:bg-sky-900 rounded-t-3xl h-52">
-                        <h1 className="font-black">3rd</h1>
-                        <Medal size={40} fill="yellow" className="dark:text-yellow-600" />
-                        <span className="text-2xl font-bold">{filteredSortedEmployees?.[2]?.attendance_rating?.rating ?? 0}</span>
+                    <div className="flex flex-col items-center justify-center text-white bg-gray-700 dark:bg-slate-600 rounded-t-3xl h-52">
+                        <h1 className="font-black">{filteredSortedEmployees?.[2]?.attendance_rating?.rating ?? 0}</h1>
+                        <Medal size={40} fill="#f0870f" className="text-yellow-700" />
+                        <span className="text-2xl font-bold">3rd</span>
                         <h1 className="font-bold bg-amber-600 dark:bg-sky-700 text-xs px-2 rounded-full text-white my-2">
                             {filteredSortedEmployees?.[2]?.contact?.name ?? ""}
                         </h1>

@@ -14,6 +14,7 @@ const Navigation = ({ user }) => {
     const pathName = usePathname();
     const userRole = user?.role?.role;
     const userPhoto = user?.attendances?.[0]?.photo_url || "/default.png";
+    const appVersion = process.env.NEXT_PUBLIC_APP_VERSION || process.env.APP_VERSION;
 
     return (
         <>
@@ -39,9 +40,9 @@ const Navigation = ({ user }) => {
                             isMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
                         }`}
                     >
-                        <h1 className={`text-xl font-bold `}>
+                        <h1 className={`text-xl font-bold text-start text-nowrap`}>
                             AgenBRI<span className="text-orange-400">Link</span>
-                            <span className="text-slate-500 dark:text-white block text-xs font-normal text-start">THREE KOMUNIKA</span>
+                            <span className="text-slate-500 dark:text-white block text-xs font-normal">THREE KOMUNIKA {appVersion}</span>
                         </h1>
                         <DarkModeToggle />
                     </div>

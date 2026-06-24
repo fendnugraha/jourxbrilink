@@ -15,7 +15,10 @@ const nextConfig = {
             },
         ],
     },
-    productionBrowserSourceMaps: true,
+    productionBrowserSourceMaps: false,
+    env: {
+        APP_VERSION: process.env.npm_package_version,
+    },
 };
 
 export default nextConfig;

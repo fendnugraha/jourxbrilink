@@ -151,7 +151,7 @@ const JournalTable = ({
                             setCurrentPage(1);
                         }}
                         value={selectedAccount}
-                        className="form-select block !min-w-[200px] p-2.5 flex-1"
+                        className="form-select block min-w-50! p-2.5 flex-1"
                     >
                         <option value="">Semua Akun</option>
                         {branchAccount.map((account, index) => (
@@ -166,7 +166,7 @@ const JournalTable = ({
                             setCurrentPage(1);
                         }}
                         value={itemsPerPage}
-                        className="form-select !w-fit block p-2.5"
+                        className="form-select w-fit! block p-2.5"
                     >
                         <option value={5}>5</option>
                         <option value={10}>10</option>

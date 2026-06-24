@@ -86,7 +86,7 @@ const WarehouseBalance = () => {
                     <span className="card-subtitle">Periode: {endDate}</span>
                 </h4>
                 <div className="flex gap-1 h-fit">
-                    <select className="form-select !w-96" value={selectedZone} onChange={(e) => setSelectedZone(e.target.value)}>
+                    <select className="form-select w-96!" value={selectedZone} onChange={(e) => setSelectedZone(e.target.value)}>
                         <option value="">Semua Zona</option>
                         {zones?.map((zone) => (
                             <option key={zone?.id} value={zone?.id}>
@@ -100,7 +100,7 @@ const WarehouseBalance = () => {
                     <button className="small-button" disabled={true}>
                         <DownloadIcon className="size-4" />
                     </button>
-                    <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="form-control !w-fit" />
+                    <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="form-control w-fit!" />
                     {/* <button onClick={() => setIsModalFilterDataOpen(true)} className="small-button">
                         <FilterIcon className="size-4" />
                     </button> */}

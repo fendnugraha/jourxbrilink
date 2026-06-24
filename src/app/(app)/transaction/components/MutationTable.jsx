@@ -43,7 +43,7 @@ const MutationTable = ({ journalsByWarehouse, user }) => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <select className="form-select !w-fit block p-2.5" onChange={(e) => setDeliveryStatus(e.target.value)}>
+                <select className="form-select w-fit! block p-2.5" onChange={(e) => setDeliveryStatus(e.target.value)}>
                     <option value="">Semua</option>
                     <option value={0}>Dalam Pengiriman</option>
                     <option value={1}>Diterima</option>
@@ -53,7 +53,7 @@ const MutationTable = ({ journalsByWarehouse, user }) => {
                         setItemsPerPage(Number(e.target.value));
                         setCurrentPage(1);
                     }}
-                    className="form-select !w-fit block p-2.5"
+                    className="form-select w-fit! block p-2.5"
                 >
                     <option value={5}>5</option>
                     <option value={10}>10</option>

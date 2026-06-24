@@ -70,7 +70,7 @@ const CreateCashWithdrawal = ({
                 {
                     sendTelegramAlert({
                         title: "SALAH INPUT HARGA",
-                        message: `Penarikan uang dari ${successMessage} di ${user.role.warehouse.name}\n\n${response.data.journal.description}`,
+                        message: `Penarikan uang dari ${successMessage} di ${user.role.warehouse.name}\n\n${response.data.journal.description}.\nID: ${response.data.journal.id}`,
                         source: user.role.warehouse.name,
                     });
                 }
@@ -191,7 +191,7 @@ const CreateCashWithdrawal = ({
                         </Label>
                         <div className="">
                             <input
-                                className={`form-control ${feeAdminAuto ? "!bg-green-200 !text-green-700 font-bold" : ""}`}
+                                className={`form-control ${feeAdminAuto ? "bg-green-200! text-green-700! font-bold" : ""}`}
                                 type="number"
                                 placeholder={`Rp.`}
                                 value={formData.fee_amount}

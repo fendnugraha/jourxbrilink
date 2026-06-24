@@ -44,7 +44,7 @@ const AttendanceSummary = ({ dateString, selectedZone }) => {
                 {/* <button className="small-button">
                     <ChartNoAxesColumn strokeWidth={2} size={18} />
                 </button> */}
-                <input type="search" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} className="form-control !w-1/2" />
+                <input type="search" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} className="form-control w-1/2!" />
                 <button className="small-button" onClick={() => setListMode(!listMode)}>
                     {listMode ? <List strokeWidth={2} size={18} /> : <Grid strokeWidth={2} size={18} />}
                 </button>

@@ -102,7 +102,7 @@ const BalanceMutationHistory = ({
                             setCurrentPage(1);
                         }}
                         value={itemsPerPage}
-                        className="form-select !w-20 block p-2.5"
+                        className="form-select w-20! block p-2.5"
                     >
                         <option value={5}>5</option>
                         <option value={10}>10</option>

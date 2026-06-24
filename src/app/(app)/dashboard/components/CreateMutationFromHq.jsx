@@ -115,7 +115,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                 <Label>Tanggal</Label>
                 <div className="col-span-1">
                     <div className="flex gap-1">
-                        <button type="button" className="small-button !bg-green-500" onClick={() => setFormData({ ...formData, date_issued: today })}>
+                        <button type="button" className="small-button bg-green-500!" onClick={() => setFormData({ ...formData, date_issued: today })}>
                             <Clock className="text-white" size={14} />
                         </button>
                         <input
@@ -225,7 +225,7 @@ const CreateMutationFromHq = ({ isModalOpen, cashBank, notification, fetchJourna
                 <Label>Admin bank</Label>
                 <div className="col-span-1">
                     <input
-                        className="form-control !w-full sm:!w-1/2"
+                        className="form-control w-full! sm:w-1/2!"
                         type="number"
                         placeholder="Rp."
                         value={formData.admin_fee}

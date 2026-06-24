@@ -95,7 +95,7 @@ const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse
                     <div className="col-span-1 sm:col-span-2">
                         <div className="flex gap-2">
                             <select
-                                className="form-select !w-24"
+                                className="form-select w-24!"
                                 value={credGroup}
                                 onChange={(e) => setCredGroup(e.target.value)}
                                 hidden={!["Administrator", "Super Admin"].includes(userRole)}
@@ -129,7 +129,7 @@ const EditMutationJournal = ({ isModalOpen, journal, cashBank, selectedWarehouse
                     <div className="col-span-1 sm:col-span-2">
                         <div className="flex gap-2">
                             <select
-                                className="form-select !w-24"
+                                className="form-select w-24!"
                                 value={debtGroup}
                                 onChange={(e) => setDebtGroup(e.target.value)}
                                 hidden={!["Administrator", "Super Admin"].includes(userRole)}

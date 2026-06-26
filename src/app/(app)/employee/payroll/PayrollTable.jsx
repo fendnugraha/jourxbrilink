@@ -22,7 +22,6 @@ const PayrollTable = () => {
     }, [fetchPayrolls]);
 
     const totalSavings = payrolls.data?.payroll?.reduce((total, item) => total + Number(item.total_savings), 0);
-    console.log("totalSavings: ", payrolls);
 
     return (
         <div className="overflow-x-auto">

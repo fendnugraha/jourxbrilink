@@ -35,7 +35,7 @@ ${type}
             });
         }
 
-        return NextResponse.json({ success: true, message: "Laporan dan Forward berhasil diproses!" });
+        return NextResponse.json({ success: true, message: "Laporan dan Forward berhasil diproses!", data: telegramRes.data });
     } catch (error) {
         const errorMsg = error.response?.data?.description || error.message;
         console.error("Gagal memproses Telegram di Server:", errorMsg);

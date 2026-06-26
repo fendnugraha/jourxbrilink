@@ -6,12 +6,11 @@ import { calculateWorkDuration, formatNumber } from "@/libs/format";
 import DropdownMenu from "@/components/DropdownMenu";
 import { Ellipsis } from "lucide-react";
 import WarningForm from "./WarningForm";
-import axios from "@/libs/axios";
 import EditEmployee from "./EditEmployee";
-import { formatDistanceToNow } from "date-fns";
 import StatusBadge from "@/components/StatusBadge";
 
 const EmployeeTable = ({ employees, fetchContacts, notification }) => {
+    console.log(employees);
     const [isModalAddEmployeeOpen, setIsModalAddEmployeeOpen] = useState(false);
     const [isModalAddWarningOpen, setIsModalAddWarningOpen] = useState(false);
     const [isModalEditEmployeeOpen, setIsModalEditEmployeeOpen] = useState(false);
@@ -51,9 +50,9 @@ const EmployeeTable = ({ employees, fetchContacts, notification }) => {
                             <th>No</th>
                             <th>Nama</th>
                             <th>Gaji Pokok</th>
-                            <th>Komisi</th>
+                            <th>Komisi/Tunjangan</th>
                             <th>Piutang</th>
-                            <th>Join</th>
+                            <th>Bergabung</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -70,8 +69,8 @@ const EmployeeTable = ({ employees, fetchContacts, notification }) => {
                                     <td>
                                         {employee.contact?.name}
                                         {employee.warning_active && (
-                                            <div className="bg-red-400 rounded-full pe-2 text-white w-fit">
-                                                <span className="font-bold bg-red-500 px-2 text-white text-xs rounded-full">
+                                            <div className="bg-red-400 rounded-full pe-2 text-white w-fit mt-0.5">
+                                                <span className="font-bold bg-red-500 px-2 text-white text-xs rounded-full py-0.5">
                                                     {employee.warning_active?.level}
                                                 </span>{" "}
                                                 Exp: {employee.warning_active?.expired_date}

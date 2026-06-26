@@ -10,6 +10,7 @@ import { Check, ChevronDown, CircleAlertIcon, CopyIcon, LoaderCircle, Power, Ref
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
+import { ClosingCard } from "./ClosingCard";
 
 const getCurrentDate = () => {
     const today = new Date();
@@ -42,6 +43,9 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
     const [transactions, setTransactions] = useState([]);
     const [statusText, setStatusText] = useState("");
     const [isClosingComplete, setIsClosingComplete] = useState(false);
+    const [rawTelegramData, setRawTelegramData] = useState(null);
+    const [countdown, setCountdown] = useState(0); // Menyimpan sisa waktu dalam detik (300 detik = 5 menit)
+    const [isLocking, setIsLocking] = useState(false); // Penanda apakah proses hitung mundur sedang berjalan
 
     // Load data saat pertama kali mount
     useEffect(() => {
@@ -196,7 +200,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
             // 🔥 Ambil data terbaru langsung dari return fungsi fetch
             const latestTransactions = await fetchTransaction();
 
-            await closingShift({
+            const result = await closingShift({
                 cred_code: warehouseCashId,
                 amount: dailyDashboard?.data?.totalCash - openingCash,
                 warehouse: warehouseName,
@@ -204,32 +208,85 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                 warehouseId: warehouse,
             });
 
+            setRawTelegramData(result.telegramData.data);
+
             setStatusText("Mengirim laporan...");
             await sendTelegramAlert({
                 title: "PENJUALAN BARANG",
                 source: warehouseName,
                 // 🔥 Oper data transaksi terbaru ke pembuat format teks
                 message: formatVoucherText(latestTransactions),
-                forwardChatId: 986761281,
-                // forwardChatId: 851552604,
+                // forwardChatId: 986761281,
+                forwardChatId: 851552604,
             });
 
-            changeLockStatus(warehouse);
+            const waktuKunciTarget = Date.now() + 1 * 60 * 1000; // Jam sekarang + 5 menit (dalam milidetik)
+            localStorage.setItem("target_lock_time", waktuKunciTarget);
+            localStorage.setItem("lock_warehouse_id", warehouse);
+
+            setCountdown(300);
+            setIsLocking(true);
+
+            // changeLockStatus(warehouse);
             alert("Shift berhasil ditutup!");
             setShowCloseStore(false);
+            console.log(result);
+            closingStatus();
         } catch (error) {
             console.log(error);
             alert("Terjadi kesalahan saat menutup shift.");
         } finally {
             setLoading(false); // Loading dimatikan HANYA jika semua proses di atas selesai/gagal
-            closingStatus();
         }
     };
+
+    useEffect(() => {
+        const savedTargetTime = localStorage.getItem("target_lock_time");
+        const savedWarehouse = localStorage.getItem("lock_warehouse_id");
+
+        if (savedTargetTime && savedWarehouse) {
+            const sisaWaktuDetik = Math.floor((Number(savedTargetTime) - Date.now()) / 1000);
+
+            if (sisaWaktuDetik > 0) {
+                // Lanjutkan hitung mundur yang tersisa
+                setCountdown(sisaWaktuDetik);
+                setIsLocking(true);
+            } else {
+                // Jika ternyata waktu sudah lewat saat web mati/ditutup, langsung eksekusi kunci!
+                changeLockStatus(savedWarehouse);
+                localStorage.removeItem("target_lock_time");
+                localStorage.removeItem("lock_warehouse_id");
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        let timer;
+
+        if (isLocking && countdown > 0) {
+            timer = setInterval(() => {
+                setCountdown((prev) => prev - 1);
+            }, 1000);
+        } else if (countdown === 0 && isLocking) {
+            // 🔥 Eksekusi kunci saat waktu habis
+            const savedWarehouse = localStorage.getItem("lock_warehouse_id") || warehouse;
+            changeLockStatus(savedWarehouse);
+            setIsLocking(false);
+
+            // Bersihkan localStorage agar tidak memicu kunci berulang
+            localStorage.removeItem("target_lock_time");
+            localStorage.removeItem("lock_warehouse_id");
+            alert("Waktu habis! Akses gudang resmi dikunci.");
+        }
+
+        return () => clearInterval(timer);
+    }, [countdown, isLocking, warehouse]);
 
     const changeLockStatus = async (id) => {
         try {
             await axios.put(`api/change-lock-status/${id}`, {
                 status: 3,
+                delay: 1,
             });
         } catch (error) {
             setErrors(error.response?.data?.errors || ["Something went wrong."]);
@@ -261,6 +318,13 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
     const end = 23 * 60 + 45; // 1425 menit
 
     const isWithinTime = currentMinutes >= start && currentMinutes <= end;
+
+    const formatCountdown = (seconds) => {
+        const menit = Math.floor(seconds / 60);
+        const detik = seconds % 60;
+        // padStart digunakan agar jika angka di bawah 10 tetap memunculkan nol di depan (contoh: 09)
+        return `${String(menit).padStart(2, "0")}:${String(detik).padStart(2, "0")}`;
+    };
 
     return (
         <>
@@ -424,7 +488,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                                     mutate(["/api/daily-dashboard", { warehouse, startDate, endDate }]);
                                 }}
                                 className="text-xs text-slate-100 active:scale-90 bg-red-500 hover:bg-red-400 px-1 py-0.5 rounded-md flex items-center gap-1"
-                                hidden={!isWithinTime || warehouse === 1 || limitPlusSummary > 0}
+                                // hidden={!isWithinTime || warehouse === 1 || limitPlusSummary > 0}
                             >
                                 Tutup Toko{" "}
                                 <span className="bg-red-300 rounded-full p-0.5 text-white">
@@ -589,6 +653,16 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                                 {loading ? statusText : "Setorkan Kas"}
                             </button>
                         )}
+                    </div>
+                    {isLocking && (
+                        <div className="fixed bottom-5 right-5 bg-amber-500 text-white font-bold px-4 py-3 rounded-2xl shadow-lg flex items-center gap-2 animate-bounce z-50">
+                            <span>⚠️ Mengunci otomatis dalam:</span>
+                            <span className="bg-white text-amber-600 px-2 py-0.5 rounded-lg font-mono">{formatCountdown(countdown)}</span>
+                        </div>
+                    )}
+                    <div className="bg-slate-100 dark:bg-slate-950 flex items-center justify-center p-4">
+                        {/* Tampilkan card jika data sudah siap tersedia */}
+                        {rawTelegramData && <ClosingCard responseData={rawTelegramData} />}
                     </div>
                 </div>
                 <button type="button" className={`p-4 bg-red-500 rounded-full`} onClick={() => setShowCloseStore(false)}>

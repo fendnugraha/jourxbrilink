@@ -33,14 +33,14 @@ export const closingShift = async ({ cred_code, amount, message, warehouse, ware
         };
 
         const response = await axios.post("/api/create-mutation", payload);
-        await sendTelegramAlert({
+        const telegramResponse = await sendTelegramAlert({
             title: "💰 CLOSING SHIFT",
             source: warehouse,
             message: message,
             forwardChatId: 851552604,
         });
 
-        return response;
+        return { ...response.data, telegramData: telegramResponse.data };
     } catch (error) {
         console.log(error);
         throw error;

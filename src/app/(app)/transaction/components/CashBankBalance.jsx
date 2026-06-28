@@ -145,6 +145,9 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
         dailyDashboard?.data?.totalExpense;
 
     const limitSummary = accountBalance?.data?.chartOfAccounts?.reduce((total, account) => total + Number(account.limit?.limit_amount), 0);
+    const limitPlusSummary = accountBalance?.data?.chartOfAccounts
+        ?.filter((acc) => acc.balance - acc.limit?.limit_amount > 0 && acc.account_id === 2)
+        .reduce((total, account) => total + Number(account.balance - account.limit?.limit_amount), 0);
 
     const copyData = async () => {
         await navigator.clipboard.writeText(copyDailyReport());

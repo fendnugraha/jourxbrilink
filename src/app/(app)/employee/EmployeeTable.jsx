@@ -10,7 +10,6 @@ import EditEmployee from "./EditEmployee";
 import StatusBadge from "@/components/StatusBadge";
 
 const EmployeeTable = ({ employees, fetchContacts, notification }) => {
-    console.log(employees);
     const [isModalAddEmployeeOpen, setIsModalAddEmployeeOpen] = useState(false);
     const [isModalAddWarningOpen, setIsModalAddWarningOpen] = useState(false);
     const [isModalEditEmployeeOpen, setIsModalEditEmployeeOpen] = useState(false);
@@ -36,7 +35,7 @@ const EmployeeTable = ({ employees, fetchContacts, notification }) => {
                 <AddEmployee isModalOpen={setIsModalAddEmployeeOpen} fetchContacts={fetchContacts} notification={notification} />
             </Modal>
             <div className="flex gap-2 mb-4">
-                <select onChange={(e) => setEmpStatus(e.target.value)} className="form-select !w-fit" value={empStatus} name="empStatus" id="empStatus">
+                <select onChange={(e) => setEmpStatus(e.target.value)} className="form-select w-fit!" value={empStatus} name="empStatus" id="empStatus">
                     <option value="">Semua</option>
                     <option value="active">Aktif</option>
                     <option value="inactive">Tidak Aktif</option>

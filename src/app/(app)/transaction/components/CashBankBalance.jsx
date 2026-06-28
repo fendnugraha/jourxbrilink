@@ -6,7 +6,7 @@ import { closingShift } from "@/libs/closingShift";
 import { DateTimeNow, formatDateTime, formatRupiah } from "@/libs/format";
 import formatNumber from "@/libs/formatNumber";
 import { sendTelegramAlert } from "@/libs/telegramAlert";
-import { Check, ChevronDown, CircleAlertIcon, CopyIcon, LoaderCircle, Power, RefreshCcwIcon, ScanQrCodeIcon, SettingsIcon, X } from "lucide-react";
+import { Check, ChevronDown, CircleAlertIcon, CopyIcon, LoaderCircle, Lock, Power, RefreshCcwIcon, ScanQrCodeIcon, SettingsIcon, X } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
@@ -46,6 +46,10 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
     const [rawTelegramData, setRawTelegramData] = useState(null);
     const [countdown, setCountdown] = useState(0); // Menyimpan sisa waktu dalam detik (300 detik = 5 menit)
     const [isLocking, setIsLocking] = useState(false); // Penanda apakah proses hitung mundur sedang berjalan
+
+    const closeModal = () => {
+        setIsModalSettingInitBalancesOpen(false);
+    };
 
     // Load data saat pertama kali mount
     useEffect(() => {
@@ -132,10 +136,6 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
         return `Voucher ${warehouseName}:\n\n${voucherLines.join("\n") || "Tidak ada data"}\n\n\nNon Voucher :\n${nonVoucherLines.join("\n") || "Tidak ada data"}`;
     };
 
-    const closeModal = () => {
-        setIsModalSettingInitBalancesOpen(false);
-    };
-
     const totalSetoran =
         dailyDashboard?.data?.totalFee +
         dailyDashboard?.data?.totalCash +
@@ -143,6 +143,8 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
         dailyDashboard?.data?.totalAccessories?.total +
         dailyDashboard?.data?.totalVoucher?.total +
         dailyDashboard?.data?.totalExpense;
+
+    const limitSummary = accountBalance?.data?.chartOfAccounts?.reduce((total, account) => total + Number(account.limit?.limit_amount), 0);
 
     const copyData = async () => {
         await navigator.clipboard.writeText(copyDailyReport());
@@ -154,15 +156,6 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
         await navigator.clipboard.writeText(formatVoucherText());
         setIsCopied(true);
         setTimeout(() => setIsCopied(false), 3000);
-    };
-
-    const closingStatus = () => {
-        setIsClosingComplete(true);
-        setStatusText("Selesai.");
-        setTimeout(() => {
-            setIsClosingComplete(false);
-            setStatusText("");
-        }, 300000);
     };
 
     const copyDailyReport = () => {
@@ -181,23 +174,31 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
             dailyDashboard?.data?.totalCash > openingCash ? totalSetoran - openingCash : totalSetoran,
         )}`;
     };
-    const limitSummary = accountBalance?.data?.chartOfAccounts?.reduce((total, account) => total + Number(account.limit?.limit_amount), 0);
-    const limitPlusSummary = accountBalance?.data?.chartOfAccounts
-        ?.filter((acc) => acc.balance - acc.limit?.limit_amount > 0 && acc.account_id === 2)
-        .reduce((total, account) => total + Number(account.balance - account.limit?.limit_amount), 0);
+
+    const closingStatus = () => {
+        setIsClosingComplete(true);
+        setStatusText("Selesai.");
+        setTimeout(() => {
+            setIsClosingComplete(false);
+            setStatusText("");
+        }, 300000);
+    };
 
     const handleClosing = async () => {
-        if (confirm("Anda yakin ingin menutup shift, pastikan semua data sudah diinput?\n(Semua input data akan terkunci setelah kas disetor)") === false)
-            return;
+        // Variabel menggunakan bahasa Inggris pro (isConfirmed)
+        const isConfirmed = confirm("Anda yakin ingin menutup shift, pastikan semua data sudah diinput?\n(Semua input data akan terkunci setelah kas disetor)");
+        if (!isConfirmed) return;
 
-        setLoading(true); // Cukup satu loading utama di sini untuk mengontrol seluruh alur
+        setLoading(true);
         setStatusText("Menutup shift...");
 
         try {
             await copyData();
 
-            setStatusText("Menyalin report...");
-            // 🔥 Ambil data terbaru langsung dari return fungsi fetch
+            setStatusText("Mengunci cabang...");
+            await changeLockStatus(warehouse);
+
+            setStatusText("Mengambil data transaksi...");
             const latestTransactions = await fetchTransaction();
 
             const result = await closingShift({
@@ -208,79 +209,107 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                 warehouseId: warehouse,
             });
 
-            setRawTelegramData(result.telegramData.data);
+            const telegramResponseObj = result.telegramData.data;
+            setRawTelegramData(telegramResponseObj);
+            localStorage.setItem("last_telegram_data", JSON.stringify(telegramResponseObj));
 
             setStatusText("Mengirim laporan...");
             await sendTelegramAlert({
-                title: "PENJUALAN BARANG",
+                title: "PENJUALAN BARANG", // Kembali ke teks asli Anda
                 source: warehouseName,
-                // 🔥 Oper data transaksi terbaru ke pembuat format teks
                 message: formatVoucherText(latestTransactions),
-                // forwardChatId: 986761281,
-                forwardChatId: 851552604,
+                forwardChatId: 986761281,
+                // forwardChatId: 851552604,
             });
 
-            const waktuKunciTarget = Date.now() + 1 * 60 * 1000; // Jam sekarang + 5 menit (dalam milidetik)
-            localStorage.setItem("target_lock_time", waktuKunciTarget);
+            // set duration in milliseconds
+            const LOCK_DURATION_MS = 1 * 60 * 1000;
+            const lockTargetTime = Date.now() + LOCK_DURATION_MS;
+
+            localStorage.setItem("target_lock_time", lockTargetTime);
             localStorage.setItem("lock_warehouse_id", warehouse);
 
-            setCountdown(300);
+            setCountdown(LOCK_DURATION_MS / 1000); // Menghitung detik
             setIsLocking(true);
 
-            // changeLockStatus(warehouse);
+            // Timer otomatis menggunakan durasi milidetik yang benar
+            setTimeout(() => {
+                setRawTelegramData(null);
+                localStorage.removeItem("last_telegram_data");
+            }, LOCK_DURATION_MS);
+
+            setStatusText("Menutup shift...");
             alert("Shift berhasil ditutup!");
-            setShowCloseStore(false);
-            console.log(result);
             closingStatus();
         } catch (error) {
-            console.log(error);
+            console.error("Closing shift error:", error);
             alert("Terjadi kesalahan saat menutup shift.");
         } finally {
-            setLoading(false); // Loading dimatikan HANYA jika semua proses di atas selesai/gagal
+            setLoading(false);
         }
     };
 
     useEffect(() => {
         const savedTargetTime = localStorage.getItem("target_lock_time");
-        const savedWarehouse = localStorage.getItem("lock_warehouse_id");
+        const savedWarehouseId = localStorage.getItem("lock_warehouse_id");
+        const savedTelegramData = localStorage.getItem("last_telegram_data");
 
-        if (savedTargetTime && savedWarehouse) {
-            const sisaWaktuDetik = Math.floor((Number(savedTargetTime) - Date.now()) / 1000);
+        if (savedTargetTime && savedWarehouseId) {
+            // Variabel penampung durasi detik menggunakan bahasa Inggris pro (remainingTimeSeconds)
+            const remainingTimeSeconds = Math.floor((Number(savedTargetTime) - Date.now()) / 1000);
 
-            if (sisaWaktuDetik > 0) {
-                // Lanjutkan hitung mundur yang tersisa
-                setCountdown(sisaWaktuDetik);
+            if (remainingTimeSeconds > 0) {
+                if (savedTelegramData) {
+                    setRawTelegramData(JSON.parse(savedTelegramData));
+                    setShowCloseStore(true);
+
+                    // Perbaikan: dikalikan 1000 agar menjadi milidetik yang valid
+                    setTimeout(() => {
+                        setRawTelegramData(null);
+                        setShowCloseStore(false);
+                        localStorage.removeItem("last_telegram_data");
+                    }, remainingTimeSeconds * 1000);
+                }
+                setIsClosingComplete(true);
+                setCountdown(remainingTimeSeconds);
                 setIsLocking(true);
             } else {
-                // Jika ternyata waktu sudah lewat saat web mati/ditutup, langsung eksekusi kunci!
-                changeLockStatus(savedWarehouse);
+                // changeLockStatus(savedWarehouseId);
                 localStorage.removeItem("target_lock_time");
                 localStorage.removeItem("lock_warehouse_id");
+                localStorage.removeItem("last_telegram_data");
             }
         }
     }, []);
 
     useEffect(() => {
-        let timer;
+        let timerInterval; // Variabel interval menggunakan bahasa Inggris pro
 
         if (isLocking && countdown > 0) {
-            timer = setInterval(() => {
-                setCountdown((prev) => prev - 1);
+            timerInterval = setInterval(() => {
+                setCountdown((prevCountdown) => prevCountdown - 1);
             }, 1000);
         } else if (countdown === 0 && isLocking) {
-            // 🔥 Eksekusi kunci saat waktu habis
-            const savedWarehouse = localStorage.getItem("lock_warehouse_id") || warehouse;
-            changeLockStatus(savedWarehouse);
+            // const cachedWarehouseId = localStorage.getItem("lock_warehouse_id") || warehouse;
+            // changeLockStatus(cachedWarehouseId);
             setIsLocking(false);
+            setShowCloseStore(false);
 
-            // Bersihkan localStorage agar tidak memicu kunci berulang
             localStorage.removeItem("target_lock_time");
             localStorage.removeItem("lock_warehouse_id");
-            alert("Waktu habis! Akses gudang resmi dikunci.");
+            localStorage.removeItem("last_telegram_data");
+            // alert("Waktu habis! Akses gudang resmi dikunci."); // Kembali ke teks asli Anda
         }
 
-        return () => clearInterval(timer);
+        return () => clearInterval(timerInterval);
     }, [countdown, isLocking, warehouse]);
+
+    const formatCountdown = (seconds) => {
+        const menit = Math.floor(seconds / 60);
+        const detik = seconds % 60;
+        // padStart digunakan agar jika angka di bawah 10 tetap memunculkan nol di depan (contoh: 09)
+        return `${String(menit).padStart(2, "0")}:${String(detik).padStart(2, "0")}`;
+    };
 
     const changeLockStatus = async (id) => {
         try {
@@ -318,13 +347,6 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
     const end = 23 * 60 + 45; // 1425 menit
 
     const isWithinTime = currentMinutes >= start && currentMinutes <= end;
-
-    const formatCountdown = (seconds) => {
-        const menit = Math.floor(seconds / 60);
-        const detik = seconds % 60;
-        // padStart digunakan agar jika angka di bawah 10 tetap memunculkan nol di depan (contoh: 09)
-        return `${String(menit).padStart(2, "0")}:${String(detik).padStart(2, "0")}`;
-    };
 
     return (
         <>
@@ -488,7 +510,7 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                                     mutate(["/api/daily-dashboard", { warehouse, startDate, endDate }]);
                                 }}
                                 className="text-xs text-slate-100 active:scale-90 bg-red-500 hover:bg-red-400 px-1 py-0.5 rounded-md flex items-center gap-1"
-                                // hidden={!isWithinTime || warehouse === 1 || limitPlusSummary > 0}
+                                hidden={!isWithinTime || warehouse === 1 || limitPlusSummary > 0}
                             >
                                 Tutup Toko{" "}
                                 <span className="bg-red-300 rounded-full p-0.5 text-white">
@@ -496,20 +518,20 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
                                 </span>
                             </button>
 
-                            <div className="flex gap-2 items-center bg-slate-400 dark:bg-slate-600 rounded-full px-2 py-1">
-                                <button
+                            {/* <div className="flex gap-2 items-center bg-slate-400 dark:bg-slate-600 rounded-full px-2 py-1"> */}
+                            {/* <button
                                     className="cursor-pointer text-slate-600 dark:text-slate-100 transition-transform duration-75"
                                     onClick={() => copyData()}
                                 >
                                     <CopyIcon size={14} className={`${isCopied ? "text-green-500" : ""}`} />
-                                </button>
-                                <button
-                                    className="cursor-pointer text-slate-600 dark:text-slate-100 transition-transform duration-75"
-                                    onClick={() => mutate(["/api/daily-dashboard", { warehouse, startDate, endDate }])}
-                                >
-                                    <RefreshCcwIcon size={14} className={`${isLoading ? "animate-spin" : ""}`} />
-                                </button>
-                            </div>
+                                </button> */}
+                            <button
+                                className="cursor-pointer border border-slate-300 rounded-full px-1 py-0.5 text-xs text-slate-600 dark:text-slate-100 transition-transform duration-75 flex items-center gap-1"
+                                onClick={() => mutate(["/api/daily-dashboard", { warehouse, startDate, endDate }])}
+                            >
+                                <RefreshCcwIcon size={14} className={`${isLoading ? "animate-spin" : ""}`} /> Refresh
+                            </button>
+                            {/* </div> */}
                         </div>
                         <div className="flex justify-between mb-1">
                             <h1 className="text-xs">Uang Tunai</h1>
@@ -608,64 +630,77 @@ const CashBankBalance = ({ accountBalance, dailyDashboard, isLoading, isValidati
             <div
                 className={`fixed z-100000 top-0 left-0 w-screen ${showCloseStore ? "h-screen" : "h-0 overflow-hidden"} bg-black/80 backdrop-blur-sm flex flex-col gap-6 justify-center items-center transition-all duration-500 ease-in-out`}
             >
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="flex flex-col gap-2 items-center">
-                        <div className="bg-white rounded-lg p-4">
-                            <QRCodeSVG value={copyDailyReport()} size={120} />
-                        </div>
-                        <button
-                            className="cursor-pointer text-xs border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1 text-slate-100 transition-transform duration-75 flex items-center gap-1 hover:scale-110"
-                            onClick={() => copyData()}
-                        >
-                            <CopyIcon size={14} className={`${isCopied ? "text-green-500" : ""}`} /> {isCopied ? "Copied" : "Copy"}
-                        </button>
-                    </div>
-                    <div className="flex flex-col justify-between text-white border border-slate-500 p-4 rounded-2xl sm:col-span-2">
-                        <h1 className="text-sm font-bold">{warehouseName}</h1>
-                        <table className="w-full border-b border-slate-500 text-sm">
-                            <tbody>
-                                <tr>
-                                    <td className="p-1">Total Pendapatan</td>
-                                    <td className="text-end font-bold">{formatNumber(totalSetoran)}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-1">Kas Awal</td>
-                                    <td className="text-end font-bold">{formatNumber(openingCash)}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <h1 className="text-sm font-bold mt-5">Total Uang Disetor</h1>
-                        <h1 className="text-xl font-semibold text-end text-yellow-300 dark:text-yellow-500">
-                            {formatRupiah(dailyDashboard?.data?.totalCash > openingCash ? totalSetoran - openingCash : totalSetoran)}
-                        </h1>
+                <div
+                    className="flex flex-col justify-between bg-slate-700/50 text-white border border-slate-500 p-4 rounded-3xl sm:col-span-2 w-3/4 sm:w-1/4 xs:w-full"
+                    hidden={isClosingComplete}
+                >
+                    <h1 className="text-xl mb-4 font-bold">{warehouseName}</h1>
+                    <table className="w-full border-b border-slate-500 text-sm">
+                        <tbody>
+                            <tr className="border-b border-slate-500">
+                                <td className="p-2">Kas</td>
+                                <td className="text-end font-bold">{formatNumber(dailyDashboard?.data?.totalCash)}</td>
+                            </tr>
+                            <tr className="border-b border-slate-500">
+                                <td className="p-2">Deposit</td>
+                                <td className="text-end font-bold">{formatNumber(dailyDashboard?.data?.totalCashDeposit?.total)}</td>
+                            </tr>
+                            <tr className="border-b border-slate-500">
+                                <td className="p-2">Aksesoris</td>
+                                <td className="text-end font-bold">{formatNumber(dailyDashboard?.data?.totalAccessories?.total)}</td>
+                            </tr>
+                            <tr className="border-b border-slate-500">
+                                <td className="p-2">Voucher</td>
+                                <td className="text-end font-bold">{formatNumber(dailyDashboard?.data?.totalVoucher?.total)}</td>
+                            </tr>
+                            <tr className="border-b border-slate-500">
+                                <td className="p-2">Fee/Laba</td>
+                                <td className="text-end font-bold text-green-400">{formatNumber(dailyDashboard?.data?.totalFee)}</td>
+                            </tr>
+                            <tr className="border-b border-slate-500">
+                                <td className="p-2">Biaya</td>
+                                <td className="text-end font-bold text-red-400">{formatNumber(dailyDashboard?.data?.totalExpense)}</td>
+                            </tr>
 
-                        {isClosingComplete ? (
-                            <span className="text-xs text-slate-300 py-2 flex items-center gap-1">
-                                Setoran selesai <Check size={14} className="text-green-500" />
-                            </span>
-                        ) : (
-                            <button
-                                type="button"
-                                className={`py-2 px-4 bg-amber-500 rounded-lg disabled:bg-slate-500 hover:bg-amber-400 mt-4`}
-                                onClick={() => handleClosing()}
-                                disabled={totalSetoran < openingCash || loading || isClosingComplete}
-                            >
-                                {loading ? statusText : "Setorkan Kas"}
-                            </button>
-                        )}
-                    </div>
-                    {isLocking && (
-                        <div className="fixed bottom-5 right-5 bg-amber-500 text-white font-bold px-4 py-3 rounded-2xl shadow-lg flex items-center gap-2 animate-bounce z-50">
-                            <span>⚠️ Mengunci otomatis dalam:</span>
-                            <span className="bg-white text-amber-600 px-2 py-0.5 rounded-lg font-mono">{formatCountdown(countdown)}</span>
-                        </div>
+                            <tr>
+                                <td className="p-2 font-bold">Total Pendapatan</td>
+                                <td className="text-end font-bold">{formatNumber(totalSetoran)}</td>
+                            </tr>
+                            <tr>
+                                <td className="p-2">Kas Awal (Modal)</td>
+                                <td className="text-end font-bold text-red-400">{formatNumber(openingCash * -1)}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h1 className="text-sm font-bold mt-5">Total Uang Disetor</h1>
+                    <h1 className="text-xl font-semibold text-end text-yellow-300 dark:text-yellow-500">
+                        {formatRupiah(dailyDashboard?.data?.totalCash > openingCash ? totalSetoran - openingCash : totalSetoran)}
+                    </h1>
+                    {isClosingComplete ? (
+                        <span className="text-xs text-slate-300 py-2 flex items-center gap-1">
+                            Setoran selesai <Check size={14} className="text-green-500" />
+                        </span>
+                    ) : (
+                        <button
+                            type="button"
+                            className={`py-2 px-4 bg-amber-500 rounded-lg disabled:bg-slate-500 hover:bg-amber-400 mt-4`}
+                            onClick={() => handleClosing()}
+                            disabled={totalSetoran < openingCash || loading || isClosingComplete}
+                        >
+                            {loading ? statusText : "Setorkan Kas"}
+                        </button>
                     )}
-                    <div className="bg-slate-100 dark:bg-slate-950 flex items-center justify-center p-4">
-                        {/* Tampilkan card jika data sudah siap tersedia */}
-                        {rawTelegramData && <ClosingCard responseData={rawTelegramData} />}
-                    </div>
                 </div>
-                <button type="button" className={`p-4 bg-red-500 rounded-full`} onClick={() => setShowCloseStore(false)}>
+
+                {rawTelegramData && isClosingComplete && isLocking && <ClosingCard responseData={rawTelegramData} />}
+
+                {isLocking && (
+                    <div className="fixed bottom-5 right-5 bg-amber-500 text-white font-bold p-1 rounded-full shadow-lg flex items-center gap-1 z-50">
+                        <Lock size={20} strokeWidth={2} className="ml-1" />
+                        <span className="bg-white text-amber-600 px-2 py-0.5 rounded-2xl font-mono">{formatCountdown(countdown)}</span>
+                    </div>
+                )}
+                <button type="button" className={`p-4 bg-red-500 rounded-full`} onClick={() => setShowCloseStore(false)} hidden={isClosingComplete}>
                     <X size={20} />
                 </button>
             </div>

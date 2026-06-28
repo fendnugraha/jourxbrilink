@@ -122,7 +122,6 @@ const MainPage = ({ children, headerTitle }) => {
 
     const { journals, error: journalError, isValidating } = useGetMutationJournal(todayJakarta, todayJakarta);
     const filteredJournals = journals?.filter((journal) => journal?.status === 0);
-
     return (
         <>
             {!attCheck?.approval_status && isWithinTime && userWarehouseId !== 1 && userRole !== "Super Admin" && (

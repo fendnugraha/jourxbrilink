@@ -3,6 +3,8 @@ import { calculateFee, formatDateTime, formatNumber } from "@/libs/format";
 import { CheckCheck, CheckIcon, CircleAlert, FileWarning, Loader2, Scale, ThumbsUp, XIcon } from "lucide-react";
 
 const TransactionTable = ({
+    accountBalance,
+    isValidating,
     filteredJournals,
     currentPage,
     itemsPerPage,
@@ -165,13 +167,19 @@ const TransactionTable = ({
                         </tbody>
                     </table>
                 </div>
-                <div>
-                    <h1 className="text-xs text-slate-500 mb-2">
-                        Total Debt: <span className="font-bold">{formatNumber(totalDebt)}</span>
-                    </h1>
-                    <h1 className="text-xs text-slate-500 mb-2">
-                        Total Credit: <span className="font-bold">{formatNumber(totalCredit)}</span>
-                    </h1>
+                <div className="flex-1">
+                    {isValidating ? (
+                        <h1 className="text-xs">Loading data..</h1>
+                    ) : (
+                        accountBalance?.data?.chartOfAccounts
+                            ?.filter((acc) => acc.account_id === 2)
+                            .map((acc) => (
+                                <div key={acc.id} className="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 mb-1">
+                                    <h1 className="font-bold text-xs text-amber-500 dark:text-amber-300">{acc.account_group}</h1>
+                                    <h1 className="font-bold text-sm">{formatNumber(acc.balance)}</h1>
+                                </div>
+                            ))
+                    )}
                 </div>
             </div>
 

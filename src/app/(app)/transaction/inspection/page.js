@@ -16,6 +16,7 @@ import { set } from "date-fns";
 import PercentageCount from "./PercentageCount";
 import { Loader2 } from "lucide-react";
 import formatNumber from "@/libs/formatNumber";
+import useCashBankBalance from "@/libs/cashBankBalance";
 
 const InspectionPage = () => {
     const { today } = DateTimeNow();
@@ -30,6 +31,7 @@ const InspectionPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
     const [sortMode, setSortMode] = useState("desc");
+    const [selectedWarehouseId, setSelectedWarehouseId] = useState(warehouse);
     const [isModalCreateCorrectionOpen, setIsModalCreateCorrectionOpen] = useState(false);
     const closeModal = () => {
         setIsModalCreateCorrectionOpen(false);
@@ -51,9 +53,10 @@ const InspectionPage = () => {
         type: "",
         message: "",
     });
+
+    const { accountBalance, error: accountBalanceError, loading: isValidating, mutateCashBankBalance } = useCashBankBalance(selectedWarehouseId, endDate);
     const [journalsByWarehouse, setJournalsByWarehouse] = useState([]);
 
-    const [selectedWarehouseId, setSelectedWarehouseId] = useState(warehouse);
     const [selectedAccount, setSelectedAccount] = useState("");
     const branchAccount = cashBank.filter((cashBank) => Number(cashBank.warehouse_id) === Number(selectedWarehouseId));
     const fetchJournalsByWarehouse = useCallback(
@@ -205,7 +208,7 @@ const InspectionPage = () => {
                                 {warehouses?.data?.find((w) => w.id === Number(selectedWarehouseId))?.name},{" "}
                                 {startDate === endDate ? formatLongDate(endDate) : `${formatLongDate(startDate)} s/d ${formatLongDate(endDate)}`}
                             </h1>
-                            <button className="btn-primary !bg-yellow-500" onClick={() => setIsModalCreateCorrectionOpen(true)}>
+                            <button className="btn-primary bg-yellow-500!" onClick={() => setIsModalCreateCorrectionOpen(true)}>
                                 Buat Koreksi
                             </button>
                         </div>
@@ -249,7 +252,7 @@ const InspectionPage = () => {
                                         setCurrentPage(1);
                                     }}
                                     value={selectedAccount}
-                                    className="form-select !w-fit p-2.5"
+                                    className="form-select w-fit! p-2.5"
                                 >
                                     <option value="">Semua Akun</option>
                                     {branchAccount
@@ -260,7 +263,7 @@ const InspectionPage = () => {
                                             </option>
                                         ))}
                                 </select>
-                                <select className="form-select p-2.5 !w-fit" value={filterConfirmed} onChange={(e) => setFilterConfirmed(e.target.value)}>
+                                <select className="form-select p-2.5 w-fit!" value={filterConfirmed} onChange={(e) => setFilterConfirmed(e.target.value)}>
                                     <option value={""}>Semua</option>
                                     <option value={1}>Confirmed</option>
                                     <option value={0}>Unconfirmed</option>
@@ -271,7 +274,7 @@ const InspectionPage = () => {
                                         setCurrentPage(1);
                                     }}
                                     value={itemsPerPage}
-                                    className="form-select !w-fit p-2.5"
+                                    className="form-select w-fit! p-2.5"
                                 >
                                     <option value={5}>5</option>
                                     <option value={10}>10</option>
@@ -285,7 +288,7 @@ const InspectionPage = () => {
                                         setCurrentPage(1);
                                     }}
                                     value={sortMode}
-                                    className="form-select !w-fit p-2.5"
+                                    className="form-select w-fit! p-2.5"
                                 >
                                     <option value={"asc"}>Asc</option>
                                     <option value={"desc"}>Desc</option>
@@ -294,6 +297,8 @@ const InspectionPage = () => {
                         </div>
                         {selectTable === "transaksi" && (
                             <TransactionTable
+                                accountBalance={accountBalance}
+                                isValidating={isValidating}
                                 filteredJournals={filteredJournals}
                                 currentPage={currentPage}
                                 itemsPerPage={itemsPerPage}

@@ -25,7 +25,15 @@ const AttendanceSummaryList = ({ employees, search, selectedZone }) => {
 
             return matchSearch && matchZone && hasRating;
         })
-        .sort((a, b) => b.attendance_rating?.rating - a.attendance_rating?.rating);
+        .sort((a, b) => {
+            if (a.attendance_rating?.late === 0 && b.attendance_rating?.late !== 0) {
+                return -1;
+            }
+            if (a.attendance_rating?.late !== 0 && b.attendance_rating?.late === 0) {
+                return 1;
+            }
+            return b.attendance_rating?.rating - a.attendance_rating?.rating;
+        });
 
     if (filteredSortedEmployees?.length === 0) {
         return <div className="p-4">No employee found</div>;

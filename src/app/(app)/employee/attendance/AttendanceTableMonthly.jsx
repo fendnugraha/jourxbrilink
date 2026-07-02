@@ -1,5 +1,5 @@
 import { getDay } from "@/libs/format";
-import { AlarmClockPlus, Check, CheckCheck, Clock, Star, X } from "lucide-react";
+import { AlarmClockPlus, CheckCheck, ClockAlert, Star, X } from "lucide-react";
 
 const AttendanceTableMonthly = ({ selectedZone, warehouseMonthly }) => {
     const days = warehouseMonthly.days;
@@ -11,7 +11,7 @@ const AttendanceTableMonthly = ({ selectedZone, warehouseMonthly }) => {
                 style: "bg-yellow-300 dark:bg-yellow-500 text-slate-800",
                 icon: <Star size={26} strokeWidth={2} className="text-orange-700 rotate-45" fill="orange" />,
             };
-        if (status === "Late") return { style: "bg-red-500 dark:bg-red-600 text-white", icon: <Clock size={20} /> };
+        if (status === "Late") return { style: "bg-red-500 dark:bg-red-600 text-white", icon: <ClockAlert size={20} /> };
         if (status === "Overtime")
             return {
                 style: "bg-violet-300 text-white",

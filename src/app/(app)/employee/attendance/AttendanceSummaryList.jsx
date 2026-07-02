@@ -1,5 +1,5 @@
 import { toOrdinal } from "@/libs/format";
-import { ArrowBigDown, ArrowBigUp, ChessQueen, Clock, Crown, Medal, Star, Trophy } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp, ChessQueen, CircleAlert, Clock, Crown, Medal, Star, Trophy } from "lucide-react";
 
 const AttendanceSummaryList = ({ employees, search, selectedZone }) => {
     const checkUpOrDown = (rating, lastRating) => {
@@ -59,7 +59,12 @@ const AttendanceSummaryList = ({ employees, search, selectedZone }) => {
                         return (
                             <tr key={employee?.id}>
                                 <td>{index + 1 === 1 ? <ChessQueen size={20} fill="yellow" className="text-yellow-600" /> : <>{toOrdinal(index + 1)}</>}</td>
-                                <td>{employee?.contact?.name}</td>
+                                <td>
+                                    {employee?.contact?.name}{" "}
+                                    {employee.attendance_rating?.late > 5 && (
+                                        <CircleAlert fill="red" strokeWidth={2} className="text-white inline-block ml-2 animate-pulse" size={20} />
+                                    )}
+                                </td>
                                 <td className="text-center">{employee.attendance_rating?.good ?? 0}</td>
                                 <td className="text-center">{employee.attendance_rating?.late ?? 0}</td>
                                 <td className="text-center font-bold">

@@ -1,7 +1,7 @@
 import Modal from "@/components/Modal";
 import SimplePagination from "@/components/SimplePagination";
 import { formatDateTime, formatDateVertical, formatNumber, formatTime } from "@/libs/format";
-import { ArrowBigRight, ArrowRight, MessageCircleWarning, Pencil, RefreshCcw, Search, Trash2 } from "lucide-react";
+import { ArrowBigRight, ArrowRight, MessageCircleWarning, Pencil, RefreshCcw, Search, Trash2, TriangleAlert } from "lucide-react";
 import { useState } from "react";
 import EditMutationJournal from "../../transaction/components/EditMutationJournal";
 import InputGroup from "@/components/InputGroup";
@@ -192,6 +192,10 @@ const MutationTable = ({
                                                 ({journal.debt?.warehouse?.name.replace(/^konter\s*/i, "")})
                                             </span>
                                         )}
+                                        {journal?.cred?.account_group !== journal?.debt?.account_group &&
+                                            journal.cred?.warehouse?.id !== journal.debt?.warehouse?.id && (
+                                                <TriangleAlert size={18} className="ml-1 inline-block text-amber-600" fill="yellow" />
+                                            )}
                                     </td>
                                     <td className="text-right p-3 text-xl font-bold">
                                         <h1

@@ -1,11 +1,13 @@
 import Modal from "@/components/Modal";
 import SimplePagination from "@/components/SimplePagination";
 import { formatDateTime, formatDateVertical, formatNumber, formatTime } from "@/libs/format";
-import { ArrowBigRight, ArrowRight, MessageCircleWarning, Pencil, RefreshCcw, Search, Trash2, TriangleAlert } from "lucide-react";
+import { ArrowBigRight, ArrowRight, Calendar, MessageCircleWarning, Pencil, RefreshCcw, Search, Trash2, TriangleAlert } from "lucide-react";
 import { useState } from "react";
 import EditMutationJournal from "../../transaction/components/EditMutationJournal";
 import InputGroup from "@/components/InputGroup";
 import axios from "@/libs/axios";
+import Label from "@/components/Label";
+import Input from "@/components/Input";
 
 const MutationTable = ({
     journals,
@@ -18,12 +20,17 @@ const MutationTable = ({
     mutateCashBankBalance,
     selectedWarehouse,
     setSelectedWarehouse,
+    endDate,
+    setEndDate,
+    loading,
+    isValidating,
 }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedJournalId, setSelectedJournalId] = useState(null);
     const [isModalEditMutationJournalOpen, setIsModalEditMutationJournalOpen] = useState(false);
     const [isModalDeleteJournalOpen, setIsModalDeleteJournalOpen] = useState(false);
     const [selectedWarehouseId, setSelectedWarehouseId] = useState(warehouse);
+    const [isModalFilterDataOpen, setIsModalFilterDataOpen] = useState(false);
     const [selectInOut, setSelectInOut] = useState("");
     const selectedAccountIds = cashBank?.data
         ?.filter((cashBank) => selectedWarehouseId && cashBank.warehouse_id === Number(selectedWarehouseId))
@@ -32,6 +39,7 @@ const MutationTable = ({
     const closeModal = () => {
         setIsModalDeleteJournalOpen(false);
         setIsModalEditMutationJournalOpen(false);
+        setIsModalFilterDataOpen(false);
     };
 
     const filteredJournals = journals?.data?.filter((journal) => {
@@ -131,6 +139,27 @@ const MutationTable = ({
                 >
                     <RefreshCcw size={20} />
                 </button>
+                <button
+                    onClick={() => setIsModalFilterDataOpen(true)}
+                    className="bg-slate-300 dark:bg-slate-700 rounded-2xl p-2.5 disabled:cursor-not-allowed disabled:text-slate-400"
+                >
+                    <Calendar size={20} />
+                </button>
+                <Modal isOpen={isModalFilterDataOpen} onClose={closeModal} modalTitle="Filter Tanggal" maxWidth="max-w-md">
+                    <div className="mb-4">
+                        <Label className="font-bold">Tanggal</Label>
+                        <Input type="datetime-local" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="form-control" />
+                    </div>
+                    <button
+                        onClick={() => {
+                            fetchJournalsByWarehouse();
+                            setIsModalFilterDataOpen(false);
+                        }}
+                        className="btn-primary"
+                    >
+                        Submit
+                    </button>
+                </Modal>
             </div>
             <div className="overflow-x-auto bg-white dark:bg-gray-700 rounded-2xl border border-gray-200 dark:border-gray-600">
                 <div className="flex text-xs p-1 my-2 ml-2 rounded-full bg-slate-300 dark:bg-slate-800 w-fit">
@@ -162,6 +191,7 @@ const MutationTable = ({
                         Keluar
                     </button>
                 </div>
+                {loading && <h1 className="text-xs ml-4 animate-pulse">Loading data, please wait...</h1>}
                 <table className="w-full text-xs">
                     <thead className="text-xs text-gray-700 uppercase bg-white dark:bg-gray-700 dark:text-gray-400 rounded-2xl">
                         <tr>

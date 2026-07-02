@@ -74,8 +74,12 @@ const MutationContent = () => {
                 mutateCashBankBalance={mutateCashBankBalance}
                 selectedWarehouse={selectedWarehouse}
                 setSelectedWarehouse={setSelectedWarehouse}
+                endDate={endDate}
+                setEndDate={setEndDate}
+                loading={loading}
+                isValidating={isValidating}
             />
-            <Balance accountBalance={accountBalance} journalsByWarehouse={journalsByWarehouse} />
+            <Balance accountBalance={accountBalance} journalsByWarehouse={journalsByWarehouse} isValidating={isValidating} />
             {/* <ReportForm /> */}
         </div>
     );
